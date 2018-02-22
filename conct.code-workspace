@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "hardware"
+		},
+		{
+			"path": "tests"
+		},
+		{
+			"path": "libraries"
+		},
+		{
+			"path": "types"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/build": true
+		}
+	}
+}

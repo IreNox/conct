@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hardware>
+	<name>ATtiny85</name>
+	<specifications>
+		<program>8192</program>
+		<ram>512</ram>
+		<flash>512</flash>
+	</specifications>
+	<services>
+		<slave />
+	</services>
+</hardware>

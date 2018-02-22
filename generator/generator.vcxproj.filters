@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{e2bc6a43-995e-48aa-af27-1d6a13023863}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\generator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="third_party\tinyxml2.h">
+      <Filter>third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="include\base.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hardware.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\interface.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\device.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\service.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\service_collection.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\type_collection.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hardware_collection.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\generator.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\main.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="third_party\tinyxml2.cpp">
+      <Filter>third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\interface.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\device.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\hardware.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\service_collection.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\service.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\type.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\type_collection.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\hardware_collection.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\base.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

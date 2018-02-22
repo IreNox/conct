@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Type">
+	<properties>
+		<property name="Name" type="String">
+			<get />
+		</property>
+		<property name="Guid" type="Guid">
+			<get />
+		</property>
+		<property name="Description" type="TypeDescription">
+			<get />
+		</property>		
+	</properties>
+</interface>

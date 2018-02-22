@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Function">
+	<properties>
+		<property name="Name" type="String">
+			<get />
+		</property>
+		<property name="ParentType" type="Type">
+			<get />
+		</property>
+		<property name="ReturnType" type="Type">
+			<get />
+		</property>
+		<property name="Parameters">
+			<type>
+				<array type="FunctionParameter" />
+			</type>
+			<get />
+		</property>
+	</properties>
+</interface>

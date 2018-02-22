@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Interface" baseType="Type">
+	<properties>
+		<property name="Properties">
+			<type>
+				<array type="Property" />
+			</type>
+			<get />
+		</property>
+		<property name="Functions">
+			<type>
+				<array type="Function" />
+			</type>
+			<get />
+		</property>
+		<property name="Events">
+			<type>
+				<array type="Event" />
+			</type>
+			<get />
+		</property>
+	</properties>
+</interface>

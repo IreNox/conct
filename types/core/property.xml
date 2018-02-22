@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Property">
+	<properties>
+		<property name="Name" type="String">
+			<get />
+		</property>
+		<property name="ParentType" type="Type">
+			<get />
+		</property>
+		<property name="PropertyType" type="Type">
+			<get />
+		</property>
+		<property name="HasGetter" type="Boolean">
+			<get />
+		</property>
+		<property name="HasSetter" type="Boolean">
+			<get />
+		</property>
+	</properties>
+</interface>

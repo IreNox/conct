@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Device">
+	<properties>
+		<property name="Name" type="String">
+			<get />
+		</property>
+		<property name="Guid" type="Guid">
+			<get />
+		</property>
+		<property name="Interfaces">
+			<type>
+				<array type="Interface" />
+			</type>
+			<get />
+		</property>
+		<functions>
+			<function name="GetInterface" return="Object">
+				<parameters>
+					<parameter name="interface" type="Interface" />
+				</parameters>
+			</function>
+		</functions>
+	</properties>
+</interface>

@@ -44,6 +44,12 @@
     <ClInclude Include="include\hardware_collection.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\xml_helper.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\array.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\generator.cpp">
@@ -80,6 +86,12 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="sources\base.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\xml_helper.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\array.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>

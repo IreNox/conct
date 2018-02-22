@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="FunctionParameter">
+	<properties>
+		<property name="Name" type="String">
+			<get />
+		</property>
+		<property name="Type" type="Type">
+			<get />
+		</property>
+	</properties>
+</interface>

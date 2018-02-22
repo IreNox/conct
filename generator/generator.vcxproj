@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\array.h" />
     <ClInclude Include="include\base.h" />
     <ClInclude Include="include\device.h" />
     <ClInclude Include="include\generator.h" />
@@ -28,9 +29,11 @@
     <ClInclude Include="include\type_collection.h" />
     <ClInclude Include="include\service.h" />
     <ClInclude Include="include\service_collection.h" />
+    <ClInclude Include="include\xml_helper.h" />
     <ClInclude Include="third_party\tinyxml2.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="sources\array.cpp" />
     <ClCompile Include="sources\base.cpp" />
     <ClCompile Include="sources\device.cpp" />
     <ClCompile Include="sources\generator.cpp" />
@@ -42,6 +45,7 @@
     <ClCompile Include="sources\service.cpp" />
     <ClCompile Include="sources\service_collection.cpp" />
     <ClCompile Include="sources\type.cpp" />
+    <ClCompile Include="sources\xml_helper.cpp" />
     <ClCompile Include="third_party\tinyxml2.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

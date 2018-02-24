@@ -16,7 +16,7 @@ namespace conct
 	private:
 
 		T*		m_pData;
-		uint8	m_count;
+		uint8_t	m_count;
 	};
 }
 

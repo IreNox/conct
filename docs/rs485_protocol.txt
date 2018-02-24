@@ -1,0 +1,19 @@
+RS485 Protocol
+
+Max Packet Size = 512 Bit = 64 Byte
+Max Payload Size = 512 Bit - 64 Bit = 448 Bit = 56 Byte
+
+PacketType:
+Data	- 0 - Data Packet
+Ack		- 1 - Acknowledge
+Missing	- 2 - Packet missing 
+Error	- 3 - Error
+
+Header
+Bits	Count	Name		Description
+0-15	16		Magic		Everytime: RS
+16-21	 5		Size		< Max Payload Size - 56 Bytes
+22-37	16		Checksum	Fletcher’s Checksum of Payload
+38-41	 4		Type		Packet Type
+42-63	22		Id			Packet Id
+64-511	448		Payload		Packet Data

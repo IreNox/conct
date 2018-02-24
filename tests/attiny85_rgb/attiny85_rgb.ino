@@ -1,4 +1,4 @@
-/* Three PWM Outputs */
+  q/* Three PWM Outputs */
 
 // ATtiny85 outputs
 //const int Red = 0;
@@ -8,7 +8,20 @@
 //volatile uint8_t* Port[] = {&OCR0A, &OCR0B, &OCR1B};
 //int Pin[] = {0, 1, 4};
 
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial( 4,  5 );
+
+struct Test
+{
+  uint8_t receiveBuffer[ 64u ];
+  uint8_t workingBuffer[ 64u ];
+};
+
+Test test;
+
 void setup() {
+  mySerial.begin( 9600 );
   /*pinMode(Pin[Red], OUTPUT);
   pinMode(Pin[Green], OUTPUT);
   pinMode(Pin[Blue], OUTPUT);
@@ -18,6 +31,13 @@ void setup() {
   // Configure counter/timer1 for fast PWM on PB4
   GTCCR = 1<<PWM1B | 3<<COM1B0;
   TCCR1 = 3<<COM1A0 | 7<<CS10;*/
+  mySerial.println("r");
+
+  for( int i = 0; i < sizeof( test.receiveBuffer ); ++i )
+  {
+    test.receiveBuffer[ i ] = i;
+    test.workingBuffer[ i ] = i;
+  }
 }
 
 // Sets colour Red=0 Green=1 Blue=2 to specified intensity 0 (off) to 255 (max)
@@ -34,4 +54,8 @@ void loop() {
   //    delay(25);
   //  }
   //}
+
+  while (mySerial.available()) {
+    mySerial.read();
+  }
 }

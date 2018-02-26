@@ -33,11 +33,11 @@
     <ClCompile Include="..\libraries\conct_core\conct_core.cpp">
       <Filter>extern\conct_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\libraries\conct_runtime\conct_runtime.cpp">
-      <Filter>extern\conct_runtime</Filter>
-    </ClCompile>
     <ClCompile Include="..\libraries\conct_system_simulator\conct_system_simulator.cpp">
       <Filter>extern\conct_system_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_runtime\conct_runtime_slave.cpp">
+      <Filter>extern\conct_runtime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -56,18 +56,27 @@
     <ClInclude Include="..\libraries\conct_runtime\conct_proxy.h">
       <Filter>extern\conct_runtime</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_runtime\conct_runtime.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
     <ClInclude Include="..\libraries\conct_system_simulator\conct_system_simulator.h">
       <Filter>extern\conct_system_simulator</Filter>
     </ClInclude>
     <ClInclude Include="include\simulator_device.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\libraries\conct_runtime\conct_runtime_types.h">
+      <Filter>extern\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_runtime\conct_runtime_slave.h">
+      <Filter>extern\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_read_stream.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\libraries\conct_core\conct_array.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\libraries\conct_core\conct_read_stream.inl">
       <Filter>extern\conct_core</Filter>
     </None>
   </ItemGroup>

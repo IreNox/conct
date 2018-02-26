@@ -20,7 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libraries\conct_core\conct_core.cpp" />
-    <ClCompile Include="..\libraries\conct_runtime\conct_runtime.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime\conct_runtime_slave.cpp" />
     <ClCompile Include="..\libraries\conct_system_simulator\conct_system_simulator.cpp" />
     <ClCompile Include="sources\main.cpp" />
     <ClCompile Include="sources\simulator.cpp" />
@@ -28,15 +28,18 @@
   <ItemGroup>
     <ClInclude Include="..\libraries\conct_core\conct_array.h" />
     <ClInclude Include="..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_read_stream.h" />
     <ClInclude Include="..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\libraries\conct_runtime\conct_proxy.h" />
-    <ClInclude Include="..\libraries\conct_runtime\conct_runtime.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_runtime_slave.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_runtime_types.h" />
     <ClInclude Include="..\libraries\conct_system_simulator\conct_system_simulator.h" />
     <ClInclude Include="include\simulator.h" />
     <ClInclude Include="include\simulator_device.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\libraries\conct_core\conct_array.inl" />
+    <None Include="..\libraries\conct_core\conct_read_stream.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

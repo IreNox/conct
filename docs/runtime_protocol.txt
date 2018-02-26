@@ -2,7 +2,7 @@ conct Runtime Protocol
 
 Base Header
 Bits	Count					Name				Description
-0-15	16						Magic				Every time: 0xC0C7
+#0-15	16						Magic				Every time: 0xC0C7
 16-31	16						Size				Packet Size
 32-39	 8						Source Hop			Hop Count to Source Device
 40-47	 8						Destination Hop		Hop Count to Source Device

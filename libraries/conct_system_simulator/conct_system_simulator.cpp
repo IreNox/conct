@@ -5,6 +5,8 @@ namespace conct
 	void SystemSimulator::setup()
 	{
 
+
+		m_runtime.setup();
 	}
 
 	void SystemSimulator::loop()

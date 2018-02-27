@@ -32,12 +32,6 @@
     <ClInclude Include="include\device.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\service.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\service_collection.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\type_collection.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -48,6 +42,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\array.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\port.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\port_collection.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -70,12 +70,6 @@
     <ClCompile Include="sources\hardware.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="sources\service_collection.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\service.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="sources\type.cpp">
       <Filter>sources</Filter>
     </ClCompile>
@@ -92,6 +86,12 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="sources\array.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\port.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\port_collection.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>

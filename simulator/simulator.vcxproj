@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libraries\conct_core\conct_core.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\libraries\conct_runtime\conct_runtime_slave.cpp" />
     <ClCompile Include="..\libraries\conct_system_simulator\conct_system_simulator.cpp" />
     <ClCompile Include="sources\main.cpp" />
@@ -28,8 +29,10 @@
   <ItemGroup>
     <ClInclude Include="..\libraries\conct_core\conct_array.h" />
     <ClInclude Include="..\libraries\conct_core\conct_core.h" />
-    <ClInclude Include="..\libraries\conct_core\conct_read_stream.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_reader.h" />
     <ClInclude Include="..\libraries\conct_core\conct_value.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_device.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_instance.h" />
     <ClInclude Include="..\libraries\conct_runtime\conct_proxy.h" />
     <ClInclude Include="..\libraries\conct_runtime\conct_runtime_slave.h" />
     <ClInclude Include="..\libraries\conct_runtime\conct_runtime_types.h" />
@@ -39,7 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\libraries\conct_core\conct_array.inl" />
-    <None Include="..\libraries\conct_core\conct_read_stream.inl" />
+    <None Include="..\libraries\conct_core\conct_reader.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

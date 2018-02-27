@@ -9,6 +9,31 @@
 
 namespace conct
 {
+	bool loadBooleanValue( bool& target, tinyxml2::XMLElement* pNode, const char* pName )
+	{
+		const char* pAttributeValue = pNode->Attribute( pName );
+		if( pAttributeValue != nullptr )
+		{
+			const std::string attributeValue = pAttributeValue;
+			if( attributeValue == pName || attributeValue == "1" || attributeValue == "true" )
+			{
+				target = true;
+				return true;
+			}
+			else if( attributeValue == "0" || attributeValue == "false" )
+			{
+				target = false;
+				return true;
+			}
+
+			std::cout << "Error: '" << attributeValue << "' is not an valid boolean attribute value for '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+			return false;
+		}
+
+		target = ( pNode->FirstChildElement( pName ) != nullptr );
+		return true;
+	}
+
 	bool loadStringValue( std::string& target, tinyxml2::XMLElement* pNode, const char* pName )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
@@ -53,7 +78,7 @@ namespace conct
 		return false;
 	}
 
-	bool loadTypeValue( const Type** ppType, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection )
+	bool loadTypeValue( const Type** ppType, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false*/ )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
@@ -89,7 +114,7 @@ namespace conct
 				if( pArrayNode != nullptr )
 				{
 					const Type* pInnerType = nullptr;
-					if( loadTypeValue( &pInnerType, pArrayNode, "type", referenceNamespace, typeCollection ) )
+					if( loadTypeValue( &pInnerType, pArrayNode, "type", referenceNamespace, typeCollection, ignoreMissing ) )
 					{
 						*ppType = typeCollection.makeArray( pInnerType );
 						return true;
@@ -98,7 +123,10 @@ namespace conct
 			}
 		}
 
-		std::cout << "Error: Failed to load type value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+		if( !ignoreMissing )
+		{
+			std::cout << "Error: Failed to load type value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+		}
 		return false;
 	}
 }

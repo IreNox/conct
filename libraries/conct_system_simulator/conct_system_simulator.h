@@ -2,7 +2,7 @@
 
 #include "simulator_device.h"
 
-#include "conct_runtime.h"
+#include "conct_runtime_slave.h"
 
 namespace conct
 {
@@ -10,11 +10,11 @@ namespace conct
 	{
 	public:
 
-		virtual void setup() CONCT_OVERRIDE_FINAL;
-		virtual void loop() CONCT_OVERRIDE_FINAL;
+		virtual void	setup() CONCT_OVERRIDE_FINAL;
+		virtual void	loop() CONCT_OVERRIDE_FINAL;
 
 	private:
 
-		Runtime	m_runtime;
+		RuntimeSlave	m_runtime;
 	};
 }

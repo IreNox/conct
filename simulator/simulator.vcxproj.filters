@@ -39,6 +39,9 @@
     <ClCompile Include="..\libraries\conct_runtime\conct_runtime_slave.cpp">
       <Filter>extern\conct_runtime</Filter>
     </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_reader.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">
@@ -68,15 +71,21 @@
     <ClInclude Include="..\libraries\conct_runtime\conct_runtime_slave.h">
       <Filter>extern\conct_runtime</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_read_stream.h">
+    <ClInclude Include="..\libraries\conct_runtime\conct_device.h">
+      <Filter>extern\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_reader.h">
       <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_runtime\conct_instance.h">
+      <Filter>extern\conct_runtime</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\libraries\conct_core\conct_array.inl">
       <Filter>extern\conct_core</Filter>
     </None>
-    <None Include="..\libraries\conct_core\conct_read_stream.inl">
+    <None Include="..\libraries\conct_core\conct_reader.inl">
       <Filter>extern\conct_core</Filter>
     </None>
   </ItemGroup>

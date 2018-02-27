@@ -27,8 +27,8 @@
     <ClInclude Include="include\hardware_collection.h" />
     <ClInclude Include="include\interface.h" />
     <ClInclude Include="include\type_collection.h" />
-    <ClInclude Include="include\service.h" />
-    <ClInclude Include="include\service_collection.h" />
+    <ClInclude Include="include\port.h" />
+    <ClInclude Include="include\port_collection.h" />
     <ClInclude Include="include\xml_helper.h" />
     <ClInclude Include="third_party\tinyxml2.h" />
   </ItemGroup>
@@ -42,8 +42,8 @@
     <ClCompile Include="sources\interface.cpp" />
     <ClCompile Include="sources\type_collection.cpp" />
     <ClCompile Include="sources\main.cpp" />
-    <ClCompile Include="sources\service.cpp" />
-    <ClCompile Include="sources\service_collection.cpp" />
+    <ClCompile Include="sources\port.cpp" />
+    <ClCompile Include="sources\port_collection.cpp" />
     <ClCompile Include="sources\type.cpp" />
     <ClCompile Include="sources\xml_helper.cpp" />
     <ClCompile Include="third_party\tinyxml2.cpp" />

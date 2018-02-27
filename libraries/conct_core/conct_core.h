@@ -28,6 +28,6 @@
 
 namespace conct
 {
-
-
+	typedef uint16_t TypeCrc;
+	typedef uint16_t InstanceId;
 }

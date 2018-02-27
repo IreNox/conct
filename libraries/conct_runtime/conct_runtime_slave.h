@@ -2,22 +2,24 @@
 
 #include "conct_core.h"
 #include "conct_array.h"
+#include "conct_reader.h"
 
 namespace conct
 {
-	class Proxy;
+	class Device;
+	struct ProxyRegistry;
 
 	class RuntimeSlave
 	{
 	public:
 
-		void	setup( const Array< Proxy* >& proxies );
+		void					setup( const Device* pDevice );
 
-		void	processData( const Array< uint8_t >& data );
+		void					processData( Reader& reader );
 
 	private:
 
-		enum MessageState
+		enum MessageState : uint8_t
 		{
 			MessageState_None,
 			MessageState_ReadBaseHeader,
@@ -25,17 +27,24 @@ namespace conct
 			MessageState_ReadMessage
 		};
 
-		MessageState	m_messageState;
-		uint16_t		m_messagePlayloadSize;
-		uint8_t*		m_pMessageDestinationAddress;
-		uint8_t			m_messageDestinationAddressSize;
-		uint8_t			m_messageWorkingDataOffset;
-		uint8_t			m_messageWorkingData[ 64u ];
+		enum ProcessResult : uint8_t
+		{
+			ProcessResult_Ok,
+			ProcessResult_WaitingData,
+			ProcessResult_Error
+		};
 
-		Array< Proxy* >	m_proxies;
+		MessageState			m_messageState;
+		uint16_t				m_messagePlayloadSize;
+		uint8_t*				m_pMessageDestinationAddress;
+		uint8_t					m_messageDestinationAddressSize;
+		uint8_t					m_messageWorkingDataOffset;
+		uint8_t					m_messageWorkingData[ 64u ];
 
-		void			processBaseHeader( Array< uint8_t >& data );
-		void			processAddress( Array< uint8_t >& data );
-		void			processMessage( Array< uint8_t >& data );
+		Array< ProxyRegistry >	m_proxies;
+
+		ProcessResult			processBaseHeader( Reader& reader );
+		ProcessResult			processAddress( Reader& reader );
+		ProcessResult			processMessage( Reader& reader );
 	};
 }

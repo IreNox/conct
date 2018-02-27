@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<device>
-	<hardware>Simulator</hardware>
-	<services>
-		<slave />
-	</services>
-	<interfaces>
+<device name="LightSimulator" hardware="SimulatorLow">
+	<!--interfaces> imported by instances?
 		<interface type="Home.Light" />
 		<interface type="Home.Dimmer" />
 		<interface type="Home.RGB" />
-	</interfaces>
+	</interfaces-->
+	<ports>
+		<port index="0" type="RS-485" />
+	</ports>
+	<instances>
+		<instance type="Home.Light" />
+		<instance type="Home.Dimmer" />
+		<instance type="Home.RGB" />
+	</instances>
 </device>

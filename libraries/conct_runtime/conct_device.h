@@ -5,13 +5,13 @@
 namespace conct
 {
 	struct ProxyRegistry;
-	class Instance;
+	class LocalInstance;
 
 	class Device
 	{
 	public:
 
-		virtual void getInstances( Array< Instance* >& instances ) = 0;
-		virtual bool findInstanceForInterface( Instance** ppInstance, TypeCrc typeCrc );
+		virtual void getInstances( Array< LocalInstance* >& instances ) = 0;
+		virtual bool findInstanceForInterface( LocalInstance** ppInstance, TypeCrc typeCrc );
 	};
 }

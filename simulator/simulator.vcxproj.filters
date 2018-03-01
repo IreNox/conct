@@ -42,6 +42,9 @@
     <ClCompile Include="..\libraries\conct_core\conct_reader.cpp">
       <Filter>extern\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\libraries\conct_runtime\conct_device.cpp">
+      <Filter>extern\conct_runtime</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">

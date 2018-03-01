@@ -22,7 +22,7 @@ namespace conct
 	}
 
 	template< class T >
-	T* Array< T >::operator[]( uint8_t index )
+	const T& Array< T >::operator[]( uint8_t index ) const
 	{
 		return m_pData[ index ];
 	}

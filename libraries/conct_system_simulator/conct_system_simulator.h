@@ -15,6 +15,6 @@ namespace conct
 
 	private:
 
-		RuntimeSlave	m_runtime;
+		//RuntimeSlave	m_runtime;
 	};
 }

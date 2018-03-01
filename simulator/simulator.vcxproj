@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\libraries\conct_core\conct_core.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_reader.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime\conct_device.cpp" />
     <ClCompile Include="..\libraries\conct_runtime\conct_runtime_slave.cpp" />
     <ClCompile Include="..\libraries\conct_system_simulator\conct_system_simulator.cpp" />
     <ClCompile Include="sources\main.cpp" />

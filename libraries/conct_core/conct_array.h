@@ -1,5 +1,7 @@
 #pragma once
 
+#include "conct_core.h"
+
 namespace conct
 {
 	template< class T >
@@ -15,7 +17,7 @@ namespace conct
 		const uint8_t*	getData() const { return m_pData; }
 		uint8_t			getCount() const { return m_count; }
 
-		T*				operator[]( uint8_t index );
+		const T&		operator[]( uint8_t index ) const;
 
 	private:
 

@@ -16,6 +16,10 @@ namespace conct
 
 		virtual bool	callFunction( Value* pReturnValue, const char* pName, const Array< Value >& parameters ) = 0;
 
+	protected:
+
+						Proxy( TypeCrc typeCrc );
+
 	private:
 
 		TypeCrc			m_typeCrc;

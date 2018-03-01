@@ -1,6 +1,7 @@
 #include "xml_helper.h"
 
 #include "array.h"
+#include "interface.h"
 #include "type_collection.h"
 
 #include <third_party/tinyxml2.h>
@@ -128,5 +129,23 @@ namespace conct
 			std::cout << "Error: Failed to load type value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
 		}
 		return false;
+	}
+
+	bool loadInterfaceValue( const Interface** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
+	{
+		const Type* pType = nullptr;
+		if( !loadTypeValue( &pType, pNode, pName, referenceNamespace, typeCollection, ignoreMissing ) )
+		{
+			return false;
+		}
+
+		if( pType->getDescription() != TypeDescription_Interface )
+		{
+			std::cout << "Error: '" << pType->getFullName() << "' is not an interface. loaded type value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+			return false;
+		}
+
+		*ppInterface = static_cast< const Interface* >( pType );
+		return true;
 	}
 }

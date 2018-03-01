@@ -7,7 +7,7 @@ namespace conct
 {
 	void RuntimeSlave::setup( const Device* pDevice )
 	{
-		pDevice->getProxies( m_proxies );
+		//pDevice->getProxies( m_proxies );
 
 		m_messageState				= MessageState_None;
 		m_messagePlayloadSize		= 0u;
@@ -36,12 +36,12 @@ namespace conct
 		}
 	}
 
-	bool RuntimeSlave::processBaseHeader( Reader& reader )
+	RuntimeSlave::ProcessResult RuntimeSlave::processBaseHeader( Reader& reader )
 	{
 		const RuntimeMessageBaseHeader* pBaseHeader = reader.readStruct< RuntimeMessageBaseHeader >();
 		if( pBaseHeader == nullptr )
 		{
-			return false;
+			return ProcessResult_Error;
 		}
 
 		m_messagePlayloadSize			= pBaseHeader->payloadSize;
@@ -49,26 +49,26 @@ namespace conct
 		m_messageWorkingDataOffset		= 0u;
 
 		m_messageState = MessageState_ReadAddress;
-		return true;
+		return ProcessResult_Ok;
 	}
 
-	bool RuntimeSlave::processAddress( Reader& reader )
+	RuntimeSlave::ProcessResult RuntimeSlave::processAddress( Reader& reader )
 	{
 		if( !reader.readData( m_messageWorkingData, m_messageDestinationAddressSize ) )
 		{
-			return false;
+			return ProcessResult_Error;
 		}
 
 		m_pMessageDestinationAddress	= m_messageWorkingData;
 		m_messageWorkingDataOffset		= m_messageDestinationAddressSize;
 
 		m_messageState = MessageState_ReadMessage;
-		return true;
+		return ProcessResult_Ok;
 	}
 
-	bool RuntimeSlave::processMessage( Reader& reader )
+	RuntimeSlave::ProcessResult RuntimeSlave::processMessage( Reader& reader )
 	{
-
+		return ProcessResult_Ok;
 	}
 
 }

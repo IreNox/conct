@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<port name="LAN">
+<port name="LAN" library="conct_port_lan" class="PortLan">
 	<connection mtu="1500">
 		<multi_device />
 		<reliable />

@@ -33,34 +33,44 @@ namespace conct
 		return pData;
 	}
 
-	bool Reader::readData( uint8_t* pTarget, uint8_t length )
+	uint8_t Reader::readData( uint8_t* pTarget, uint8_t length )
 	{
-		if( m_remainingSize < length )
-		{
-			return false;
-		}
-
-		while( length-- )
+		uint8_t i = 0u;
+		for( ; i < length && m_remainingSize > 0u; ++i )
 		{
 			*pTarget++ = *m_pData++;
 			m_remainingSize--;
 		}
 
-		return true;
+		return i;
+	}
+
+	uint8_t Reader::readData( uint8_t* pTarget, uint8_t length, uint8_t remainingLength )
+	{
+		pTarget += ( length - remainingLength );
+
+		uint8_t i = 0u;
+		for( ; i < remainingLength && m_remainingSize > 0u; ++i )
+		{
+			*pTarget++ = *m_pData++;
+			m_remainingSize--;
+		}
+
+		return i;
 	}
 
 	bool Reader::readByte( uint8_t& target )
 	{
-		if( m_remainingSize < sizeof( target ) )
-		{
-			return false;
-		}
+		return readData( &target, sizeof( target ) ) == sizeof( target );
+	}
 
-		target = *m_pData;
+	uint8_t Reader::readShort( uint16_t& target )
+	{
+		return readData( (uint8_t*)&target, sizeof( target ) );
+	}
 
-		m_pData++;
-		m_remainingSize--;
-
-		return true;
+	uint8_t Reader::readShort( uint16_t& target, uint8_t remainingLength )
+	{
+		return readData( ( uint8_t* )&target, sizeof( target ), remainingLength );
 	}
 }

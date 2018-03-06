@@ -1,17 +1,16 @@
 #pragma once
 
-#include "conct_array.h"
+#include "conct_array_view.h"
 
 namespace conct
 {
-	struct ProxyRegistry;
-	class LocalInstance;
+	struct LocalInstance;
 
 	class Device
 	{
 	public:
 
-		virtual void getInstances( Array< LocalInstance* >& instances ) = 0;
-		virtual bool findInstanceForInterface( LocalInstance** ppInstance, TypeCrc typeCrc );
+		virtual void getInstances( ArrayView< LocalInstance >& instances ) = 0;
+		virtual bool findInstanceForInterface( LocalInstance* pInstance, TypeCrc typeCrc );
 	};
 }

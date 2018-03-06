@@ -24,6 +24,7 @@ namespace conct
 	template< class T >
 	const T& Array< T >::operator[]( uint8_t index ) const
 	{
+		CONCT_ASSERT( index < m_count );
 		return m_pData[ index ];
 	}
 }

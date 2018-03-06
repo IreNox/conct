@@ -20,9 +20,12 @@ namespace conct
 		template< class T >
 		const T*	readStruct();
 		const void*	readData( uint8_t length );
-		bool		readData( uint8_t* pTarget, uint8_t length );
+		uint8_t		readData( uint8_t* pTarget, uint8_t length );
+		uint8_t		readData( uint8_t* pTarget, uint8_t length, uint8_t remainingLength );
 
 		bool		readByte( uint8_t& target );
+		uint8_t		readShort( uint16_t& target );
+		uint8_t		readShort( uint16_t& target, uint8_t remainingLength );
 
 	private:
 

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <device name="LightSimulator" hardware="SimulatorLow">
-	<!--interfaces> imported by instances?
-		<interface type="Home.Light" />
-		<interface type="Home.Dimmer" />
-		<interface type="Home.RGB" />
-	</interfaces-->
 	<ports>
-		<port index="0" type="RS-485" />
+		<port index="0" type="RS-485-Simulator" />
 	</ports>
 	<instances>
 		<instance type="Home.Light" />

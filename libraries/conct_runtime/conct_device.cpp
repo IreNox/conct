@@ -5,18 +5,18 @@
 
 namespace conct
 {
-	bool Device::findInstanceForInterface( LocalInstance** ppInstance, TypeCrc typeCrc )
+	bool Device::findInstanceForInterface( LocalInstance* pInstance, TypeCrc typeCrc )
 	{
-		Array< LocalInstance* > instances;
+		ArrayView< LocalInstance > instances;
 		getInstances( instances );
 
-		for( size_t i = 0u; i < instances.getCount(); ++i )
+		for( uint8_t i = 0u; i < instances.getCount(); ++i )
 		{
-			LocalInstance* pInstance = instances[ i ];
+			const LocalInstance& instance = instances[ i ];
 
-			if( pInstance->getProxy()->getTypeCrc() == typeCrc )
+			if( instance.pProxy->getTypeCrc() == typeCrc )
 			{
-				*ppInstance = pInstance;
+				*pInstance = instance;
 				return true;
 			}
 		}

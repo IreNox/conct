@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<port name="RS-485-Simulator" library="conct_port_rs485_sim" class="PortRs485Sim">
+	<connection mtu="56">
+		<single_device />
+		<reliable />
+	</connection>
+</port>

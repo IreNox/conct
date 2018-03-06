@@ -9,6 +9,7 @@ namespace tinyxml2
 
 namespace conct
 {
+	class Interface;
 	class Type;
 	class TypeCollection;
 

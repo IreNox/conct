@@ -8,7 +8,7 @@ namespace conct
 	{
 	public:
 
-		Boolean getOn() const = 0;
-		void setOn( Boolean value ) = 0;
+		virtual bool getOn() const = 0;
+		virtual void setOn( bool value ) = 0;
 	};
 }

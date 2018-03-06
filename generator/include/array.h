@@ -15,7 +15,7 @@ namespace conct
 	private: // friend
 
 						Array();
-		void			create( const std::string& namespaceVar, const std::string& name, const Type* pBaseType );
+		void			create( const Type* pBaseType );
 
 	private:
 

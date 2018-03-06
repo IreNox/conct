@@ -7,9 +7,9 @@ namespace conct
 		m_pBaseType = nullptr;
 	}
 
-	void Array::create( const std::string& namespaceVar, const std::string& name, const Type* pBaseType )
+	void Array::create( const Type* pBaseType )
 	{
-		Type::create( namespaceVar, name, TypeDescription_Array );
+		Type::create( "", pBaseType->getName() + "[]", "Array< " + pBaseType->getCppName() + " >", TypeDescription_Array );
 		m_pBaseType = pBaseType;
 	}
 }

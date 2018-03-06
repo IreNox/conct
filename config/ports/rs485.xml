@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<port name="RS-485">
+<port name="RS-485" library="conct_port_rs485" class="PortRs485">
 	<connection mtu="56">
 		<single_device />
 		<reliable />

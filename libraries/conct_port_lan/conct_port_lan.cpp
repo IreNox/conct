@@ -12,7 +12,7 @@ namespace conct
 
 	}
 
-	bool PortLan::openSend( Writer& writer, uint8_t deviceId )
+	bool PortLan::openSend( Writer& writer, muint size, DeviceId deviceId )
 	{
 		return false;
 	}
@@ -22,7 +22,7 @@ namespace conct
 
 	}
 
-	bool PortLan::openReceived( Reader& reader, uint8_t deviceId )
+	bool PortLan::openReceived( Reader& reader, DeviceId& deviceId )
 	{
 		return false;
 	}

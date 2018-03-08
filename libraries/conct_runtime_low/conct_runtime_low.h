@@ -20,7 +20,7 @@ namespace conct
 
 	private:
 
-		enum State : uint8_t
+		enum State : uint8
 		{
 			State_ReadUntilNextMessage,
 			State_ReadBaseHeader,
@@ -31,7 +31,7 @@ namespace conct
 			State_SendResponse
 		};
 
-		enum ProcessResult : uint8_t
+		enum ProcessResult : uint8
 		{
 			ProcessResult_Ok,
 			ProcessResult_WaitingData,
@@ -39,25 +39,25 @@ namespace conct
 		};
 
 		State						m_state;
-		uint16_t					m_stateValue;
+		uint16						m_stateValue;
 
-		uint8_t						m_workingData[ 64u ];
-		uint8_t						m_workingDataOffset;
+		uint8						m_workingData[ 64u ];
+		uint8						m_workingDataOffset;
 
-		uint16_t					m_playloadSize;
-		uint8_t						m_destinationAddressSize;
+		uint16						m_playloadSize;
+		uint8						m_destinationAddressSize;
 		RuntimeMessageType			m_messageType;
-		RuntimeRequestId			m_requestId;
+		RuntimeMessageId			m_requestId;
 		RuntimeResult				m_result;
 
 		ArrayView< LocalInstance >	m_instances;
 
 		void*						getWorkingData();
-		uint8_t						getRemainingWorkingData() const;
+		uint8						getRemainingWorkingData() const;
 
 		const LocalInstance*		findInstance( InstanceId instaceId );
 
-		void						setState( State state, uint16_t stateValue = 0u );
+		void						setState( State state, uint16 stateValue = 0u );
 
 		void						processData( Port* pPort );
 		void						processData( Reader& reader );
@@ -71,7 +71,7 @@ namespace conct
 
 		void						sendPingResponse();
 		void						sendErrorResponse( RuntimeResult result );
-		void						sendResponse( RuntimeMessageType responseType, const void* pData, uint8_t dataLength );
+		void						sendResponse( RuntimeMessageType responseType, const void* pData, uint8 dataLength );
 
 		void						sendData( Port* pPort );
 	};

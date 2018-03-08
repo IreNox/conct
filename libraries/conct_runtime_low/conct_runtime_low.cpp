@@ -40,14 +40,14 @@ namespace conct
 		return m_workingData + m_workingDataOffset;
 	}
 
-	uint8_t RuntimeLow::getRemainingWorkingData() const
+	uint8 RuntimeLow::getRemainingWorkingData() const
 	{
 		return sizeof( m_workingData ) - m_workingDataOffset;
 	}
 
 	const LocalInstance* RuntimeLow::findInstance( InstanceId instaceId )
 	{
-		for( uint8_t i = 0u; i < m_instances.getCount(); ++i )
+		for( uint8 i = 0u; i < m_instances.getCount(); ++i )
 		{
 			if( m_instances[ i ].id == instaceId )
 			{
@@ -58,7 +58,7 @@ namespace conct
 		return nullptr;
 	}
 
-	void RuntimeLow::setState( State state, uint16_t stateValue /* = 0u */ )
+	void RuntimeLow::setState( State state, uint16 stateValue /* = 0u */ )
 	{
 		m_state			= state;
 		m_stateValue	= stateValue;
@@ -67,7 +67,8 @@ namespace conct
 	void RuntimeLow::processData( Port* pPort )
 	{
 		Reader reader;
-		if( !pPort->openReceived( reader, 0u ) )
+		DeviceId deviceId;
+		if( !pPort->openReceived( reader, deviceId ) )
 		{
 			return;
 		}
@@ -123,31 +124,31 @@ namespace conct
 
 	RuntimeLow::ProcessResult RuntimeLow::processUntilNextMessage( Reader& reader )
 	{
-		uint16_t& magic = *( uint16_t* )m_workingData;
+		uint16& magic = *( uint16* )m_workingData;
 
 		if( m_stateValue < 2u )
 		{
-			m_stateValue += reader.readShort( magic, muint( sizeof( s_magic ) - m_stateValue ) );
+			m_stateValue += reader.readShort( magic, muint( sizeof( s_runtimeMagic ) - m_stateValue ) );
 
-			if( m_stateValue <= sizeof( s_magic ) )
+			if( m_stateValue <= sizeof( s_runtimeMagic ) )
 			{
 				return ProcessResult_WaitingData;
 			}
 
-			if( magic == s_magic )
+			if( magic == s_runtimeMagic )
 			{
 				setState( State_ReadBaseHeader );
 				return ProcessResult_Ok;
 			}
 		}
 
-		uint8_t nextByte = 0u;
+		uint8 nextByte = 0u;
 		while( reader.readByte( nextByte ) )
 		{
 			magic <<= 8u;
 			magic |= nextByte;
 
-			if( magic == s_magic )
+			if( magic == s_runtimeMagic )
 			{
 				setState( State_ReadBaseHeader );
 				return ProcessResult_Ok;
@@ -166,7 +167,7 @@ namespace conct
 			return ProcessResult_WaitingData;
 		}
 
-		if( baseHeader.destinationHops > 0u )
+		if( baseHeader.destinationHops > 1u )
 		{
 			sendErrorResponse( RuntimeResult_Unsupported );
 			return ProcessResult_Error;
@@ -211,7 +212,7 @@ namespace conct
 	{
 		if( m_stateValue == 0u )
 		{
-			uint8_t commandTypeValue;
+			uint8 commandTypeValue;
 			if( !reader.readByte( commandTypeValue ) )
 			{
 				return ProcessResult_WaitingData;
@@ -310,7 +311,7 @@ namespace conct
 		setState( State_SendResponse );
 	}
 
-	void RuntimeLow::sendResponse( RuntimeMessageType responseType, const void* pData, uint8_t dataLength )
+	void RuntimeLow::sendResponse( RuntimeMessageType responseType, const void* pData, uint8 dataLength )
 	{
 		if( getRemainingWorkingData() < dataLength )
 		{
@@ -328,21 +329,26 @@ namespace conct
 
 	void RuntimeLow::sendData( Port* pPort )
 	{
-		Writer writer;
-		if( !pPort->openSend( writer, 0u ) )
-		{
-			return;
-		}
+		// Send Base Header
+		// Send Address 1
+		// Send Address 2
+		// Send Payload
 
-		const muint written = writer.writeData( getWorkingData(), (muint)m_stateValue );
-		m_stateValue -= written;
-		m_workingDataOffset += written;
+		//Writer writer;
+		//if( !pPort->openSend( writer, 0u ) )
+		//{
+		//	return;
+		//}
 
-		pPort->closeSend( writer );
+		//const muint written = writer.writeData( getWorkingData(), (muint)m_stateValue );
+		//m_stateValue -= written;
+		//m_workingDataOffset += written;
 
-		if( m_stateValue == 0u )
-		{
-			setState( State_ReadUntilNextMessage );
-		}
+		//pPort->closeSend( writer );
+
+		//if( m_stateValue == 0u )
+		//{
+		//	setState( State_ReadUntilNextMessage );
+		//}
 	}
 }

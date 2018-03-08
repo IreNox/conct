@@ -17,7 +17,7 @@ namespace conct
 		m_hasReceived = true;
 	}
 
-	bool PortRs485Sim::openSend( Writer& writer, uint8_t deviceId )
+	bool PortRs485Sim::openSend( Writer& writer, muint size, DeviceId deviceId )
 	{
 		if( m_hasReceived || m_hasSent )
 		{
@@ -33,11 +33,12 @@ namespace conct
 		m_hasSent = true;
 	}
 
-	bool PortRs485Sim::openReceived( Reader& reader, uint8_t deviceId )
+	bool PortRs485Sim::openReceived( Reader& reader, DeviceId& deviceId )
 	{
 		if( m_hasReceived )
 		{
 			reader.set( m_buffer, sizeof( m_buffer ) );
+			deviceId = 0u;
 			return true;
 		}
 

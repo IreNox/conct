@@ -169,7 +169,6 @@
     <ClInclude Include="..\..\..\libraries\conct_port_lan\conct_port_lan.h" />
     <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h" />
-    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_instance.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high.h" />

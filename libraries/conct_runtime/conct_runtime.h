@@ -5,9 +5,9 @@
 
 namespace conct
 {
-	typedef uint16_t RuntimeRequestId;
+	typedef uint16 RuntimeMessageId;
 
-	enum RuntimeResult : uint8_t
+	enum RuntimeResult : uint8
 	{
 		RuntimeResult_Unknown,
 
@@ -21,7 +21,7 @@ namespace conct
 		RuntimeResult_Count
 	};
 
-	enum RuntimeMessageType : uint8_t
+	enum RuntimeMessageType : uint8
 	{
 		RuntimeMessageType_ErrorResponse,
 		RuntimeMessageType_PingRequest,
@@ -40,9 +40,12 @@ namespace conct
 
 	struct RuntimeMessageBaseHeader
 	{
-		uint16_t	payloadSize;
-		uint8_t		sourceHops;
-		uint8_t		destinationHops;
+		uint8_t				sourceHops;
+		uint8_t				destinationHops;
+		uint16_t			payloadSize;
+		RuntimeMessageId	messageId;
+		RuntimeMessageType	messageType;
+		RuntimeResult		messageResult;
 	};
 
 	struct RuntimeGetPropertyRequest
@@ -56,5 +59,5 @@ namespace conct
 		Value			value;
 	};
 
-	static const uint16_t s_magic = 0xc0c7u;
+	static const uint16 s_runtimeMagic = 0xc0c7u;
 }

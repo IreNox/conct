@@ -98,9 +98,6 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h">
       <Filter>extern\conct_runtime</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_instance.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h">
       <Filter>extern\conct_runtime</Filter>
     </ClInclude>

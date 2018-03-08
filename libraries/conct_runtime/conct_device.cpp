@@ -1,6 +1,5 @@
 #include "conct_device.h"
 
-#include "conct_instance.h"
 #include "conct_proxy.h"
 
 namespace conct

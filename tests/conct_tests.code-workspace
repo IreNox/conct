@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../config"
+		},
+		{
+			"path": "../libraries"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/build": true
+		}
+	}
+}

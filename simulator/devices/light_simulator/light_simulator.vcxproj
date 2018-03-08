@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -129,7 +129,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -148,7 +148,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -167,11 +167,11 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_device.h" />
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_instance.h" />
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_proxy.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_instance.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.h" />
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_types.h" />
     <ClInclude Include="device_impl.h" />
     <ClInclude Include="gen\device_interface.h" />
     <ClInclude Include="gen\files.h" />
@@ -192,8 +192,8 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
-    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_device.cpp" />
-    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_proxy.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_device.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp" />
     <ClCompile Include="device_impl.cpp" />
     <ClCompile Include="gen\device_interface.cpp" />

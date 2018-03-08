@@ -55,4 +55,6 @@ namespace conct
 	{
 		Value			value;
 	};
+
+	static const uint16_t s_magic = 0xc0c7u;
 }

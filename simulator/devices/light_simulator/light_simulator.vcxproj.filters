@@ -24,6 +24,9 @@
     <Filter Include="extern\conct_runtime_low">
       <UniqueIdentifier>{1b93431c-39eb-47f8-bd15-8548c282f915}</UniqueIdentifier>
     </Filter>
+    <Filter Include="extern\conct_runtime">
+      <UniqueIdentifier>{9e33ed70-a1b1-48ad-ab6f-ce3e9b73b081}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -86,23 +89,23 @@
     <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h">
       <Filter>extern\conct_port_rs485_sim</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_device.h">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_instance.h">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_proxy.h">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.h">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_types.h">
       <Filter>extern\conct_runtime_low</Filter>
     </ClInclude>
     <ClInclude Include="light_simulator.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h">
+      <Filter>extern\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_instance.h">
+      <Filter>extern\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h">
+      <Filter>extern\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h">
+      <Filter>extern\conct_runtime</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,14 +151,14 @@
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
       <Filter>extern\conct_port_rs485_sim</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_device.cpp">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_proxy.cpp">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp">
       <Filter>extern\conct_runtime_low</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_device.cpp">
+      <Filter>extern\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp">
+      <Filter>extern\conct_runtime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

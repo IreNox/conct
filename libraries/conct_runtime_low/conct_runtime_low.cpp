@@ -4,13 +4,11 @@
 #include "conct_port.h"
 #include "conct_proxy.h"
 #include "conct_reader.h"
-#include "conct_runtime_types.h"
+#include "conct_runtime.h"
 #include "conct_writer.h"
 
 namespace conct
 {
-	static const uint16_t s_magic = 0xc0c7u;
-
 	void RuntimeLow::setup( Device* pDevice )
 	{
 		pDevice->getInstances( m_instances );

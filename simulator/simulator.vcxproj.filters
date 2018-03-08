@@ -5,34 +5,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="extern">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="sources">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="extern\conct_core">
-      <UniqueIdentifier>{1a73f869-b895-4218-98e4-7383aac4ae76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\conct_runtime">
-      <UniqueIdentifier>{669c528b-94be-4ec6-8bbc-54ecd4240221}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="devices">
-      <UniqueIdentifier>{b883595d-a676-4482-95b7-a733f790493d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="devices\light_simulator">
-      <UniqueIdentifier>{a53affca-90ce-4f9c-ba40-70c356272f2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="devices\light_simulator\gen">
-      <UniqueIdentifier>{1fd5f884-c829-492b-ab7c-5e74371e94f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\conct_port_rs485">
-      <UniqueIdentifier>{b06f72f4-172b-4764-beea-e5718af6bcf2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\conct_port_rs485_sim">
-      <UniqueIdentifier>{9c8a2415-48aa-4dc1-bc20-25b398af58b9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,161 +17,16 @@
     <ClCompile Include="sources\simulator.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_core.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_reader.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_runtime\conct_device.cpp">
-      <Filter>extern\conct_runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_runtime\conct_runtime_low.cpp">
-      <Filter>extern\conct_runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_runtime\conct_proxy.cpp">
-      <Filter>extern\conct_runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_value.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\gen\device_interface.cpp">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\gen\home_light_proxy.cpp">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\home_light_impl.cpp">
-      <Filter>devices\light_simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\device_impl.cpp">
-      <Filter>devices\light_simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_port_rs485\conct_port_rs485.cpp">
-      <Filter>extern\conct_port_rs485</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\home_dimmer_impl.cpp">
-      <Filter>devices\light_simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\home_rgb_impl.cpp">
-      <Filter>devices\light_simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\gen\home_dimmer_proxy.cpp">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClCompile>
-    <ClCompile Include="devices\light_simulator\gen\home_rgb_proxy.cpp">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
-      <Filter>extern\conct_port_rs485_sim</Filter>
-    </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_writer.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_array.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_core.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_value.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_runtime\conct_proxy.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
     <ClInclude Include="include\simulator_device.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_runtime\conct_runtime_types.h">
-      <Filter>extern\conct_runtime</Filter>
+    <ClInclude Include="include\simulator_context.h">
+      <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_runtime\conct_device.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_reader.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_array_view.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_runtime\conct_runtime_low.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_port.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\device_interface.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\home_light.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\home_light_proxy.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\device_impl.h">
-      <Filter>devices\light_simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\home_light_impl.h">
-      <Filter>devices\light_simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_port_rs485\conct_port_rs485.h">
-      <Filter>extern\conct_port_rs485</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\home_rgb_impl.h">
-      <Filter>devices\light_simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\home_dimmer_impl.h">
-      <Filter>devices\light_simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\home_dimmer.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\home_dimmer_proxy.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\home_rgb.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\home_rgb_proxy.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\light_simulator\gen\files.h">
-      <Filter>devices\light_simulator\gen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h">
-      <Filter>extern\conct_port_rs485_sim</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_writer.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\libraries\conct_core\conct_array.inl">
-      <Filter>extern\conct_core</Filter>
-    </None>
-    <None Include="..\libraries\conct_core\conct_reader.inl">
-      <Filter>extern\conct_core</Filter>
-    </None>
-    <None Include="..\libraries\conct_core\conct_array_view.inl">
-      <Filter>extern\conct_core</Filter>
-    </None>
-    <None Include="devices\light_simulator\light_simulator.ino">
-      <Filter>devices\light_simulator</Filter>
-    </None>
-    <None Include="..\libraries\conct_core\conct_writer.inl">
-      <Filter>extern\conct_core</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="devices\light_simulator\device.xml">
-      <Filter>devices\light_simulator</Filter>
-    </Xml>
   </ItemGroup>
 </Project>

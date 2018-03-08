@@ -15,9 +15,9 @@ namespace conct
 		virtual void	loop() = 0;
 
 		virtual bool	openSend( Writer& writer, uint8_t deviceId ) = 0;
-		virtual void	closeSend() = 0;
+		virtual void	closeSend( Writer& writer ) = 0;
 
 		virtual bool	openReceived( Reader& reader, uint8_t deviceId ) = 0;
-		virtual void	closeReceived() = 0;
+		virtual void	closeReceived( Reader& reader ) = 0;
 	};
 }

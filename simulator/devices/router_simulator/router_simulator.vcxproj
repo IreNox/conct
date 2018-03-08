@@ -18,44 +18,35 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="sources\main.cpp" />
-    <ClCompile Include="sources\simulator.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\simulator.h" />
-    <ClInclude Include="include\simulator_context.h" />
-    <ClInclude Include="include\simulator_device.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{DB95BA50-530F-47E3-A4D9-E471E0A5A8E6}</ProjectGuid>
+    <ProjectGuid>{3BC17775-48DF-4472-AAE3-9460B8079C5B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>simulator</RootNamespace>
+    <RootNamespace>routersimulator</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -79,12 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\$(ProjectName)\</IntDir>
@@ -99,29 +90,33 @@
     <OutDir>$(SolutionDir)build\$(Configuration)_$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;</AdditionalIncludeDirectories>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4200</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -132,11 +127,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -149,16 +146,52 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_array.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h" />
+    <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_device.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_instance.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_proxy.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_core.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_device.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_proxy.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="device.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\libraries\conct_core\conct_array.inl" />
+    <None Include="..\..\..\libraries\conct_core\conct_array_view.inl" />
+    <None Include="..\..\..\libraries\conct_core\conct_reader.inl" />
+    <None Include="..\..\..\libraries\conct_core\conct_writer.inl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

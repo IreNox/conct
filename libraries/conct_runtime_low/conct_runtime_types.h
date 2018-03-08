@@ -7,15 +7,18 @@ namespace conct
 {
 	typedef uint16_t RuntimeRequestId;
 
-	enum RuntimeErrorCode : uint8_t
+	enum RuntimeResult : uint8_t
 	{
-		RuntimeErrorCode_Unknown,
-		RuntimeErrorCode_OutOfMemory,
-		RuntimeErrorCode_Unsupported,
-		RuntimeErrorCode_NoSuchInstance,
-		RuntimeErrorCode_NoSuchField,
+		RuntimeResult_Unknown,
 
-		RuntimeErrorCode_Count
+		RuntimeResult_Success,
+
+		RuntimeResult_OutOfMemory,
+		RuntimeResult_Unsupported,
+		RuntimeResult_NoSuchInstance,
+		RuntimeResult_NoSuchField,
+
+		RuntimeResult_Count
 	};
 
 	enum RuntimeMessageType : uint8_t

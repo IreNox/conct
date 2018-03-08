@@ -28,7 +28,7 @@ namespace conct
 		return true;
 	}
 
-	void PortRs485Sim::closeSend()
+	void PortRs485Sim::closeSend( Writer& writer )
 	{
 		m_hasSent = true;
 	}
@@ -44,7 +44,7 @@ namespace conct
 		return false;
 	}
 
-	void PortRs485Sim::closeReceived()
+	void PortRs485Sim::closeReceived( Reader& reader )
 	{
 		m_hasReceived = false;
 	}

@@ -17,15 +17,18 @@ namespace conct
 		bool		isEnd() const { return m_remainingSize == 0u; }
 
 		template< class T >
-		bool		writeStruct( const T& data );
-		bool		writeData( const uint8_t* pData, uint8_t length );
+		muint		writeStruct( const T& data );
+		template< class T >
+		muint		writeStruct( const T& data, muint remainingLength );
+		muint		writeData( const void* pData, muint length );
+		muint		writeData( const void* pData, muint length, muint remainingLength );
 
 		bool		writeByte( uint8_t data );
 
 	private:
 
 		uint8_t*	m_pData;
-		uint8_t		m_remainingSize;
+		muint		m_remainingSize;
 	};
 }
 

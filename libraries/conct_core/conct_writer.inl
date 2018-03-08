@@ -3,8 +3,14 @@
 namespace conct
 {
 	template< class T >
-	bool Writer::writeStruct( const T& data )
+	muint Writer::writeStruct( const T& data )
 	{
-		return writeData( static_cast< const uint8_t* >( &data ), sizeof( data ) );
+		return writeData( &data, sizeof( data ) );
+	}
+
+	template< class T >
+	muint Writer::writeStruct( const T& data, muint remainingLength )
+	{
+		return writeData( &data, sizeof( data ), remainingLength );
 	}
 }

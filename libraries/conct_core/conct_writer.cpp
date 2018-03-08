@@ -7,31 +7,44 @@ namespace conct
 		set( nullptr, 0u );
 	}
 
-	Writer::Writer( void* pData, uint8_t size )
+	Writer::Writer( void* pData, muint size )
 	{
 		set( pData, size );
 	}
 
-	void Writer::set( void* pData, uint8_t size )
+	void Writer::set( void* pData, muint size )
 	{
 		m_pData			= static_cast< uint8_t* >( pData );
 		m_remainingSize	= size;
 	}
 
-	bool Writer::writeData( const uint8_t* pData, uint8_t length )
+	muint Writer::writeData( const void* pData, muint length )
 	{
-		if( m_remainingSize < length )
-		{
-			return false;
-		}
+		const uint8_t* pDataBytes = static_cast< const uint8_t* >( pData );
 
-		while( length-- )
+		muint i = 0u;
+		for( ; i < length && m_remainingSize > 0u; ++i )
 		{
-			*m_pData++ = *pData++;
+			*m_pData++ = *pDataBytes++;
 			m_remainingSize--;
 		}
 
-		return true;
+		return i;
+	}
+
+	muint Writer::writeData( const void* pData, muint length, muint remainingLength )
+	{
+		const uint8_t* pDataBytes = static_cast< const uint8_t* >( pData );
+		pDataBytes += ( length - remainingLength );
+
+		muint i = 0u;
+		for( ; i < remainingLength && m_remainingSize > 0u; ++i )
+		{
+			*m_pData++ = *pDataBytes++;
+			m_remainingSize--;
+		}
+
+		return i;
 	}
 
 	bool Writer::writeByte( uint8_t data )

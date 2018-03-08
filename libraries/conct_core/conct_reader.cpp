@@ -7,52 +7,41 @@ namespace conct
 		set( nullptr, 0u );
 	}
 
-	Reader::Reader( const void* pData, uint8_t size )
+	Reader::Reader( const void* pData, muint size )
 	{
 		set( pData, size );
 	}
 
-	void Reader::set( const void* pData, uint8_t size )
+	void Reader::set( const void* pData, muint size )
 	{
 		m_pData			= static_cast< const uint8_t* >( pData );
 		m_remainingSize	= size;
 	}
 
-	const void* Reader::readData( uint8_t length )
+	uint8_t Reader::readData( void* pTarget, muint length )
 	{
-		if( m_remainingSize < length )
-		{
-			return nullptr;
-		}
+		uint8_t* pTargetBytes = static_cast< uint8_t* >( pTarget );
 
-		const void* pData = m_pData;
-
-		m_pData += length;
-		m_remainingSize -= length;
-
-		return pData;
-	}
-
-	uint8_t Reader::readData( uint8_t* pTarget, uint8_t length )
-	{
-		uint8_t i = 0u;
+		muint i = 0u;
 		for( ; i < length && m_remainingSize > 0u; ++i )
 		{
-			*pTarget++ = *m_pData++;
+			*pTargetBytes++ = *m_pData++;
 			m_remainingSize--;
 		}
 
 		return i;
 	}
 
-	uint8_t Reader::readData( uint8_t* pTarget, uint8_t length, uint8_t remainingLength )
+	muint Reader::readData( void* pTarget, muint length, muint alreadyRead )
 	{
-		pTarget += ( length - remainingLength );
+		uint8_t* pTargetBytes = static_cast< uint8_t* >( pTarget );
 
-		uint8_t i = 0u;
-		for( ; i < remainingLength && m_remainingSize > 0u; ++i )
+		pTargetBytes += alreadyRead;
+
+		muint i = alreadyRead;
+		for( ; i < length && m_remainingSize > 0u; ++i )
 		{
-			*pTarget++ = *m_pData++;
+			*pTargetBytes++ = *m_pData++;
 			m_remainingSize--;
 		}
 
@@ -64,13 +53,13 @@ namespace conct
 		return readData( &target, sizeof( target ) ) == sizeof( target );
 	}
 
-	uint8_t Reader::readShort( uint16_t& target )
+	muint Reader::readShort( uint16_t& target )
 	{
-		return readData( (uint8_t*)&target, sizeof( target ) );
+		return readData( &target, sizeof( target ) );
 	}
 
-	uint8_t Reader::readShort( uint16_t& target, uint8_t remainingLength )
+	muint Reader::readShort( uint16_t& target, muint alreadyRead )
 	{
-		return readData( ( uint8_t* )&target, sizeof( target ), remainingLength );
+		return readData( &target, sizeof( target ), alreadyRead );
 	}
 }

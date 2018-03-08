@@ -12,10 +12,10 @@ namespace conct
 		virtual void	loop() CONCT_OVERRIDE_FINAL;
 
 		virtual bool	openSend( Writer& writer, uint8_t deviceId ) CONCT_OVERRIDE_FINAL;
-		virtual void	closeSend() CONCT_OVERRIDE_FINAL;
+		virtual void	closeSend( Writer& writer ) CONCT_OVERRIDE_FINAL;
 
 		virtual bool	openReceived( Reader& reader, uint8_t deviceId ) CONCT_OVERRIDE_FINAL;
-		virtual void	closeReceived() CONCT_OVERRIDE_FINAL;
+		virtual void	closeReceived( Reader& reader ) CONCT_OVERRIDE_FINAL;
 
 	private:
 

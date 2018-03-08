@@ -3,8 +3,14 @@
 namespace conct
 {
 	template< class T >
-	const T* Reader::readStruct()
+	muint Reader::readStruct( T& target )
 	{
-		return static_cast< const T* >( readData( sizeof( T ) ) );
+		return readData( &target, sizeof( T ) );
+	}
+
+	template< class T >
+	muint Reader::readStruct( T& target, muint alreadyRead )
+	{
+		return readData( &target, sizeof( T ), alreadyRead );
 	}
 }

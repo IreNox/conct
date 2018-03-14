@@ -17,7 +17,7 @@ namespace conct
 		m_hasReceived = true;
 	}
 
-	bool PortRs485Sim::openSend( Writer& writer, muint size, DeviceId deviceId )
+	bool PortRs485Sim::openSend( Writer& writer, uintreg size, DeviceId deviceId )
 	{
 		if( m_hasReceived || m_hasSent )
 		{

@@ -4,7 +4,7 @@
 
 namespace conct
 {
-	enum ValueType : uint8_t
+	enum ValueType : uint8
 	{
 		ValueType_Void,
 		ValueType_Boolean,
@@ -23,7 +23,7 @@ namespace conct
 		unsigned		unsignedInteger;
 		const char*		pString;
 		PercentValue	percent;
-		uint32_t		guid;
+		uint32			guid;
 		InstanceId		instance;
 	};
 

@@ -171,6 +171,8 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_command.h" />
+    <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_controller.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="device_impl.h" />
     <ClInclude Include="gen\device_interface.h" />
@@ -185,6 +187,8 @@
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime\conct_device.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_command.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_controller.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
     <ClCompile Include="device_impl.cpp" />
     <ClCompile Include="gen\device_interface.cpp" />
@@ -198,6 +202,7 @@
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_reader.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_writer.inl" />
+    <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

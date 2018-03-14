@@ -128,14 +128,14 @@ namespace conct
 
 		if( m_stateValue < 2u )
 		{
-			m_stateValue += reader.readShort( magic, muint( sizeof( s_runtimeMagic ) - m_stateValue ) );
+			m_stateValue += reader.readShort( magic, uintreg( sizeof( s_messageBaseHeaderMagic ) - m_stateValue ) );
 
-			if( m_stateValue <= sizeof( s_runtimeMagic ) )
+			if( m_stateValue <= sizeof( s_messageBaseHeaderMagic ) )
 			{
 				return ProcessResult_WaitingData;
 			}
 
-			if( magic == s_runtimeMagic )
+			if( magic == s_messageBaseHeaderMagic )
 			{
 				setState( State_ReadBaseHeader );
 				return ProcessResult_Ok;
@@ -148,7 +148,7 @@ namespace conct
 			magic <<= 8u;
 			magic |= nextByte;
 
-			if( magic == s_runtimeMagic )
+			if( magic == s_messageBaseHeaderMagic )
 			{
 				setState( State_ReadBaseHeader );
 				return ProcessResult_Ok;
@@ -160,8 +160,8 @@ namespace conct
 
 	RuntimeLow::ProcessResult RuntimeLow::processBaseHeader( Reader& reader )
 	{
-		RuntimeMessageBaseHeader& baseHeader = *static_cast< RuntimeMessageBaseHeader* >( getWorkingData() );
-		m_stateValue += reader.readStruct< RuntimeMessageBaseHeader >( baseHeader, ( muint )m_stateValue );
+		MessageBaseHeader& baseHeader = *static_cast< MessageBaseHeader* >( getWorkingData() );
+		m_stateValue += reader.readStruct< MessageBaseHeader >( baseHeader, ( uintreg )m_stateValue );
 		if( m_stateValue < sizeof( baseHeader ) )
 		{
 			return ProcessResult_WaitingData;
@@ -169,20 +169,20 @@ namespace conct
 
 		if( baseHeader.destinationHops > 1u )
 		{
-			sendErrorResponse( RuntimeResult_Unsupported );
+			sendErrorResponse( ResultId_Unsupported );
 			return ProcessResult_Error;
 		}
 
 		if( baseHeader.sourceHops > sizeof( m_workingData ) )
 		{
-			sendErrorResponse( RuntimeResult_OutOfMemory );
+			sendErrorResponse( ResultId_OutOfMemory );
 			return ProcessResult_Error;
 		}
 
 		m_workingDataOffset			= 0u;
 		m_playloadSize				= baseHeader.payloadSize;
 		m_destinationAddressSize	= baseHeader.sourceHops;
-		m_result					= RuntimeResult_Unknown;
+		m_result					= ResultId_Unknown;
 
 		setState( State_ReadAddress );
 		return ProcessResult_Ok;
@@ -190,7 +190,7 @@ namespace conct
 
 	RuntimeLow::ProcessResult RuntimeLow::processAddress( Reader& reader )
 	{
-		m_stateValue += reader.readData( getWorkingData(), m_destinationAddressSize, ( muint )m_stateValue );
+		m_stateValue += reader.readData( getWorkingData(), m_destinationAddressSize, ( uintreg )m_stateValue );
 		if( m_stateValue < m_destinationAddressSize )
 		{
 			return ProcessResult_WaitingData;
@@ -200,7 +200,7 @@ namespace conct
 
 		if( m_playloadSize > getRemainingWorkingData() )
 		{
-			sendErrorResponse( RuntimeResult_OutOfMemory );
+			sendErrorResponse( ResultId_OutOfMemory );
 			return ProcessResult_Error;
 		}
 
@@ -218,13 +218,13 @@ namespace conct
 				return ProcessResult_WaitingData;
 			}
 
-			m_messageType = ( RuntimeMessageType )commandTypeValue;
+			m_messageType = ( MessageType )commandTypeValue;
 			m_stateValue++;
 		}
 
 		if( m_stateValue < sizeof( m_requestId ) + 1u )
 		{
-			m_stateValue += reader.readShort( m_requestId, muint( m_stateValue - 1u ) );
+			m_stateValue += reader.readShort( m_requestId, uintreg( m_stateValue - 1u ) );
 			if( m_stateValue < sizeof( m_requestId ) + 1u )
 			{
 				return ProcessResult_WaitingData;
@@ -237,7 +237,7 @@ namespace conct
 
 	RuntimeLow::ProcessResult RuntimeLow::processMessage( Reader& reader )
 	{
-		m_stateValue = reader.readData( getWorkingData(), ( muint )m_playloadSize, ( muint )m_stateValue );
+		m_stateValue = reader.readData( getWorkingData(), ( uintreg )m_playloadSize, ( uintreg )m_stateValue );
 		if( m_stateValue < m_playloadSize )
 		{
 			return ProcessResult_WaitingData;
@@ -253,43 +253,43 @@ namespace conct
 	{
 		switch( m_messageType )
 		{
-		case RuntimeMessageType_PingRequest:
+		case MessageType_PingRequest:
 			sendPingResponse();
 			break;
 
-		case RuntimeMessageType_GetPropertyRequest:
+		case MessageType_GetPropertyRequest:
 			{
 				Value value;
 				{
-					const RuntimeGetPropertyRequest& request = *reinterpret_cast< const RuntimeGetPropertyRequest* >( m_workingData + m_workingDataOffset );
+					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_workingDataOffset );
 
 					const LocalInstance* pInstance = findInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
-						sendErrorResponse( RuntimeResult_NoSuchInstance );
+						sendErrorResponse( ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->getProperty( value, pInstance->pInstance, request.name ) )
 					{
-						sendErrorResponse( RuntimeResult_NoSuchField );
+						sendErrorResponse( ResultId_NoSuchField );
 						return;
 					}
 				}
 
-				sendResponse( RuntimeMessageType_GetPropertyResponse, &value, sizeof( value ) );
+				sendResponse( MessageType_GetPropertyResponse, &value, sizeof( value ) );
 			}
 			break;
 
-		//case RuntimeMessageType_SetPropertyRequest:
+		//case MessageType_SetPropertyRequest:
 		//	break;
 
-		//case RuntimeMessageType_CallFunctionRequest:
+		//case MessageType_CallFunctionRequest:
 		//	break;
 
 		default:
 			{
-				sendErrorResponse( RuntimeResult_Unsupported );
+				sendErrorResponse( ResultId_Unsupported );
 				return;
 			}
 			break;
@@ -300,29 +300,29 @@ namespace conct
 
 	void RuntimeLow::sendPingResponse()
 	{
-		m_messageType = RuntimeMessageType_PingResponse;
+		m_messageType = MessageType_PingResponse;
 		setState( State_SendResponse );
 	}
 
-	void RuntimeLow::sendErrorResponse( RuntimeResult result )
+	void RuntimeLow::sendErrorResponse( ResultId result )
 	{
-		m_messageType	= RuntimeMessageType_ErrorResponse;
+		m_messageType	= MessageType_ErrorResponse;
 		m_result		= result;
 		setState( State_SendResponse );
 	}
 
-	void RuntimeLow::sendResponse( RuntimeMessageType responseType, const void* pData, uint8 dataLength )
+	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uint8 dataLength )
 	{
 		if( getRemainingWorkingData() < dataLength )
 		{
-			sendErrorResponse( RuntimeResult_OutOfMemory );
+			sendErrorResponse( ResultId_OutOfMemory );
 			return;
 		}
 
 		copyMemory( getWorkingData(), pData, dataLength );
 
 		m_messageType	= responseType;
-		m_result		= RuntimeResult_Success;
+		m_result		= ResultId_Success;
 
 		setState( State_SendResponse, dataLength );
 	}

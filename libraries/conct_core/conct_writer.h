@@ -9,26 +9,26 @@ namespace conct
 	public:
 
 					Writer();
-					Writer( void* pData, uint8_t size );
+					Writer( void* pData, uintreg size );
 
-		void		set( void* pData, uint8_t size );
+		void		set( void* pData, uintreg size );
 
-		uint8_t		getRemainingSize() const { return m_remainingSize; }
+		uintreg		getRemainingSize() const { return m_remainingSize; }
 		bool		isEnd() const { return m_remainingSize == 0u; }
 
 		template< class T >
-		muint		writeStruct( const T& data );
+		uintreg		writeStruct( const T& data );
 		template< class T >
-		muint		writeStruct( const T& data, muint remainingLength );
-		muint		writeData( const void* pData, muint length );
-		muint		writeData( const void* pData, muint length, muint remainingLength );
+		uintreg		writeStruct( const T& data, uintreg remainingLength );
+		uintreg		writeData( const void* pData, uintreg length );
+		uintreg		writeData( const void* pData, uintreg length, uintreg remainingLength );
 
-		bool		writeByte( uint8_t data );
+		bool		writeByte( uint8 data );
 
 	private:
 
-		uint8_t*	m_pData;
-		muint		m_remainingSize;
+		uint8*		m_pData;
+		uintreg		m_remainingSize;
 	};
 }
 

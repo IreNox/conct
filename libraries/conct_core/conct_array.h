@@ -10,19 +10,19 @@ namespace conct
 	public:
 
 						Array();
-						Array( T* pData, uint8_t count );
+						Array( T* pData, uintreg count );
 
-		void			set( T* pData, uint8_t count );
+		void			set( T* pData, uintreg count );
 
-		const uint8_t*	getData() const { return m_pData; }
-		uint8_t			getCount() const { return m_count; }
+		const uint8*	getData() const { return m_pData; }
+		uintreg			getCount() const { return m_count; }
 
-		const T&		operator[]( uint8_t index ) const;
+		const T&		operator[]( uintreg index ) const;
 
 	private:
 
 		T*		m_pData;
-		uint8_t	m_count;
+		uintreg	m_count;
 	};
 }
 

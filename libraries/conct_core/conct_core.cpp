@@ -9,7 +9,7 @@ namespace conct
 		return strcmp( pString1, pString2 ) == 0;
 	}
 
-	void copyMemory( void* pTarget, const void* pSource, muint size )
+	void copyMemory( void* pTarget, const void* pSource, uintreg size )
 	{
 		memcpy( pTarget, pSource, size );
 	}

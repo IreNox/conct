@@ -7,22 +7,22 @@ namespace conct
 		set( nullptr, 0u );
 	}
 
-	Reader::Reader( const void* pData, muint size )
+	Reader::Reader( const void* pData, uintreg size )
 	{
 		set( pData, size );
 	}
 
-	void Reader::set( const void* pData, muint size )
+	void Reader::set( const void* pData, uintreg size )
 	{
-		m_pData			= static_cast< const uint8_t* >( pData );
+		m_pData			= static_cast< const uint8* >( pData );
 		m_remainingSize	= size;
 	}
 
-	uint8_t Reader::readData( void* pTarget, muint length )
+	uintreg Reader::readData( void* pTarget, uintreg length )
 	{
-		uint8_t* pTargetBytes = static_cast< uint8_t* >( pTarget );
+		uint8* pTargetBytes = static_cast< uint8* >( pTarget );
 
-		muint i = 0u;
+		uintreg i = 0u;
 		for( ; i < length && m_remainingSize > 0u; ++i )
 		{
 			*pTargetBytes++ = *m_pData++;
@@ -32,13 +32,13 @@ namespace conct
 		return i;
 	}
 
-	muint Reader::readData( void* pTarget, muint length, muint alreadyRead )
+	uintreg Reader::readData( void* pTarget, uintreg length, uintreg alreadyRead )
 	{
-		uint8_t* pTargetBytes = static_cast< uint8_t* >( pTarget );
+		uint8* pTargetBytes = static_cast< uint8* >( pTarget );
 
 		pTargetBytes += alreadyRead;
 
-		muint i = alreadyRead;
+		uintreg i = alreadyRead;
 		for( ; i < length && m_remainingSize > 0u; ++i )
 		{
 			*pTargetBytes++ = *m_pData++;
@@ -48,17 +48,17 @@ namespace conct
 		return i;
 	}
 
-	bool Reader::readByte( uint8_t& target )
+	bool Reader::readByte( uint8& target )
 	{
 		return readData( &target, sizeof( target ) ) == sizeof( target );
 	}
 
-	muint Reader::readShort( uint16_t& target )
+	uintreg Reader::readShort( uint16& target )
 	{
 		return readData( &target, sizeof( target ) );
 	}
 
-	muint Reader::readShort( uint16_t& target, muint alreadyRead )
+	uintreg Reader::readShort( uint16& target, uintreg alreadyRead )
 	{
 		return readData( &target, sizeof( target ), alreadyRead );
 	}

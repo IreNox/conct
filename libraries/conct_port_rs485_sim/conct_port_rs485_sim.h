@@ -11,7 +11,7 @@ namespace conct
 		virtual void		setup() CONCT_OVERRIDE_FINAL;
 		virtual void		loop() CONCT_OVERRIDE_FINAL;
 
-		virtual bool		openSend( Writer& writer, muint size, DeviceId deviceId ) CONCT_OVERRIDE_FINAL;
+		virtual bool		openSend( Writer& writer, uintreg size, DeviceId deviceId ) CONCT_OVERRIDE_FINAL;
 		virtual void		closeSend( Writer& writer ) CONCT_OVERRIDE_FINAL;
 
 		virtual bool		openReceived( Reader& reader, DeviceId& deviceId ) CONCT_OVERRIDE_FINAL;

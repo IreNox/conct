@@ -3,13 +3,13 @@
 namespace conct
 {
 	template< class T >
-	muint Reader::readStruct( T& target )
+	uintreg Reader::readStruct( T& target )
 	{
 		return readData( &target, sizeof( T ) );
 	}
 
 	template< class T >
-	muint Reader::readStruct( T& target, muint alreadyRead )
+	uintreg Reader::readStruct( T& target, uintreg alreadyRead )
 	{
 		return readData( &target, sizeof( T ), alreadyRead );
 	}

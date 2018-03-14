@@ -108,17 +108,28 @@ namespace conct
 	typedef uint64_t	uint64;
 	typedef int64_t		sint64;
 
-	typedef uint8		muint;
-
 	typedef int			sint;
 	typedef unsigned	uint;
 
 #if CONCT_ENABLED( CONCT_POINTER_16 )
-	typedef uint16		puint;
+	typedef uint16		uintptr;
 #elif CONCT_ENABLED( CONCT_POINTER_32 )
-	typedef uint32		puint;
+	typedef uint32		uintptr;
 #elif CONCT_ENABLED( CONCT_POINTER_64 )
-	typedef uint64		puint;
+	typedef uint64		uintptr;
+#endif
+
+#if CONCT_ENABLED( CONCT_REGISTER_8 )
+	typedef uint8		uintreg;
+#endif
+#if CONCT_ENABLED( CONCT_REGISTER_16 )
+	typedef uint16		uintreg;
+#endif
+#if CONCT_ENABLED( CONCT_REGISTER_32 )
+	typedef uint32		uintreg;
+#endif
+#if CONCT_ENABLED( CONCT_REGISTER_64 )
+	typedef uint64		uintreg;
 #endif
 
 	typedef uint8		DeviceId;
@@ -126,13 +137,8 @@ namespace conct
 	typedef uint16		InstanceId;
 	typedef uint16		PercentValue;
 
-	struct LocalInstance
-	{
-		InstanceId	id;
-		void*		pInstance;
-		Proxy*		pProxy;
-	};
+	static const DeviceId InvalidDeviceId = 0u;
 
 	bool	isStringEqual( const char* pString1, const char* pString2 );
-	void	copyMemory( void* pTarget, const void* pSource, muint size );
+	void	copyMemory( void* pTarget, const void* pSource, uintreg size );
 }

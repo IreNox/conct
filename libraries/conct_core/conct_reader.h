@@ -9,29 +9,29 @@ namespace conct
 	{
 	public:
 
-					Reader();
-					Reader( const void* pData, muint size );
+						Reader();
+						Reader( const void* pData, uintreg size );
 
-		void		set( const void* pData, muint size );
+		void			set( const void* pData, uintreg size );
 
-		muint		getRemainingSize() const { return m_remainingSize; }
-		bool		isEnd() const { return m_remainingSize == 0u; }
+		uintreg			getRemainingSize() const { return m_remainingSize; }
+		bool			isEnd() const { return m_remainingSize == 0u; }
 
 		template< class T >
-		muint		readStruct( T& target );
+		uintreg			readStruct( T& target );
 		template< class T >
-		muint		readStruct( T& Target, muint alreadyRead );
-		muint		readData( void* pTarget, muint length );
-		muint		readData( void* pTarget, muint length, muint alreadyRead );
+		uintreg			readStruct( T& Target, uintreg alreadyRead );
+		uintreg			readData( void* pTarget, uintreg length );
+		uintreg			readData( void* pTarget, uintreg length, uintreg alreadyRead );
 
-		bool		readByte( uint8_t& target );
-		muint		readShort( uint16_t& target );
-		muint		readShort( uint16_t& target, muint alreadyRead );
+		bool			readByte( uint8& target );
+		uintreg			readShort( uint16& target );
+		uintreg			readShort( uint16& target, uintreg alreadyRead );
 
 	private:
 
-		const uint8_t*	m_pData;
-		muint			m_remainingSize;
+		const uint8*	m_pData;
+		uintreg			m_remainingSize;
 	};
 }
 

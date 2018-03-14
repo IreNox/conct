@@ -46,9 +46,9 @@ namespace conct
 
 		uint16						m_playloadSize;
 		uint8						m_destinationAddressSize;
-		RuntimeMessageType			m_messageType;
-		RuntimeMessageId			m_requestId;
-		RuntimeResult				m_result;
+		MessageType					m_messageType;
+		CommandId					m_requestId;
+		ResultId						m_result;
 
 		ArrayView< LocalInstance >	m_instances;
 
@@ -70,8 +70,8 @@ namespace conct
 		void						executeCommand();
 
 		void						sendPingResponse();
-		void						sendErrorResponse( RuntimeResult result );
-		void						sendResponse( RuntimeMessageType responseType, const void* pData, uint8 dataLength );
+		void						sendErrorResponse( ResultId result );
+		void						sendResponse( MessageType responseType, const void* pData, uint8 dataLength );
 
 		void						sendData( Port* pPort );
 	};

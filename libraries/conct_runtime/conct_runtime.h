@@ -5,59 +5,108 @@
 
 namespace conct
 {
-	typedef uint16 RuntimeMessageId;
+	typedef uint16 CommandId;
 
-	enum RuntimeResult : uint8
+	struct DeviceAddress
 	{
-		RuntimeResult_Unknown,
+		enum
+		{
+			Size = 128u
+		};
 
-		RuntimeResult_Success,
-
-		RuntimeResult_OutOfMemory,
-		RuntimeResult_Unsupported,
-		RuntimeResult_NoSuchInstance,
-		RuntimeResult_NoSuchField,
-
-		RuntimeResult_Count
+		DeviceId address[ Size ];
 	};
 
-	enum RuntimeMessageType : uint8
+	struct LocalInstance
 	{
-		RuntimeMessageType_ErrorResponse,
-		RuntimeMessageType_PingRequest,
-		RuntimeMessageType_PingResponse,
-		RuntimeMessageType_GetPropertyRequest,
-		RuntimeMessageType_GetPropertyResponse,
-		RuntimeMessageType_SetPropertyRequest,
-		RuntimeMessageType_SetPropertyResponse,
-		RuntimeMessageType_CallFunctionRequest,
-		RuntimeMessageType_CallFunctionResponse,
-		//RuntimeMessageType_RegisterEvent,
-		//RuntimeMessageType_UnregisterEvent,
-		//RuntimeMessageType_CallEventHandler,
-		//RuntimeMessageType_CheckEventHandler,
+		InstanceId	id;
+		void*		pInstance;
+		Proxy*		pProxy;
 	};
 
-	struct RuntimeMessageBaseHeader
+	struct RemoteInstance
 	{
-		uint8_t				sourceHops;
-		uint8_t				destinationHops;
-		uint16_t			payloadSize;
-		RuntimeMessageId	messageId;
-		RuntimeMessageType	messageType;
-		RuntimeResult		messageResult;
+		DeviceAddress	address;
+		InstanceId		id;
 	};
 
-	struct RuntimeGetPropertyRequest
+	enum ResultId : uint8
+	{
+		ResultId_Unknown,
+
+		ResultId_Success,
+
+		ResultId_OutOfMemory,
+		ResultId_Timeout,
+		ResultId_Unsupported,
+		ResultId_NoSuchDevice,
+		ResultId_NoSuchInstance,
+		ResultId_NoSuchField,
+		ResultId_NoSource,
+		ResultId_NoDestination,
+
+		ResultId_Count
+	};
+
+	struct ResultBase
+	{
+		ResultId		result;
+
+		inline bool		isSuccess() const { return result == ResultId_Success; }
+		inline bool		isError() const { return result != ResultId_Success; }
+
+		inline bool		isBusy() const { return result == ResultId_Timeout; }
+		inline bool		isDone() const { return result != ResultId_Timeout; }
+	};
+
+	template< class TValue >
+	struct Result : public ResultBase
+	{
+		TValue			value;
+	};
+
+	template< >
+	struct Result< void > : public ResultBase
+	{
+	};
+
+	enum MessageType : uint8
+	{
+		MessageType_ErrorResponse,
+		MessageType_PingRequest,
+		MessageType_PingResponse,
+		MessageType_GetPropertyRequest,
+		MessageType_GetPropertyResponse,
+		MessageType_SetPropertyRequest,
+		MessageType_SetPropertyResponse,
+		MessageType_CallFunctionRequest,
+		MessageType_CallFunctionResponse,
+		//MessageType_RegisterEvent,
+		//MessageType_UnregisterEvent,
+		//MessageType_CallEventHandler,
+		//MessageType_CheckEventHandler,
+	};
+
+	struct MessageBaseHeader
+	{
+		uint8		sourceHops;
+		uint8		destinationHops;
+		uint16		payloadSize;
+		CommandId	commandId;
+		MessageType	messageType;
+		ResultId		messageResult;
+	};
+
+	struct GetPropertyRequest
 	{
 		InstanceId		instanceId;
 		char			name[ 0u ];
 	};
 
-	struct RuntimeGetPropertyResponse
+	struct GetPropertyResponse
 	{
 		Value			value;
 	};
 
-	static const uint16 s_runtimeMagic = 0xc0c7u;
+	static const uint16 s_messageBaseHeaderMagic = 0xc0c7u;
 }

@@ -80,6 +80,12 @@
     <ClInclude Include="..\..\..\libraries\conct_port_lan\conct_port_lan.h">
       <Filter>extern\conct_port_lan</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_controller.h">
+      <Filter>extern\conct_runtime_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_command.h">
+      <Filter>extern\conct_runtime_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
@@ -118,6 +124,12 @@
     <ClCompile Include="..\..\..\libraries\conct_port_lan\conct_port_lan.cpp">
       <Filter>extern\conct_port_lan</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_controller.cpp">
+      <Filter>extern\conct_runtime_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_command.cpp">
+      <Filter>extern\conct_runtime_high</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -134,6 +146,9 @@
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl">
       <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl">
+      <Filter>extern\conct_runtime_high</Filter>
     </None>
   </ItemGroup>
 </Project>

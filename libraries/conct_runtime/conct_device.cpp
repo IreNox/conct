@@ -1,6 +1,7 @@
 #include "conct_device.h"
 
 #include "conct_proxy.h"
+#include "conct_runtime.h"
 
 namespace conct
 {
@@ -9,7 +10,7 @@ namespace conct
 		ArrayView< LocalInstance > instances;
 		getInstances( instances );
 
-		for( uint8_t i = 0u; i < instances.getCount(); ++i )
+		for( uintreg i = 0u; i < instances.getCount(); ++i )
 		{
 			const LocalInstance& instance = instances[ i ];
 

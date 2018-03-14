@@ -12,6 +12,7 @@ namespace conct
 	class Device;
 	class Port;
 	class Reader;
+	class CommandBase;
 
 	class RuntimeHigh
 	{
@@ -20,6 +21,10 @@ namespace conct
 		void					setup( Device* pDevice );
 
 		void					processPort( Port* pPort );
+
+		CommandId				getNextCommandId( DeviceId deviceId );
+
+		ResultId					sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const std::vector< uint8 >& payload );
 
 	private:
 
@@ -35,13 +40,13 @@ namespace conct
 
 		struct PackageWaitForMagicData
 		{
-			muint						firstReadCounter;
+			uintreg						firstReadCounter;
 			uint16						lastMagic;
 		};
 
 		struct PackageReadBytesData
 		{
-			muint						alreadyRead;
+			uintreg						alreadyRead;
 		};
 
 		union PackageStateData
@@ -52,18 +57,17 @@ namespace conct
 
 		struct Package
 		{
-			DeviceId					deviceId;
-			RuntimeMessageBaseHeader	baseHeader;
-			std::vector< uint8 >		sourceAddress;
-			std::vector< uint8 >		destinationAddress;
-			std::vector< uint8 >		payload;
+			MessageBaseHeader		baseHeader;
+			std::vector< DeviceId >	sourceAddress;
+			std::vector< DeviceId >	destinationAddress;
+			std::vector< uint8 >	payload;
 		};
 
 		struct PendingPackage
 		{
-			PackageState				state;
-			PackageStateData			data;
-			Package						target;
+			PackageState			state;
+			PackageStateData		data;
+			Package					target;
 		};
 
 		struct PortData
@@ -80,6 +84,7 @@ namespace conct
 		{
 			Port*		pTargetPort;
 			DeviceId	ownDeviceId;
+			CommandId	nextCommandId;
 		};
 
 		typedef std::vector< LocalInstance > LocalInstanceVector;
@@ -96,10 +101,11 @@ namespace conct
 		void				readMagic( PendingPackage& package, Reader& reader );
 		void				readBaseHeader( PendingPackage& package, Reader& reader );
 		void				readBytes( std::vector< uint8 >& target, PendingPackage& package, Reader& reader, PackageState nextState );
-		void				readPush( Port* pPort, PortData& portData, PendingPackage& package, DeviceId deviceId );
+		void				readStore( Port* pPort, PortData& portData, PendingPackage& package, DeviceId deviceId );
 
 		void				processPackages( PortData& portData );
 		void				processRoute( PortData& portData, const Package& package );
+		void				processPackage( PortData& portData, const Package& package );
 
 		void				setState( PendingPackage& package, PackageState state );
 	};

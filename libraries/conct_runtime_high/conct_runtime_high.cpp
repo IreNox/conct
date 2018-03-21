@@ -52,7 +52,7 @@ namespace conct
 		}
 	}
 
-	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const std::vector<uint8>& payload )
+	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )
 	{
 		Package package;
 		if( package.destinationAddress.empty() )
@@ -64,6 +64,11 @@ namespace conct
 		if( it == m_devices.end() )
 		{
 			return ResultId_NoSuchDevice;
+		}
+
+		for( uint i = 0u; i < payload.getCount(); ++i )
+		{
+			package.payload.push_back( payload[ i ] );
 		}
 
 		const DeviceData& deviceData = it->second;

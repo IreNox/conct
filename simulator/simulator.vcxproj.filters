@@ -17,6 +17,9 @@
     <ClCompile Include="sources\simulator.cpp">
       <Filter>sources</Filter>
     </ClCompile>
+    <ClCompile Include="sources\console.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">
@@ -26,6 +29,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\simulator_context.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\console.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

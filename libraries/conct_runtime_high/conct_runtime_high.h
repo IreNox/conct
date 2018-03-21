@@ -24,7 +24,7 @@ namespace conct
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
-		ResultId					sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const std::vector< uint8 >& payload );
+		ResultId				sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload );
 
 	private:
 

@@ -12,5 +12,8 @@ namespace std
 
 namespace conct
 {
+	typedef uint16_t TypeCrc;
+
 	std::string getExecutableName();
+	uint16_t	calculateCrc16( const void* pData, size_t size );
 }

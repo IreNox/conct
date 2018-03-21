@@ -29,8 +29,8 @@ namespace conct
 
 	struct Value
 	{
-		ValueType	type;
-		ValueData	data;
+		ValueType		type;
+		ValueData		data;
 
 		bool			getBoolean() const;
 		PercentValue	getPercentValue() const;

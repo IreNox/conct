@@ -12,6 +12,8 @@ namespace conct
 	{
 	public:
 
+	private:
+
 	};
 
 	SIMULATOR_DLL SimulatorContext& getSimulatorContext();

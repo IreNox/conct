@@ -5,7 +5,7 @@ namespace conct
 	template< class T >
 	Array<T>::Array()
 	{
-		set( nullptr, 0u );
+		clear();
 	}
 
 	template< class T >
@@ -19,6 +19,19 @@ namespace conct
 	{
 		m_pData	= pData;
 		m_count	= count;
+	}
+
+	template< class T >
+	void conct::Array<T>::clear()
+	{
+		set( nullptr, 0u );
+	}
+
+	template< class T >
+	T& Array<T>::operator[]( uintreg index )
+	{
+		CONCT_ASSERT( index < m_count );
+		return m_pData[ index ];
 	}
 
 	template< class T >

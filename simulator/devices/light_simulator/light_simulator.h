@@ -16,6 +16,8 @@ namespace conct
 		virtual void			setup() override final;
 		virtual void			loop() override final;
 
+		virtual void 			fillData( SimulatorDeviceData& targetData ) override final;
+
 	private:
 
 		DeviceLightSimulator	m_device;

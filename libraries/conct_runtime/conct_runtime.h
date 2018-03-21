@@ -5,6 +5,8 @@
 
 namespace conct
 {
+	class Proxy;
+
 	typedef uint16 CommandId;
 
 	struct DeviceAddress
@@ -97,6 +99,16 @@ namespace conct
 		ResultId		messageResult;
 	};
 
+	struct GetInstanceRequest
+	{
+		TypeCrc			typeCrc;
+	};
+
+	struct FindInstanceRequest
+	{
+		TypeCrc			typeCrc;
+	};
+
 	struct GetPropertyRequest
 	{
 		InstanceId		instanceId;
@@ -106,6 +118,20 @@ namespace conct
 	struct GetPropertyResponse
 	{
 		Value			value;
+	};
+
+	struct SetPropertyRequest
+	{
+		InstanceId		instanceId;
+		Value			value;
+		char			name[ 0u ];
+	};
+
+	struct CallFunctionRequest
+	{
+		InstanceId		instanceId;
+		Value			value;
+		char			name[ 0u ];
 	};
 
 	static const uint16 s_messageBaseHeaderMagic = 0xc0c7u;

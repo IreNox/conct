@@ -13,10 +13,17 @@ namespace conct
 						Array( T* pData, uintreg count );
 
 		void			set( T* pData, uintreg count );
+		void			clear();
 
-		const uint8*	getData() const { return m_pData; }
+		T*				getData() { return m_pData; }
+		const T*		getData() const { return m_pData; }
+
 		uintreg			getCount() const { return m_count; }
 
+		T*				begin() { return m_pData; }
+		T*				end() { return m_pData + m_count; }
+
+		T&				operator[]( uintreg index );
 		const T&		operator[]( uintreg index ) const;
 
 	private:

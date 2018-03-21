@@ -16,10 +16,55 @@ namespace conct
 
 	Command< RemoteInstance >* Controller::getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc )
 	{
-		Command< RemoteInstance >* pCommand = new Command< RemoteInstance >( m_pRuntime->getNextCommandId( deviceAddress.address[ 0u ] ) );
+		GetInstanceRequest request;
+		request.typeCrc = typeCrc;
 
-		std::vector< uint8 > payload;
-		// fill payload
+		ArrayView< uint8 > payload( (uint8*)&request, sizeof( request ) );
+		return beginCommand< Command< RemoteInstance > >( deviceAddress, payload );
+	}
+
+	Command< Array< RemoteInstance > >* Controller::findInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc )
+	{
+		FindInstanceRequest request;
+		request.typeCrc = typeCrc;
+
+		ArrayView< uint8 > payload( ( uint8* )&request, sizeof( request ) );
+		return beginCommand< Command< Array< RemoteInstance > > >( deviceAddress, payload );
+	}
+
+	Command< Value >* Controller::getProperty( const RemoteInstance& instance, const char* pName )
+	{
+		GetPropertyRequest request;
+		request.instanceId = instance.id;
+
+		ArrayView< uint8 > payload( ( uint8* )&request, sizeof( request ) );
+		return beginCommand< Command< Value > >( instance.address, payload );
+	}
+
+	CommandBase* Controller::setProperty( const RemoteInstance& instance, const char* pName, const Value& value )
+	{
+		SetPropertyRequest request;
+		request.instanceId	= instance.id;
+		request.value		= value;
+
+		ArrayView< uint8 > payload( ( uint8* )&request, sizeof( request ) );
+		return beginCommand< CommandBase >( instance.address, payload );
+	}
+
+	Command< Value >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const Array< Value >& arguments )
+	{
+		CallFunctionRequest request;
+		request.instanceId = instance.id;
+
+		ArrayView< uint8 > payload( ( uint8* )&request, sizeof( request ) );
+		return beginCommand< Command< Value > >( instance.address, payload );
+	}
+
+	template< class TCommand >
+	TCommand* conct::Controller::beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )
+	{
+		const DeviceId deviceId = deviceAddress.address[ 0u ];
+		TCommand* pCommand = new TCommand( m_pRuntime->getNextCommandId( deviceId ) );
 
 		if( m_pRuntime->sendPackage( pCommand, deviceAddress, payload ) != ResultId_Success )
 		{
@@ -28,25 +73,5 @@ namespace conct
 		}
 
 		return pCommand;
-	}
-
-	Command< Array< RemoteInstance > >* Controller::findInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc )
-	{
-
-	}
-
-	Command< Value >* Controller::getProperty( const RemoteInstance& instance, const char* pName )
-	{
-
-	}
-
-	Command< Value >* Controller::setProperty( const RemoteInstance& instance, const char* pName, const Value& value )
-	{
-
-	}
-
-	Command< Value >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const Array< Value >& arguments )
-	{
-
 	}
 }

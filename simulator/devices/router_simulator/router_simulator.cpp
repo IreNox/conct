@@ -19,6 +19,11 @@ namespace conct
 	{
 		m_device.loopDevice();
 	}
+
+	void RouterSimulator::fillData( SimulatorDeviceData& targetData )
+	{
+		//targetData.pController = m_device.getController();
+	}
 }
 
 extern "C"

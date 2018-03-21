@@ -8,6 +8,8 @@ namespace conct
 	{
 	public:
 
+		static const TypeCrc s_TypeCrc = 7621;
+
 		virtual PercentValue getRed() const = 0;
 		virtual void setRed( PercentValue value ) = 0;
 		virtual PercentValue getGreen() const = 0;

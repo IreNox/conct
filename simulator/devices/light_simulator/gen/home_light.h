@@ -8,7 +8,7 @@ namespace conct
 	{
 	public:
 
-		static const TypeCrc s_TypeCrc = 24332;
+		static const TypeCrc s_typeCrc = 24332;
 
 		virtual bool getOn() const = 0;
 		virtual void setOn( bool value ) = 0;

@@ -5,7 +5,7 @@
 namespace conct
 {
 	DimmerProxy::DimmerProxy()
-		: Proxy( 0u )
+		: Proxy( Dimmer::s_typeCrc )
 	{
 	}
 

@@ -162,8 +162,10 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
@@ -210,6 +212,7 @@
   <ItemGroup>
     <None Include="..\..\..\libraries\conct_core\conct_array.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl" />
+    <None Include="..\..\..\libraries\conct_core\conct_flags.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_reader.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_writer.inl" />
   </ItemGroup>

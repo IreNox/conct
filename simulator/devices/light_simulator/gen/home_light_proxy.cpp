@@ -5,7 +5,7 @@
 namespace conct
 {
 	LightProxy::LightProxy()
-		: Proxy( 0u )
+		: Proxy( Light::s_typeCrc )
 	{
 	}
 

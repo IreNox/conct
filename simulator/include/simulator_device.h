@@ -10,13 +10,15 @@ namespace conct
 
 	struct SimulatorInstance
 	{
-		InstanceId				id;
-		TypeCrc					type;
-		std::vector< uint8 >	data;
+		InstanceId		id;
+		TypeCrc			type;
+		std::string		data;
 	};
 
 	struct SimulatorDeviceData
 	{
+		std::string							name;
+
 		Controller*							pController;
 		std::vector< SimulatorInstance >	instances;
 	};

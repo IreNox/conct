@@ -5,7 +5,7 @@
 namespace conct
 {
 	RGBProxy::RGBProxy()
-		: Proxy( 0u )
+		: Proxy( RGB::s_typeCrc )
 	{
 	}
 

@@ -104,6 +104,12 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h">
       <Filter>extern\conct_runtime</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -172,6 +178,9 @@
       <Filter>extern\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_flags.inl">
       <Filter>extern\conct_core</Filter>
     </None>
   </ItemGroup>

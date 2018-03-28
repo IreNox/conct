@@ -8,6 +8,12 @@ namespace conct
 	{
 		m_changeFlags		= ChangeFlag_None;
 		m_selectedDevice	= 0u;
+		m_deviceMode		= DeviceMode_Invalid;
+
+		const HANDLE consoleHandle = GetStdHandle( STD_INPUT_HANDLE );
+		DWORD modes;
+		GetConsoleMode( consoleHandle, &modes );
+		SetConsoleMode( consoleHandle, modes | ENABLE_WINDOW_INPUT );
 	}
 
 	void Console::addDevice( SimulatorDevice* pDevice )
@@ -20,10 +26,7 @@ namespace conct
 
 		m_changeFlags |= ChangeFlag_DeviceList;
 
-		if( m_devices.size() == 1u )
-		{
-			m_changeFlags |= ChangeFlag_Device;
-		}
+		selectDevice( m_devices.size() - 1u );
 	}
 
 	void Console::removeDevice( SimulatorDevice* pDevice )
@@ -41,6 +44,11 @@ namespace conct
 
 	void Console::update()
 	{
+		if( getKeyState( VK_ESCAPE ) )
+		{
+			exit( 0u );
+		}
+
 		updateDeviceSelection();
 		updateModeSelection();
 
@@ -72,38 +80,56 @@ namespace conct
 			default:
 				break;
 			}
-
-			if( device.data.pController != nullptr )
-			{
-
-			}
 		}
 	}
 
 	void Console::updateDeviceSelection()
 	{
-		for( uint i = 0u; i < m_devices.size(); ++i )
+		for( size_t i = 0u; i < m_devices.size(); ++i )
 		{
-			if( getKeyState( VK_F1 + i ) )
+			if( getKeyState( int( VK_F1 + i ) ) )
 			{
-				m_selectedDevice = i;
-
-				m_changeFlags |= ChangeFlag_DeviceList;
-				m_changeFlags |= ChangeFlag_Device;
+				selectDevice( i );
 			}
 		}
 	}
 
 	void Console::updateModeSelection()
 	{
-		for( uint i = 0u; i < DeviceMode_Count; ++i )
+		for( size_t i = 0u; i < m_enabledModes.size(); ++i )
 		{
-			if( getKeyState( '1' + i ) )
+			if( getKeyState( int( '1' + i ) ) )
 			{
-				m_deviceMode = ( DeviceMode )i;
+				m_deviceMode = m_enabledModes[ i ];
 				m_changeFlags |= ChangeFlag_Device;
 			}
 		}
+	}
+
+	void Console::selectDevice( size_t index )
+	{
+		m_selectedDevice = index;
+		m_deviceMode = DeviceMode_Invalid;
+		m_enabledModes.clear();
+
+		const Device& selectedDevice = m_devices[ m_selectedDevice ];
+		if( selectedDevice.data.pController != nullptr )
+		{
+			m_enabledModes.push_back( DeviceMode_Controller );
+		}
+
+		if( !selectedDevice.data.instances.empty() )
+		{
+			m_enabledModes.push_back( DeviceMode_Instances );
+		}
+
+		if( !m_enabledModes.empty() )
+		{
+			m_deviceMode = m_enabledModes[ 0u ];
+		}
+
+		m_changeFlags |= ChangeFlag_DeviceList;
+		m_changeFlags |= ChangeFlag_Device;
 	}
 
 	void Console::drawDeviceList()
@@ -144,7 +170,62 @@ namespace conct
 
 	void Console::drawDeviceController()
 	{
+		uint16 width = measureTextSize( "Instances:" ).x;
+		for( const ControllerInstance& instance : m_controllerInstances )
+		{
+			width = CONCT_MAX( measureTextSize( instance.name.c_str() ).x, width );
+		}
+		width += 4u;
 
+		const uint16x2 size = getSize();
+		const uint16 left = size.x - width + 2u;
+
+		drawRectangle( 0u, 6u, size.x - width, size.y - 9u, LineType_Single );
+		drawRectangle( 0u, size.y - 3u, size.x - width, 3u, LineType_Single );
+		drawRectangle( size.x - width, 6u, width, size.y - 6u, LineType_Single );
+
+		uint16 top = 7u;
+		drawText( left, top++, "Instances:" );
+		for( const ControllerInstance& instance : m_controllerInstances )
+		{
+			drawText( left, top++, instance.name.c_str() );
+		}
+
+		drawText( 2u, size.y - 2u, m_controllerCommand.c_str() );
+
+		const HANDLE consoleHandle = GetStdHandle( STD_INPUT_HANDLE );
+		INPUT_RECORD input;
+		DWORD read;
+		PeekConsoleInputA( consoleHandle, &input, 1u, &read );
+		if( read > 0u )
+		{
+			if( input.EventType == KEY_EVENT && input.Event.KeyEvent.bKeyDown )
+			{
+				const char c = input.Event.KeyEvent.uChar.AsciiChar;
+				if( c == '\r' )
+				{
+
+				}
+				else if( c == '\0' )
+				{
+
+				}
+				else if( c == '\b' )
+				{
+					if( !m_controllerCommand.empty() )
+					{
+						m_controllerCommand.pop_back();
+						drawCharacter( uint16( 2u + m_controllerCommand.size() ), size.y - 2u, ' ' );
+					}
+				}
+				else
+				{
+					m_controllerCommand += c;
+				}
+			}
+
+			ReadConsoleInputA( consoleHandle, &input, 1u, &read );
+		}
 	}
 
 	void Console::drawDeviceInstances()
@@ -160,6 +241,32 @@ namespace conct
 
 			x += size.x + 4u;
 		}
+	}
+
+	uint16x2 Console::measureTextSize( const char* pString )
+	{
+		const uint16 length = uint16( strlen( pString ) );
+
+		uint16 x = 0u;
+		uint16x2 size = { 0u, 0u };
+		for( uint16 i = 0u; i < length; ++i )
+		{
+			const char c = pString[ i ];
+			if( c == '\n' )
+			{
+				size.x = CONCT_MAX( size.x, x );
+				size.y++;
+
+				x = 0u;
+
+				continue;
+			}
+
+			x++;
+		}
+
+		size.x = CONCT_MAX( size.x, x );
+		return size;
 	}
 
 	uint16 Console::drawButton( uint16 x, uint16 y, const char* pText, LineType type )
@@ -270,8 +377,8 @@ namespace conct
 		GetConsoleScreenBufferInfo( consoleHandle, &info );
 
 		const uint16x2 size = {
-			uint16( info.srWindow.Right ),
-			uint16( info.srWindow.Bottom )
+			uint16( info.srWindow.Right - info.srWindow.Left ),
+			uint16( info.srWindow.Bottom - info.srWindow.Top )
 		};
 		return size;
 	}

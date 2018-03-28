@@ -2,6 +2,7 @@
 
 #include "conct_flags.h"
 #include "conct_structs.h"
+#include "conct_runtime.h"
 
 #include "simulator_device.h"
 
@@ -40,6 +41,8 @@ namespace conct
 
 		enum DeviceMode
 		{
+			DeviceMode_Invalid = -1,
+
 			DeviceMode_Controller,
 			DeviceMode_Instances,
 
@@ -52,38 +55,49 @@ namespace conct
 			SimulatorDeviceData	data;
 		};
 
+		struct ControllerInstance
+		{
+			std::string		name;
+			TypeCrc			type;
+			RemoteInstance	instance;
+		};
+
 		typedef std::vector< Device > DeviceVector;
+		typedef std::vector< DeviceMode > DeviceModeVector;
+		typedef std::vector< ControllerInstance > ControllerInstanceVector;
 
-		Flags8< ChangeFlag >	m_changeFlags;
+		Flags8< ChangeFlag >		m_changeFlags;
 
-		size_t					m_selectedDevice;
-		DeviceVector			m_devices;
-		DeviceMode				m_deviceMode;
+		size_t						m_selectedDevice;
+		DeviceVector				m_devices;
+		DeviceMode					m_deviceMode;
+		DeviceModeVector			m_enabledModes;
 
-		uint16					m_width;
-		uint16					m_height;
-		uint16					m_cursorX;
-		uint16					m_cursorY;
+		std::string					m_controllerCommand;
+		ControllerInstanceVector	m_controllerInstances;
 
-		void					updateDeviceSelection();
-		void					updateModeSelection();
+		void						updateDeviceSelection();
+		void						updateModeSelection();
 
-		void					drawDeviceList();
-		void					drawDeviceModes();
-		void					drawDeviceController();
-		void					drawDeviceInstances();
+		void						selectDevice( size_t index );
 
-		uint16					drawButton( uint16 x, uint16 y, const char* pText, LineType type );
-		void					drawRectangle( uint16 x, uint16 y, uint16 width, uint16 height, LineType type );
-		void					drawFillRectangle( uint16 x, uint16 y, uint16 width, uint16 height, wchar_t c );
-		void					drawText( uint16 x, uint16 y, const char* pString );
-		uint16x2				drawTextMultiline( uint16 x, uint16 y, const char* pString );
-		void					drawCharacter( uint16 x, uint16 y, wchar_t c );
-		void					drawCharacterRepeated( uint16 x, uint16 y, wchar_t c, uint16 count );
+		void						drawDeviceList();
+		void						drawDeviceModes();
+		void						drawDeviceController();
+		void						drawDeviceInstances();
 
-		uint16x2				getSize();
-		void					setCursor( uint16 x, uint16 y );
+		uint16x2					measureTextSize( const char* pString );
 
-		bool					getKeyState( int code );
+		uint16						drawButton( uint16 x, uint16 y, const char* pText, LineType type );
+		void						drawRectangle( uint16 x, uint16 y, uint16 width, uint16 height, LineType type );
+		void						drawFillRectangle( uint16 x, uint16 y, uint16 width, uint16 height, wchar_t c );
+		void						drawText( uint16 x, uint16 y, const char* pString );
+		uint16x2					drawTextMultiline( uint16 x, uint16 y, const char* pString );
+		void						drawCharacter( uint16 x, uint16 y, wchar_t c );
+		void						drawCharacterRepeated( uint16 x, uint16 y, wchar_t c, uint16 count );
+
+		uint16x2					getSize();
+
+		bool						getKeyState( int code );
 	};
 }

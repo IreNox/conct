@@ -112,7 +112,7 @@ namespace conct
 	struct GetPropertyRequest
 	{
 		InstanceId		instanceId;
-		char			name[ 0u ];
+		char			name[ 1u ];
 	};
 
 	struct GetPropertyResponse
@@ -124,14 +124,14 @@ namespace conct
 	{
 		InstanceId		instanceId;
 		Value			value;
-		char			name[ 0u ];
+		char			name[ 1u ];
 	};
 
 	struct CallFunctionRequest
 	{
 		InstanceId		instanceId;
 		Value			value;
-		char			name[ 0u ];
+		char			name[ 1u ];
 	};
 
 	static const uint16 s_messageBaseHeaderMagic = 0xc0c7u;

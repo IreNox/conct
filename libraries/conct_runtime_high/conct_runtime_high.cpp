@@ -48,8 +48,13 @@ namespace conct
 		DeviceMap::iterator it = m_devices.find( deviceId );
 		if( it == m_devices.end() )
 		{
-			return ResultId_NoSuchDevice;
+			return InvalidCommandId;
 		}
+
+		const CommandId commandId = it->second.nextCommandId;
+		while( ++it->second.nextCommandId == InvalidCommandId );
+
+		return commandId;
 	}
 
 	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )

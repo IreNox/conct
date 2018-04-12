@@ -8,6 +8,7 @@ namespace conct
 	class Proxy;
 
 	typedef uint16 CommandId;
+	static const CommandId InvalidCommandId = 0u;
 
 	struct DeviceAddress
 	{

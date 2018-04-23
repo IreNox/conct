@@ -21,16 +21,12 @@ namespace conct
 
 	protected:
 
-		virtual void setup() = 0;
-		virtual void loop() = 0;
-
-	private:
-
 		RuntimeHigh m_runtime;
 
 		PortLan m_port0;
 		PortRs485Sim m_port1;
 
-
+		virtual void setup() = 0;
+		virtual void loop() = 0;
 	};
 }

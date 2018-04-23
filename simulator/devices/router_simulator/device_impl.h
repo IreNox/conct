@@ -6,6 +6,10 @@ namespace conct
 {
 	class DeviceRouterSimulator : public DeviceInterface
 	{
+	public:
+
+		RuntimeHigh& getRuntime() { return m_runtime; }
+
 	protected:
 
 		virtual void setup() CONCT_OVERRIDE_FINAL;

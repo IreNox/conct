@@ -4,14 +4,19 @@
 
 namespace conct
 {
-	Controller::Controller( RuntimeHigh* pRuntime )
-		: m_pRuntime( pRuntime )
+	Controller::Controller()
+		: m_pRuntime( nullptr )
 	{
 	}
 
 	Controller::~Controller()
 	{
 
+	}
+
+	void Controller::setup( RuntimeHigh* pRuntime )
+	{
+		m_pRuntime = pRuntime;
 	}
 
 	Command< RemoteInstance >* Controller::getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc )
@@ -63,6 +68,8 @@ namespace conct
 	template< class TCommand >
 	TCommand* conct::Controller::beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )
 	{
+		CONCT_ASSERT( m_pRuntime != nullptr );
+
 		const DeviceId deviceId = deviceAddress.address[ 0u ];
 		TCommand* pCommand = new TCommand( m_pRuntime->getNextCommandId( deviceId ) );
 

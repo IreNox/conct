@@ -14,8 +14,10 @@ namespace conct
 	{
 	public:
 
-											Controller( RuntimeHigh* pRuntime );
+											Controller();
 											~Controller();
+
+		void								setup( RuntimeHigh* pRuntime );
 
 		Command< RemoteInstance >*			getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
 		Command< Array< RemoteInstance > >*	findInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc );

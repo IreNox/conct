@@ -9,6 +9,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="extern">
+      <UniqueIdentifier>{540076ba-3ec3-41ce-b1a0-63f638610b0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extern\conct_core">
+      <UniqueIdentifier>{d70ffcef-c524-4689-8727-01e9ba34d86a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\main.cpp">
@@ -19,6 +25,33 @@
     </ClCompile>
     <ClCompile Include="sources\console.cpp">
       <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\console_instances.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\console_render.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\console_controller.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\console_input.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_reader.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_timer.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_value.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_writer.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_core.cpp">
+      <Filter>extern\conct_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -34,5 +67,67 @@
     <ClInclude Include="include\console.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="sources\console_instances.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\console_plugin.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\console_render.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\console_controller.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\console_input.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_port.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_reader.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_structs.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_timer.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_value.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_writer.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_array.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_array_view.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_core.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_flags.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\libraries\conct_core\conct_reader.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\libraries\conct_core\conct_writer.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\libraries\conct_core\conct_array.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\libraries\conct_core\conct_array_view.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\libraries\conct_core\conct_flags.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\..\libraries\conct_port_lan\conct_port_lan.h" />
@@ -181,6 +182,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_core.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_port_lan\conct_port_lan.cpp" />

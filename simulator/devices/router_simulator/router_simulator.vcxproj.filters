@@ -86,6 +86,9 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_command.h">
       <Filter>extern\conct_runtime_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_timer.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
@@ -129,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_command.cpp">
       <Filter>extern\conct_runtime_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp">
+      <Filter>extern\conct_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

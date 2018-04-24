@@ -66,13 +66,18 @@ namespace conct
 	}
 
 	template< class TCommand >
-	TCommand* conct::Controller::beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )
+	TCommand* Controller::beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )
 	{
 		CONCT_ASSERT( m_pRuntime != nullptr );
 
 		const DeviceId deviceId = deviceAddress.address[ 0u ];
-		TCommand* pCommand = new TCommand( m_pRuntime->getNextCommandId( deviceId ) );
+		const CommandId commandId = m_pRuntime->getNextCommandId( deviceId );
+		if( commandId == InvalidCommandId )
+		{
+			return nullptr;
+		}
 
+		TCommand* pCommand = new TCommand( commandId );
 		if( m_pRuntime->sendPackage( pCommand, deviceAddress, payload ) != ResultId_Success )
 		{
 			delete pCommand;

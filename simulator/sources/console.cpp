@@ -1,10 +1,14 @@
 ﻿#include "console.h"
 
+#include "base.h"
+
 #include "console_controller.h"
 #include "console_input.h"
 #include "console_instances.h"
 #include "console_plugin.h"
 #include "console_render.h"
+
+#include <iostream>
 
 namespace conct
 {
@@ -16,6 +20,19 @@ namespace conct
 
 		ConsoleInput::setup();
 		ConsoleRenderer::setup();
+
+		std::filesystem::path exePath = getExecutableName();
+		std::filesystem::path basePath = exePath.parent_path().parent_path().parent_path().parent_path();
+		std::filesystem::path configPath = basePath;
+		configPath.append( "config" );
+
+		std::filesystem::path typesPath = configPath;
+		typesPath.append( "types" );
+		if( !m_types.load( typesPath.generic_string() ) )
+		{
+			std::cout << "could not load types" << std::endl;
+			exit( 0u );
+		}
 	}
 
 	void Console::addDevice( SimulatorDevice* pDevice )
@@ -26,7 +43,7 @@ namespace conct
 
 		if( device.data.pController != nullptr )
 		{
-			device.plugins.push_back( new ConsoleController() );
+			device.plugins.push_back( new ConsoleController( &m_types ) );
 		}
 
 		if( !device.data.instances.empty() )

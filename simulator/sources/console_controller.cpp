@@ -1,19 +1,27 @@
 #include "console_controller.h"
 
+#include "type_collection.h"
+#include "interface_type.h"
+
+#include "conct_controller.h"
+
 #include "console_input.h"
 #include "console_render.h"
 
+#include <sstream>
+
 namespace conct
 {
-	/*static*/ const ConsoleController::Command ConsoleController::s_aCommands[] =
+	/*static*/ const ConsoleController::CommandInfo ConsoleController::s_aCommands[] =
 	{
 		{ "help",			&ConsoleController::executeHelpCommand },
 		{ "getInstance",	&ConsoleController::executeGetInstanceCommand },
 	};
 
-	ConsoleController::ConsoleController()
+	ConsoleController::ConsoleController( TypeCollection* pTypes )
+		: m_pTypes( pTypes )
+		, m_instancesWidth( 0u )
 	{
-		m_instancesWidth = 0u;
 		updateInstancesWidth();
 	}
 
@@ -263,7 +271,7 @@ namespace conct
 		bool found = false;
 		for( size_t i = 0u; i < CONCT_COUNT( s_aCommands ); ++i )
 		{
-			const Command& command = s_aCommands[ i ];
+			const CommandInfo& command = s_aCommands[ i ];
 			if( command.pCommand != commandText )
 			{
 				continue;
@@ -294,17 +302,45 @@ namespace conct
 
 	void ConsoleController::executeGetInstanceCommand( ConsoleDevice& device, const std::vector< std::string >& arguments )
 	{
-		if( arguments.size() < 2u )
+		if( arguments.size() != 2u )
 		{
-			pushLog( "getInstance deviceId typeName not enough arguments" );
+			pushLog( "getInstance: not enough arguments. deviceId and typeName are required" );
 			return;
 		}
 
-		for( const std::string& str : arguments )
+		std::stringstream deviceIdStream( arguments[ 0u ] );
+
+		int deviceId;
+		deviceIdStream >> deviceId;
+
+		if( !deviceIdStream )
 		{
-			pushLog( str.c_str() );
+			const std::string text = "getInstance: '" + arguments[ 0u ] + "' is not a valid device id.";
+			pushLog( text.c_str() );
+			return;
 		}
 
-		//device.data.pController->getInstance()
+		DeviceAddress address;
+		address.address[ 0u ] = (DeviceId)deviceId;
+		address.address[ 1u ] = InvalidDeviceId;
+
+		const std::string& typeName = arguments[ 1u ];
+		const InterfaceType* pType = m_pTypes->findInterface( typeName, "" );
+		if( pType == nullptr )
+		{
+			const std::string text = "getInstance: type with name '" + typeName + "' not found.";
+			pushLog( text.c_str() );
+			return;
+		}
+
+		Command< RemoteInstance >* pCommand = device.data.pController->getInstance( address, pType->getCrc() );
+		if( pCommand == nullptr )
+		{
+			const std::string text = "getInstance: failed to start command.";
+			pushLog( text.c_str() );
+			return;
+		}
+
+		m_pRunningCommand = pCommand;
 	}
 }

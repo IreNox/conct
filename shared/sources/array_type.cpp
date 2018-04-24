@@ -1,13 +1,13 @@
-#include "array.h"
+#include "array_type.h"
 
 namespace conct
 {
-	Array::Array()
+	ArrayType::ArrayType()
 	{
 		m_pBaseType = nullptr;
 	}
 
-	void Array::create( const Type* pBaseType )
+	void ArrayType::create( const Type* pBaseType )
 	{
 		Type::create( "", pBaseType->getName() + "[]", "Array< " + pBaseType->getCppName() + " >", TypeDescription_Array );
 		m_pBaseType = pBaseType;

@@ -24,6 +24,18 @@
     <ClCompile Include="..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime\conct_device.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime\conct_proxy.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime_high\conct_command.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime_high\conct_controller.cpp" />
+    <ClCompile Include="..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
+    <ClCompile Include="..\shared\sources\array_type.cpp" />
+    <ClCompile Include="..\shared\sources\base.cpp" />
+    <ClCompile Include="..\shared\sources\interface_type.cpp" />
+    <ClCompile Include="..\shared\sources\type.cpp" />
+    <ClCompile Include="..\shared\sources\type_collection.cpp" />
+    <ClCompile Include="..\shared\sources\xml_helper.cpp" />
+    <ClCompile Include="..\third_party\tinyxml2.cpp" />
     <ClCompile Include="sources\console.cpp" />
     <ClCompile Include="sources\console_controller.cpp" />
     <ClCompile Include="sources\console_input.cpp" />
@@ -43,6 +55,19 @@
     <ClInclude Include="..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\libraries\conct_core\conct_writer.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_device.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_proxy.h" />
+    <ClInclude Include="..\libraries\conct_runtime\conct_runtime.h" />
+    <ClInclude Include="..\libraries\conct_runtime_high\conct_command.h" />
+    <ClInclude Include="..\libraries\conct_runtime_high\conct_controller.h" />
+    <ClInclude Include="..\libraries\conct_runtime_high\conct_runtime_high.h" />
+    <ClInclude Include="..\shared\include\array_type.h" />
+    <ClInclude Include="..\shared\include\base.h" />
+    <ClInclude Include="..\shared\include\interface_type.h" />
+    <ClInclude Include="..\shared\include\type.h" />
+    <ClInclude Include="..\shared\include\type_collection.h" />
+    <ClInclude Include="..\shared\include\xml_helper.h" />
+    <ClInclude Include="..\third_party\tinyxml2.h" />
     <ClInclude Include="include\console.h" />
     <ClInclude Include="include\simulator.h" />
     <ClInclude Include="include\simulator_context.h" />
@@ -59,6 +84,7 @@
     <None Include="..\libraries\conct_core\conct_flags.inl" />
     <None Include="..\libraries\conct_core\conct_reader.inl" />
     <None Include="..\libraries\conct_core\conct_writer.inl" />
+    <None Include="..\libraries\conct_runtime_high\conct_command.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -138,7 +164,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime;$(ProjectDir)..\libraries\conct_runtime_high;$(ProjectDir)..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,7 +177,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime;$(ProjectDir)..\libraries\conct_runtime_high;$(ProjectDir)..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,7 +192,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime;$(ProjectDir)..\libraries\conct_runtime_high;$(ProjectDir)..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -183,7 +209,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\libraries\conct_runtime;$(ProjectDir)..\libraries\conct_runtime_high;$(ProjectDir)..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

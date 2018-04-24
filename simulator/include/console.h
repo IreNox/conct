@@ -4,6 +4,8 @@
 #include "conct_structs.h"
 #include "conct_runtime.h"
 
+#include "type_collection.h"
+
 #include "console_plugin.h"
 
 namespace conct
@@ -41,6 +43,8 @@ namespace conct
 		size_t						m_selectedDevice;
 		DeviceVector				m_devices;
 		size_t						m_pluginIndex;
+
+		TypeCollection				m_types;
 
 		void						updateDeviceSelection();
 		void						updateModeSelection( ConsoleDevice* pDevice );

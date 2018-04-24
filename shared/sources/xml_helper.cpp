@@ -1,7 +1,7 @@
 #include "xml_helper.h"
 
-#include "array.h"
-#include "interface.h"
+#include "array_type.h"
+#include "interface_type.h"
 #include "type_collection.h"
 
 #include <third_party/tinyxml2.h>
@@ -131,7 +131,7 @@ namespace conct
 		return false;
 	}
 
-	bool loadInterfaceValue( const Interface** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
+	bool loadInterfaceValue( const InterfaceType** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
 	{
 		const Type* pType = nullptr;
 		if( !loadTypeValue( &pType, pNode, pName, referenceNamespace, typeCollection, ignoreMissing ) )
@@ -145,7 +145,7 @@ namespace conct
 			return false;
 		}
 
-		*ppInterface = static_cast< const Interface* >( pType );
+		*ppInterface = static_cast< const InterfaceType* >( pType );
 		return true;
 	}
 }

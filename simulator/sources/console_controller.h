@@ -12,11 +12,14 @@
 
 namespace conct
 {
+	class CommandBase;
+	class TypeCollection;
+
 	class ConsoleController : public ConsolePlugin
 	{
 	public:
 
-									ConsoleController();
+									ConsoleController( TypeCollection* pTypes );
 
 		virtual void				activate( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
 		virtual void				deactivate( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
@@ -30,7 +33,7 @@ namespace conct
 
 		typedef void ( ConsoleController::*CommandFunc )( ConsoleDevice& device, const std::vector< std::string >& arguments );
 
-		struct Command
+		struct CommandInfo
 		{
 			const char*				pCommand;
 			CommandFunc				pFunction;
@@ -45,7 +48,9 @@ namespace conct
 
 		typedef std::vector< ControllerInstance > ControllerInstanceVector;
 
-		static const Command					s_aCommands[];
+		static const CommandInfo				s_aCommands[];
+
+		TypeCollection*							m_pTypes;
 
 		ControllerInstanceVector				m_instances;
 		uint16									m_instancesWidth;
@@ -57,6 +62,8 @@ namespace conct
 		std::vector< std::string >				m_commandHistory;
 		std::string								m_commandText;
 		bool									m_drawCommand;
+
+		CommandBase*							m_pRunningCommand;
 
 		void									drawInstances( const uint16x2 size ) const;
 		void									drawLog( const uint16x2 size ) const;

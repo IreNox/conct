@@ -4,7 +4,7 @@
 
 namespace conct
 {
-	class Array : public Type
+	class ArrayType : public Type
 	{
 		friend class TypeCollection;
 
@@ -14,7 +14,7 @@ namespace conct
 
 	private: // friend
 
-						Array();
+						ArrayType();
 		void			create( const Type* pBaseType );
 
 	private:

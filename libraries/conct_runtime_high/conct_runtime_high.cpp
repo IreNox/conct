@@ -1,5 +1,6 @@
 #include "conct_runtime_high.h"
 
+#include "conct_command.h"
 #include "conct_device.h"
 #include "conct_port.h"
 #include "conct_proxy.h"
@@ -20,11 +21,33 @@ namespace conct
 		}
 	}
 
+	void RuntimeHigh::registerPort( Port* pPort )
+	{
+		PortData& portData = m_ports[ pPort ];
+
+		const Flags8< PortFlag > flags = pPort->getFlags();
+		if( flags.isSet( PortFlag_SingleEndpoint ) )
+		{
+			const DeviceId nextDeviceId = m_devices.size() + 1u;
+			DeviceData& deviceData = m_devices[ nextDeviceId ];
+			deviceData.nextCommandId	= FirstCommandId;
+			deviceData.ownDeviceId		= 1u;
+			deviceData.pTargetPort		= pPort;
+		}
+
+		if( !flags.isSet( PortFlag_Reliable ) )
+		{
+			// not supported
+		}
+	}
+
 	void RuntimeHigh::processPort( Port* pPort )
 	{
 		PortData& portData = m_ports[ pPort ];
 
 		readPort( pPort, portData );
+		writePort( pPort, portData );
+
 		processPackages( portData );
 
 
@@ -57,9 +80,19 @@ namespace conct
 		return commandId;
 	}
 
-	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload )
+	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
 		Package package;
+		for( uintreg i = 0u; i < DeviceAddress::Size; ++i )
+		{
+			if( deviceAddress.address[ i ] == InvalidDeviceId )
+			{
+				break;
+			}
+
+			package.destinationAddress.push_back( deviceAddress.address[ i ] );
+		}
+
 		if( package.destinationAddress.empty() )
 		{
 			return ResultId_NoDestination;
@@ -70,15 +103,26 @@ namespace conct
 		{
 			return ResultId_NoSuchDevice;
 		}
+		DeviceData& deviceData = it->second;
+
+		package.sourceAddress.push_back( deviceData.ownDeviceId );
 
 		for( uint i = 0u; i < payload.getCount(); ++i )
 		{
 			package.payload.push_back( payload[ i ] );
 		}
 
-		const DeviceData& deviceData = it->second;
+		package.baseHeader.sourceHops		= package.sourceAddress.size();
+		package.baseHeader.destinationHops	= package.destinationAddress.size();
+		package.baseHeader.payloadSize		= package.payload.size();
+		package.baseHeader.commandId		= pCommand->getId();
+		package.baseHeader.messageType		= messageType;
+		package.baseHeader.messageResult	= ResultId_Success;
+
 		PortData& portData = m_ports[ deviceData.pTargetPort ];
 		portData.sendPackages.push_back( package );
+
+		deviceData.commands[ package.baseHeader.commandId ] = pCommand;
 
 		return ResultId_Success;
 	}
@@ -272,6 +316,22 @@ namespace conct
 		}
 
 		setState( package, PackageState_WaitForMagic );
+	}
+
+	void RuntimeHigh::writePort( Port* pPort, PortData& portData )
+	{
+		if( portData.sendPackages.empty() )
+		{
+			return;
+		}
+
+		const Package& currentPackage = portData.sendPackages.front();
+
+		Writer writer;
+		if( !pPort->openSend( writer, ..., currentPackage.destinationAddress.front() ) )
+		{
+			return;
+		}
 	}
 
 	void RuntimeHigh::setState( PendingPackage& package, PackageState state )

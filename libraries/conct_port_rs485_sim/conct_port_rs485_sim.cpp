@@ -49,4 +49,12 @@ namespace conct
 	{
 		m_hasReceived = false;
 	}
+
+	Flags8< PortFlag > PortRs485Sim::getFlags()
+	{
+		Flags8< PortFlag > flags;
+		flags |= PortFlag_SingleEndpoint;
+		flags |= PortFlag_Reliable;
+		return flags;
+	}
 }

@@ -9,6 +9,7 @@ namespace conct
 
 	typedef uint16 CommandId;
 	static const CommandId InvalidCommandId = 0u;
+	static const CommandId FirstCommandId = 1u;
 
 	struct DeviceAddress
 	{
@@ -78,6 +79,8 @@ namespace conct
 		MessageType_ErrorResponse,
 		MessageType_PingRequest,
 		MessageType_PingResponse,
+		MessageType_GetInstanceRequest,
+		MessageType_GetInstanceResponse,
 		MessageType_GetPropertyRequest,
 		MessageType_GetPropertyResponse,
 		MessageType_SetPropertyRequest,
@@ -97,7 +100,7 @@ namespace conct
 		uint16		payloadSize;
 		CommandId	commandId;
 		MessageType	messageType;
-		ResultId		messageResult;
+		ResultId	messageResult;
 	};
 
 	struct GetInstanceRequest

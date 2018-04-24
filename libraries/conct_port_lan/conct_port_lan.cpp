@@ -31,4 +31,12 @@ namespace conct
 	{
 
 	}
+
+	Flags8< PortFlag > PortLan::getFlags()
+	{
+		Flags8< PortFlag > flags;
+		flags |= PortFlag_MultiEndpoint;
+		flags |= PortFlag_Reliable;
+		return flags;
+	}
 }

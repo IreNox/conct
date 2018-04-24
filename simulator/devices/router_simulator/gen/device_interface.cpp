@@ -8,6 +8,8 @@ namespace conct
 		m_port1.setup();
 
 		m_runtime.setup( this );
+		m_runtime.registerPort( &m_port0 );
+		m_runtime.registerPort( &m_port1 );
 
 		setup();
 	}

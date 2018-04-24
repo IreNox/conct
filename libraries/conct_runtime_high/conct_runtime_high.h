@@ -20,11 +20,12 @@ namespace conct
 
 		void					setup( Device* pDevice );
 
+		void					registerPort( Port* pPort );
 		void					processPort( Port* pPort );
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
-		ResultId				sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload );
+		ResultId				sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
 
 	private:
 
@@ -82,9 +83,12 @@ namespace conct
 
 		struct DeviceData
 		{
+			typedef std::map< CommandId, CommandBase* > CommandMap;
+
 			Port*		pTargetPort;
 			DeviceId	ownDeviceId;
 			CommandId	nextCommandId;
+			CommandMap	commands;
 		};
 
 		typedef std::vector< LocalInstance > LocalInstanceVector;
@@ -102,6 +106,8 @@ namespace conct
 		void				readBaseHeader( PendingPackage& package, Reader& reader );
 		void				readBytes( std::vector< uint8 >& target, PendingPackage& package, Reader& reader, PackageState nextState );
 		void				readStore( Port* pPort, PortData& portData, PendingPackage& package, DeviceId deviceId );
+
+		void				writePort( Port* pPort, PortData& portData );
 
 		void				processPackages( PortData& portData );
 		void				processRoute( PortData& portData, const Package& package );

@@ -30,6 +30,9 @@
     <Filter Include="libraries\conct_port_lan">
       <UniqueIdentifier>{fe3335ad-9074-4d30-b62e-26ada7f5e0af}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{37079177-96e3-4ff2-9903-31a126048f10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h">
@@ -89,6 +92,15 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_timer.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\i_simulator_context.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\i_simulator_port.h">
+      <Filter>shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
@@ -98,9 +110,6 @@
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_core.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
@@ -134,6 +143,9 @@
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
   </ItemGroup>

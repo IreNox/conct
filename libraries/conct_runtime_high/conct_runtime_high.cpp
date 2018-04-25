@@ -28,7 +28,7 @@ namespace conct
 		const Flags8< PortFlag > flags = pPort->getFlags();
 		if( flags.isSet( PortFlag_SingleEndpoint ) )
 		{
-			const DeviceId nextDeviceId = m_devices.size() + 1u;
+			const DeviceId nextDeviceId = DeviceId( m_devices.size() + 1u );
 			DeviceData& deviceData = m_devices[ nextDeviceId ];
 			deviceData.nextCommandId	= FirstCommandId;
 			deviceData.ownDeviceId		= 1u;
@@ -82,7 +82,9 @@ namespace conct
 
 	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
-		Package package;
+		MessageBaseHeader baseHeader;
+
+		baseHeader.destinationHops = 0u;
 		for( uintreg i = 0u; i < DeviceAddress::Size; ++i )
 		{
 			if( deviceAddress.address[ i ] == InvalidDeviceId )
@@ -90,46 +92,63 @@ namespace conct
 				break;
 			}
 
-			package.destinationAddress.push_back( deviceAddress.address[ i ] );
+			baseHeader.destinationHops++;
 		}
 
-		if( package.destinationAddress.empty() )
+		if( baseHeader.destinationHops == 0u )
 		{
 			return ResultId_NoDestination;
 		}
 
-		DeviceMap::iterator it = m_devices.find( *package.destinationAddress.begin() );
+		DeviceMap::iterator it = m_devices.find( deviceAddress.address[ 0u ] );
 		if( it == m_devices.end() )
 		{
 			return ResultId_NoSuchDevice;
 		}
 		DeviceData& deviceData = it->second;
 
-		package.sourceAddress.push_back( deviceData.ownDeviceId );
+		baseHeader.sourceHops		= 1u;
+		baseHeader.payloadSize		= uint16( payload.getCount() );
+		baseHeader.commandId		= pCommand->getId();
+		baseHeader.messageType		= messageType;
+		baseHeader.messageResult	= ResultId_Success;
 
-		for( uint i = 0u; i < payload.getCount(); ++i )
+		SendPackage package;
+		package.targetDeviceId	= deviceAddress.address[ 0u ];
+		package.currentOffset	= 0u;
+
+		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getCount();
+		package.data.reserve( packageSize );
+
+		const uint8* pHeaderData = ( const uint8* )&baseHeader;
+		for( uintreg i = 0u; i < sizeof( baseHeader ); ++i )
 		{
-			package.payload.push_back( payload[ i ] );
+			package.data.push_back( pHeaderData[ i ] );
 		}
 
-		package.baseHeader.sourceHops		= package.sourceAddress.size();
-		package.baseHeader.destinationHops	= package.destinationAddress.size();
-		package.baseHeader.payloadSize		= package.payload.size();
-		package.baseHeader.commandId		= pCommand->getId();
-		package.baseHeader.messageType		= messageType;
-		package.baseHeader.messageResult	= ResultId_Success;
+		package.data.push_back( deviceData.ownDeviceId );
+
+		for( uintreg i = 0u; i < baseHeader.destinationHops; ++i )
+		{
+			package.data.push_back( deviceAddress.address[ i ] );
+		}
+
+		for( uintreg i = 0u; i < payload.getCount(); ++i )
+		{
+			package.data.push_back( payload[ i ] );
+		}
 
 		PortData& portData = m_ports[ deviceData.pTargetPort ];
-		portData.sendPackages.push_back( package );
+		portData.sendPackages.push( package );
 
-		deviceData.commands[ package.baseHeader.commandId ] = pCommand;
+		deviceData.commands[ baseHeader.commandId ] = pCommand;
 
 		return ResultId_Success;
 	}
 
 	void RuntimeHigh::processPackages( PortData& portData )
 	{
-		for( const Package& package : portData.receivedPackages )
+		for( const ReceivedPackage& package : portData.receivedPackages )
 		{
 			if( package.destinationAddress.size() > 1u )
 			{
@@ -137,15 +156,15 @@ namespace conct
 			}
 			else
 			{
-				// ...
+				processPackage( portData, package );
 			}
 		}
 		portData.receivedPackages.clear();
 	}
 
-	void RuntimeHigh::processRoute( PortData& portData, const Package& package )
+	void RuntimeHigh::processRoute( PortData& portData, const ReceivedPackage& sourcePackage )
 	{
-		const DeviceId nextDevice = *package.destinationAddress.begin();
+		const DeviceId nextDevice = sourcePackage.destinationAddress.front();
 		DeviceMap::iterator deviceIt = m_devices.find( nextDevice );
 		if( deviceIt == m_devices.end() )
 		{
@@ -156,15 +175,53 @@ namespace conct
 		const DeviceData& targetDevice = deviceIt->second;
 		PortData& targetPortData = m_ports[ targetDevice.pTargetPort ];
 
-		Package sendPackage = package;
-		sendPackage.destinationAddress.erase( sendPackage.destinationAddress.begin() );
-		sendPackage.sourceAddress.insert( sendPackage.sourceAddress.begin(), targetDevice.ownDeviceId );
+		MessageBaseHeader baseHeader = sourcePackage.baseHeader;
+		baseHeader.destinationHops--;
+		baseHeader.sourceHops++;
 
-		portData.sendPackages.push_back( sendPackage );
+		SendPackage package;
+		package.targetDeviceId	= nextDevice;
+		package.currentOffset	= 0u;
+
+		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + sourcePackage.payload.size();
+		package.data.reserve( packageSize );
+
+		const uint8* pHeaderData = ( const uint8* )&baseHeader;
+		for( uintreg i = 0u; i < sizeof( baseHeader ); ++i )
+		{
+			package.data.push_back( pHeaderData[ i ] );
+		}
+
+		package.data.push_back( targetDevice.ownDeviceId );
+		for( DeviceId deviceId : sourcePackage.sourceAddress )
+		{
+			package.data.push_back( deviceId );
+		}
+
+		for( uintreg i = 1u; i < sourcePackage.destinationAddress.size(); ++i )
+		{
+			package.data.push_back( sourcePackage.destinationAddress[ i ] );
+		}
+
+		for( uint8 byte : sourcePackage.payload )
+		{
+			package.data.push_back( byte );
+		}
+
+
+		portData.sendPackages.push( package );
 	}
 
-	void RuntimeHigh::processPackage( PortData& portData, const Package& package )
+	void RuntimeHigh::processPackage( PortData& portData, const ReceivedPackage& package )
 	{
+		DeviceData& deviceData = m_devices[ package.sourceAddress.front() ];
+
+		CommandBase* pCommandBase = nullptr;
+		if( package.baseHeader.commandId != InvalidCommandId )
+		{
+			pCommandBase = deviceData.commands[ package.baseHeader.commandId ];
+		}
+
 		switch( package.baseHeader.messageType )
 		{
 		case MessageType_ErrorResponse:
@@ -174,6 +231,28 @@ namespace conct
 			break;
 
 		case MessageType_PingResponse:
+			break;
+
+		case MessageType_GetInstanceRequest:
+			break;
+
+		case MessageType_GetInstanceResponse:
+			{
+				if( pCommandBase == nullptr )
+				{
+					// error
+					return;
+				}
+
+				const GetInstanceResponse& response = *( const GetInstanceResponse* )package.payload.data();
+
+				RemoteInstance instance;
+				//instance.address	= package.sourceAddress;
+				instance.id			= response.instanceId;
+
+				Command< RemoteInstance >* pCommand = static_cast< Command< RemoteInstance >* >( pCommandBase );
+				pCommand->setResponse( package.baseHeader.messageResult, instance );
+			}
 			break;
 
 		case MessageType_GetPropertyRequest:
@@ -212,14 +291,14 @@ namespace conct
 
 	void RuntimeHigh::readPackage( Port* pPort, PortData& portData, Reader& reader, DeviceId deviceId )
 	{
-		PendingPackage& package = portData.pendingPackages[ deviceId ];
+		PendingReceivedPackage& package = portData.pendingPackages[ deviceId ];
 		while( !reader.isEnd() )
 		{
 			switch( package.state )
 			{
-			case PackageState_WaitForMagic:
-				readMagic( package, reader );
-				break;
+			//case PackageState_WaitForMagic:
+			//	readMagic( package, reader );
+			//	break;
 
 			case PackageState_ReadBaseHeader:
 				readBaseHeader( package, reader );
@@ -238,41 +317,45 @@ namespace conct
 				break;
 
 			case PackageState_PushToQueue:
-				readStore( pPort, portData, package, deviceId );
 				break;
 			}
-		}
-	}
 
-	void RuntimeHigh::readMagic( PendingPackage& package, Reader& reader )
-	{
-		if( package.data.waitForMagic.firstReadCounter < sizeof( s_messageBaseHeaderMagic ) )
-		{
-			package.data.waitForMagic.firstReadCounter += reader.readShort( package.data.waitForMagic.lastMagic, package.data.waitForMagic.firstReadCounter );
-
-			if( package.data.waitForMagic.firstReadCounter == sizeof( s_messageBaseHeaderMagic ) &&
-				package.data.waitForMagic.lastMagic == s_messageBaseHeaderMagic )
+			if( package.state == PackageState_PushToQueue )
 			{
-				setState( package, PackageState_ReadBaseHeader );
-				return;
-			}
-		}
-
-		uint8 nextByte;
-		while( reader.readByte( nextByte ) )
-		{
-			package.data.waitForMagic.lastMagic <<= 8u;
-			package.data.waitForMagic.lastMagic |= nextByte;
-
-			if( package.data.waitForMagic.lastMagic == s_messageBaseHeaderMagic )
-			{
-				setState( package, PackageState_ReadBaseHeader );
-				return;
+				readStore( pPort, portData, package, deviceId );
 			}
 		}
 	}
 
-	void RuntimeHigh::readBaseHeader( PendingPackage& package, Reader& reader )
+	//void RuntimeHigh::readMagic( PendingReceivedPackage& package, Reader& reader )
+	//{
+	//	if( package.data.waitForMagic.firstReadCounter < sizeof( s_messageBaseHeaderMagic ) )
+	//	{
+	//		package.data.waitForMagic.firstReadCounter += reader.readShort( package.data.waitForMagic.lastMagic, package.data.waitForMagic.firstReadCounter );
+
+	//		if( package.data.waitForMagic.firstReadCounter == sizeof( s_messageBaseHeaderMagic ) &&
+	//			package.data.waitForMagic.lastMagic == s_messageBaseHeaderMagic )
+	//		{
+	//			setState( package, PackageState_ReadBaseHeader );
+	//			return;
+	//		}
+	//	}
+
+	//	uint8 nextByte;
+	//	while( reader.readByte( nextByte ) )
+	//	{
+	//		package.data.waitForMagic.lastMagic <<= 8u;
+	//		package.data.waitForMagic.lastMagic |= nextByte;
+
+	//		if( package.data.waitForMagic.lastMagic == s_messageBaseHeaderMagic )
+	//		{
+	//			setState( package, PackageState_ReadBaseHeader );
+	//			return;
+	//		}
+	//	}
+	//}
+
+	void RuntimeHigh::readBaseHeader( PendingReceivedPackage& package, Reader& reader )
 	{
 		package.data.readBytes.alreadyRead += reader.readStruct( package.target.baseHeader, package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead < sizeof( package.target.baseHeader ) )
@@ -292,7 +375,7 @@ namespace conct
 		setState( package, PackageState_ReadSourceAddress );
 	}
 
-	void RuntimeHigh::readBytes( std::vector<uint8>& target, PendingPackage& package, Reader& reader, PackageState nextState )
+	void RuntimeHigh::readBytes( std::vector<uint8>& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState )
 	{
 		package.data.readBytes.alreadyRead += reader.readData( target.data(), (uintreg)target.size(), package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead == target.size() )
@@ -301,7 +384,7 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingPackage& package, DeviceId deviceId )
+	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, DeviceId deviceId )
 	{
 		package.target.sourceAddress.insert( package.target.sourceAddress.begin(), deviceId );
 		portData.receivedPackages.push_back( package.target );
@@ -315,7 +398,7 @@ namespace conct
 			device.ownDeviceId	= *package.target.destinationAddress.begin();
 		}
 
-		setState( package, PackageState_WaitForMagic );
+		setState( package, PackageState_ReadBaseHeader );
 	}
 
 	void RuntimeHigh::writePort( Port* pPort, PortData& portData )
@@ -325,25 +408,43 @@ namespace conct
 			return;
 		}
 
-		const Package& currentPackage = portData.sendPackages.front();
+		SendPackage& currentPackage = portData.sendPackages.front();
 
 		Writer writer;
-		if( !pPort->openSend( writer, ..., currentPackage.destinationAddress.front() ) )
+		const uintreg remainingSize = currentPackage.data.size() - currentPackage.currentOffset;
+		if( !pPort->openSend( writer, remainingSize, currentPackage.targetDeviceId ) )
 		{
 			return;
 		}
+
+		uintreg index = currentPackage.currentOffset;
+		while( !writer.isEnd() && index < currentPackage.data.size() )
+		{
+			writer.writeByte( currentPackage.data[ index++ ] );
+		}
+
+		if( index == currentPackage.data.size() )
+		{
+			portData.sendPackages.pop();
+		}
+		else
+		{
+			currentPackage.currentOffset = index;
+		}
+
+		pPort->closeSend( writer );
 	}
 
-	void RuntimeHigh::setState( PendingPackage& package, PackageState state )
+	void RuntimeHigh::setState( PendingReceivedPackage& package, PackageState state )
 	{
 		package.state = state;
 
 		switch( state )
 		{
-		case PackageState_WaitForMagic:
-			package.data.waitForMagic.firstReadCounter = 0u;
-			package.data.waitForMagic.lastMagic = 0u;
-			break;
+		//case PackageState_WaitForMagic:
+		//	package.data.waitForMagic.firstReadCounter = 0u;
+		//	package.data.waitForMagic.lastMagic = 0u;
+		//	break;
 
 		case PackageState_ReadBaseHeader:
 		case PackageState_ReadSourceAddress:

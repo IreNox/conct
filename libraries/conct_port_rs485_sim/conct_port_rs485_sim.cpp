@@ -2,52 +2,67 @@
 
 #include "conct_reader.h"
 #include "conct_writer.h"
+#include "conct_functions.h"
+
+#define CONCT_IS_DLL CONCT_ON
+#include "i_simulator_context.h"
 
 namespace conct
 {
 	void PortRs485Sim::setup()
 	{
-		m_hasSent = false;
-		m_hasReceived = false;
+		m_pCounterpartPort = nullptr;
+
+		getSimulatorContext().registerPort( this );
 	}
 
 	void PortRs485Sim::loop()
 	{
-		m_hasSent = false;
-		m_hasReceived = true;
 	}
 
 	bool PortRs485Sim::openSend( Writer& writer, uintreg size, DeviceId deviceId )
 	{
-		if( m_hasReceived || m_hasSent )
+		if( m_pCounterpartPort == nullptr )
 		{
 			return false;
 		}
 
-		writer.set( m_buffer, sizeof( m_buffer ) );
-		return true;
+		writer.set( m_sendBuffer, sizeof( m_sendBuffer ) );
+		return size > 0u;
 	}
 
 	void PortRs485Sim::closeSend( Writer& writer )
 	{
-		m_hasSent = true;
+		const uintreg writtenBytes = sizeof( m_sendBuffer ) - writer.getRemainingSize();
+		if( writtenBytes == 0u )
+		{
+			return;
+		}
+
+		m_pCounterpartPort->pushData( m_sendBuffer, writtenBytes );
 	}
 
 	bool PortRs485Sim::openReceived( Reader& reader, DeviceId& deviceId )
 	{
-		if( m_hasReceived )
+		std::lock_guard< std::mutex > lock( m_receiveMutex );
+
+		if( m_receivedPackets.empty() )
 		{
-			reader.set( m_buffer, sizeof( m_buffer ) );
-			deviceId = 0u;
-			return true;
+			return false;
 		}
 
-		return false;
+		const Packet& packet = m_receivedPackets.front();
+		const uintreg dataSize = CONCT_MIN( sizeof( m_receiveBuffer ), packet.size() );
+		copyMemory( m_receiveBuffer, packet.data(), dataSize );
+		m_receivedPackets.pop();
+
+		reader.set( m_receiveBuffer, dataSize );
+		deviceId = 1u;
+		return true;
 	}
 
 	void PortRs485Sim::closeReceived( Reader& reader )
 	{
-		m_hasReceived = false;
 	}
 
 	Flags8< PortFlag > PortRs485Sim::getFlags()
@@ -56,5 +71,19 @@ namespace conct
 		flags |= PortFlag_SingleEndpoint;
 		flags |= PortFlag_Reliable;
 		return flags;
+	}
+
+	void PortRs485Sim::setCounterpartPort( ISimulatorPort* pPort )
+	{
+		m_pCounterpartPort = pPort;
+	}
+
+	void PortRs485Sim::pushData( const void* pData, uintreg dataSize )
+	{
+		std::lock_guard< std::mutex > lock( m_receiveMutex );
+
+		m_receivedPackets.push( Packet( dataSize ) );
+		Packet& packet = m_receivedPackets.back();
+		copyMemory( packet.data(), pData, dataSize );
 	}
 }

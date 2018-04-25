@@ -6,6 +6,7 @@
 
 #include <map>
 #include <vector>
+#include <queue>
 
 namespace conct
 {
@@ -31,7 +32,7 @@ namespace conct
 
 		enum PackageState
 		{
-			PackageState_WaitForMagic,
+			//PackageState_WaitForMagic,
 			PackageState_ReadBaseHeader,
 			PackageState_ReadSourceAddress,
 			PackageState_ReadDestinationAddress,
@@ -39,46 +40,54 @@ namespace conct
 			PackageState_PushToQueue
 		};
 
-		struct PackageWaitForMagicData
+		//struct ReceivedPackageWaitForMagicData
+		//{
+		//	uintreg								firstReadCounter;
+		//	uint16								lastMagic;
+		//};
+
+		struct ReceivedPackageReadBytesData
 		{
-			uintreg						firstReadCounter;
-			uint16						lastMagic;
+			uintreg								alreadyRead;
 		};
 
-		struct PackageReadBytesData
+		union ReceivedPackageStateData
 		{
-			uintreg						alreadyRead;
+			//ReceivedPackageWaitForMagicData		waitForMagic;
+			ReceivedPackageReadBytesData		readBytes;
 		};
 
-		union PackageStateData
+		struct ReceivedPackage
 		{
-			PackageWaitForMagicData		waitForMagic;
-			PackageReadBytesData		readBytes;
+			MessageBaseHeader					baseHeader;
+			std::vector< DeviceId >				sourceAddress;
+			std::vector< DeviceId >				destinationAddress;
+			std::vector< uint8 >				payload;
 		};
 
-		struct Package
+		struct PendingReceivedPackage
 		{
-			MessageBaseHeader		baseHeader;
-			std::vector< DeviceId >	sourceAddress;
-			std::vector< DeviceId >	destinationAddress;
-			std::vector< uint8 >	payload;
+			PackageState						state;
+			ReceivedPackageStateData			data;
+			ReceivedPackage						target;
 		};
 
-		struct PendingPackage
+		struct SendPackage
 		{
-			PackageState			state;
-			PackageStateData		data;
-			Package					target;
+			DeviceId							targetDeviceId;
+			std::vector< uint8 >				data;
+			uintreg								currentOffset;
 		};
 
 		struct PortData
 		{
-			typedef std::map< DeviceId, PendingPackage > PendingPackageMap;
-			typedef std::vector< Package > PackageVector;
+			typedef std::map< DeviceId, PendingReceivedPackage > PendingPackageMap;
+			typedef std::vector< ReceivedPackage > ReceivedPackageVector;
+			typedef std::queue< SendPackage > SendPackageQueue;
 
-			PendingPackageMap	pendingPackages;
-			PackageVector		receivedPackages;
-			PackageVector		sendPackages;
+			PendingPackageMap		pendingPackages;
+			ReceivedPackageVector	receivedPackages;
+			SendPackageQueue		sendPackages;
 		};
 
 		struct DeviceData
@@ -102,17 +111,17 @@ namespace conct
 
 		void				readPort( Port* pPort, PortData& portData );
 		void				readPackage( Port* pPort, PortData& portData, Reader& reader, DeviceId deviceId );
-		void				readMagic( PendingPackage& package, Reader& reader );
-		void				readBaseHeader( PendingPackage& package, Reader& reader );
-		void				readBytes( std::vector< uint8 >& target, PendingPackage& package, Reader& reader, PackageState nextState );
-		void				readStore( Port* pPort, PortData& portData, PendingPackage& package, DeviceId deviceId );
+		//void				readMagic( PendingReceivedPackage& package, Reader& reader );
+		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader );
+		void				readBytes( std::vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState );
+		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, DeviceId deviceId );
 
 		void				writePort( Port* pPort, PortData& portData );
 
 		void				processPackages( PortData& portData );
-		void				processRoute( PortData& portData, const Package& package );
-		void				processPackage( PortData& portData, const Package& package );
+		void				processRoute( PortData& portData, const ReceivedPackage& package );
+		void				processPackage( PortData& portData, const ReceivedPackage& package );
 
-		void				setState( PendingPackage& package, PackageState state );
+		void				setState( PendingReceivedPackage& package, PackageState state );
 	};
 }

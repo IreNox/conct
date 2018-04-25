@@ -22,6 +22,8 @@ namespace conct
 		: m_pTypes( pTypes )
 		, m_instancesWidth( 0u )
 	{
+		m_commandText = "getInstance 1 Home.Light";
+
 		updateInstancesWidth();
 	}
 

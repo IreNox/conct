@@ -20,7 +20,7 @@ namespace conct
 		void								setup( RuntimeHigh* pRuntime );
 
 		Command< RemoteInstance >*			getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
-		Command< Array< RemoteInstance > >*	findInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
+		Command< Array< RemoteInstance > >*	findInstances( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
 
 		Command< Value >*					getProperty( const RemoteInstance& instance, const char* pName );
 		CommandBase*						setProperty( const RemoteInstance& instance, const char* pName, const Value& value );
@@ -32,6 +32,6 @@ namespace conct
 		RuntimeHigh*						m_pRuntime;
 
 		template< class TCommand >
-		TCommand*							beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload );
+		TCommand*							beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
 	};
 }

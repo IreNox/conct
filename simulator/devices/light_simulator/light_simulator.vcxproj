@@ -97,12 +97,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>simulator.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -112,12 +114,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>simulator.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -129,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -137,6 +141,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>simulator.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -148,7 +154,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -156,6 +162,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>simulator.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -163,6 +171,7 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h" />
@@ -173,6 +182,8 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.h" />
+    <ClInclude Include="..\shared\i_simulator_context.h" />
+    <ClInclude Include="..\shared\i_simulator_port.h" />
     <ClInclude Include="device_impl.h" />
     <ClInclude Include="gen\device_interface.h" />
     <ClInclude Include="gen\files.h" />
@@ -188,7 +199,7 @@
     <ClInclude Include="light_simulator.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_core.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />

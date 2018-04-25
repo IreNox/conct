@@ -8,4 +8,15 @@ namespace conct
 		m_id		= id;
 		m_result	= ResultId_Timeout;
 	}
+
+	void CommandBase::setSent()
+	{
+		m_state = CommandState_WaitForResponse;
+	}
+
+	void CommandBase::setResponse( ResultId result )
+	{
+		m_state = CommandState_Finish;
+		m_result = result;
+	}
 }

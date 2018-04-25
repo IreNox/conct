@@ -1,4 +1,4 @@
-#include "conct_core.h"
+#include "conct_functions.h"
 
 #include <string.h>
 
@@ -9,8 +9,8 @@ namespace conct
 		return strcmp( pString1, pString2 ) == 0;
 	}
 
-	void copyMemory( void* pTarget, const void* pSource, uintreg size )
+	void copyMemory( void* pTarget, const void* pSource, uintreg count )
 	{
-		memcpy( pTarget, pSource, size );
+		memcpy( pTarget, pSource, count );
 	}
 }

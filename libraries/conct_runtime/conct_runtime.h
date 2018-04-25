@@ -81,6 +81,8 @@ namespace conct
 		MessageType_PingResponse,
 		MessageType_GetInstanceRequest,
 		MessageType_GetInstanceResponse,
+		MessageType_FindInstancesRequest,
+		MessageType_FindInstancesResponse,
 		MessageType_GetPropertyRequest,
 		MessageType_GetPropertyResponse,
 		MessageType_SetPropertyRequest,
@@ -108,7 +110,12 @@ namespace conct
 		TypeCrc			typeCrc;
 	};
 
-	struct FindInstanceRequest
+	struct GetInstanceResponse
+	{
+		InstanceId		instanceId;
+	};
+
+	struct FindInstancesRequest
 	{
 		TypeCrc			typeCrc;
 	};

@@ -9,6 +9,7 @@ namespace conct
 	class Device;
 	class Port;
 	class Reader;
+	class Writer;
 
 	class RuntimeLow
 	{
@@ -22,20 +23,19 @@ namespace conct
 
 		enum State : uint8
 		{
-			State_ReadUntilNextMessage,
+			//State_ReadUntilNextMessage,
 			State_ReadBaseHeader,
-			State_ReadAddress,
-			State_ReadMessageHeader,
-			State_ReadMessage,
+			State_ReadAddresses,
+			State_ReadPayload,
 			State_ExecuteCommand,
-			State_SendResponse
+			State_Send,
 		};
 
-		enum ProcessResult : uint8
+		enum ReadResult : uint8
 		{
-			ProcessResult_Ok,
-			ProcessResult_WaitingData,
-			ProcessResult_Error
+			ReadResult_Ok,
+			ReadResult_WaitingData,
+			ReadResult_Error
 		};
 
 		State						m_state;
@@ -47,25 +47,25 @@ namespace conct
 		uint16						m_playloadSize;
 		uint8						m_destinationAddressSize;
 		MessageType					m_messageType;
-		CommandId					m_requestId;
-		ResultId						m_result;
+		CommandId					m_commandId;
+		ResultId					m_result;
 
 		ArrayView< LocalInstance >	m_instances;
 
 		void*						getWorkingData();
 		uint8						getRemainingWorkingData() const;
 
-		const LocalInstance*		findInstance( InstanceId instaceId );
+		const LocalInstance*		findInstanceById( InstanceId instaceId );
+		const LocalInstance*		findInstanceByType( TypeCrc typeCrc );
 
 		void						setState( State state, uint16 stateValue = 0u );
 
-		void						processData( Port* pPort );
-		void						processData( Reader& reader );
-		ProcessResult				processUntilNextMessage( Reader& reader );
-		ProcessResult				processBaseHeader( Reader& reader );
-		ProcessResult				processAddress( Reader& reader );
-		ProcessResult				processMessageHeader( Reader& reader );
-		ProcessResult				processMessage( Reader& reader );
+		void						readData( Port* pPort );
+		void						readData( Reader& reader );
+		//ReadResult					readUntilNextMessage( Reader& reader );
+		ReadResult					readBaseHeader( Reader& reader );
+		ReadResult					readAddresses( Reader& reader );
+		ReadResult					readPayload( Reader& reader );
 
 		void						executeCommand();
 

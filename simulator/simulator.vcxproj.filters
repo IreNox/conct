@@ -68,9 +68,6 @@
     <ClCompile Include="..\libraries\conct_core\conct_writer.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_core.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\shared\sources\type_collection.cpp">
       <Filter>shared\sources</Filter>
     </ClCompile>
@@ -106,6 +103,12 @@
     </ClCompile>
     <ClCompile Include="..\libraries\conct_runtime_high\conct_runtime_high.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_functions.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\simulator_context.cpp">
+      <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +207,15 @@
     </ClInclude>
     <ClInclude Include="..\libraries\conct_runtime_high\conct_runtime_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_functions.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\shared\i_simulator_port.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\shared\i_simulator_context.h">
+      <Filter>shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

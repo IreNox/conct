@@ -25,13 +25,13 @@ namespace conct
 			executeCommand();
 		}
 
-		if( m_state == State_SendResponse )
+		if( m_state == State_Send )
 		{
 			sendData( pPort );
 		}
 		else
 		{
-			processData( pPort );
+			readData( pPort );
 		}
 	}
 
@@ -45,11 +45,24 @@ namespace conct
 		return sizeof( m_workingData ) - m_workingDataOffset;
 	}
 
-	const LocalInstance* RuntimeLow::findInstance( InstanceId instaceId )
+	const LocalInstance* RuntimeLow::findInstanceById( InstanceId instaceId )
 	{
 		for( uint8 i = 0u; i < m_instances.getCount(); ++i )
 		{
 			if( m_instances[ i ].id == instaceId )
+			{
+				return &m_instances[ i ];
+			}
+		}
+
+		return nullptr;
+	}
+
+	const LocalInstance* RuntimeLow::findInstanceByType( TypeCrc typeCrc )
+	{
+		for( uint8 i = 0u; i < m_instances.getCount(); ++i )
+		{
+			if( m_instances[ i ].pProxy->getTypeCrc() == typeCrc )
 			{
 				return &m_instances[ i ];
 			}
@@ -64,7 +77,7 @@ namespace conct
 		m_stateValue	= stateValue;
 	}
 
-	void RuntimeLow::processData( Port* pPort )
+	void RuntimeLow::readData( Port* pPort )
 	{
 		Reader reader;
 		DeviceId deviceId;
@@ -73,36 +86,32 @@ namespace conct
 			return;
 		}
 
-		processData( reader );
+		readData( reader );
 
 		pPort->closeReceived( reader );
 	}
 
-	void RuntimeLow::processData( Reader& reader )
+	void RuntimeLow::readData( Reader& reader )
 	{
-		ProcessResult result = ProcessResult_Ok;
+		ReadResult result = ReadResult_Ok;
 		while( !reader.isEnd() )
 		{
 			switch( m_state )
 			{
-			case State_ReadUntilNextMessage:
-				result = processUntilNextMessage( reader );
-				break;
+			//case State_ReadUntilNextMessage:
+			//	result = readUntilNextMessage( reader );
+			//	break;
 
 			case State_ReadBaseHeader:
-				result = processBaseHeader( reader );
+				result = readBaseHeader( reader );
 				break;
 
-			case State_ReadAddress:
-				result = processAddress( reader );
+			case State_ReadAddresses:
+				result = readAddresses( reader );
 				break;
 
-			case State_ReadMessageHeader:
-				result = processMessageHeader( reader );
-				break;
-
-			case State_ReadMessage:
-				result = processMessage( reader );
+			case State_ReadPayload:
+				result = readPayload( reader );
 				break;
 
 			default:
@@ -110,11 +119,11 @@ namespace conct
 				return;
 			}
 
-			if( result == ProcessResult_Error )
+			if( result == ReadResult_Error )
 			{
 				// ...
 			}
-			else if( result == ProcessResult_WaitingData )
+			else if( result == ReadResult_WaitingData )
 			{
 				CONCT_ASSERT( reader.isEnd() );
 				break;
@@ -122,78 +131,80 @@ namespace conct
 		}
 	}
 
-	RuntimeLow::ProcessResult RuntimeLow::processUntilNextMessage( Reader& reader )
-	{
-		uint16& magic = *( uint16* )m_workingData;
+	//RuntimeLow::ReadResult RuntimeLow::readUntilNextMessage( Reader& reader )
+	//{
+	//	uint16& magic = *( uint16* )m_workingData;
 
-		if( m_stateValue < 2u )
-		{
-			m_stateValue += reader.readShort( magic, uintreg( sizeof( s_messageBaseHeaderMagic ) - m_stateValue ) );
+	//	if( m_stateValue < 2u )
+	//	{
+	//		m_stateValue += reader.readShort( magic, uintreg( sizeof( s_messageBaseHeaderMagic ) - m_stateValue ) );
 
-			if( m_stateValue <= sizeof( s_messageBaseHeaderMagic ) )
-			{
-				return ProcessResult_WaitingData;
-			}
+	//		if( m_stateValue <= sizeof( s_messageBaseHeaderMagic ) )
+	//		{
+	//			return ReadResult_WaitingData;
+	//		}
 
-			if( magic == s_messageBaseHeaderMagic )
-			{
-				setState( State_ReadBaseHeader );
-				return ProcessResult_Ok;
-			}
-		}
+	//		if( magic == s_messageBaseHeaderMagic )
+	//		{
+	//			setState( State_ReadBaseHeader );
+	//			return ReadResult_Ok;
+	//		}
+	//	}
 
-		uint8 nextByte = 0u;
-		while( reader.readByte( nextByte ) )
-		{
-			magic <<= 8u;
-			magic |= nextByte;
+	//	uint8 nextByte = 0u;
+	//	while( reader.readByte( nextByte ) )
+	//	{
+	//		magic <<= 8u;
+	//		magic |= nextByte;
 
-			if( magic == s_messageBaseHeaderMagic )
-			{
-				setState( State_ReadBaseHeader );
-				return ProcessResult_Ok;
-			}
-		}
+	//		if( magic == s_messageBaseHeaderMagic )
+	//		{
+	//			setState( State_ReadBaseHeader );
+	//			return ReadResult_Ok;
+	//		}
+	//	}
 
-		return ProcessResult_WaitingData;
-	}
+	//	return ReadResult_WaitingData;
+	//}
 
-	RuntimeLow::ProcessResult RuntimeLow::processBaseHeader( Reader& reader )
+	RuntimeLow::ReadResult RuntimeLow::readBaseHeader( Reader& reader )
 	{
 		MessageBaseHeader& baseHeader = *static_cast< MessageBaseHeader* >( getWorkingData() );
 		m_stateValue += reader.readStruct< MessageBaseHeader >( baseHeader, ( uintreg )m_stateValue );
 		if( m_stateValue < sizeof( baseHeader ) )
 		{
-			return ProcessResult_WaitingData;
+			return ReadResult_WaitingData;
 		}
 
 		if( baseHeader.destinationHops > 1u )
 		{
 			sendErrorResponse( ResultId_Unsupported );
-			return ProcessResult_Error;
+			return ReadResult_Error;
 		}
 
-		if( baseHeader.sourceHops > sizeof( m_workingData ) )
+		if( baseHeader.sourceHops + 1u > sizeof( m_workingData ) )
 		{
 			sendErrorResponse( ResultId_OutOfMemory );
-			return ProcessResult_Error;
+			return ReadResult_Error;
 		}
 
 		m_workingDataOffset			= 0u;
 		m_playloadSize				= baseHeader.payloadSize;
 		m_destinationAddressSize	= baseHeader.sourceHops;
-		m_result					= ResultId_Unknown;
+		m_messageType				= baseHeader.messageType;
+		m_commandId					= baseHeader.commandId;
+		m_result					= ResultId_Success;
 
-		setState( State_ReadAddress );
-		return ProcessResult_Ok;
+		setState( State_ReadAddresses );
+		return ReadResult_Ok;
 	}
 
-	RuntimeLow::ProcessResult RuntimeLow::processAddress( Reader& reader )
+	RuntimeLow::ReadResult RuntimeLow::readAddresses( Reader& reader )
 	{
-		m_stateValue += reader.readData( getWorkingData(), m_destinationAddressSize, ( uintreg )m_stateValue );
-		if( m_stateValue < m_destinationAddressSize )
+		m_stateValue += reader.readData( getWorkingData(), m_destinationAddressSize + 1u, ( uintreg )m_stateValue );
+		if( m_stateValue < m_destinationAddressSize + 1u )
 		{
-			return ProcessResult_WaitingData;
+			return ReadResult_WaitingData;
 		}
 
 		m_workingDataOffset += m_destinationAddressSize;
@@ -201,52 +212,25 @@ namespace conct
 		if( m_playloadSize > getRemainingWorkingData() )
 		{
 			sendErrorResponse( ResultId_OutOfMemory );
-			return ProcessResult_Error;
+			return ReadResult_Error;
 		}
 
-		setState( State_ReadMessageHeader );
-		return ProcessResult_Ok;
+		setState( State_ReadPayload );
+		return ReadResult_Ok;
 	}
 
-	RuntimeLow::ProcessResult RuntimeLow::processMessageHeader( Reader& reader )
-	{
-		if( m_stateValue == 0u )
-		{
-			uint8 commandTypeValue;
-			if( !reader.readByte( commandTypeValue ) )
-			{
-				return ProcessResult_WaitingData;
-			}
-
-			m_messageType = ( MessageType )commandTypeValue;
-			m_stateValue++;
-		}
-
-		if( m_stateValue < sizeof( m_requestId ) + 1u )
-		{
-			m_stateValue += reader.readShort( m_requestId, uintreg( m_stateValue - 1u ) );
-			if( m_stateValue < sizeof( m_requestId ) + 1u )
-			{
-				return ProcessResult_WaitingData;
-			}
-		}
-
-		setState( State_ReadMessage );
-		return ProcessResult_Ok;
-	}
-
-	RuntimeLow::ProcessResult RuntimeLow::processMessage( Reader& reader )
+	RuntimeLow::ReadResult RuntimeLow::readPayload( Reader& reader )
 	{
 		m_stateValue = reader.readData( getWorkingData(), ( uintreg )m_playloadSize, ( uintreg )m_stateValue );
 		if( m_stateValue < m_playloadSize )
 		{
-			return ProcessResult_WaitingData;
+			return ReadResult_WaitingData;
 		}
 
 		m_workingDataOffset += m_playloadSize;
 
 		setState( State_ExecuteCommand );
-		return ProcessResult_Ok;
+		return ReadResult_Ok;
 	}
 
 	void RuntimeLow::executeCommand()
@@ -257,13 +241,31 @@ namespace conct
 			sendPingResponse();
 			break;
 
+		case MessageType_GetInstanceRequest:
+			{
+				const GetInstanceRequest& request = *reinterpret_cast< const GetInstanceRequest* >( m_workingData + m_destinationAddressSize );
+
+				const LocalInstance* pInstance = findInstanceByType( request.typeCrc );
+				if( pInstance == nullptr )
+				{
+					sendErrorResponse( ResultId_NoSuchInstance );
+					return;
+				}
+
+				GetInstanceResponse response;
+				response.instanceId = pInstance->id;
+
+				sendResponse( MessageType_GetInstanceResponse, &response, sizeof( response ) );
+			}
+			break;
+
 		case MessageType_GetPropertyRequest:
 			{
 				Value value;
 				{
 					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_workingDataOffset );
 
-					const LocalInstance* pInstance = findInstance( request.instanceId );
+					const LocalInstance* pInstance = findInstanceById( request.instanceId );
 					if( pInstance == nullptr )
 					{
 						sendErrorResponse( ResultId_NoSuchInstance );
@@ -288,67 +290,72 @@ namespace conct
 		//	break;
 
 		default:
-			{
-				sendErrorResponse( ResultId_Unsupported );
-				return;
-			}
+			sendErrorResponse( ResultId_Unsupported );
 			break;
 		}
-
-		setState( State_ReadUntilNextMessage );
 	}
 
 	void RuntimeLow::sendPingResponse()
 	{
-		m_messageType = MessageType_PingResponse;
-		setState( State_SendResponse );
+		m_messageType	= MessageType_PingResponse;
+		m_result		= ResultId_Success;
+
+		sendResponse( MessageType_ErrorResponse, nullptr, 0u );
 	}
 
 	void RuntimeLow::sendErrorResponse( ResultId result )
 	{
 		m_messageType	= MessageType_ErrorResponse;
 		m_result		= result;
-		setState( State_SendResponse );
+
+		sendResponse( MessageType_ErrorResponse, nullptr, 0u );
 	}
 
 	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uint8 dataLength )
 	{
-		if( getRemainingWorkingData() < dataLength )
+		const uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
+		if( sizeof( m_workingData ) < packetSize )
 		{
 			sendErrorResponse( ResultId_OutOfMemory );
 			return;
 		}
 
-		copyMemory( getWorkingData(), pData, dataLength );
+		MessageBaseHeader* pBaseHeader = ( MessageBaseHeader* )m_workingData;
+		DeviceId* pSourceAddress = (DeviceId*)&pBaseHeader[ 1u ];
+		DeviceId* pDestinationAddress = &pSourceAddress[ 1u ];
+		uint8* pPayload = &pDestinationAddress[ m_destinationAddressSize ];
 
-		m_messageType	= responseType;
-		m_result		= ResultId_Success;
+		copyMemory( pDestinationAddress, m_workingData, m_destinationAddressSize );
+		copyMemory( pPayload, pData, dataLength );
 
-		setState( State_SendResponse, dataLength );
+		pSourceAddress[ 0u ] = 1u;
+
+		pBaseHeader->sourceHops			= 1u;
+		pBaseHeader->destinationHops	= m_destinationAddressSize;
+		pBaseHeader->payloadSize		= dataLength;
+		pBaseHeader->commandId			= m_commandId;
+		pBaseHeader->messageType		= responseType;
+		pBaseHeader->messageResult		= m_result;
+
+		m_workingDataOffset = 0u;
+		setState( State_Send, packetSize );
 	}
 
 	void RuntimeLow::sendData( Port* pPort )
 	{
-		// Send Base Header
-		// Send Address 1
-		// Send Address 2
-		// Send Payload
+		Writer writer;
+		if( !pPort->openSend( writer, m_stateValue, 1u ) )
+		{
+			return;
+		}
 
-		//Writer writer;
-		//if( !pPort->openSend( writer, 0u ) )
-		//{
-		//	return;
-		//}
+		while( !writer.isEnd() && m_stateValue > 0u )
+		{
+			const uintreg writtenBytes = writer.writeData( getWorkingData(), m_stateValue );
+			m_stateValue -= writtenBytes;
+			m_workingDataOffset += writtenBytes;
+		}
 
-		//const muint written = writer.writeData( getWorkingData(), (muint)m_stateValue );
-		//m_stateValue -= written;
-		//m_workingDataOffset += written;
-
-		//pPort->closeSend( writer );
-
-		//if( m_stateValue == 0u )
-		//{
-		//	setState( State_ReadUntilNextMessage );
-		//}
+		pPort->closeSend( writer );
 	}
 }

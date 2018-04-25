@@ -1,10 +1,15 @@
 #pragma once
 
 #include "conct_port.h"
+#include "i_simulator_port.h"
+
+#include <mutex>
+#include <queue>
+#include <vector>
 
 namespace conct
 {
-	class PortRs485Sim : public Port
+	class PortRs485Sim : public Port, private ISimulatorPort
 	{
 	public:
 
@@ -21,8 +26,23 @@ namespace conct
 
 	private:
 
-		bool						m_hasSent;
-		bool						m_hasReceived;
-		uint8						m_buffer[ 64u ];
+		enum
+		{
+			MaxPacketSize = 24u
+		};
+
+		typedef std::vector< uint8 > Packet;
+		typedef std::queue< Packet > PacketQueue;
+
+		ISimulatorPort*				m_pCounterpartPort;
+
+		std::mutex					m_receiveMutex;
+		PacketQueue					m_receivedPackets;
+		uint8						m_receiveBuffer[ MaxPacketSize ];
+		uint8						m_sendBuffer[ MaxPacketSize ];
+
+		virtual void				setCounterpartPort( ISimulatorPort* pPort ) CONCT_OVERRIDE_FINAL;
+
+		virtual void				pushData( const void* pData, uintreg dataSize ) CONCT_OVERRIDE_FINAL;
 	};
 }

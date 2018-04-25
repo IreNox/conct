@@ -10,9 +10,9 @@ namespace conct
 
 	enum PortFlag
 	{
-		PortFlag_SingleEndpoint,
-		PortFlag_MultiEndpoint,
-		PortFlag_Reliable
+		PortFlag_SingleEndpoint	= 1u << 0u,
+		PortFlag_MultiEndpoint	= 1u << 1u,
+		PortFlag_Reliable		= 1u << 2u
 	};
 
 	class Port

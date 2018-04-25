@@ -27,6 +27,9 @@
     <Filter Include="extern\conct_runtime">
       <UniqueIdentifier>{9e33ed70-a1b1-48ad-ab6f-ce3e9b73b081}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{84a3fe5c-9ed4-4574-bbc7-6971b35f2fb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -110,6 +113,15 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h">
       <Filter>extern\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\i_simulator_context.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\i_simulator_port.h">
+      <Filter>shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -148,9 +160,6 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp">
       <Filter>extern\conct_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_core.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
       <Filter>extern\conct_port_rs485_sim</Filter>
     </ClCompile>
@@ -162,6 +171,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp">
       <Filter>extern\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
+      <Filter>extern\conct_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

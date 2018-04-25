@@ -1,20 +1,25 @@
 #pragma once
 
-#if is_dll
-#	define SIMULATOR_DLL __declspec( dllimport )
-#else
-#	define SIMULATOR_DLL __declspec( dllexport )
-#endif
+#define CONCT_IS_DLL CONCT_OFF
+#include "i_simulator_context.h"
+
+#include <vector>
 
 namespace conct
 {
-	class SimulatorContext
+	class SimulatorContext : public ISimulatorContext
 	{
 	public:
 
+						SimulatorContext();
+
+		virtual void	registerPort( ISimulatorPort* pPort ) CONCT_OVERRIDE_FINAL;
+
 	private:
 
-	};
+		typedef std::vector< ISimulatorPort* > PortVector;
 
-	SIMULATOR_DLL SimulatorContext& getSimulatorContext();
+		PortVector		m_ports;
+
+	};
 }

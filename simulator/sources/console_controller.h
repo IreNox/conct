@@ -1,10 +1,11 @@
 #pragma once
 
+#include "console_plugin.h"
+
 #include "conct_core.h"
 #include "conct_runtime.h"
 #include "conct_structs.h"
-
-#include "console_plugin.h"
+#include "conct_timer.h"
 
 #include <string>
 #include <vector>
@@ -13,7 +14,10 @@
 namespace conct
 {
 	class CommandBase;
+	class InterfaceType;
 	class TypeCollection;
+	struct InterfaceFunction;
+	struct InterfaceProperty;
 
 	class ConsoleController : public ConsolePlugin
 	{
@@ -31,12 +35,38 @@ namespace conct
 
 	private:
 
-		typedef void ( ConsoleController::*CommandFunc )( ConsoleDevice& device, const std::vector< std::string >& arguments );
-
-		struct CommandInfo
+		enum State
 		{
-			const char*				pCommand;
-			CommandFunc				pFunction;
+			State_Invalid = -1,
+
+			State_Action,
+			State_Device,
+			State_Instance,
+			State_Type,
+			State_Property,
+			State_Function,
+			State_Waiting,
+			State_Popup,
+
+			State_Count
+		};
+
+		enum Action
+		{
+			Action_Invalid = -1,
+
+			Action_GetInstance,
+			Action_GetProperty,
+			Action_SetProperty,
+			Action_CallFunction,
+
+			Action_Count
+		};
+
+		struct ControllerDevice
+		{
+			std::string				name;
+			DeviceAddress			address;
 		};
 
 		struct ControllerInstance
@@ -46,37 +76,50 @@ namespace conct
 			RemoteInstance			instance;
 		};
 
+		typedef std::vector< std::string > StringVector;
+		typedef std::vector< State > StateVector;
+		typedef std::vector< ControllerDevice > ControllerDeviceVector;
 		typedef std::vector< ControllerInstance > ControllerInstanceVector;
-
-		static const CommandInfo				s_aCommands[];
 
 		TypeCollection*							m_pTypes;
 
+		State									m_state;
+		StateVector								m_stateHistory;
+		Action									m_action;
+		uintreg									m_index;
+		uintreg									m_lastIndices[ State_Count ];
+		StringVector							m_list;
+
+		const ControllerDevice*					m_pDevice;
+		const ControllerInstance*				m_pInstance;
+		const InterfaceType*					m_pInterface;
+		const InterfaceProperty*				m_pProperty;
+		const InterfaceFunction*				m_pFunction;
+
+		ControllerDeviceVector					m_devices;
 		ControllerInstanceVector				m_instances;
-		uint16									m_instancesWidth;
-		bool									m_drawInstances;
-
-		std::deque< std::string >				m_log;
-		bool									m_drawLog;
-
-		std::vector< std::string >				m_commandHistory;
-		std::string								m_commandText;
-		bool									m_drawCommand;
 
 		CommandBase*							m_pRunningCommand;
 
-		void									drawInstances( const uint16x2 size ) const;
-		void									drawLog( const uint16x2 size ) const;
-		void									drawCommand( const uint16x2 size ) const;
+		Timer									m_timer;
 
-		void									updateInstancesWidth();
+		void									nextState( ConsoleDevice& device );
+		void									setState( State state );
+		void									showPopup( const std::string& text );
 
-		void									pushLog( const char* pText );
+		void									drawClear() const;
+		void									drawList() const;
+		void									drawLoading() const;
+		void									drawPopup() const;
 
-		void									autoComplete( ConsoleDevice& device );
+		void									buildActions();
+		void									buildDevices();
+		void									buildInstances();
+		void									buildTypes();
+		void									buildProperties();
+		void									buildFunctions();
 
-		void									executeCommand( ConsoleDevice& device );
-		void									executeHelpCommand( ConsoleDevice& device, const std::vector< std::string >& arguments );
-		void									executeGetInstanceCommand( ConsoleDevice& device, const std::vector< std::string >& arguments );
+		void									executeAction( ConsoleDevice& device );
+		void									executeGetInstanceAction( ConsoleDevice& device );
 	};
 }

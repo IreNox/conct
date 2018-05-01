@@ -83,7 +83,20 @@ namespace conct
 			exit( 0u );
 		}
 
-		updateDeviceSelection();
+		ConsoleInput::readKey( [ this ]( ConsoleKey key )
+		{
+			if( key >= ConsoleKey_F1 && key < ConsoleKey_F12 )
+			{
+				const uintreg index = key - ConsoleKey_F1;
+				if( index < m_devices.size() )
+				{
+					selectDevice( index );
+					return true;
+				}
+			}
+
+			return false;
+		} );
 
 		ConsoleDevice* pDevice = nullptr;
 		if( m_selectedDevice < m_devices.size() )
@@ -91,7 +104,33 @@ namespace conct
 			pDevice = &m_devices[ m_selectedDevice ];
 		}
 
-		updateModeSelection( pDevice );
+		ConsoleInput::readChar( [ this, pDevice ]( char c )
+		{
+			if( pDevice == nullptr )
+			{
+				return false;
+			}
+
+			if( c >= '1' && c <= '9' )
+			{
+				const uintreg index = c - '1';
+				if( index < pDevice->plugins.size() )
+				{
+					if( m_pluginIndex < pDevice->plugins.size() )
+					{
+						pDevice->plugins[ m_pluginIndex ]->deactivate( *pDevice );
+					}
+
+					m_pluginIndex = index;
+					pDevice->plugins[ m_pluginIndex ]->activate( *pDevice );
+
+					m_changeFlags |= ChangeFlag_Device;
+					return true;
+				}
+			}
+
+			return false;
+		} );
 
 		if( m_changeFlags.isSet( ChangeFlag_DeviceList ) )
 		{
@@ -112,41 +151,6 @@ namespace conct
 				ConsolePlugin* pPlugin = pDevice->plugins[ m_pluginIndex ];
 				pPlugin->update( *pDevice );
 				pPlugin->draw( *pDevice );
-			}
-		}
-	}
-
-	void Console::updateDeviceSelection()
-	{
-		for( size_t i = 0u; i < m_devices.size(); ++i )
-		{
-			if( ConsoleInput::getKeyState( (ConsoleKey)(ConsoleKey_F1 + i) ) )
-			{
-				selectDevice( i );
-			}
-		}
-	}
-
-	void Console::updateModeSelection( ConsoleDevice* pDevice )
-	{
-		if( pDevice == nullptr )
-		{
-			return;
-		}
-
-		for( size_t i = 0u; i < pDevice->plugins.size(); ++i )
-		{
-			if( ConsoleInput::getKeyState( (ConsoleKey)( ConsoleKey_1 + i ) ) )
-			{
-				if( m_pluginIndex < pDevice->plugins.size() )
-				{
-					pDevice->plugins[ m_pluginIndex ]->deactivate( *pDevice );
-				}
-
-				m_pluginIndex = i;
-				pDevice->plugins[ m_pluginIndex ]->activate( *pDevice );
-
-				m_changeFlags |= ChangeFlag_Device;
 			}
 		}
 	}

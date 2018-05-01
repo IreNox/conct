@@ -45,6 +45,7 @@ namespace conct
 			State_Type,
 			State_Property,
 			State_Function,
+			State_Value,
 			State_Waiting,
 			State_Popup,
 
@@ -89,12 +90,15 @@ namespace conct
 		uintreg									m_index;
 		uintreg									m_lastIndices[ State_Count ];
 		StringVector							m_list;
+		std::string								m_valueText;
+		std::string								m_popupText;
 
 		const ControllerDevice*					m_pDevice;
 		const ControllerInstance*				m_pInstance;
 		const InterfaceType*					m_pInterface;
 		const InterfaceProperty*				m_pProperty;
 		const InterfaceFunction*				m_pFunction;
+		std::vector< Value >					m_values;
 
 		ControllerDeviceVector					m_devices;
 		ControllerInstanceVector				m_instances;
@@ -103,12 +107,19 @@ namespace conct
 
 		Timer									m_timer;
 
+		void									updateList( ConsoleDevice& device );
+		void									updateValue( ConsoleDevice& device );
+
+		void									previousState();
 		void									nextState( ConsoleDevice& device );
 		void									setState( State state );
 		void									showPopup( const std::string& text );
 
+		bool									setValueFromString( Value& value, const std::string& text );
+
 		void									drawClear() const;
 		void									drawList() const;
+		void									drawValue() const;
 		void									drawLoading() const;
 		void									drawPopup() const;
 
@@ -121,5 +132,10 @@ namespace conct
 
 		void									executeAction( ConsoleDevice& device );
 		void									executeGetInstanceAction( ConsoleDevice& device );
+		void									executeGetPropertyAction( ConsoleDevice& device );
+		void									executeSetPropertyAction( ConsoleDevice& device );
+		void									executeCallFunctionAction( ConsoleDevice& device );
+
+		void									finishCommand();
 	};
 }

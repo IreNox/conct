@@ -25,7 +25,7 @@ namespace conct
 		Command< Value >*					getProperty( const RemoteInstance& instance, const char* pName );
 		CommandBase*						setProperty( const RemoteInstance& instance, const char* pName, const Value& value );
 
-		Command< Value >*					callFunction( const RemoteInstance& instance, const char* pName, const Array< Value >& arguments );
+		Command< Value >*					callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< Value >& arguments );
 
 	private:
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 namespace conct
 {
 	enum ConsoleKey
@@ -7,6 +9,7 @@ namespace conct
 		ConsoleKey_Escape,
 		ConsoleKey_Return,
 		ConsoleKey_Backspace,
+		ConsoleKey_Delete,
 		ConsoleKey_Tab,
 		ConsoleKey_F1,
 		ConsoleKey_F2,
@@ -20,16 +23,6 @@ namespace conct
 		ConsoleKey_F10,
 		ConsoleKey_F11,
 		ConsoleKey_F12,
-		ConsoleKey_0,
-		ConsoleKey_1,
-		ConsoleKey_2,
-		ConsoleKey_3,
-		ConsoleKey_4,
-		ConsoleKey_5,
-		ConsoleKey_6,
-		ConsoleKey_7,
-		ConsoleKey_8,
-		ConsoleKey_9,
 		ConsoleKey_Up,
 		ConsoleKey_Down,
 		ConsoleKey_Left,
@@ -47,6 +40,8 @@ namespace conct
 		static bool		getKeyState( ConsoleKey key );
 
 		static bool		readKey( ConsoleKey& key );
+		static void		readKey( std::function< bool( ConsoleKey ) > callback );
 		static bool		readChar( char& c );
+		static void		readChar( std::function< bool( char ) > callback );
 	};
 }

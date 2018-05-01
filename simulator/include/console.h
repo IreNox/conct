@@ -46,9 +46,6 @@ namespace conct
 
 		TypeCollection				m_types;
 
-		void						updateDeviceSelection();
-		void						updateModeSelection( ConsoleDevice* pDevice );
-
 		void						selectDevice( size_t index );
 
 		void						drawDeviceList();

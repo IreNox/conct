@@ -35,7 +35,7 @@ namespace conct
 	{
 		if( m_state == State_Invalid )
 		{
-			setState( State_Action );
+			setState( State_Value );
 		}
 	}
 
@@ -44,6 +44,33 @@ namespace conct
 	}
 
 	void ConsoleController::update( ConsoleDevice& device )
+	{
+		if( m_state == State_Value )
+		{
+			updateValue( device );
+		}
+		else if( m_state == State_Waiting )
+		{
+			drawLoading();
+			finishCommand();
+		}
+		else
+		{
+			updateList( device );
+		}
+	}
+
+	void ConsoleController::draw( const ConsoleDevice& device ) const
+	{
+		// ???
+	}
+
+	const char* ConsoleController::getName() const
+	{
+		return "Controller";
+	}
+
+	void ConsoleController::updateList( ConsoleDevice& device )
 	{
 		ConsoleKey key;
 		if( ConsoleInput::readKey( key ) )
@@ -55,15 +82,7 @@ namespace conct
 				break;
 
 			case ConsoleKey_Backspace:
-				if( !m_stateHistory.empty() )
-				{
-					setState( m_stateHistory.back() );
-					m_stateHistory.pop_back();
-					if( !m_stateHistory.empty() )
-					{
-						m_stateHistory.pop_back();
-					}
-				}
+				previousState();
 				break;
 
 			case ConsoleKey_Up:
@@ -92,32 +111,106 @@ namespace conct
 				break;
 			}
 		}
+	}
 
-		if( m_state == State_Waiting )
+	void ConsoleController::updateValue( ConsoleDevice& device )
+	{
+		bool hasChanged = false;
+
+		char c;
+		if( ConsoleInput::readChar( c ) )
 		{
-			drawLoading();
+			std::string::iterator it = m_valueText.begin() + m_index;
+			m_valueText.insert( it, c );
+			m_index++;
 
-			if( m_pRunningCommand != nullptr && m_pRunningCommand->isFinish() )
+			hasChanged = true;
+		}
+
+		ConsoleKey key;
+		if( ConsoleInput::readKey( key ) )
+		{
+			switch( key )
 			{
-				showPopup( "Command finish." );
-				m_pRunningCommand = nullptr;
+			case ConsoleKey_Return:
+				nextState( device );
+				break;
+
+			case ConsoleKey_Backspace:
+				if( m_valueText.empty() )
+				{
+					previousState();
+				}
+				else if( m_index > 0u )
+				{
+					std::string::iterator it = m_valueText.begin() + m_index - 1u;
+					if( it == m_valueText.end() )
+					{
+						it--;
+					}
+					m_valueText.erase( it );
+					m_index--;
+
+					hasChanged = true;
+				}
+				break;
+
+			case ConsoleKey_Delete:
+				if( !m_valueText.empty() && m_index < m_valueText.size() )
+				{
+					std::string::iterator it = m_valueText.begin() + m_index;
+					if( it != m_valueText.end() )
+					{
+						m_valueText.erase( it );
+
+						hasChanged = true;
+					}
+				}
+				break;
+
+			case ConsoleKey_Left:
+				if( m_index > 0u )
+				{
+					m_index--;
+					ConsoleRenderer::setCursorPosition( uint16( 2u + m_index ), 8u );
+				}
+				break;
+
+			case ConsoleKey_Right:
+				if( m_index < m_valueText.size() )
+				{
+					m_index++;
+					ConsoleRenderer::setCursorPosition( uint16( 2u + m_index ), 8u );
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		if( hasChanged )
+		{
+			drawValue();
+		}
+	}
+
+	void ConsoleController::previousState()
+	{
+		if( !m_stateHistory.empty() )
+		{
+			setState( m_stateHistory.back() );
+			m_stateHistory.pop_back();
+			if( !m_stateHistory.empty() )
+			{
+				m_stateHistory.pop_back();
 			}
 		}
 	}
 
-	void ConsoleController::draw( const ConsoleDevice& device ) const
-	{
-		// ???
-	}
-
-	const char* ConsoleController::getName() const
-	{
-		return "Controller";
-	}
-
 	void ConsoleController::nextState( ConsoleDevice& device )
 	{
-		if( m_list.empty() )
+		if( m_list.empty() && m_state != State_Popup && m_state != State_Value )
 		{
 			return;
 		}
@@ -202,16 +295,63 @@ namespace conct
 			break;
 
 		case State_Property:
+			{
+				m_pProperty = &m_pInterface->getProperties()[ m_index ];
+
+				setState( State_Value );
+			}
 			break;
 
 		case State_Function:
+			{
+				m_pFunction = &m_pInterface->getFunctions()[ m_index ];
+
+				setState( State_Value );
+			}
+			break;
+
+		case State_Value:
+			{
+				Value value;
+				if( !setValueFromString( value, m_valueText ) )
+				{
+					showPopup( "Value can't interpreted." );
+					return;
+				}
+
+				m_values.push_back( value );
+
+				if( m_action == Action_SetProperty )
+				{
+					executeAction( device );
+				}
+				else if( m_action == Action_CallFunction )
+				{
+					if( m_values.size() < m_pFunction->parameters.size() )
+					{
+						setState( State_Value );
+					}
+					else
+					{
+						executeAction( device );
+					}
+				}
+			}
 			break;
 
 		case State_Waiting:
 			break;
 
 		case State_Popup:
-			setState( State_Action );
+			if( m_stateHistory.back() != State_Value )
+			{
+				setState( State_Action );
+			}
+			else
+			{
+				drawClear();
+				drawValue();
+			}
 			break;
 
 		case State_Invalid:
@@ -226,6 +366,14 @@ namespace conct
 		{
 			m_stateHistory.clear();
 		}
+		else if( m_state == State_Value )
+		{
+			m_list.push_back( m_valueText );
+		}
+		else
+		{
+			m_list.clear();
+		}
 
 		if( m_state != State_Invalid )
 		{
@@ -234,11 +382,6 @@ namespace conct
 
 		m_state = state;
 		m_index = m_lastIndices[ state ];
-
-		if( m_state != State_Popup )
-		{
-			m_list.clear();
-		}
 
 		switch( state )
 		{
@@ -266,6 +409,11 @@ namespace conct
 			buildFunctions();
 			break;
 
+		case State_Value:
+			m_valueText.clear();
+			drawValue();
+			return;
+
 		case State_Waiting:
 			drawClear();
 			drawLoading();
@@ -290,10 +438,13 @@ namespace conct
 
 	void ConsoleController::showPopup( const std::string& text )
 	{
-		m_list.clear();
-		m_list.push_back( text );
-
+		m_popupText = text;
 		setState( State_Popup );
+	}
+
+	bool ConsoleController::setValueFromString( Value& value, const std::string& text )
+	{
+		return false;
 	}
 
 	void ConsoleController::drawClear() const
@@ -313,6 +464,7 @@ namespace conct
 			"Type",
 			"Property",
 			"Function",
+			"Value",
 			"Waiting",
 			"Popup"
 		};
@@ -338,6 +490,17 @@ namespace conct
 
 			i++;
 		}
+	}
+
+	void ConsoleController::drawValue() const
+	{
+		const uint16x2 size = ConsoleRenderer::getSize();
+
+		ConsoleRenderer::drawRectangle( 0u, 7u, size.x, 3u, LineType_Single );
+		ConsoleRenderer::drawText( 2u, 8u, m_valueText.c_str() );
+		ConsoleRenderer::drawCharacter( uint16( 2u + m_valueText.size() ), 8u, ' ' );
+
+		ConsoleRenderer::setCursorPosition( uint16( 2u + m_index ), 8u );
 	}
 
 	void ConsoleController::drawLoading() const
@@ -369,7 +532,7 @@ namespace conct
 
 	void ConsoleController::drawPopup() const
 	{
-		const char* pText = m_list.front().c_str();
+		const char* pText = m_popupText.c_str();
 		const uint16x2 textSize = ConsoleRenderer::measureTextSize( pText );
 
 		const uint16x2 size = ConsoleRenderer::getSize();
@@ -443,12 +606,15 @@ namespace conct
 			break;
 
 		case Action_GetProperty:
+			executeGetPropertyAction( device );
 			break;
 
 		case Action_SetProperty:
+			executeSetPropertyAction( device );
 			break;
 
 		case Action_CallFunction:
+			executeCallFunctionAction( device );
 			break;
 
 		case Action_Invalid:
@@ -469,5 +635,91 @@ namespace conct
 		}
 
 		m_pRunningCommand = pCommand;
+	}
+
+	void ConsoleController::executeGetPropertyAction( ConsoleDevice& device )
+	{
+		Command< Value >* pCommand = device.data.pController->getProperty( m_pInstance->instance, m_pProperty->name.c_str() );
+		if( pCommand == nullptr )
+		{
+			showPopup( "Failed to start 'getProperty' command." );
+			return;
+		}
+
+		m_pRunningCommand = pCommand;
+	}
+
+	void ConsoleController::executeSetPropertyAction( ConsoleDevice& device )
+	{
+		CommandBase* pCommand = device.data.pController->setProperty( m_pInstance->instance, m_pProperty->name.c_str(), m_values.front() );
+		if( pCommand == nullptr )
+		{
+			showPopup( "Failed to start 'setProperty' command." );
+			return;
+		}
+
+		m_pRunningCommand = pCommand;
+	}
+
+	void ConsoleController::executeCallFunctionAction( ConsoleDevice& device )
+	{
+		ArrayView< Value > arguments;
+		arguments.set( m_values.data(), m_values.size() );
+		CommandBase* pCommand = device.data.pController->callFunction( m_pInstance->instance, m_pFunction->name.c_str(), arguments );
+		if( pCommand == nullptr )
+		{
+			showPopup( "Failed to start 'setProperty' command." );
+			return;
+		}
+
+		m_pRunningCommand = pCommand;
+	}
+
+	void ConsoleController::finishCommand()
+	{
+		if( !m_pRunningCommand->isFinish() )
+		{
+			return;
+		}
+
+		if( m_pRunningCommand->hasError() )
+		{
+			showPopup( "Command failed." );
+			m_pRunningCommand = nullptr;
+			return;
+		}
+
+		switch( m_action )
+		{
+		case Action_GetInstance:
+			{
+				Command< RemoteInstance >* pCommand = static_cast< Command< RemoteInstance >* >( m_pRunningCommand );
+
+				ControllerInstance instance;
+				instance.instance	= pCommand->getData();
+				instance.name		= m_pInterface->getFullName();
+				instance.type		= m_pInterface->getCrc();
+
+				m_instances.push_back( instance );
+			}
+			break;
+
+		case Action_GetProperty:
+		case Action_CallFunction:
+			{
+				Command< Value >* pCommand = static_cast< Command< Value >* >( m_pRunningCommand );
+
+				// show value
+			}
+			break;
+
+		case Action_SetProperty:
+		case Action_Invalid:
+		case Action_Count:
+			break;
+		}
+
+		showPopup( "Command finish." );
+		m_pRunningCommand = nullptr;
 	}
 }

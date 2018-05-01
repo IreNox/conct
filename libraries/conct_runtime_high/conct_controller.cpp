@@ -56,7 +56,7 @@ namespace conct
 		return beginCommand< CommandBase >( instance.address, payload, MessageType_SetPropertyRequest );
 	}
 
-	Command< Value >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const Array< Value >& arguments )
+	Command< Value >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< Value >& arguments )
 	{
 		CallFunctionRequest request;
 		request.instanceId = instance.id;

@@ -3,7 +3,7 @@
 #include "conct_device.h"
 #include "conct_runtime_high.h"
 
-#include "conct_port_lan.h"
+#include "conct_port_tcp.h"
 #include "conct_port_rs485_sim.h"
 
 
@@ -23,7 +23,7 @@ namespace conct
 
 		RuntimeHigh m_runtime;
 
-		PortLan m_port0;
+		PortTcp m_port0;
 		PortRs485Sim m_port1;
 
 		virtual void setup() = 0;

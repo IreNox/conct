@@ -4,7 +4,7 @@
 
 namespace conct
 {
-	class PortLan : public Port
+	class PortTcp : public Port
 	{
 	public:
 

@@ -1,38 +1,38 @@
-#include "conct_port_lan.h"
+#include "conct_port_tcp.h"
 
 namespace conct
 {
-	void PortLan::setup()
+	void PortTcp::setup()
 	{
 
 	}
 
-	void PortLan::loop()
+	void PortTcp::loop()
 	{
 
 	}
 
-	bool PortLan::openSend( Writer& writer, uintreg size, DeviceId deviceId )
-	{
-		return false;
-	}
-
-	void PortLan::closeSend( Writer& writer )
-	{
-
-	}
-
-	bool PortLan::openReceived( Reader& reader, DeviceId& deviceId )
+	bool PortTcp::openSend( Writer& writer, uintreg size, DeviceId deviceId )
 	{
 		return false;
 	}
 
-	void PortLan::closeReceived( Reader& reader )
+	void PortTcp::closeSend( Writer& writer )
 	{
 
 	}
 
-	Flags8< PortFlag > PortLan::getFlags()
+	bool PortTcp::openReceived( Reader& reader, DeviceId& deviceId )
+	{
+		return false;
+	}
+
+	void PortTcp::closeReceived( Reader& reader )
+	{
+
+	}
+
+	Flags8< PortFlag > PortTcp::getFlags()
 	{
 		Flags8< PortFlag > flags;
 		flags |= PortFlag_MultiEndpoint;

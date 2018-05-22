@@ -97,7 +97,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_lan;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_tcp;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -114,7 +114,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_lan;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_tcp;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_lan;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_tcp;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -154,7 +154,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_lan;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_port_tcp;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>

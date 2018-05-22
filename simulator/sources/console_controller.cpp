@@ -459,7 +459,6 @@ namespace conct
 			break;
 
 		case ValueType_Integer:
-			return
 			break;
 
 		case ValueType_Unsigned:
@@ -477,6 +476,8 @@ namespace conct
 		case ValueType_Instance:
 			break;
 		}
+
+		return "";
 	}
 
 	void ConsoleController::drawClear() const

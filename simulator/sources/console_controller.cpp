@@ -447,6 +447,38 @@ namespace conct
 		return false;
 	}
 
+	std::string ConsoleController::getStringFromValue( const Value& value )
+	{
+		switch( value.type )
+		{
+		case ValueType_Void:
+			return "void";
+
+		case ValueType_Boolean:
+			return value.data.boolean ? "true" : "false";
+			break;
+
+		case ValueType_Integer:
+			return
+			break;
+
+		case ValueType_Unsigned:
+			break;
+
+		case ValueType_String:
+			break;
+
+		case ValueType_PercentValue:
+			break;
+
+		case ValueType_Guid:
+			break;
+
+		case ValueType_Instance:
+			break;
+		}
+	}
+
 	void ConsoleController::drawClear() const
 	{
 		const uint16x2 size = ConsoleRenderer::getSize();

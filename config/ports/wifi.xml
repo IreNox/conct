@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<port name="WiFi" library="conct_port_wifi" class="PortWiFi">
-	<connection mtu="2312">
-		<multi_device />
-		<reliable />
-	</connection>
-</port>

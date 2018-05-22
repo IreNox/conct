@@ -116,6 +116,7 @@ namespace conct
 		void									showPopup( const std::string& text );
 
 		bool									setValueFromString( Value& value, const std::string& text );
+		std::string								getStringFromValue( const Value& value );
 
 		void									drawClear() const;
 		void									drawList() const;

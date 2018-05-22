@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<port name="TCP" library="conct_port_tcp" class="PortTcp">
+	<connection mtu="1500">
+		<multi_device />
+		<reliable />
+	</connection>
+	<properties>
+		<listen_port type="int" min="1024" max="49999" defailt="49351" />
+	</properties>
+</port>

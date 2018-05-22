@@ -27,11 +27,14 @@
     <Filter Include="libraries\conct_runtime_high">
       <UniqueIdentifier>{d53511c4-7177-434c-bf83-74d507b15ae0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_port_lan">
-      <UniqueIdentifier>{fe3335ad-9074-4d30-b62e-26ada7f5e0af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="shared">
       <UniqueIdentifier>{37079177-96e3-4ff2-9903-31a126048f10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_tcp">
+      <UniqueIdentifier>{fe3335ad-9074-4d30-b62e-26ada7f5e0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_core_high">
+      <UniqueIdentifier>{b988e0ce-3f28-445d-b389-f7797a982cff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -80,9 +83,6 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_port_lan\conct_port_lan.h">
-      <Filter>libraries\conct_port_lan</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_controller.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
@@ -100,6 +100,21 @@
     </ClInclude>
     <ClInclude Include="..\shared\i_simulator_port.h">
       <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.h">
+      <Filter>libraries\conct_port_tcp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_core_high.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_queue.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_string.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_vector.h">
+      <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -133,9 +148,6 @@
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_port_lan\conct_port_lan.cpp">
-      <Filter>libraries\conct_port_lan</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_controller.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
@@ -147,6 +159,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
       <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.cpp">
+      <Filter>libraries\conct_port_tcp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_string.cpp">
+      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +185,12 @@
     </None>
     <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl">
       <Filter>libraries\conct_runtime_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core_high\conct_queue.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core_high\conct_vector.inl">
+      <Filter>libraries\conct_core_high</Filter>
     </None>
   </ItemGroup>
 </Project>

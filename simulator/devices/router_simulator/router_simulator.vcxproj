@@ -176,8 +176,12 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h" />
-    <ClInclude Include="..\..\..\libraries\conct_port_lan\conct_port_lan.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_core_high.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_queue.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_string.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
+    <ClInclude Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h" />
@@ -196,8 +200,9 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />
-    <ClCompile Include="..\..\..\libraries\conct_port_lan\conct_port_lan.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_string.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime\conct_device.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_command.cpp" />
@@ -215,6 +220,8 @@
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_reader.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_writer.inl" />
+    <None Include="..\..\..\libraries\conct_core_high\conct_queue.inl" />
+    <None Include="..\..\..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

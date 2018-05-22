@@ -6,8 +6,8 @@
 #include "conct_runtime.h"
 #include "conct_structs.h"
 #include "conct_timer.h"
+#include "conct_string.h"
 
-#include <string>
 #include <vector>
 #include <deque>
 
@@ -66,18 +66,18 @@ namespace conct
 
 		struct ControllerDevice
 		{
-			std::string				name;
+			String				name;
 			DeviceAddress			address;
 		};
 
 		struct ControllerInstance
 		{
-			std::string				name;
+			String				name;
 			TypeCrc					type;
 			RemoteInstance			instance;
 		};
 
-		typedef std::vector< std::string > StringVector;
+		typedef std::vector< String > StringVector;
 		typedef std::vector< State > StateVector;
 		typedef std::vector< ControllerDevice > ControllerDeviceVector;
 		typedef std::vector< ControllerInstance > ControllerInstanceVector;
@@ -90,8 +90,9 @@ namespace conct
 		uintreg									m_index;
 		uintreg									m_lastIndices[ State_Count ];
 		StringVector							m_list;
-		std::string								m_valueText;
-		std::string								m_popupText;
+		String									m_valueText;
+		String									m_popupText;
+		ValueType								m_valueType;
 
 		const ControllerDevice*					m_pDevice;
 		const ControllerInstance*				m_pInstance;
@@ -113,10 +114,11 @@ namespace conct
 		void									previousState();
 		void									nextState( ConsoleDevice& device );
 		void									setState( State state );
-		void									showPopup( const std::string& text );
+		void									setValueState( ValueType targetType );
+		void									setPopupState( const String& text );
 
-		bool									setValueFromString( Value& value, const std::string& text );
-		std::string								getStringFromValue( const Value& value );
+		bool									setValueFromString( Value& value, const String& text );
+		String									getStringFromValue( const Value& value );
 
 		void									drawClear() const;
 		void									drawList() const;

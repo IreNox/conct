@@ -1,5 +1,7 @@
 #include "home_dimmer_proxy.h"
 
+#include "conct_functions.h"
+
 #include "home_dimmer.h"
 
 namespace conct

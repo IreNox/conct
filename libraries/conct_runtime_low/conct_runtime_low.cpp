@@ -1,6 +1,7 @@
 #include "conct_runtime_low.h"
 
 #include "conct_device.h"
+#include "conct_functions.h"
 #include "conct_port.h"
 #include "conct_proxy.h"
 #include "conct_reader.h"

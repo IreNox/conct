@@ -25,7 +25,7 @@ namespace conct
 		}
 
 		ControllerDevice device;
-		device.name						= "Test";
+		device.name						= String( "Test" );
 		device.address.address[ 0u ]	= 1u;
 		device.address.address[ 1u ]	= 0u;
 		m_devices.push_back( device );
@@ -35,7 +35,7 @@ namespace conct
 	{
 		if( m_state == State_Invalid )
 		{
-			setState( State_Value );
+			setValueState( ValueType_Boolean );
 		}
 	}
 
@@ -120,8 +120,7 @@ namespace conct
 		char c;
 		if( ConsoleInput::readChar( c ) )
 		{
-			std::string::iterator it = m_valueText.begin() + m_index;
-			m_valueText.insert( it, c );
+			m_valueText = m_valueText.insert( c, m_index );
 			m_index++;
 
 			hasChanged = true;
@@ -137,18 +136,18 @@ namespace conct
 				break;
 
 			case ConsoleKey_Backspace:
-				if( m_valueText.empty() )
+				if( m_valueText.isEmpty() )
 				{
 					previousState();
 				}
 				else if( m_index > 0u )
 				{
-					std::string::iterator it = m_valueText.begin() + m_index - 1u;
-					if( it == m_valueText.end() )
+					uintreg index = m_index - 1u;
+					if( index == m_valueText.getLength() )
 					{
-						it--;
+						index--;
 					}
-					m_valueText.erase( it );
+					m_valueText = m_valueText.erase( index );
 					m_index--;
 
 					hasChanged = true;
@@ -156,15 +155,10 @@ namespace conct
 				break;
 
 			case ConsoleKey_Delete:
-				if( !m_valueText.empty() && m_index < m_valueText.size() )
+				if( !m_valueText.isEmpty() && m_index < m_valueText.getLength() )
 				{
-					std::string::iterator it = m_valueText.begin() + m_index;
-					if( it != m_valueText.end() )
-					{
-						m_valueText.erase( it );
-
-						hasChanged = true;
-					}
+					m_valueText = m_valueText.erase( m_index );
+					hasChanged = true;
 				}
 				break;
 
@@ -177,7 +171,7 @@ namespace conct
 				break;
 
 			case ConsoleKey_Right:
-				if( m_index < m_valueText.size() )
+				if( m_index < m_valueText.getLength() )
 				{
 					m_index++;
 					ConsoleRenderer::setCursorPosition( uint16( 2u + m_index ), 8u );
@@ -298,7 +292,14 @@ namespace conct
 			{
 				m_pProperty = &m_pInterface->getProperties()[ m_index ];
 
-				setState( State_Value );
+				if( m_pProperty->pType->getDescription() == TypeDescription_Value )
+				{
+					setValueState( m_pProperty->pType->getValueType() );
+				}
+				else
+				{
+					setState( State_Instance );
+				}
 			}
 			break;
 
@@ -306,7 +307,14 @@ namespace conct
 			{
 				m_pFunction = &m_pInterface->getFunctions()[ m_index ];
 
-				setState( State_Value );
+				if( !m_pFunction->parameters.empty() )
+				{
+					setValueState( m_pFunction->parameters[ 0u ].pType->getValueType() );
+				}
+				else
+				{
+					executeAction( device );
+				}
 			}
 			break;
 
@@ -315,7 +323,7 @@ namespace conct
 				Value value;
 				if( !setValueFromString( value, m_valueText ) )
 				{
-					showPopup( "Value can't interpreted." );
+					setPopupState( "Value can't interpreted."_s );
 					return;
 				}
 
@@ -329,7 +337,8 @@ namespace conct
 				{
 					if( m_values.size() < m_pFunction->parameters.size() )
 					{
-						setState( State_Value );
+						const ValueType nextType = m_pFunction->parameters[ m_values.size() ].pType->getValueType();
+						setValueState( nextType );
 					}
 					else
 					{
@@ -351,6 +360,8 @@ namespace conct
 			{
 				drawClear();
 				drawValue();
+
+				m_state = State_Value;
 			}
 			break;
 
@@ -381,7 +392,10 @@ namespace conct
 		}
 
 		m_state = state;
-		m_index = m_lastIndices[ state ];
+		if( m_state != State_Popup )
+		{
+			m_index = m_lastIndices[ state ];
+		}
 
 		switch( state )
 		{
@@ -436,26 +450,56 @@ namespace conct
 		drawList();
 	}
 
-	void ConsoleController::showPopup( const std::string& text )
+	void ConsoleController::setValueState( ValueType targetType )
+	{
+		m_valueType = targetType;
+		setState( State_Value );
+	}
+
+	void ConsoleController::setPopupState( const String& text )
 	{
 		m_popupText = text;
 		setState( State_Popup );
 	}
 
-	bool ConsoleController::setValueFromString( Value& value, const std::string& text )
+	bool ConsoleController::setValueFromString( Value& value, const String& text )
 	{
+		switch( m_valueType )
+		{
+		case ValueType_Void:
+			return false;
+
+		case ValueType_Boolean:
+			break;
+
+		case ValueType_Integer:
+			break;
+		case ValueType_Unsigned:
+			break;
+		case ValueType_String:
+			break;
+		case ValueType_PercentValue:
+			break;
+		case ValueType_Guid:
+			break;
+		case ValueType_Instance:
+			break;
+		case ValueType_Array:
+			break;
+		}
+
 		return false;
 	}
 
-	std::string ConsoleController::getStringFromValue( const Value& value )
+	String ConsoleController::getStringFromValue( const Value& value )
 	{
 		switch( value.type )
 		{
 		case ValueType_Void:
-			return "void";
+			return "void"_s;
 
 		case ValueType_Boolean:
-			return value.data.boolean ? "true" : "false";
+			return String( value.data.boolean ? "true" : "false" );
 			break;
 
 		case ValueType_Integer:
@@ -477,7 +521,7 @@ namespace conct
 			break;
 		}
 
-		return "";
+		return String();
 	}
 
 	void ConsoleController::drawClear() const
@@ -510,16 +554,16 @@ namespace conct
 		uint16 y = 7u;
 		uintreg i = 0u;
 		const uint16x2 size = ConsoleRenderer::getSize();
-		for( const std::string& text : m_list )
+		for( const String& text : m_list )
 		{
-			const uint16 right = uint16( x + text.size() + 4u );
+			const uint16 right = uint16( x + text.getLength() + 4u );
 			if( right >= size.x )
 			{
 				x = 0u;
 				y += 3u;
 			}
 
-			x += ConsoleRenderer::drawButton( x, y, text.c_str(), i == m_index ? LineType_Double : LineType_Single );
+			x += ConsoleRenderer::drawButton( x, y, text.toConstCharPointer(), i == m_index ? LineType_Double : LineType_Single );
 
 			i++;
 		}
@@ -530,8 +574,8 @@ namespace conct
 		const uint16x2 size = ConsoleRenderer::getSize();
 
 		ConsoleRenderer::drawRectangle( 0u, 7u, size.x, 3u, LineType_Single );
-		ConsoleRenderer::drawText( 2u, 8u, m_valueText.c_str() );
-		ConsoleRenderer::drawCharacter( uint16( 2u + m_valueText.size() ), 8u, ' ' );
+		ConsoleRenderer::drawText( 2u, 8u, m_valueText.toConstCharPointer() );
+		ConsoleRenderer::drawCharacter( uint16( 2u + m_valueText.getLength() ), 8u, ' ' );
 
 		ConsoleRenderer::setCursorPosition( uint16( 2u + m_index ), 8u );
 	}
@@ -565,7 +609,7 @@ namespace conct
 
 	void ConsoleController::drawPopup() const
 	{
-		const char* pText = m_popupText.c_str();
+		const char* pText = m_popupText.toConstCharPointer();
 		const uint16x2 textSize = ConsoleRenderer::measureTextSize( pText );
 
 		const uint16x2 size = ConsoleRenderer::getSize();
@@ -583,10 +627,10 @@ namespace conct
 	void ConsoleController::buildActions()
 	{
 		m_list = {
-			"Get Instance",
-			"Get Property",
-			"Set Property",
-			"Call Function",
+			"Get Instance"_s,
+			"Get Property"_s,
+			"Set Property"_s,
+			"Call Function"_s,
 		};
 	}
 
@@ -663,7 +707,7 @@ namespace conct
 		Command< RemoteInstance >* pCommand = device.data.pController->getInstance( m_pDevice->address, m_pInterface->getCrc() );
 		if( pCommand == nullptr )
 		{
-			showPopup( "Failed to start 'getInstance' command." );
+			setPopupState( "Failed to start 'getInstance' command."_s );
 			return;
 		}
 
@@ -675,7 +719,7 @@ namespace conct
 		Command< Value >* pCommand = device.data.pController->getProperty( m_pInstance->instance, m_pProperty->name.c_str() );
 		if( pCommand == nullptr )
 		{
-			showPopup( "Failed to start 'getProperty' command." );
+			setPopupState( "Failed to start 'getProperty' command."_s );
 			return;
 		}
 
@@ -687,7 +731,7 @@ namespace conct
 		CommandBase* pCommand = device.data.pController->setProperty( m_pInstance->instance, m_pProperty->name.c_str(), m_values.front() );
 		if( pCommand == nullptr )
 		{
-			showPopup( "Failed to start 'setProperty' command." );
+			setPopupState( "Failed to start 'setProperty' command."_s );
 			return;
 		}
 
@@ -701,7 +745,7 @@ namespace conct
 		CommandBase* pCommand = device.data.pController->callFunction( m_pInstance->instance, m_pFunction->name.c_str(), arguments );
 		if( pCommand == nullptr )
 		{
-			showPopup( "Failed to start 'setProperty' command." );
+			setPopupState( "Failed to start 'setProperty' command."_s );
 			return;
 		}
 
@@ -717,7 +761,7 @@ namespace conct
 
 		if( m_pRunningCommand->hasError() )
 		{
-			showPopup( "Command failed." );
+			setPopupState( "Command failed."_s );
 			m_pRunningCommand = nullptr;
 			return;
 		}
@@ -752,7 +796,7 @@ namespace conct
 			break;
 		}
 
-		showPopup( "Command finish." );
+		setPopupState( "Command finish."_s );
 		m_pRunningCommand = nullptr;
 	}
 }

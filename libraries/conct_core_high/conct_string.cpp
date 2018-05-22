@@ -1,142 +1,169 @@
-#pragma once
+#include "conct_string.h"
 
-#include <stdint.h>
-
-#define CONCT_ON 				2
-#define CONCT_OFF				1
-
-#define CONCT_ENABLED( value )	( ( 0 + value ) == 2 )
-#define CONCT_DISABLED( value )	( ( 0 + value ) != 2 )
-#define CONCT_IF( expr )		( ( expr ) ? CONCT_ON : CONCT_OFF )
-
-#if defined( _WIN32 ) // Windows
-#	define CONCT_WINDOWS			CONCT_ON
-#	if defined( _WIN64 )
-#		define CONCT_POINTER_64		CONCT_ON
-#		define CONCT_REGISTER_64	CONCT_ON
-#	else
-#		define CONCT_POINTER_32		CONCT_ON
-#		define CONCT_REGISTER_32	CONCT_ON
-#	endif
-#else
-#	define CONCT_WINDOWS			CONCT_OFF
-#endif
-
-#if defined( __AVR__ ) // AVR (UNO, Duemilanove, etc.)
-#	define CONCT_AVR				CONCT_ON
-#	define CONCT_POINTER_16			CONCT_ON
-#	define CONCT_REGISTER_8			CONCT_ON
-#else
-#	define CONCT_AVR				CONCT_OFF
-#endif
-
-#if defined( __SAM3X8E__ ) // ARM (DUE)
-#	define CONCT_ARM_DUE			CONCT_ON
-#	define CONCT_POINTER_32			CONCT_ON
-#	define CONCT_REGISTER_32		CONCT_ON
-#else
-#	define CONCT_ARM_DUE			CONCT_OFF
-#endif
-
-#if !defined( CONCT_POINTER_16 )
-#	define CONCT_POINTER_16				CONCT_OFF
-#endif
-#if !defined( CONCT_POINTER_32 )
-#	define CONCT_POINTER_32				CONCT_OFF
-#endif
-#if !defined( CONCT_POINTER_64 )
-#	define CONCT_POINTER_64				CONCT_OFF
-#endif
-
-#if !defined( CONCT_REGISTER_8 )
-#	define CONCT_REGISTER_8				CONCT_OFF
-#endif
-#if !defined( CONCT_REGISTER_16 )
-#	define CONCT_REGISTER_16			CONCT_OFF
-#endif
-#if !defined( CONCT_REGISTER_32 )
-#	define CONCT_REGISTER_32			CONCT_OFF
-#endif
-#if !defined( CONCT_REGISTER_64 )
-#	define CONCT_REGISTER_64			CONCT_OFF
-#endif
-
-#define CONCT_DEBUG					CONCT_ON
-#define CONCT_HAS_OVERRIDE			CONCT_ON
-#define CONCT_HAS_FINAL				CONCT_ON
-#define CONCT_HAS_BREAK				CONCT_WINDOWS
-
-#if CONCT_ENABLED( CONCT_HAS_OVERRIDE )
-#	define CONCT_OVERRIDE override
-#else
-#	define CONCT_OVERRIDE
-#endif
-
-#if CONCT_ENABLED( CONCT_HAS_FINAL )
-#	define CONCT_FINAL final
-#else
-#	define CONCT_FINAL
-#endif
-
-#define CONCT_OVERRIDE_FINAL CONCT_OVERRIDE CONCT_FINAL
-
-#if CONCT_ENABLED( CONCT_HAS_BREAK )
-#	define CONCT_BREAK __debugbreak()
-#endif
-
-#if CONCT_ENABLED( CONCT_DEBUG ) && CONCT_ENABLED( CONCT_HAS_BREAK )
-#	define CONCT_ASSERT( expr ) if( !( expr ) ) CONCT_BREAK
-#else
-#	define CONCT_ASSERT( expr )
-#endif
-
-#define CONCT_COUNT( arr ) ( sizeof( arr ) / sizeof( *arr ) )
-
-#define CONCT_MIN( a, b ) ( ( a ) < ( b ) ? ( a ) : ( b ) )
-#define CONCT_MAX( a, b ) ( ( a ) > ( b ) ? ( a ) : ( b ) )
+#include "conct_ascii.h"
 
 namespace conct
 {
-	typedef uint8_t		uint8;
-	typedef int8_t		sint8;
-	typedef uint16_t	uint16;
-	typedef int16_t		sint16;
-	typedef uint32_t	uint32;
-	typedef int32_t		sint32;
-	typedef uint64_t	uint64;
-	typedef int64_t		sint64;
 
-	typedef int			sint;
-	typedef unsigned	uint;
+	String::String()
+	{
+	}
 
-#if CONCT_ENABLED( CONCT_POINTER_16 )
-	typedef uint16		uintptr;
-#elif CONCT_ENABLED( CONCT_POINTER_32 )
-	typedef uint32		uintptr;
-#elif CONCT_ENABLED( CONCT_POINTER_64 )
-	typedef uint64		uintptr;
-#endif
+	String::String( const std::string& string )
+		: m_string( string )
+	{
 
-#if CONCT_ENABLED( CONCT_REGISTER_8 )
-	typedef uint8		uintreg;
-#endif
-#if CONCT_ENABLED( CONCT_REGISTER_16 )
-	typedef uint16		uintreg;
-#endif
-#if CONCT_ENABLED( CONCT_REGISTER_32 )
-	typedef uint32		uintreg;
-#endif
-#if CONCT_ENABLED( CONCT_REGISTER_64 )
-	typedef uint64		uintreg;
-#endif
+	}
 
-	typedef uint8		DeviceId;
-	typedef uint16		TypeCrc;
-	typedef uint16		InstanceId;
-	typedef uint16		PercentValue;
+	String::String( const char* pString )
+		: m_string( pString )
+	{
+	}
 
-	static const DeviceId InvalidDeviceId = 0u;
+	String::String( const char* pString, uintreg stringLength )
+	{
+		m_string.reserve( stringLength );
+		for( size_t i = 0u; i < stringLength; ++i )
+		{
+			m_string.push_back( pString[ i ] );
+		}
+	}
 
-	bool	isStringEqual( const char* pString1, const char* pString2 );
-	void	copyMemory( void* pTarget, const void* pSource, uintreg size );
+	String::~String()
+	{
+	}
+
+	void String::clear()
+	{
+		m_string.clear();
+	}
+
+	bool String::isEmpty() const
+	{
+		return m_string.empty();
+	}
+
+	uintreg String::getLength() const
+	{
+		return m_string.length();
+	}
+
+	String String::trim() const
+	{
+		uintreg startIndex = 0u;
+		while( ascii::isWhitespace( m_string[ startIndex ] ) && startIndex < getLength() )
+		{
+			startIndex++;
+		}
+
+		uintreg endIndex = getLength();
+		while( ascii::isWhitespace( m_string[ endIndex ] ) && endIndex > 0u )
+		{
+			endIndex--;
+		}
+
+		return subString( startIndex, endIndex - startIndex );
+	}
+
+	String String::toLower() const
+	{
+		String result = *this;
+		for( size_t i = 0u; i < result.getLength(); ++i )
+		{
+			result[ i ] = ascii::toLower( result[ i ] );
+		}
+
+		return result;
+	}
+
+	String String::toUpper() const
+	{
+		String result = *this;
+		for( size_t i = 0u; i < result.getLength(); ++i )
+		{
+			result[ i ] = ascii::toUpper( result[ i ] );
+		}
+
+		return result;
+	}
+
+	String String::subString( uintreg startIndex, uintreg length ) const
+	{
+		return String( m_string.c_str() + startIndex, length );
+	}
+
+	String String::insert( char c, uintreg index ) const
+	{
+		String result = *this;
+		result.m_string.insert( result.m_string.begin() + index, c );
+		return result;
+	}
+
+	String String::erase( uintreg index ) const
+	{
+		String result = *this;
+		result.m_string.erase( result.m_string.begin() + index );
+		return result;
+	}
+
+	String String::popBack() const
+	{
+		String result = *this;
+		result.m_string.pop_back();
+		return result;
+	}
+
+	String String::pushBack( char c ) const
+	{
+		String result = *this;
+		result.m_string.push_back( c );
+		return result;
+	}
+
+	char* String::toCharPointer()
+	{
+		return &*m_string.begin();
+	}
+
+	const char* String::toConstCharPointer() const
+	{
+		return m_string.c_str();
+	}
+
+	char& String::operator[]( uintreg index )
+	{
+		return m_string[ index ];
+	}
+
+	const char& String::operator[]( uintreg index ) const
+	{
+		return m_string[ index ];
+	}
+
+	String& String::operator+=( const String& rhs )
+	{
+		m_string += rhs.m_string;
+		return *this;
+	}
+
+	String& String::operator+=( const char* pString )
+	{
+		m_string += pString;
+		return *this;
+	}
+
+	bool String::operator!=( const String& rhs ) const
+	{
+		return m_string != rhs.m_string;
+	}
+
+	bool String::operator==( const String& rhs ) const
+	{
+		return m_string == rhs.m_string;
+	}
+
+	String operator ""_s( const char* pString, size_t length )
+	{
+		return String( pString, length );
+	}
 }

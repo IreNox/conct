@@ -169,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_ascii.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="router_simulator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_ascii.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp" />

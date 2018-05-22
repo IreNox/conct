@@ -1,5 +1,7 @@
 #include "home_rgb_proxy.h"
 
+#include "conct_functions.h"
+
 #include "home_rgb.h"
 
 namespace conct

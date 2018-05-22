@@ -116,6 +116,9 @@
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_vector.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_ascii.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
@@ -165,6 +168,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core_high\conct_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_ascii.cpp">
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

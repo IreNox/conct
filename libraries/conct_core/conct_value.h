@@ -13,7 +13,8 @@ namespace conct
 		ValueType_String,
 		ValueType_PercentValue,
 		ValueType_Guid,
-		ValueType_Instance
+		ValueType_Instance,
+		ValueType_Array
 	};
 
 	union ValueData

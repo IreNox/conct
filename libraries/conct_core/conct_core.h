@@ -136,7 +136,4 @@ namespace conct
 	typedef uint16		PercentValue;
 
 	static const DeviceId InvalidDeviceId = 0u;
-
-	bool	isStringEqual( const char* pString1, const char* pString2 );
-	void	copyMemory( void* pTarget, const void* pSource, uintreg size );
 }

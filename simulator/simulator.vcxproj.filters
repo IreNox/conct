@@ -33,6 +33,9 @@
     <Filter Include="libraries\conct_runtime">
       <UniqueIdentifier>{8fc8548e-aa7c-4486-b833-37ccbf06f8b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_core_high">
+      <UniqueIdentifier>{51fc7d70-7424-43bb-9444-727295713e0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\main.cpp">
@@ -109,6 +112,12 @@
     </ClCompile>
     <ClCompile Include="sources\simulator_context.cpp">
       <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core_high\conct_string.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_ascii.cpp">
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +226,18 @@
     <ClInclude Include="devices\shared\i_simulator_context.h">
       <Filter>shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\libraries\conct_core_high\conct_core_high.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core_high\conct_string.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_ascii.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core_high\conct_vector.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\libraries\conct_core\conct_reader.inl">
@@ -236,6 +257,9 @@
     </None>
     <None Include="..\libraries\conct_runtime_high\conct_command.inl">
       <Filter>libraries\conct_runtime_high</Filter>
+    </None>
+    <None Include="..\libraries\conct_core_high\conct_vector.inl">
+      <Filter>libraries\conct_core_high</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 #include "home_light_proxy.h"
 
+#include "conct_functions.h"
+
 #include "home_light.h"
 
 namespace conct

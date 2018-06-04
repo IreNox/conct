@@ -113,11 +113,14 @@
     <ClCompile Include="sources\simulator_context.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\libraries\conct_core_high\conct_string.cpp">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
     <ClCompile Include="..\libraries\conct_core\conct_ascii.cpp">
       <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core_high\conct_dynamic_string.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\libraries\conct_core_high\conct_string_tools.cpp">
+      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,13 +232,16 @@
     <ClInclude Include="..\libraries\conct_core_high\conct_core_high.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_core_high\conct_string.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_ascii.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\libraries\conct_core_high\conct_vector.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core_high\conct_dynamic_string.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core_high\conct_string_tools.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
   </ItemGroup>

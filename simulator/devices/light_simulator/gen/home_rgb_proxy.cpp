@@ -1,6 +1,6 @@
 #include "home_rgb_proxy.h"
 
-#include "conct_functions.h"
+#include "conct_string.h"
 
 #include "home_rgb.h"
 
@@ -15,17 +15,17 @@ namespace conct
 	{
 		const RGB* pTypedInstance = static_cast< const RGB* >( pInstance );
 
-		if( isStringEqual( pName, "Red" ) )
+		if( isStringEquals( pName, "Red" ) )
 		{
 			targetValue.setPercentValue( pTypedInstance->getRed() );
 			return true;
 		}
-		if( isStringEqual( pName, "Green" ) )
+		if( isStringEquals( pName, "Green" ) )
 		{
 			targetValue.setPercentValue( pTypedInstance->getGreen() );
 			return true;
 		}
-		if( isStringEqual( pName, "Blue" ) )
+		if( isStringEquals( pName, "Blue" ) )
 		{
 			targetValue.setPercentValue( pTypedInstance->getBlue() );
 			return true;
@@ -38,17 +38,17 @@ namespace conct
 	{
 		RGB* pTypedInstance = static_cast< RGB* >( pInstance );
 
-		if( isStringEqual( pName, "Red" ) )
+		if( isStringEquals( pName, "Red" ) )
 		{
 			pTypedInstance->setRed( value.getPercentValue() );
 			return true;
 		}
-		if( isStringEqual( pName, "Green" ) )
+		if( isStringEquals( pName, "Green" ) )
 		{
 			pTypedInstance->setGreen( value.getPercentValue() );
 			return true;
 		}
-		if( isStringEqual( pName, "Blue" ) )
+		if( isStringEquals( pName, "Blue" ) )
 		{
 			pTypedInstance->setBlue( value.getPercentValue() );
 			return true;

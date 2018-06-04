@@ -23,7 +23,7 @@
     <ProjectGuid>{BAB53685-72A3-479A-9457-FF3A849E7990}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>lightsimulator</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -172,8 +172,11 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_memory.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_number_limits.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_string.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h" />
@@ -200,6 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_memory.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />
@@ -224,7 +228,9 @@
     <None Include="..\..\..\libraries\conct_core\conct_array.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_flags.inl" />
+    <None Include="..\..\..\libraries\conct_core\conct_memory.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_reader.inl" />
+    <None Include="..\..\..\libraries\conct_core\conct_string.inl" />
     <None Include="..\..\..\libraries\conct_core\conct_writer.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

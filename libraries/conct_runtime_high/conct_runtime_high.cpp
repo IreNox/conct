@@ -220,6 +220,12 @@ namespace conct
 		if( package.baseHeader.commandId != InvalidCommandId )
 		{
 			pCommandBase = deviceData.commands[ package.baseHeader.commandId ];
+
+			if( pCommandBase == nullptr )
+			{
+				// error
+				return;
+			}
 		}
 
 		switch( package.baseHeader.messageType )
@@ -238,17 +244,16 @@ namespace conct
 
 		case MessageType_GetInstanceResponse:
 			{
-				if( pCommandBase == nullptr )
-				{
-					// error
-					return;
-				}
-
 				const GetInstanceResponse& response = *( const GetInstanceResponse* )package.payload.data();
 
 				RemoteInstance instance;
-				//instance.address	= package.sourceAddress;
-				instance.id			= response.instanceId;
+				instance.id = response.instanceId;
+
+				for( uintreg i = 0u; i < package.sourceAddress.size(); ++i )
+				{
+					instance.address.address[ i ] = package.sourceAddress[ i ];
+				}
+				instance.address.address[ package.sourceAddress.size() ] = InvalidDeviceId;
 
 				Command< RemoteInstance >* pCommand = static_cast< Command< RemoteInstance >* >( pCommandBase );
 				pCommand->setResponse( package.baseHeader.messageResult, instance );
@@ -259,18 +264,33 @@ namespace conct
 			break;
 
 		case MessageType_GetPropertyResponse:
+			{
+				const GetPropertyResponse& response = *( const GetPropertyResponse* )package.payload.data();
+
+				Command< Value >* pCommand = static_cast< Command< Value >* >( pCommandBase );
+				pCommand->setResponse( package.baseHeader.messageResult, response.value );
+			}
 			break;
 
 		case MessageType_SetPropertyRequest:
 			break;
 
 		case MessageType_SetPropertyResponse:
+			{
+				pCommandBase->setResponse( package.baseHeader.messageResult );
+			}
 			break;
 
 		case MessageType_CallFunctionRequest:
 			break;
 
 		case MessageType_CallFunctionResponse:
+			{
+				const CallFunctionResponse& response = *( const CallFunctionResponse* )package.payload.data();
+
+				Command< Value >* pCommand = static_cast< Command< Value >* >( pCommandBase );
+				pCommand->setResponse( package.baseHeader.messageResult, response.value );
+			}
 			break;
 
 		default:
@@ -386,7 +406,6 @@ namespace conct
 
 	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, DeviceId deviceId )
 	{
-		package.target.sourceAddress.insert( package.target.sourceAddress.begin(), deviceId );
 		portData.receivedPackages.push_back( package.target );
 
 		DeviceMap::iterator deviceIt = m_devices.find( deviceId );

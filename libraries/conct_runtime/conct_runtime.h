@@ -145,5 +145,10 @@ namespace conct
 		char			name[ 1u ];
 	};
 
+	struct CallFunctionResponse
+	{
+		Value			value;
+	};
+
 	static const uint16 s_messageBaseHeaderMagic = 0xc0c7u;
 }

@@ -1,8 +1,9 @@
 #include "conct_port_rs485_sim.h"
 
+#include "conct_functions.h"
+#include "conct_memory.h"
 #include "conct_reader.h"
 #include "conct_writer.h"
-#include "conct_functions.h"
 
 #define CONCT_IS_DLL CONCT_ON
 #include "i_simulator_context.h"
@@ -53,7 +54,7 @@ namespace conct
 
 		const Packet& packet = m_receivedPackets.front();
 		const uintreg dataSize = CONCT_MIN( sizeof( m_receiveBuffer ), packet.size() );
-		copyMemory( m_receiveBuffer, packet.data(), dataSize );
+		memory::copy( m_receiveBuffer, packet.data(), dataSize );
 		m_receivedPackets.pop();
 
 		reader.set( m_receiveBuffer, dataSize );
@@ -84,6 +85,6 @@ namespace conct
 
 		m_receivedPackets.push( Packet( dataSize ) );
 		Packet& packet = m_receivedPackets.back();
-		copyMemory( packet.data(), pData, dataSize );
+		memory::copy( packet.data(), pData, dataSize );
 	}
 }

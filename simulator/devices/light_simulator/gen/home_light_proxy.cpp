@@ -1,6 +1,6 @@
 #include "home_light_proxy.h"
 
-#include "conct_functions.h"
+#include "conct_string.h"
 
 #include "home_light.h"
 
@@ -15,7 +15,7 @@ namespace conct
 	{
 		const Light* pTypedInstance = static_cast< const Light* >( pInstance );
 
-		if( isStringEqual( pName, "On" ) )
+		if( isStringEquals( pName, "On" ) )
 		{
 			targetValue.setBoolean( pTypedInstance->getOn() );
 			return true;
@@ -28,7 +28,7 @@ namespace conct
 	{
 		Light* pTypedInstance = static_cast< Light* >( pInstance );
 
-		if( isStringEqual( pName, "On" ) )
+		if( isStringEquals( pName, "On" ) )
 		{
 			pTypedInstance->setOn( value.getBoolean() );
 			return true;

@@ -6,7 +6,7 @@
 #include "conct_runtime.h"
 #include "conct_structs.h"
 #include "conct_timer.h"
-#include "conct_string.h"
+#include "conct_dynamic_string.h"
 
 #include <vector>
 #include <deque>
@@ -66,18 +66,18 @@ namespace conct
 
 		struct ControllerDevice
 		{
-			String				name;
+			DynamicString			name;
 			DeviceAddress			address;
 		};
 
 		struct ControllerInstance
 		{
-			String				name;
+			DynamicString			name;
 			TypeCrc					type;
 			RemoteInstance			instance;
 		};
 
-		typedef std::vector< String > StringVector;
+		typedef std::vector< DynamicString > StringVector;
 		typedef std::vector< State > StateVector;
 		typedef std::vector< ControllerDevice > ControllerDeviceVector;
 		typedef std::vector< ControllerInstance > ControllerInstanceVector;
@@ -90,8 +90,8 @@ namespace conct
 		uintreg									m_index;
 		uintreg									m_lastIndices[ State_Count ];
 		StringVector							m_list;
-		String									m_valueText;
-		String									m_popupText;
+		DynamicString							m_valueText;
+		DynamicString							m_popupText;
 		ValueType								m_valueType;
 
 		const ControllerDevice*					m_pDevice;
@@ -115,10 +115,10 @@ namespace conct
 		void									nextState( ConsoleDevice& device );
 		void									setState( State state );
 		void									setValueState( ValueType targetType );
-		void									setPopupState( const String& text );
+		void									setPopupState( const DynamicString& text );
 
-		bool									setValueFromString( Value& value, const String& text );
-		String									getStringFromValue( const Value& value );
+		bool									setValueFromString( Value& value, const DynamicString& text );
+		DynamicString							getStringFromValue( const Value& value );
 
 		void									drawClear() const;
 		void									drawList() const;

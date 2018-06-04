@@ -4,6 +4,7 @@
 #include "interface_type.h"
 
 #include "conct_controller.h"
+#include "conct_string_tools.h"
 
 #include "console_input.h"
 #include "console_render.h"
@@ -25,7 +26,7 @@ namespace conct
 		}
 
 		ControllerDevice device;
-		device.name						= String( "Test" );
+		device.name						= "Test"_s;
 		device.address.address[ 0u ]	= 1u;
 		device.address.address[ 1u ]	= 0u;
 		m_devices.push_back( device );
@@ -35,7 +36,7 @@ namespace conct
 	{
 		if( m_state == State_Invalid )
 		{
-			setValueState( ValueType_Boolean );
+			setState( State_Action );
 		}
 	}
 
@@ -292,13 +293,20 @@ namespace conct
 			{
 				m_pProperty = &m_pInterface->getProperties()[ m_index ];
 
-				if( m_pProperty->pType->getDescription() == TypeDescription_Value )
+				if( m_action == Action_SetProperty )
 				{
-					setValueState( m_pProperty->pType->getValueType() );
+					if( m_pProperty->pType->getDescription() == TypeDescription_Value )
+					{
+						setValueState( m_pProperty->pType->getValueType() );
+					}
+					else
+					{
+						setState( State_Instance );
+					}
 				}
 				else
 				{
-					setState( State_Instance );
+					executeAction( device );
 				}
 			}
 			break;
@@ -456,13 +464,13 @@ namespace conct
 		setState( State_Value );
 	}
 
-	void ConsoleController::setPopupState( const String& text )
+	void ConsoleController::setPopupState( const DynamicString& text )
 	{
 		m_popupText = text;
 		setState( State_Popup );
 	}
 
-	bool ConsoleController::setValueFromString( Value& value, const String& text )
+	bool ConsoleController::setValueFromString( Value& value, const DynamicString& text )
 	{
 		switch( m_valueType )
 		{
@@ -470,20 +478,84 @@ namespace conct
 			return false;
 
 		case ValueType_Boolean:
+			{
+				const DynamicString valueText = text.trim().toLower();
+				if( valueText == "false" || valueText == "0" )
+				{
+					value.setBoolean( false );
+					return true;
+				}
+				else if( valueText == "true" || valueText == "1" )
+				{
+					value.setBoolean( false );
+					return true;
+				}
+			}
 			break;
 
 		case ValueType_Integer:
+			{
+				const DynamicString valueText = text.trim();
+
+				sint32 intValue;
+				if( string_tools::tryParseSInt32( intValue, valueText.toConstCharPointer() ) )
+				{
+					value.setInteger( intValue );
+					return true;
+				}
+			}
 			break;
+
 		case ValueType_Unsigned:
+			{
+				const DynamicString valueText = text.trim();
+
+				uint32 intValue;
+				if( string_tools::tryParseUInt32( intValue, valueText.toConstCharPointer() ) )
+				{
+					value.setInteger( intValue );
+					return true;
+				}
+			}
 			break;
+
 		case ValueType_String:
+			//value.setString();
 			break;
+
 		case ValueType_PercentValue:
+			{
+				const DynamicString valueText = text.trim();
+
+				if( valueText == "1" )
+				{
+					value.setPercentValue( 65335u );
+					return true;
+				}
+
+				float floatValue;
+				if( string_tools::tryParseFloat( floatValue, valueText.toConstCharPointer() ) && floatValue >= 0.0f )
+				{
+					if( floatValue <= 1.0f )
+					{
+						value.setPercentValue( PercentValue( floatValue * 65535.0f ) );
+						return true;
+					}
+					else if( floatValue <= 65535.0f )
+					{
+						value.setPercentValue( PercentValue( floatValue ) );
+						return true;
+					}
+				}
+			}
 			break;
+
 		case ValueType_Guid:
 			break;
+
 		case ValueType_Instance:
 			break;
+
 		case ValueType_Array:
 			break;
 		}
@@ -491,7 +563,7 @@ namespace conct
 		return false;
 	}
 
-	String ConsoleController::getStringFromValue( const Value& value )
+	DynamicString ConsoleController::getStringFromValue( const Value& value )
 	{
 		switch( value.type )
 		{
@@ -499,19 +571,22 @@ namespace conct
 			return "void"_s;
 
 		case ValueType_Boolean:
-			return String( value.data.boolean ? "true" : "false" );
+			return DynamicString( value.getBoolean() ? "true" : "false" );
 			break;
 
 		case ValueType_Integer:
+			return string_tools::toString( value.getInteger() );
 			break;
 
 		case ValueType_Unsigned:
+			return string_tools::toString( value.getUnsigned() );
 			break;
 
 		case ValueType_String:
 			break;
 
 		case ValueType_PercentValue:
+			return string_tools::toString( float( value.getPercentValue() ) * ( 100.0f / 65535.0f ) ) + " %";
 			break;
 
 		case ValueType_Guid:
@@ -521,7 +596,7 @@ namespace conct
 			break;
 		}
 
-		return String();
+		return DynamicString();
 	}
 
 	void ConsoleController::drawClear() const
@@ -554,7 +629,7 @@ namespace conct
 		uint16 y = 7u;
 		uintreg i = 0u;
 		const uint16x2 size = ConsoleRenderer::getSize();
-		for( const String& text : m_list )
+		for( const DynamicString& text : m_list )
 		{
 			const uint16 right = uint16( x + text.getLength() + 4u );
 			if( right >= size.x )
@@ -573,6 +648,11 @@ namespace conct
 	{
 		const uint16x2 size = ConsoleRenderer::getSize();
 
+		DynamicString titleText = "Please enter "_s;
+		titleText += getValueTypeName( m_valueType );
+		titleText += ":";
+
+		ConsoleRenderer::drawText( 0u, 6u, titleText.toConstCharPointer() );
 		ConsoleRenderer::drawRectangle( 0u, 7u, size.x, 3u, LineType_Single );
 		ConsoleRenderer::drawText( 2u, 8u, m_valueText.toConstCharPointer() );
 		ConsoleRenderer::drawCharacter( uint16( 2u + m_valueText.getLength() ), 8u, ' ' );
@@ -699,7 +779,10 @@ namespace conct
 			break;
 		}
 
-		setState( State_Waiting );
+		if( m_pRunningCommand != nullptr )
+		{
+			setState( State_Waiting );
+		}
 	}
 
 	void ConsoleController::executeGetInstanceAction( ConsoleDevice& device )
@@ -786,7 +869,18 @@ namespace conct
 			{
 				Command< Value >* pCommand = static_cast< Command< Value >* >( m_pRunningCommand );
 
-				// show value
+				DynamicString text;
+				if( m_action == Action_GetProperty )
+				{
+					text = "Property '"_s + m_pProperty->name.c_str() + "' has the following value:\n"_s;
+				}
+				else
+				{
+					text = "Function '"_s + m_pFunction->name.c_str() + "' returned the following value:\n"_s;
+				}
+				text += getStringFromValue( pCommand->getData() );
+
+				setPopupState( text );
 			}
 			break;
 
@@ -796,7 +890,11 @@ namespace conct
 			break;
 		}
 
-		setPopupState( "Command finish."_s );
+		if( m_state != State_Popup )
+		{
+			setPopupState( "Command finish."_s );
+		}
+
 		m_pRunningCommand = nullptr;
 	}
 }

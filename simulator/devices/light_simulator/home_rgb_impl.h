@@ -8,6 +8,8 @@ namespace conct
 	{
 	public:
 
+		RGBImpl();
+
 		virtual PercentValue getRed() const CONCT_OVERRIDE_FINAL;
 		virtual void setRed( PercentValue value ) CONCT_OVERRIDE_FINAL;
 		virtual PercentValue getGreen() const CONCT_OVERRIDE_FINAL;

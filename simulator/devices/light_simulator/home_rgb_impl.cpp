@@ -2,9 +2,14 @@
 
 namespace conct
 {
+	RGBImpl::RGBImpl()
+	{
+
+	}
+
 	PercentValue RGBImpl::getRed() const
 	{
-		return 0;
+		return 65535 / 2;
 	}
 
 	void RGBImpl::setRed( PercentValue value )
@@ -14,7 +19,7 @@ namespace conct
 
 	PercentValue RGBImpl::getGreen() const
 	{
-		return 0;
+		return 65535 / 3;
 	}
 
 	void RGBImpl::setGreen( PercentValue value )
@@ -24,7 +29,7 @@ namespace conct
 
 	PercentValue RGBImpl::getBlue() const
 	{
-		return 0;
+		return 65535;
 	}
 
 	void RGBImpl::setBlue( PercentValue value )

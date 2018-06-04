@@ -6,14 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simulator", "simulator.vcxproj", "{DB95BA50-530F-47E3-A4D9-E471E0A5A8E6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "light_simulator", "devices\light_simulator\light_simulator.vcxproj", "{BAB53685-72A3-479A-9457-FF3A849E7990}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DB95BA50-530F-47E3-A4D9-E471E0A5A8E6} = {DB95BA50-530F-47E3-A4D9-E471E0A5A8E6}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "router_simulator", "devices\router_simulator\router_simulator.vcxproj", "{3BC17775-48DF-4472-AAE3-9460B8079C5B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DB95BA50-530F-47E3-A4D9-E471E0A5A8E6} = {DB95BA50-530F-47E3-A4D9-E471E0A5A8E6}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

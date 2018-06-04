@@ -2,6 +2,7 @@
 
 #include "conct_device.h"
 #include "conct_functions.h"
+#include "conct_memory.h"
 #include "conct_port.h"
 #include "conct_proxy.h"
 #include "conct_reader.h"
@@ -264,7 +265,7 @@ namespace conct
 			{
 				Value value;
 				{
-					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_workingDataOffset );
+					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_destinationAddressSize );
 
 					const LocalInstance* pInstance = findInstanceById( request.instanceId );
 					if( pInstance == nullptr )
@@ -326,8 +327,8 @@ namespace conct
 		DeviceId* pDestinationAddress = &pSourceAddress[ 1u ];
 		uint8* pPayload = &pDestinationAddress[ m_destinationAddressSize ];
 
-		copyMemory( pDestinationAddress, m_workingData, m_destinationAddressSize );
-		copyMemory( pPayload, pData, dataLength );
+		memory::copy( pDestinationAddress, m_workingData, m_destinationAddressSize );
+		memory::copy( pPayload, pData, dataLength );
 
 		pSourceAddress[ 0u ] = 1u;
 
@@ -358,5 +359,10 @@ namespace conct
 		}
 
 		pPort->closeSend( writer );
+
+		if( m_stateValue == 0u )
+		{
+			setState( State_ReadBaseHeader );
+		}
 	}
 }

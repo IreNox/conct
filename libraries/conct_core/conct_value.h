@@ -14,14 +14,17 @@ namespace conct
 		ValueType_PercentValue,
 		ValueType_Guid,
 		ValueType_Instance,
-		ValueType_Array
+		ValueType_Array,
+
+		ValueType_Count
 	};
+	const char*	getValueTypeName( ValueType value );
 
 	union ValueData
 	{
 		bool			boolean;
-		int				integer;
-		unsigned		unsignedInteger;
+		sint32			integer;
+		uint32			unsignedInteger;
 		const char*		pString;
 		PercentValue	percent;
 		uint32			guid;
@@ -34,9 +37,13 @@ namespace conct
 		ValueData		data;
 
 		bool			getBoolean() const;
+		sint32			getInteger() const;
+		uint32			getUnsigned() const;
 		PercentValue	getPercentValue() const;
 
 		void			setBoolean( bool value );
+		void			setInteger( sint32 value );
+		void			setUnsigned( uint32 value );
 		void			setPercentValue( PercentValue value );
 	};
 }

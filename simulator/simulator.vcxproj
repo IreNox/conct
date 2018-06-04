@@ -25,7 +25,8 @@
     <ClCompile Include="..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_value.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_writer.cpp" />
-    <ClCompile Include="..\libraries\conct_core_high\conct_string.cpp" />
+    <ClCompile Include="..\libraries\conct_core_high\conct_dynamic_string.cpp" />
+    <ClCompile Include="..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\libraries\conct_runtime\conct_device.cpp" />
     <ClCompile Include="..\libraries\conct_runtime\conct_proxy.cpp" />
     <ClCompile Include="..\libraries\conct_runtime_high\conct_command.cpp" />
@@ -61,7 +62,8 @@
     <ClInclude Include="..\libraries\conct_core\conct_value.h" />
     <ClInclude Include="..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\libraries\conct_core_high\conct_core_high.h" />
-    <ClInclude Include="..\libraries\conct_core_high\conct_string.h" />
+    <ClInclude Include="..\libraries\conct_core_high\conct_dynamic_string.h" />
+    <ClInclude Include="..\libraries\conct_core_high\conct_string_tools.h" />
     <ClInclude Include="..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\libraries\conct_runtime\conct_device.h" />
     <ClInclude Include="..\libraries\conct_runtime\conct_proxy.h" />
@@ -102,7 +104,7 @@
     <ProjectGuid>{DB95BA50-530F-47E3-A4D9-E471E0A5A8E6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>simulator</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -138,15 +140,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="disable_secure_warning.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

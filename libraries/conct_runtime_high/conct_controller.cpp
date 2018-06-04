@@ -1,6 +1,7 @@
 #include "conct_controller.h"
 
 #include "conct_runtime_high.h"
+#include "conct_string.h"
 
 namespace conct
 {
@@ -39,10 +40,12 @@ namespace conct
 
 	Command< Value >* Controller::getProperty( const RemoteInstance& instance, const char* pName )
 	{
-		GetPropertyRequest request;
-		request.instanceId = instance.id;
+		uint8 buffer[ 1024u ];
+		GetPropertyRequest* pRequest = ( GetPropertyRequest* )buffer;
+		pRequest->instanceId = instance.id;
+		copyString( pRequest->name, sizeof( buffer ) - sizeof( *pRequest ), pName );
 
-		ArrayView< uint8 > payload( ( uint8* )&request, sizeof( request ) );
+		ArrayView< uint8 > payload( buffer, sizeof( *pRequest ) + getStringLength( pName ) );
 		return beginCommand< Command< Value > >( instance.address, payload, MessageType_GetPropertyRequest );
 	}
 

@@ -1,6 +1,6 @@
 #include "home_dimmer_proxy.h"
 
-#include "conct_functions.h"
+#include "conct_string.h"
 
 #include "home_dimmer.h"
 
@@ -15,7 +15,7 @@ namespace conct
 	{
 		const Dimmer* pTypedInstance = static_cast< const Dimmer* >( pInstance );
 
-		if( isStringEqual( pName, "Brightness" ) )
+		if( isStringEquals( pName, "Brightness" ) )
 		{
 			targetValue.setPercentValue( pTypedInstance->getBrightness() );
 			return true;
@@ -28,7 +28,7 @@ namespace conct
 	{
 		Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
 
-		if( isStringEqual( pName, "Brightness" ) )
+		if( isStringEquals( pName, "Brightness" ) )
 		{
 			pTypedInstance->setBrightness( value.getPercentValue() );
 			return true;

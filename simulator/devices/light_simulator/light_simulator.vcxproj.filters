@@ -122,6 +122,15 @@
     <ClInclude Include="..\shared\i_simulator_port.h">
       <Filter>shared</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_string.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_number_limits.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_memory.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -175,6 +184,9 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
       <Filter>extern\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_memory.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -193,6 +205,12 @@
       <Filter>extern\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_flags.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_string.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_memory.inl">
       <Filter>extern\conct_core</Filter>
     </None>
   </ItemGroup>

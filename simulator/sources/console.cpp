@@ -85,7 +85,7 @@ namespace conct
 
 		ConsoleInput::readKey( [ this ]( ConsoleKey key )
 		{
-			if( key >= ConsoleKey_F1 && key < ConsoleKey_F12 )
+			if( key >= ConsoleKey_F1 && key <= ConsoleKey_F4 )
 			{
 				const uintreg index = key - ConsoleKey_F1;
 				if( index < m_devices.size() )
@@ -104,16 +104,16 @@ namespace conct
 			pDevice = &m_devices[ m_selectedDevice ];
 		}
 
-		ConsoleInput::readChar( [ this, pDevice ]( char c )
+		ConsoleInput::readKey( [ this, pDevice ]( ConsoleKey key )
 		{
 			if( pDevice == nullptr )
 			{
 				return false;
 			}
 
-			if( c >= '1' && c <= '9' )
+			if( key >= ConsoleKey_F5 && key <= ConsoleKey_F8 )
 			{
-				const uintreg index = c - '1';
+				const uintreg index = key - ConsoleKey_F5;
 				if( index < pDevice->plugins.size() )
 				{
 					if( m_pluginIndex < pDevice->plugins.size() )

@@ -16,7 +16,7 @@ namespace conct
 
 	private:
 
-#if CONCT_ENABLED( CONCT_WINDOWS )
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		uint64	m_startTime;
 		uint64	m_frequence;
 #else

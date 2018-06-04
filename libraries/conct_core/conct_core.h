@@ -10,7 +10,7 @@
 #define CONCT_IF( expr )		( ( expr ) ? CONCT_ON : CONCT_OFF )
 
 #if defined( _WIN32 ) // Windows
-#	define CONCT_WINDOWS			CONCT_ON
+#	define CONCT_PLATFORM_WINDOWS	CONCT_ON
 #	if defined( _WIN64 )
 #		define CONCT_POINTER_64		CONCT_ON
 #		define CONCT_REGISTER_64	CONCT_ON
@@ -19,23 +19,41 @@
 #		define CONCT_REGISTER_32	CONCT_ON
 #	endif
 #else
-#	define CONCT_WINDOWS			CONCT_OFF
+#	define CONCT_PLATFORM_WINDOWS	CONCT_OFF
 #endif
 
 #if defined( __AVR__ ) // AVR (UNO, Duemilanove, etc.)
-#	define CONCT_AVR				CONCT_ON
+#	define CONCT_PLATFORM_AVR		CONCT_ON
 #	define CONCT_POINTER_16			CONCT_ON
 #	define CONCT_REGISTER_8			CONCT_ON
 #else
-#	define CONCT_AVR				CONCT_OFF
+#	define CONCT_PLATFORM_AVR				CONCT_OFF
 #endif
 
 #if defined( __SAM3X8E__ ) // ARM (DUE)
-#	define CONCT_ARM_DUE			CONCT_ON
+#	define CONCT_PLATFORM_ARM_DUE	CONCT_ON
 #	define CONCT_POINTER_32			CONCT_ON
 #	define CONCT_REGISTER_32		CONCT_ON
 #else
-#	define CONCT_ARM_DUE			CONCT_OFF
+#	define CONCT_PLATFORM_ARM_DUE	CONCT_OFF
+#endif
+
+#if defined( _MSC_VER )
+#	define CONCT_COMPILER_MSVC		CONCT_ON
+#else
+#	define CONCT_COMPILER_MSVC		CONCT_OFF
+#endif
+
+#if defined( __clang__ )
+#	define CONCT_COMPILER_CLANG		CONCT_ON
+#else
+#	define CONCT_COMPILER_CLANG		CONCT_OFF
+#endif
+
+#if defined( __GNUC__ )
+#	define CONCT_COMPILER_GCC		CONCT_ON
+#else
+#	define CONCT_COMPILER_GCC		CONCT_OFF
 #endif
 
 #if !defined( CONCT_POINTER_16 )
@@ -64,7 +82,7 @@
 #define CONCT_DEBUG					CONCT_ON
 #define CONCT_HAS_OVERRIDE			CONCT_ON
 #define CONCT_HAS_FINAL				CONCT_ON
-#define CONCT_HAS_BREAK				CONCT_WINDOWS
+#define CONCT_HAS_BREAK				CONCT_PLATFORM_WINDOWS
 
 #if CONCT_ENABLED( CONCT_HAS_OVERRIDE )
 #	define CONCT_OVERRIDE override
@@ -94,6 +112,29 @@
 
 #define CONCT_MIN( a, b ) ( ( a ) < ( b ) ? ( a ) : ( b ) )
 #define CONCT_MAX( a, b ) ( ( a ) > ( b ) ? ( a ) : ( b ) )
+
+#define CONCT_USE_INLINE CONCT_ON
+
+#if CONCT_ENABLED( CONCT_USE_INLINE )
+
+#	if CONCT_ENABLED( CONCT_COMPILER_MSVC )
+#		define CONCT_INLINE			inline
+#		define CONCT_FORCE_INLINE	__forceinline
+#		define CONCT_NO_INLINE		__declspec(noinline)
+#	elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_GCC )
+#		define CONCT_INLINE			inline
+#		define CONCT_FORCE_INLINE	__attribute__((always_inline))
+#		define CONCT_NO_INLINE		__attribute__((noinline))
+#	else
+#		error Platform not implemented
+#	endif
+#else
+#	define CONCT_INLINE
+#	define CONCT_FORCE_INLINE
+#	define CONCT_NO_INLINE
+#endif
+
+#define CONCT_STATIC_ASSERT( expr ) static_assert( ( expr ), #expr )
 
 namespace conct
 {

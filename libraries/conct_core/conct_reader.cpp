@@ -45,7 +45,7 @@ namespace conct
 			m_remainingSize--;
 		}
 
-		return i;
+		return i - alreadyRead;
 	}
 
 	bool Reader::readByte( uint8& target )

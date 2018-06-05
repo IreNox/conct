@@ -223,7 +223,7 @@ namespace conct
 
 	RuntimeLow::ReadResult RuntimeLow::readPayload( Reader& reader )
 	{
-		m_stateValue = reader.readData( getWorkingData(), ( uintreg )m_playloadSize, ( uintreg )m_stateValue );
+		m_stateValue += reader.readData( getWorkingData(), ( uintreg )m_playloadSize, ( uintreg )m_stateValue );
 		if( m_stateValue < m_playloadSize )
 		{
 			return ReadResult_WaitingData;
@@ -285,8 +285,26 @@ namespace conct
 			}
 			break;
 
-		//case MessageType_SetPropertyRequest:
-		//	break;
+		case MessageType_SetPropertyRequest:
+			{
+				const SetPropertyRequest& request = *reinterpret_cast< const SetPropertyRequest* >( m_workingData + m_destinationAddressSize );
+
+				const LocalInstance* pInstance = findInstanceById( request.instanceId );
+				if( pInstance == nullptr )
+				{
+					sendErrorResponse( ResultId_NoSuchInstance );
+					return;
+				}
+
+				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.name, request.value ) )
+				{
+					sendErrorResponse( ResultId_NoSuchField );
+					return;
+				}
+
+				sendResponse( MessageType_SetPropertyResponse, nullptr, 0u );
+			}
+			break;
 
 		//case MessageType_CallFunctionRequest:
 		//	break;

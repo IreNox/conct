@@ -32,7 +32,6 @@ namespace conct
 
 		enum PackageState
 		{
-			//PackageState_WaitForMagic,
 			PackageState_ReadBaseHeader,
 			PackageState_ReadSourceAddress,
 			PackageState_ReadDestinationAddress,

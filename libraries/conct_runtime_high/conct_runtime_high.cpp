@@ -314,30 +314,24 @@ namespace conct
 		PendingReceivedPackage& package = portData.pendingPackages[ deviceId ];
 		while( !reader.isEnd() )
 		{
-			switch( package.state )
+			if( package.state == PackageState_ReadBaseHeader )
 			{
-			//case PackageState_WaitForMagic:
-			//	readMagic( package, reader );
-			//	break;
-
-			case PackageState_ReadBaseHeader:
 				readBaseHeader( package, reader );
-				break;
+			}
 
-			case PackageState_ReadSourceAddress:
+			if( package.state == PackageState_ReadSourceAddress )
+			{
 				readBytes( package.target.sourceAddress, package, reader, PackageState_ReadDestinationAddress );
-				break;
+			}
 
-			case PackageState_ReadDestinationAddress:
+			if( package.state == PackageState_ReadDestinationAddress )
+			{
 				readBytes( package.target.destinationAddress, package, reader, PackageState_ReadPayload );
-				break;
+			}
 
-			case PackageState_ReadPayload:
+			if( package.state == PackageState_ReadPayload )
+			{
 				readBytes( package.target.payload, package, reader, PackageState_PushToQueue );
-				break;
-
-			case PackageState_PushToQueue:
-				break;
 			}
 
 			if( package.state == PackageState_PushToQueue )
@@ -346,34 +340,6 @@ namespace conct
 			}
 		}
 	}
-
-	//void RuntimeHigh::readMagic( PendingReceivedPackage& package, Reader& reader )
-	//{
-	//	if( package.data.waitForMagic.firstReadCounter < sizeof( s_messageBaseHeaderMagic ) )
-	//	{
-	//		package.data.waitForMagic.firstReadCounter += reader.readShort( package.data.waitForMagic.lastMagic, package.data.waitForMagic.firstReadCounter );
-
-	//		if( package.data.waitForMagic.firstReadCounter == sizeof( s_messageBaseHeaderMagic ) &&
-	//			package.data.waitForMagic.lastMagic == s_messageBaseHeaderMagic )
-	//		{
-	//			setState( package, PackageState_ReadBaseHeader );
-	//			return;
-	//		}
-	//	}
-
-	//	uint8 nextByte;
-	//	while( reader.readByte( nextByte ) )
-	//	{
-	//		package.data.waitForMagic.lastMagic <<= 8u;
-	//		package.data.waitForMagic.lastMagic |= nextByte;
-
-	//		if( package.data.waitForMagic.lastMagic == s_messageBaseHeaderMagic )
-	//		{
-	//			setState( package, PackageState_ReadBaseHeader );
-	//			return;
-	//		}
-	//	}
-	//}
 
 	void RuntimeHigh::readBaseHeader( PendingReceivedPackage& package, Reader& reader )
 	{

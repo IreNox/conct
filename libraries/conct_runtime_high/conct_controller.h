@@ -3,11 +3,11 @@
 #include "conct_array.h"
 #include "conct_array_view.h"
 #include "conct_command.h"
-
-#include <vector>
+#include "conct_vector.h"
 
 namespace conct
 {
+	class DataBuilder;
 	class RuntimeHigh;
 
 	class Controller
@@ -18,6 +18,7 @@ namespace conct
 											~Controller();
 
 		void								setup( RuntimeHigh* pRuntime );
+		void								loop();
 
 		Command< RemoteInstance >*			getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
 		Command< Array< RemoteInstance > >*	findInstances( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
@@ -27,11 +28,15 @@ namespace conct
 
 		Command< Value >*					callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< Value >& arguments );
 
+		void								releaseCommand( CommandBase* pCommand );
+
 	private:
 
 		RuntimeHigh*						m_pRuntime;
 
+		Vector< CommandBase* >				m_releaseCommand;
+
 		template< class TCommand >
-		TCommand*							beginCommand( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
+		TCommand*							beginCommand( const DeviceAddress& deviceAddress, const DataBuilder& payload, MessageType messageType );
 	};
 }

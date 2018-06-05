@@ -134,6 +134,15 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_relative_pointer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_relative_array.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_data_builder.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
@@ -190,6 +199,9 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_data_builder.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -223,6 +235,15 @@
       <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_flags.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_relative_pointer.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_relative_array.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_data_builder.inl">
       <Filter>libraries\conct_core</Filter>
     </None>
   </ItemGroup>

@@ -1,6 +1,156 @@
 #pragma once
 
+#include "conct_functions.h"
+
 namespace conct
 {
+	template< class T >
+	Vector< T >::Vector()
+	{
+		m_pData = nullptr;
+		m_size = 0u;
+		m_capacity = 0u;
+	}
 
+	template< class T >
+	Vector< T >::Vector( const std::initializer_list< T >& initList )
+	{
+		m_pData = nullptr;
+		m_size = 0u;
+		m_capacity = 0u;
+
+		reserve( initList.size() );
+		for( const T& value : initList )
+		{
+			pushBack( value );
+		}
+	}
+
+	template< class T >
+	Vector< T >::~Vector()
+	{
+		delete[] m_pData;
+	}
+
+	template< class T >
+	bool Vector< T >::isEmpty() const
+	{
+		return m_size == 0u;
+	}
+
+	template< class T >
+	uintreg Vector< T >::getSize() const
+	{
+		return m_size;
+	}
+
+	template< class T >
+	uintreg Vector< T >::getCapacity() const
+	{
+		return m_capacity;
+	}
+
+	template< class T >
+	void Vector< T >::reserve( uintreg size )
+	{
+		checkCapacity( size );
+	}
+
+	template< class T >
+	T& Vector< T >::pushBack()
+	{
+		checkCapacity( m_size + 1u );
+		return m_pData[ m_size++ ];
+	}
+
+	template< class T >
+	void Vector< T >::pushBack( const T& value )
+	{
+		checkCapacity( m_size + 1u );
+		m_pData[ m_size++ ] = value;
+	}
+
+	template< class T >
+	void Vector< T >::popBack()
+	{
+		CONCT_ASSERT( m_size > 0u );
+		m_size--;
+	}
+
+	template< class T >
+	void Vector< T >::eraseSorted( const T& value )
+	{
+		eraseSorted( &value );
+	}
+
+	template< class T >
+	void Vector< T >::eraseSorted( const T* pValue )
+	{
+		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_size );
+		eraseSortedByIndex( pValue - m_pData );
+	}
+
+	template< class T >
+	void Vector< T >::eraseSortedByIndex( uintreg index )
+	{
+		m_size--;
+		for( uintreg i = index; i < m_size; ++i )
+		{
+			m_pData[ i ] = m_pData[ i + 1u ];
+		}
+	}
+
+	template< class T >
+	void Vector< T >::eraseUnsorted( const T& value )
+	{
+		eraseUnsorted( &value );
+	}
+
+	template< class T >
+	void Vector< T >::eraseUnsorted( const T* pValue )
+	{
+		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_size );
+		eraseUnsortedByIndex( pValue - m_pData );
+	}
+
+	template< class T >
+	void Vector< T >::eraseUnsortedByIndex( uintreg index )
+	{
+		m_size--;
+		if( index != m_size )
+		{
+			m_pData[ index ] = m_pData[ m_size ];
+		}
+	}
+
+	template< class T >
+	T& Vector< T >::operator[]( uintreg index )
+	{
+		CONCT_ASSERT( index < m_size );
+		return m_pData[ index ];
+	}
+
+	template< class T >
+	const T& Vector< T >::operator[]( uintreg index ) const
+	{
+		CONCT_ASSERT( index < m_size );
+		return m_pData[ index ];
+	}
+
+	template< class T >
+	void Vector< T >::checkCapacity( uintreg size )
+	{
+		const uintreg nextCapacity = getNextPowerOfTwo( CONCT_MAX( 1u, size ) );
+		T* pNewData = new T[ nextCapacity ];
+		CONCT_ASSERT( pNewData != nullptr );
+
+		for( uintreg i = 0u; i < m_size; ++i )
+		{
+			pNewData[ i ] = m_pData[ i ];
+		}
+
+		delete[] m_pData;
+		m_pData = pNewData;
+		m_capacity = nextCapacity;
+	}
 }

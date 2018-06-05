@@ -139,6 +139,6 @@ namespace conct
 		void									executeSetPropertyAction( ConsoleDevice& device );
 		void									executeCallFunctionAction( ConsoleDevice& device );
 
-		void									finishCommand();
+		void									finishCommand( ConsoleDevice& device );
 	};
 }

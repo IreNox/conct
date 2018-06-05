@@ -20,7 +20,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\libraries\conct_core\conct_ascii.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_data_builder.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_functions.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_memory.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_value.cpp" />
@@ -53,10 +55,16 @@
     <ClInclude Include="..\libraries\conct_core\conct_array_view.h" />
     <ClInclude Include="..\libraries\conct_core\conct_ascii.h" />
     <ClInclude Include="..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_data_builder.h" />
     <ClInclude Include="..\libraries\conct_core\conct_flags.h" />
     <ClInclude Include="..\libraries\conct_core\conct_functions.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_memory.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_number_limits.h" />
     <ClInclude Include="..\libraries\conct_core\conct_port.h" />
     <ClInclude Include="..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_relative_array.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_relative_pointer.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_string.h" />
     <ClInclude Include="..\libraries\conct_core\conct_structs.h" />
     <ClInclude Include="..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\libraries\conct_core\conct_value.h" />
@@ -93,8 +101,13 @@
   <ItemGroup>
     <None Include="..\libraries\conct_core\conct_array.inl" />
     <None Include="..\libraries\conct_core\conct_array_view.inl" />
+    <None Include="..\libraries\conct_core\conct_data_builder.inl" />
     <None Include="..\libraries\conct_core\conct_flags.inl" />
+    <None Include="..\libraries\conct_core\conct_memory.inl" />
     <None Include="..\libraries\conct_core\conct_reader.inl" />
+    <None Include="..\libraries\conct_core\conct_relative_array.inl" />
+    <None Include="..\libraries\conct_core\conct_relative_pointer.inl" />
+    <None Include="..\libraries\conct_core\conct_string.inl" />
     <None Include="..\libraries\conct_core\conct_writer.inl" />
     <None Include="..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="..\libraries\conct_runtime_high\conct_command.inl" />

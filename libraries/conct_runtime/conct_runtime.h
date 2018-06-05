@@ -1,6 +1,8 @@
 #pragma once
 
 #include "conct_core.h"
+#include "conct_relative_array.h"
+#include "conct_relative_pointer.h"
 #include "conct_value.h"
 
 namespace conct
@@ -10,6 +12,9 @@ namespace conct
 	typedef uint16 CommandId;
 	static const CommandId InvalidCommandId = 0u;
 	static const CommandId FirstCommandId = 1u;
+
+	typedef RelativePointer8< const char > RelativeStringPointer;
+	typedef RelativeArray8< Value > RelativeValueArray;
 
 	struct DeviceAddress
 	{
@@ -107,48 +112,47 @@ namespace conct
 
 	struct GetInstanceRequest
 	{
-		TypeCrc			typeCrc;
+		TypeCrc					typeCrc;
 	};
 
 	struct GetInstanceResponse
 	{
-		InstanceId		instanceId;
+		InstanceId				instanceId;
 	};
 
 	struct FindInstancesRequest
 	{
-		TypeCrc			typeCrc;
+		TypeCrc					typeCrc;
 	};
 
 	struct GetPropertyRequest
 	{
-		InstanceId		instanceId;
-		char			name[ 1u ];
+		InstanceId				instanceId;
+		RelativeStringPointer	name;
 	};
 
 	struct GetPropertyResponse
 	{
-		Value			value;
+		Value					value;
 	};
 
 	struct SetPropertyRequest
 	{
-		InstanceId		instanceId;
-		Value			value;
-		char			name[ 1u ];
+		InstanceId				instanceId;
+		Value					value;
+		RelativeStringPointer	name;
 	};
 
 	struct CallFunctionRequest
 	{
-		InstanceId		instanceId;
-		Value			value;
-		char			name[ 1u ];
+		InstanceId				instanceId;
+		Value					value;
+		RelativeStringPointer	name;
+		RelativeValueArray		arguments;
 	};
 
 	struct CallFunctionResponse
 	{
-		Value			value;
+		Value					value;
 	};
-
-	static const uint16 s_messageBaseHeaderMagic = 0xc0c7u;
 }

@@ -53,7 +53,7 @@ namespace conct
 		else if( m_state == State_Waiting )
 		{
 			drawLoading();
-			finishCommand();
+			finishCommand( device );
 		}
 		else
 		{
@@ -101,7 +101,7 @@ namespace conct
 				break;
 
 			case ConsoleKey_Right:
-				if( m_index < m_list.size() )
+				if( m_index < m_list.size() - 1u )
 				{
 					m_index++;
 					drawList();
@@ -835,7 +835,7 @@ namespace conct
 		m_pRunningCommand = pCommand;
 	}
 
-	void ConsoleController::finishCommand()
+	void ConsoleController::finishCommand( ConsoleDevice& device )
 	{
 		if( !m_pRunningCommand->isFinish() )
 		{
@@ -845,6 +845,7 @@ namespace conct
 		if( m_pRunningCommand->hasError() )
 		{
 			setPopupState( "Command failed."_s );
+			device.data.pController->releaseCommand( m_pRunningCommand );
 			m_pRunningCommand = nullptr;
 			return;
 		}
@@ -895,6 +896,7 @@ namespace conct
 			setPopupState( "Command finish."_s );
 		}
 
+		device.data.pController->releaseCommand( m_pRunningCommand );
 		m_pRunningCommand = nullptr;
 	}
 }

@@ -40,7 +40,7 @@ namespace conct
 		}
 
 		CONCT_ASSERT( ( uintptr )pData - ( uintptr )this < NumberLimits< TValueType >::max() );
-		m_offset = ( uintptr )pData - ( uintptr )this;
+		m_offset = TValueType( ( uintptr )pData - ( uintptr )this );
 	}
 
 	template< class TType, class TValueType >

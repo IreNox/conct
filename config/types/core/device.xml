@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <interface namespace="Core" name="Device">
+	<singleton />
 	<properties>
 		<property name="Name" type="String">
 			<get />
@@ -7,18 +8,26 @@
 		<property name="Guid" type="Guid">
 			<get />
 		</property>
-		<property name="Interfaces">
+		<property name="Instances">
 			<type>
-				<array type="Interface" />
+				<array type="InstanceId" />
 			</type>
 			<get />
 		</property>
-		<functions>
-			<function name="GetInterface" return="Object">
-				<parameters>
-					<parameter name="interface" type="Interface" />
-				</parameters>
-			</function>
-		</functions>
 	</properties>
+	<functions>
+		<function name="FindInstances">
+			<return>
+				<array type="InstanceId" />
+			</return>
+			<parameters>
+				<parameter name="type" type="TypeCrc" />
+			</parameters>
+		</function>
+		<function name="FinstFirstInstance" return="InstanceId">
+			<parameters>
+				<parameter name="type" type="TypeCrc" />
+			</parameters>
+		</function>
+	</functions>
 </interface>

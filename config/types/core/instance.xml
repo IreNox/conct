@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<interface namespace="Core" name="FunctionParameter">
+<interface namespace="Core" name="Instance">
 	<properties>
-		<property name="Name" type="String">
+		<property name="Id" type="InstanceId">
 			<get />
 		</property>
-		<property name="Type" type="Type">
+		<property name="Type" type="TypeCrc">
 			<get />
 		</property>
 	</properties>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<enum namespace="Core" name="TypeDescription">
-	<values>
-		<value name="Value">0</value>
-		<value name="Interface">1</value>
-	</values>
-</enum>

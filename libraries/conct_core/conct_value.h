@@ -13,22 +13,38 @@ namespace conct
 		ValueType_String,
 		ValueType_PercentValue,
 		ValueType_Guid,
+		ValueType_Device,
 		ValueType_Instance,
+		ValueType_Type,
 		ValueType_Array,
 
 		ValueType_Count
 	};
 	const char*	getValueTypeName( ValueType value );
 
+	struct StringValueData
+	{
+		uint16	offset;
+	};
+
+	struct ArrayValueData
+	{
+		uint16	offset;
+		uint16	size;
+	};
+
 	union ValueData
 	{
-		bool			boolean;
-		sint32			integer;
-		uint32			unsignedInteger;
-		const char*		pString;
-		PercentValue	percent;
-		uint32			guid;
-		InstanceId		instance;
+		bool				boolean;
+		sint32				integer;
+		uint32				unsignedInteger;
+		StringValueData		string;
+		PercentValue		percent;
+		uint32				guid;
+		DeviceId			device;
+		InstanceId			instance;
+		TypeCrc				type;
+		ArrayValueData		array;
 	};
 
 	struct Value

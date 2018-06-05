@@ -13,7 +13,9 @@ namespace conct
 			"String",
 			"PercentValue",
 			"Guid",
+			"Device",
 			"Instance",
+			"Type",
 			"Array"
 		};
 		CONCT_STATIC_ASSERT( CONCT_COUNT( s_aValueTypeNames ) == ValueType_Count );

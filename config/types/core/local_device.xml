@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<interface namespace="Core" name="LocalDevice">
-	<properties>
-		<property name="Device" type="Device">
-			<get />
-		</property>
-	</properties>
-</interface>

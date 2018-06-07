@@ -19,9 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\libraries\conct_core\conct_array.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_array_view.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_ascii.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_data_builder.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_flags.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_functions.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_memory.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_number_limits.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_port.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_relative_array.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_relative_pointer.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_string.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_structs.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_timer.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_value.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\shared\include\array_type.h" />
     <ClInclude Include="..\shared\include\base.h" />
     <ClInclude Include="..\shared\include\interface_type.h" />
+    <ClInclude Include="..\shared\include\struct_type.h" />
     <ClInclude Include="..\shared\include\type.h" />
     <ClInclude Include="..\shared\include\type_collection.h" />
     <ClInclude Include="..\shared\include\xml_helper.h" />
@@ -34,9 +53,18 @@
     <ClInclude Include="include\port_collection.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\libraries\conct_core\conct_ascii.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_data_builder.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_functions.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_memory.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_reader.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_timer.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_value.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\shared\sources\array_type.cpp" />
     <ClCompile Include="..\shared\sources\base.cpp" />
     <ClCompile Include="..\shared\sources\interface_type.cpp" />
+    <ClCompile Include="..\shared\sources\struct_type.cpp" />
     <ClCompile Include="..\shared\sources\type.cpp" />
     <ClCompile Include="..\shared\sources\type_collection.cpp" />
     <ClCompile Include="..\shared\sources\xml_helper.cpp" />
@@ -48,6 +76,18 @@
     <ClCompile Include="sources\main.cpp" />
     <ClCompile Include="sources\port.cpp" />
     <ClCompile Include="sources\port_collection.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\libraries\conct_core\conct_array.inl" />
+    <None Include="..\libraries\conct_core\conct_array_view.inl" />
+    <None Include="..\libraries\conct_core\conct_data_builder.inl" />
+    <None Include="..\libraries\conct_core\conct_flags.inl" />
+    <None Include="..\libraries\conct_core\conct_memory.inl" />
+    <None Include="..\libraries\conct_core\conct_reader.inl" />
+    <None Include="..\libraries\conct_core\conct_relative_array.inl" />
+    <None Include="..\libraries\conct_core\conct_relative_pointer.inl" />
+    <None Include="..\libraries\conct_core\conct_string.inl" />
+    <None Include="..\libraries\conct_core\conct_writer.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -128,7 +168,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,7 +182,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,7 +198,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -176,7 +216,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)..\libraries\conct_core;$(ProjectDir)..\shared\include;$(ProjectDir)..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

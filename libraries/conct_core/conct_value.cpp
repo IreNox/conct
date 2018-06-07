@@ -16,6 +16,7 @@ namespace conct
 			"Device",
 			"Instance",
 			"Type",
+			"Structure",
 			"Array"
 		};
 		CONCT_STATIC_ASSERT( CONCT_COUNT( s_aValueTypeNames ) == ValueType_Count );
@@ -48,6 +49,35 @@ namespace conct
 		return data.percent;
 	}
 
+	Guid Value::setGuid() const
+	{
+		CONCT_ASSERT( type == ValueType_Guid );
+		return data.guid;
+	}
+
+	DeviceId Value::getDeviceId() const
+	{
+		CONCT_ASSERT( type == ValueType_Device );
+		return data.device;
+	}
+
+	InstanceId Value::getInstanceId() const
+	{
+		CONCT_ASSERT( type == ValueType_Instance );
+		return data.instance;
+	}
+
+	TypeCrc Value::getTypeCrc() const
+	{
+		CONCT_ASSERT( type == ValueType_Type );
+		return data.type;
+	}
+
+	void Value::setVoid()
+	{
+		type = ValueType_Void;
+	}
+
 	void Value::setBoolean( bool value )
 	{
 		type = ValueType_Boolean;
@@ -70,5 +100,29 @@ namespace conct
 	{
 		type = ValueType_PercentValue;
 		data.percent = value;
+	}
+
+	void Value::setGuid( Guid value )
+	{
+		type = ValueType_Guid;
+		data.guid = value;
+	}
+
+	void Value::setDeviceId( DeviceId value )
+	{
+		type = ValueType_Device;
+		data.device = value;
+	}
+
+	void Value::setInstanceId( InstanceId value )
+	{
+		type = ValueType_Instance;
+		data.instance = value;
+	}
+
+	void Value::setTypeCrc( TypeCrc value )
+	{
+		type = ValueType_Type;
+		data.type = value;
 	}
 }

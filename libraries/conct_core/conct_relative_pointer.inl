@@ -3,12 +3,6 @@
 namespace conct
 {
 	template< class TType, class TValueType >
-	RelativePointer< TType, TValueType >::RelativePointer()
-	{
-		m_offset = 0u;
-	}
-
-	template< class TType, class TValueType >
 	TType* RelativePointer< TType, TValueType >::get()
 	{
 		if( !isValid() )

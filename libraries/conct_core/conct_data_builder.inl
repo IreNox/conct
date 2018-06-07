@@ -14,6 +14,12 @@ namespace conct
 		pushData( &data, sizeof( data ) );
 	}
 
+	template< class T >
+	T* DataBuilder::pushArray( uintreg count )
+	{
+		return static_cast< T* >( pushData( count * sizeof( T ) ) );
+	}
+
 	template< uintreg TBufferSize >
 	BufferedDataBuilder< TBufferSize >::BufferedDataBuilder()
 		: DataBuilder( m_buffer, sizeof( m_buffer ) )

@@ -5,7 +5,7 @@
 
 namespace conct
 {
-	bool Device::findInstanceForInterface( LocalInstance* pInstance, TypeCrc typeCrc )
+	bool Device2::findInstanceForInterface( LocalInstance* pInstance, TypeCrc typeCrc )
 	{
 		ArrayView< LocalInstance > instances;
 		getInstances( instances );

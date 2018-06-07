@@ -11,13 +11,13 @@ namespace conct
 	{
 	}
 
-	bool LightProxy::getProperty( Value& targetValue, const void* pInstance, const char* pName ) const
+	bool LightProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
 	{
 		const Light* pTypedInstance = static_cast< const Light* >( pInstance );
 
 		if( isStringEquals( pName, "On" ) )
 		{
-			targetValue.setBoolean( pTypedInstance->getOn() );
+			targetValueBuilder.setBoolean( pTypedInstance->getOn() );
 			return true;
 		}
 
@@ -37,7 +37,7 @@ namespace conct
 		return false;
 	}
 
-	bool LightProxy::callFunction( Value& returnValue, void* pInstance, const char* pName, const Array< Value >& parameters )
+	bool LightProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters )
 	{
 		const Light* pTypedInstance = static_cast< Light* >( pInstance );
 

@@ -16,6 +16,7 @@ namespace conct
 		ValueType_Device,
 		ValueType_Instance,
 		ValueType_Type,
+		ValueType_Struct,
 		ValueType_Array,
 
 		ValueType_Count
@@ -23,6 +24,11 @@ namespace conct
 	const char*	getValueTypeName( ValueType value );
 
 	struct StringValueData
+	{
+		uint16	offset;
+	};
+
+	struct StructValueData
 	{
 		uint16	offset;
 	};
@@ -40,10 +46,11 @@ namespace conct
 		uint32				unsignedInteger;
 		StringValueData		string;
 		PercentValue		percent;
-		uint32				guid;
+		Guid				guid;
 		DeviceId			device;
 		InstanceId			instance;
 		TypeCrc				type;
+		StructValueData		structure;
 		ArrayValueData		array;
 	};
 
@@ -56,10 +63,19 @@ namespace conct
 		sint32			getInteger() const;
 		uint32			getUnsigned() const;
 		PercentValue	getPercentValue() const;
+		Guid			setGuid() const;
+		DeviceId		getDeviceId() const;
+		InstanceId		getInstanceId() const;
+		TypeCrc			getTypeCrc() const;
 
+		void			setVoid();
 		void			setBoolean( bool value );
 		void			setInteger( sint32 value );
 		void			setUnsigned( uint32 value );
 		void			setPercentValue( PercentValue value );
+		void			setGuid( Guid value );
+		void			setDeviceId( DeviceId value );
+		void			setInstanceId( InstanceId value );
+		void			setTypeCrc( TypeCrc value );
 	};
 }

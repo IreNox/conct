@@ -11,23 +11,23 @@ namespace conct
 	{
 	}
 
-	bool RGBProxy::getProperty( Value& targetValue, const void* pInstance, const char* pName ) const
+	bool RGBProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
 	{
 		const RGB* pTypedInstance = static_cast< const RGB* >( pInstance );
 
 		if( isStringEquals( pName, "Red" ) )
 		{
-			targetValue.setPercentValue( pTypedInstance->getRed() );
+			targetValueBuilder.setPercentValue( pTypedInstance->getRed() );
 			return true;
 		}
 		if( isStringEquals( pName, "Green" ) )
 		{
-			targetValue.setPercentValue( pTypedInstance->getGreen() );
+			targetValueBuilder.setPercentValue( pTypedInstance->getGreen() );
 			return true;
 		}
 		if( isStringEquals( pName, "Blue" ) )
 		{
-			targetValue.setPercentValue( pTypedInstance->getBlue() );
+			targetValueBuilder.setPercentValue( pTypedInstance->getBlue() );
 			return true;
 		}
 
@@ -57,7 +57,7 @@ namespace conct
 		return false;
 	}
 
-	bool RGBProxy::callFunction( Value& returnValue, void* pInstance, const char* pName, const Array< Value >& parameters )
+	bool RGBProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters )
 	{
 		const RGB* pTypedInstance = static_cast< RGB* >( pInstance );
 

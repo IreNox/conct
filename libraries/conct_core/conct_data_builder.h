@@ -5,6 +5,8 @@
 
 namespace conct
 {
+	struct Value;
+
 	class DataBuilder
 	{
 	public:
@@ -26,10 +28,14 @@ namespace conct
 		template< class T >
 		void				pushStruct( const T& data );
 
+		template< class T >
+		T*					pushArray( uintreg count );
+
 		void*				pushData( uintreg length );
 		void				pushData( const void* pData, uintreg length );
 
 		const char*			pushString( const char* pString );
+		void				pushValueData( Value* pTargetValue, const Value* pSourceValue );
 
 		ArrayView< uint8 >	toArrayView() const;
 

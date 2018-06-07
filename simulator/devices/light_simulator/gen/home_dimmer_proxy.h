@@ -10,9 +10,9 @@ namespace conct
 
 		DimmerProxy();
 
-		virtual bool getProperty( Value& targetValue, const void* pInstance, const char* pName ) const CONCT_OVERRIDE_FINAL;
+		virtual bool getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const CONCT_OVERRIDE_FINAL;
 		virtual bool setProperty( void* pInstance, const char* pName, const Value& value ) CONCT_OVERRIDE_FINAL;
 
-		virtual bool callFunction( Value& returnValue, void* pInstance, const char* pName, const Array< Value >& parameters ) CONCT_OVERRIDE_FINAL;
+		virtual bool callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) CONCT_OVERRIDE_FINAL;
 	};
 }

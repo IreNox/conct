@@ -9,7 +9,8 @@ namespace conct
 	{
 	public:
 
-							RelativePointer();
+							RelativePointer() = default;
+							RelativePointer( const RelativePointer& ) = delete;
 
 		TType*				get();
 		const TType*		get() const;
@@ -23,8 +24,6 @@ namespace conct
 							operator TType*() const;
 
 	private:
-
-							RelativePointer( const RelativePointer& );
 
 		TValueType			m_offset;
 	};

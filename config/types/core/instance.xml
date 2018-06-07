@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<interface namespace="Core" name="Instance">
-	<properties>
-		<property name="Id" type="InstanceId">
-			<get />
-		</property>
-		<property name="Type" type="TypeCrc">
-			<get />
-		</property>
-	</properties>
-</interface>
+<struct namespace="Core" name="Instance">
+	<fields>
+		<field name="Id" type="InstanceId" />
+		<field name="Type" type="TypeCrc" />
+	</fields>
+</struct>

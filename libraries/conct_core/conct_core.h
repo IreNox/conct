@@ -175,6 +175,7 @@ namespace conct
 	typedef uint16		TypeCrc;
 	typedef uint16		InstanceId;
 	typedef uint16		PercentValue;
+	typedef uint32		Guid;
 
 	static const DeviceId InvalidDeviceId = 0u;
 }

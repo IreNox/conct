@@ -131,6 +131,18 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_memory.h">
       <Filter>extern\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_value_builder.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_result.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_data_builder.h">
+      <Filter>extern\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="gen\core_device_proxy.h">
+      <Filter>gen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -187,6 +199,15 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_memory.cpp">
       <Filter>extern\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_value_builder.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_data_builder.cpp">
+      <Filter>extern\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="gen\core_device_proxy.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -211,6 +232,12 @@
       <Filter>extern\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_memory.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_value_builder.inl">
+      <Filter>extern\conct_core</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_data_builder.inl">
       <Filter>extern\conct_core</Filter>
     </None>
   </ItemGroup>

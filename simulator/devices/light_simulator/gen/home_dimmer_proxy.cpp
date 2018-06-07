@@ -11,13 +11,13 @@ namespace conct
 	{
 	}
 
-	bool DimmerProxy::getProperty( Value& targetValue, const void* pInstance, const char* pName ) const
+	bool DimmerProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
 	{
 		const Dimmer* pTypedInstance = static_cast< const Dimmer* >( pInstance );
 
 		if( isStringEquals( pName, "Brightness" ) )
 		{
-			targetValue.setPercentValue( pTypedInstance->getBrightness() );
+			targetValueBuilder.setPercentValue( pTypedInstance->getBrightness() );
 			return true;
 		}
 
@@ -37,7 +37,7 @@ namespace conct
 		return false;
 	}
 
-	bool DimmerProxy::callFunction( Value& returnValue, void* pInstance, const char* pName, const Array< Value >& parameters )
+	bool DimmerProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters )
 	{
 		const Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
 

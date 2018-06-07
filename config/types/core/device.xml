@@ -10,7 +10,7 @@
 		</property>
 		<property name="Instances">
 			<type>
-				<array type="InstanceId" />
+				<array type="Instance" />
 			</type>
 			<get />
 		</property>

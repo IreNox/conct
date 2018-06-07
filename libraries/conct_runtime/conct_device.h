@@ -6,7 +6,7 @@ namespace conct
 {
 	struct LocalInstance;
 
-	class Device
+	class Device2
 	{
 	public:
 

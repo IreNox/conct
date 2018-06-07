@@ -24,9 +24,10 @@ namespace conct
 	{
 		static const LocalInstance s_instances[] =
 		{
-			{ 0, &m_instanceLight, &m_proxyLight },
-			{ 1, &m_instanceDimmer, &m_proxyDimmer },
-			{ 2, &m_instanceRGB, &m_proxyRGB },
+			{ 0, this, &m_proxyDevice },
+			{ 1, &m_instanceLight, &m_proxyLight },
+			{ 2, &m_instanceDimmer, &m_proxyDimmer },
+			{ 3, &m_instanceRGB, &m_proxyRGB },
 		};
 
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );

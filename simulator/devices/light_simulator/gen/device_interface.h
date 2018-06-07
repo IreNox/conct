@@ -1,17 +1,18 @@
 #pragma once
 
-#include "conct_device.h"
+#include "core_device.h"
 #include "conct_runtime_low.h"
 
 #include "conct_port_rs485_sim.h"
 
-#include "home_dimmer_proxy.h"
+#include "core_device_proxy.h"
 #include "home_light_proxy.h"
 #include "home_rgb_proxy.h"
+#include "home_dimmer_proxy.h"
 
-#include "../home_dimmer_impl.h"
 #include "../home_light_impl.h"
 #include "../home_rgb_impl.h"
+#include "../home_dimmer_impl.h"
 
 namespace conct
 {
@@ -35,9 +36,10 @@ namespace conct
 
 		PortRs485Sim m_port0;
 
-		DimmerProxy m_proxyDimmer;
+		DeviceProxy m_proxyDevice;
 		LightProxy m_proxyLight;
 		RGBProxy m_proxyRGB;
+		DimmerProxy m_proxyDimmer;
 
 		LightImpl m_instanceLight;
 		DimmerImpl m_instanceDimmer;

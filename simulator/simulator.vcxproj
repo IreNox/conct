@@ -37,6 +37,7 @@
     <ClCompile Include="..\shared\sources\array_type.cpp" />
     <ClCompile Include="..\shared\sources\base.cpp" />
     <ClCompile Include="..\shared\sources\interface_type.cpp" />
+    <ClCompile Include="..\shared\sources\struct_type.cpp" />
     <ClCompile Include="..\shared\sources\type.cpp" />
     <ClCompile Include="..\shared\sources\type_collection.cpp" />
     <ClCompile Include="..\shared\sources\xml_helper.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="..\shared\include\array_type.h" />
     <ClInclude Include="..\shared\include\base.h" />
     <ClInclude Include="..\shared\include\interface_type.h" />
+    <ClInclude Include="..\shared\include\struct_type.h" />
     <ClInclude Include="..\shared\include\type.h" />
     <ClInclude Include="..\shared\include\type_collection.h" />
     <ClInclude Include="..\shared\include\xml_helper.h" />

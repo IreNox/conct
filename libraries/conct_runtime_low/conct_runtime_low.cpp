@@ -263,7 +263,7 @@ namespace conct
 
 		case MessageType_GetPropertyRequest:
 			{
-				Value value;
+				ValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
 				{
 					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_destinationAddressSize );
 
@@ -274,14 +274,14 @@ namespace conct
 						return;
 					}
 
-					if( !pInstance->pProxy->getProperty( value, pInstance->pInstance, request.name ) )
+					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.name ) )
 					{
 						sendErrorResponse( ResultId_NoSuchField );
 						return;
 					}
 				}
 
-				sendResponse( MessageType_GetPropertyResponse, &value, sizeof( value ) );
+				sendResponse( MessageType_GetPropertyResponse, valueBuilder.getValue(), valueBuilder.getValueSize() );
 			}
 			break;
 

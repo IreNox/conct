@@ -128,6 +128,9 @@
     <ClCompile Include="..\libraries\conct_core\conct_data_builder.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\shared\sources\struct_type.cpp">
+      <Filter>shared\sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">
@@ -267,6 +270,9 @@
     </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_data_builder.h">
       <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\include\struct_type.h">
+      <Filter>shared\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

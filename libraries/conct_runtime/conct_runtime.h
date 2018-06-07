@@ -4,6 +4,7 @@
 #include "conct_relative_array.h"
 #include "conct_relative_pointer.h"
 #include "conct_value.h"
+#include "conct_result.h"
 
 namespace conct
 {
@@ -37,46 +38,6 @@ namespace conct
 	{
 		DeviceAddress	address;
 		InstanceId		id;
-	};
-
-	enum ResultId : uint8
-	{
-		ResultId_Unknown,
-
-		ResultId_Success,
-
-		ResultId_OutOfMemory,
-		ResultId_Timeout,
-		ResultId_Unsupported,
-		ResultId_NoSuchDevice,
-		ResultId_NoSuchInstance,
-		ResultId_NoSuchField,
-		ResultId_NoSource,
-		ResultId_NoDestination,
-
-		ResultId_Count
-	};
-
-	struct ResultBase
-	{
-		ResultId		result;
-
-		inline bool		isSuccess() const { return result == ResultId_Success; }
-		inline bool		isError() const { return result != ResultId_Success; }
-
-		inline bool		isBusy() const { return result == ResultId_Timeout; }
-		inline bool		isDone() const { return result != ResultId_Timeout; }
-	};
-
-	template< class TValue >
-	struct Result : public ResultBase
-	{
-		TValue			value;
-	};
-
-	template< >
-	struct Result< void > : public ResultBase
-	{
 	};
 
 	enum MessageType : uint8

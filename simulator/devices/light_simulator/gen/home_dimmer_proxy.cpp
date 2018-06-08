@@ -3,6 +3,7 @@
 #include "conct_string.h"
 
 #include "home_dimmer.h"
+#include "conct_core.h"
 
 namespace conct
 {
@@ -24,7 +25,7 @@ namespace conct
 		return false;
 	}
 
-	bool DimmerProxy::setProperty( void* pInstance, const char* pName, const Value& value )
+	bool DimmerProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
 	{
 		Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
 
@@ -37,9 +38,9 @@ namespace conct
 		return false;
 	}
 
-	bool DimmerProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters )
+	bool DimmerProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		const Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
+		Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
 
 
 		return false;

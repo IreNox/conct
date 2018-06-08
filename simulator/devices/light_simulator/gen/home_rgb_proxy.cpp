@@ -3,6 +3,7 @@
 #include "conct_string.h"
 
 #include "home_rgb.h"
+#include "conct_core.h"
 
 namespace conct
 {
@@ -34,7 +35,7 @@ namespace conct
 		return false;
 	}
 
-	bool RGBProxy::setProperty( void* pInstance, const char* pName, const Value& value )
+	bool RGBProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
 	{
 		RGB* pTypedInstance = static_cast< RGB* >( pInstance );
 
@@ -57,9 +58,9 @@ namespace conct
 		return false;
 	}
 
-	bool RGBProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters )
+	bool RGBProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		const RGB* pTypedInstance = static_cast< RGB* >( pInstance );
+		RGB* pTypedInstance = static_cast< RGB* >( pInstance );
 
 
 		return false;

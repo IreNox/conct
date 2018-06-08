@@ -13,9 +13,9 @@ namespace conct
 		ValueType_String,
 		ValueType_PercentValue,
 		ValueType_Guid,
-		ValueType_Device,
-		ValueType_Instance,
-		ValueType_Type,
+		ValueType_DeviceId,
+		ValueType_InstanceId,
+		ValueType_TypeCrc,
 		ValueType_Struct,
 		ValueType_Array,
 
@@ -31,12 +31,14 @@ namespace conct
 	struct StructValueData
 	{
 		uint16	offset;
+		uint16	size;
 	};
 
 	struct ArrayValueData
 	{
 		uint16	offset;
-		uint16	size;
+		uint8	count;
+		uint8	size;
 	};
 
 	union ValueData
@@ -62,11 +64,19 @@ namespace conct
 		bool			getBoolean() const;
 		sint32			getInteger() const;
 		uint32			getUnsigned() const;
+		const char*		getString() const;
 		PercentValue	getPercentValue() const;
-		Guid			setGuid() const;
+		Guid			getGuid() const;
 		DeviceId		getDeviceId() const;
 		InstanceId		getInstanceId() const;
 		TypeCrc			getTypeCrc() const;
+
+		const void*		getStructData() const;
+		uintreg			getStructSize() const;
+
+		const void*		getArrayData() const;
+		uintreg			getArrayElementSize() const;
+		uintreg			getArrayCount() const;
 
 		void			setVoid();
 		void			setBoolean( bool value );

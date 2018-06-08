@@ -30,6 +30,15 @@ namespace conct
 		device.address.address[ 0u ]	= 1u;
 		device.address.address[ 1u ]	= 0u;
 		m_devices.push_back( device );
+
+		const InterfaceType* pDeviceType = pTypes->findInterface( "Core.Device", "" );
+
+		ControllerInstance instance;
+		instance.name					= DynamicString( pDeviceType->getFullName() ) + " @ " + device.name;
+		instance.instance.id			= 0u;
+		instance.instance.address		= device.address;
+		instance.pType					= pDeviceType;
+		m_instances.push_back( instance );
 	}
 
 	void ConsoleController::activate( ConsoleDevice& device )
@@ -291,7 +300,7 @@ namespace conct
 
 		case State_Property:
 			{
-				m_pProperty = &m_pInterface->getProperties()[ m_index ];
+				m_pProperty = &m_pInstance->pType->getProperties()[ m_index ];
 
 				if( m_action == Action_SetProperty )
 				{
@@ -313,7 +322,7 @@ namespace conct
 
 		case State_Function:
 			{
-				m_pFunction = &m_pInterface->getFunctions()[ m_index ];
+				m_pFunction = &m_pInstance->pType->getFunctions()[ m_index ];
 
 				if( !m_pFunction->parameters.empty() )
 				{
@@ -551,12 +560,36 @@ namespace conct
 			break;
 
 		case ValueType_Guid:
+			{
+				Guid intValue;
+				if( string_tools::tryParseUInt32( intValue, text.toConstCharPointer() ) )
+				{
+					value.setGuid( intValue );
+					return true;
+				}
+			}
 			break;
 
-		case ValueType_Instance:
+		case ValueType_InstanceId:
+			{
+				InstanceId intValue;
+				if( string_tools::tryParseUInt16( intValue, text.toConstCharPointer() ) )
+				{
+					value.setInstanceId( intValue );
+					return true;
+				}
+			}
 			break;
 
-		case ValueType_Array:
+		case ValueType_TypeCrc:
+			{
+				TypeCrc intValue;
+				if( string_tools::tryParseUInt16( intValue, text.toConstCharPointer() ) )
+				{
+					value.setTypeCrc( intValue );
+					return true;
+				}
+			}
 			break;
 		}
 
@@ -583,6 +616,7 @@ namespace conct
 			break;
 
 		case ValueType_String:
+			return value.getString();
 			break;
 
 		case ValueType_PercentValue:
@@ -590,9 +624,15 @@ namespace conct
 			break;
 
 		case ValueType_Guid:
+			return string_tools::toString( value.getGuid() );
 			break;
 
-		case ValueType_Instance:
+		case ValueType_InstanceId:
+			return string_tools::toString( value.getInstanceId() );
+			break;
+
+		case ValueType_TypeCrc:
+			return string_tools::toString( value.getTypeCrc() );
 			break;
 		}
 
@@ -740,7 +780,7 @@ namespace conct
 
 	void ConsoleController::buildProperties()
 	{
-		for( const InterfaceProperty& property : m_pInterface->getProperties() )
+		for( const InterfaceProperty& property : m_pInstance->pType->getProperties() )
 		{
 			m_list.push_back( property.name );
 		}
@@ -748,7 +788,7 @@ namespace conct
 
 	void ConsoleController::buildFunctions()
 	{
-		for( const InterfaceFunction& function : m_pInterface->getFunctions() )
+		for( const InterfaceFunction& function : m_pInstance->pType->getFunctions() )
 		{
 			m_list.push_back( function.name );
 		}
@@ -858,8 +898,8 @@ namespace conct
 
 				ControllerInstance instance;
 				instance.instance	= pCommand->getData();
-				instance.name		= m_pInterface->getFullName();
-				instance.type		= m_pInterface->getCrc();
+				instance.name		= DynamicString( m_pInterface->getFullName().c_str() ) + " @ " + m_pDevice->name;
+				instance.pType		= m_pInterface;
 
 				m_instances.push_back( instance );
 			}

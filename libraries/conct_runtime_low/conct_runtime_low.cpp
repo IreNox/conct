@@ -13,8 +13,7 @@ namespace conct
 {
 	void RuntimeLow::setup( Device* pDevice )
 	{
-		pDevice->getInstances( m_instances );
-
+		m_pDevice				= pDevice;
 		m_state					= State_ReadBaseHeader;
 		m_stateValue			= 0u;
 		m_workingDataOffset		= 0u;
@@ -45,32 +44,6 @@ namespace conct
 	uint8 RuntimeLow::getRemainingWorkingData() const
 	{
 		return sizeof( m_workingData ) - m_workingDataOffset;
-	}
-
-	const LocalInstance* RuntimeLow::findInstanceById( InstanceId instaceId )
-	{
-		for( uint8 i = 0u; i < m_instances.getCount(); ++i )
-		{
-			if( m_instances[ i ].id == instaceId )
-			{
-				return &m_instances[ i ];
-			}
-		}
-
-		return nullptr;
-	}
-
-	const LocalInstance* RuntimeLow::findInstanceByType( TypeCrc typeCrc )
-	{
-		for( uint8 i = 0u; i < m_instances.getCount(); ++i )
-		{
-			if( m_instances[ i ].pProxy->getTypeCrc() == typeCrc )
-			{
-				return &m_instances[ i ];
-			}
-		}
-
-		return nullptr;
 	}
 
 	void RuntimeLow::setState( State state, uint16 stateValue /* = 0u */ )
@@ -247,7 +220,14 @@ namespace conct
 			{
 				const GetInstanceRequest& request = *reinterpret_cast< const GetInstanceRequest* >( m_workingData + m_destinationAddressSize );
 
-				const LocalInstance* pInstance = findInstanceByType( request.typeCrc );
+				InstanceId instanceId = m_pDevice->findFirstInstance( request.typeCrc );
+				if( instanceId == InvalidInstanceId )
+				{
+					sendErrorResponse( ResultId_NoSuchInstance );
+					return;
+				}
+
+				const LocalInstance* pInstance = m_pDevice->getInstance( instanceId );
 				if( pInstance == nullptr )
 				{
 					sendErrorResponse( ResultId_NoSuchInstance );
@@ -267,7 +247,7 @@ namespace conct
 				{
 					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_destinationAddressSize );
 
-					const LocalInstance* pInstance = findInstanceById( request.instanceId );
+					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
 						sendErrorResponse( ResultId_NoSuchInstance );
@@ -289,7 +269,7 @@ namespace conct
 			{
 				const SetPropertyRequest& request = *reinterpret_cast< const SetPropertyRequest* >( m_workingData + m_destinationAddressSize );
 
-				const LocalInstance* pInstance = findInstanceById( request.instanceId );
+				const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 				if( pInstance == nullptr )
 				{
 					sendErrorResponse( ResultId_NoSuchInstance );
@@ -306,8 +286,29 @@ namespace conct
 			}
 			break;
 
-		//case MessageType_CallFunctionRequest:
-		//	break;
+		case MessageType_CallFunctionRequest:
+			{
+				ValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
+				{
+					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( m_workingData + m_destinationAddressSize );
+
+					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
+					if( pInstance == nullptr )
+					{
+						sendErrorResponse( ResultId_NoSuchInstance );
+						return;
+					}
+
+					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.name, request.arguments.toView() ) )
+					{
+						sendErrorResponse( ResultId_NoSuchField );
+						return;
+					}
+				}
+
+				sendResponse( MessageType_GetPropertyResponse, valueBuilder.getValue(), valueBuilder.getValueSize() );
+			}
+			break;
 
 		default:
 			sendErrorResponse( ResultId_Unsupported );

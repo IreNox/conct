@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <interface namespace="Core" name="Device">
+	<internal include="conct_device.h" class="Device" />
 	<singleton />
 	<properties>
 		<property name="Name" type="String">
@@ -16,7 +17,7 @@
 		</property>
 	</properties>
 	<functions>
-		<function name="FindInstances">
+		<function name="findInstances">
 			<return>
 				<array type="InstanceId" />
 			</return>
@@ -24,7 +25,7 @@
 				<parameter name="type" type="TypeCrc" />
 			</parameters>
 		</function>
-		<function name="FinstFirstInstance" return="InstanceId">
+		<function name="findFirstInstance" return="InstanceId">
 			<parameters>
 				<parameter name="type" type="TypeCrc" />
 			</parameters>

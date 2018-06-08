@@ -3,7 +3,7 @@
 namespace conct
 {
 	template< class T >
-	Array<T>::Array()
+	Array< T >::Array()
 	{
 		clear();
 	}
@@ -15,20 +15,26 @@ namespace conct
 	}
 
 	template< class T >
-	void Array<T>::set( T* pData, uintreg count )
+	void Array< T >::set( T* pData, uintreg count )
 	{
 		m_pData	= pData;
 		m_count	= count;
 	}
 
 	template< class T >
-	void conct::Array<T>::clear()
+	void Array< T >::clear()
 	{
 		set( nullptr, 0u );
 	}
 
 	template< class T >
-	T& Array<T>::operator[]( uintreg index )
+	bool Array< T >::isSet() const
+	{
+		return m_pData != nullptr;
+	}
+
+	template< class T >
+	T& Array< T >::operator[]( uintreg index )
 	{
 		CONCT_ASSERT( index < m_count );
 		return m_pData[ index ];

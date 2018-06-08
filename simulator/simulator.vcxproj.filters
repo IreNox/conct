@@ -104,6 +104,9 @@
     <ClCompile Include="..\libraries\conct_core_high\conct_string_tools.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
+    <ClCompile Include="..\shared\sources\struct_type.cpp">
+      <Filter>shared\sources</Filter>
+    </ClCompile>
     <ClCompile Include="..\libraries\conct_core\conct_functions.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
@@ -119,6 +122,9 @@
     <ClCompile Include="..\libraries\conct_core\conct_value.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_value_builder.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
     <ClCompile Include="..\libraries\conct_core\conct_writer.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
@@ -127,9 +133,6 @@
     </ClCompile>
     <ClCompile Include="..\libraries\conct_core\conct_data_builder.cpp">
       <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\shared\sources\struct_type.cpp">
-      <Filter>shared\sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +220,12 @@
     <ClInclude Include="..\libraries\conct_core_high\conct_string_tools.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\shared\include\struct_type.h">
+      <Filter>shared\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_data_builder.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_flags.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
@@ -241,6 +250,9 @@
     <ClInclude Include="..\libraries\conct_core\conct_relative_pointer.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_result.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_string.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
@@ -251,6 +263,9 @@
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_value.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_value_builder.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_writer.h">
@@ -267,12 +282,6 @@
     </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_core.h">
       <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_data_builder.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\include\struct_type.h">
-      <Filter>shared\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -301,6 +310,9 @@
       <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\libraries\conct_core\conct_string.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\libraries\conct_core\conct_value_builder.inl">
       <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\libraries\conct_core\conct_writer.inl">

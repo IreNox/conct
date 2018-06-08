@@ -29,9 +29,9 @@ namespace conct
 
 	struct LocalInstance
 	{
-		InstanceId	id;
-		void*		pInstance;
-		Proxy*		pProxy;
+		InstanceId		id;
+		void*			pInstance;
+		const Proxy*	pProxy;
 	};
 
 	struct RemoteInstance
@@ -107,7 +107,6 @@ namespace conct
 	struct CallFunctionRequest
 	{
 		InstanceId				instanceId;
-		Value					value;
 		RelativeStringPointer	name;
 		RelativeValueArray		arguments;
 	};

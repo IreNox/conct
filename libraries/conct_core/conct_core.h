@@ -178,4 +178,5 @@ namespace conct
 	typedef uint32		Guid;
 
 	static const DeviceId InvalidDeviceId = 0u;
+	static const InstanceId InvalidInstanceId = 0xffffu;
 }

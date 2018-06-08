@@ -99,11 +99,10 @@ namespace conct
 			CommandMap	commands;
 		};
 
-		typedef std::vector< LocalInstance > LocalInstanceVector;
 		typedef std::map< Port*, PortData > PortMap;
 		typedef std::map< DeviceId, DeviceData > DeviceMap;
 
-		LocalInstanceVector	m_instances;
+		Device*				m_pDevice;
 
 		PortMap				m_ports;
 		DeviceMap			m_devices;

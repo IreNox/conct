@@ -9,12 +9,6 @@ namespace conct
 	}
 
 	template< class TType, class TValueType >
-	RelativeArray< TType, TValueType >::RelativeArray( TType* pData, TValueType size )
-	{
-		set( pData, size );
-	}
-
-	template< class TType, class TValueType >
 	TType* RelativeArray< TType, TValueType >::get()
 	{
 		if( !isValid() )
@@ -69,6 +63,26 @@ namespace conct
 	TValueType RelativeArray< TType, TValueType >::getOffset() const
 	{
 		return m_offset;
+	}
+
+	template< class TType, class TValueType >
+	ArrayView< TType > RelativeArray< TType, TValueType >::toView() const
+	{
+		return ArrayView< TType >( get(), m_size );
+	}
+
+	template< class TType, class TValueType >
+	RelativeArray< TType, TValueType >& RelativeArray< TType, TValueType >::operator=( const RelativeArray& rhs )
+	{
+		set( const_cast< TType* >( rhs.get() ), rhs.getSize() );
+		return *this;
+	}
+
+	template< class TType, class TValueType >
+	RelativeArray< TType, TValueType >& RelativeArray< TType, TValueType >::operator=( Array< TType > rhs )
+	{
+		set( rhs.getData(), rhs.getCount() );
+		return *this;
 	}
 
 	template< class TType, class TValueType >

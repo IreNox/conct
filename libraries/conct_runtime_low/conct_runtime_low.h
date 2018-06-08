@@ -38,6 +38,8 @@ namespace conct
 			ReadResult_Error
 		};
 
+		Device*						m_pDevice;
+
 		State						m_state;
 		uint16						m_stateValue;
 
@@ -50,13 +52,8 @@ namespace conct
 		CommandId					m_commandId;
 		ResultId					m_result;
 
-		ArrayView< LocalInstance >	m_instances;
-
 		void*						getWorkingData();
 		uint8						getRemainingWorkingData() const;
-
-		const LocalInstance*		findInstanceById( InstanceId instaceId );
-		const LocalInstance*		findInstanceByType( TypeCrc typeCrc );
 
 		void						setState( State state, uint16 stateValue = 0u );
 

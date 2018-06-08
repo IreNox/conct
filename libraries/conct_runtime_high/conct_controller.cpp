@@ -78,9 +78,18 @@ namespace conct
 
 	Command< Value >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< Value >& arguments )
 	{
-		StructDataBuilder< CallFunctionRequest > dataBuilder;
-		CallFunctionRequest* pRequest = dataBuilder.pushGenericStruct();
-		pRequest->instanceId = instance.id;
+		BufferedDataBuilder< 1024u > dataBuilder;
+		CallFunctionRequest* pRequest = dataBuilder.pushStruct< CallFunctionRequest >();
+		pRequest->instanceId	= instance.id;
+		pRequest->name			= dataBuilder.pushString( pName );
+
+		Array< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getCount() );
+		pRequest->arguments		= workingArguments;
+
+		for( size_t i = 0u; i < workingArguments.getCount(); ++i )
+		{
+			dataBuilder.pushValueData( &workingArguments[ i ], &arguments[ i ] );
+		}
 
 		return beginCommand< Command< Value > >( instance.address, dataBuilder, MessageType_CallFunctionRequest );
 	}

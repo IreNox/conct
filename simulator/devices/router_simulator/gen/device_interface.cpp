@@ -1,5 +1,7 @@
 #include "device_interface.h"
 
+#include "core_instance.h"
+
 namespace conct
 {
 	void DeviceInterface::setupDevice()
@@ -25,8 +27,36 @@ namespace conct
 		loop();
 	}
 
-	void DeviceInterface::getInstances( ArrayView< LocalInstance >& instances )
+	const char* DeviceInterface::getName() const
 	{
-		instances.set( nullptr, 0u );
+		 return "RouterSimulator";
+	}
+
+	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )
+	{
+		static Instance s_instances[ 2u ];
+		instances.set( s_instances, CONCT_COUNT( s_instances ) );
+	}
+
+	void DeviceInterface::getPublicInstances( ArrayView< Instance >& instances ) const
+	{
+		static const Instance s_instances[] =
+		{
+			{ 0, 32636 },
+			{ 1, 25653 },
+		};
+
+		instances.set( s_instances, CONCT_COUNT( s_instances ) );
+	}
+
+	void DeviceInterface::getLocalInstances( ArrayView< LocalInstance >& instances )
+	{
+		static const LocalInstance s_instances[] =
+		{
+			{ 0, this, &m_proxyDevice },
+			{ 1, &m_instanceRouter, &m_proxyRouter },
+		};
+
+		instances.set( s_instances, CONCT_COUNT( s_instances ) );
 	}
 }

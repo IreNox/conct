@@ -73,8 +73,8 @@ namespace conct
 		struct ControllerInstance
 		{
 			DynamicString			name;
-			TypeCrc					type;
 			RemoteInstance			instance;
+			const InterfaceType*	pType;
 		};
 
 		typedef std::vector< DynamicString > StringVector;

@@ -3,6 +3,7 @@
 #include "conct_string.h"
 
 #include "home_light.h"
+#include "conct_core.h"
 
 namespace conct
 {
@@ -24,7 +25,7 @@ namespace conct
 		return false;
 	}
 
-	bool LightProxy::setProperty( void* pInstance, const char* pName, const Value& value )
+	bool LightProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
 	{
 		Light* pTypedInstance = static_cast< Light* >( pInstance );
 
@@ -37,9 +38,9 @@ namespace conct
 		return false;
 	}
 
-	bool LightProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters )
+	bool LightProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		const Light* pTypedInstance = static_cast< Light* >( pInstance );
+		Light* pTypedInstance = static_cast< Light* >( pInstance );
 
 
 		return false;

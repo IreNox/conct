@@ -12,9 +12,9 @@ namespace conct
 		TypeCrc			getTypeCrc() const { return m_typeCrc; }
 
 		virtual bool	getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const = 0;
-		virtual bool	setProperty( void* pInstance, const char* pName, const Value& value ) = 0;
+		virtual bool	setProperty( void* pInstance, const char* pName, const Value& value ) const = 0;
 
-		virtual bool	callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) = 0;
+		virtual bool	callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const = 0;
 
 	protected:
 

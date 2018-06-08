@@ -1,5 +1,7 @@
 #pragma once
 
+#include "conct_array.h"
+#include "conct_array_view.h"
 #include "conct_core.h"
 
 namespace conct
@@ -9,25 +11,29 @@ namespace conct
 	{
 	public:
 
-						RelativeArray();
-						RelativeArray( TType* pData, TValueType size );
+							RelativeArray();
 
-		TType*			get();
-		const TType*	get() const;
-		void			set( TType* pData, TValueType size );
+		TType*				get();
+		const TType*		get() const;
+		void				set( TType* pData, TValueType size );
 
-		bool			isValid() const;
+		bool				isValid() const;
 
-		TValueType		getSize() const;
-		TValueType		getOffset() const;
+		TValueType			getSize() const;
+		TValueType			getOffset() const;
 
-		TType&			operator[]( uintreg index );
-		const TType&	operator[]( uintreg index ) const;
+		ArrayView< TType >	toView() const;
+
+		RelativeArray&		operator=( const RelativeArray& rhs );
+		RelativeArray&		operator=( Array< TType > rhs );
+
+		TType&				operator[]( uintreg index );
+		const TType&		operator[]( uintreg index ) const;
 
 	private:
 
-		TValueType	m_size;
-		TValueType	m_offset;
+		TValueType			m_size;
+		TValueType			m_offset;
 	};
 
 	template< class T >

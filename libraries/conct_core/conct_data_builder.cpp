@@ -2,6 +2,7 @@
 
 #include "conct_memory.h"
 #include "conct_string.h"
+#include "conct_value_builder.h"
 
 namespace conct
 {
@@ -35,17 +36,19 @@ namespace conct
 		return pData;
 	}
 
-	void DataBuilder::pushData( const void* pData, uintreg length )
+	void* DataBuilder::pushData( const void* pData, uintreg length )
 	{
 		void* pTargetData = m_pData;
 		m_pData += length;
 
 		if( isExceeded() )
 		{
-			return;
+			return nullptr;
 		}
 
 		memory::copy( pTargetData, pData, length );
+
+		return pTargetData;
 	}
 
 	const char* DataBuilder::pushString( const char* pString )
@@ -67,7 +70,8 @@ namespace conct
 
 	void DataBuilder::pushValueData( Value* pTargetValue, const Value* pSourceValue )
 	{
-
+		ValueBuilder valueBuilder( this, pTargetValue );
+		valueBuilder.setValue( pSourceValue );
 	}
 
 	ArrayView< uint8 > DataBuilder::toArrayView() const

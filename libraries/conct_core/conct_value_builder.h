@@ -11,9 +11,10 @@ namespace conct
 	public:
 
 						ValueBuilder( void* pBuffer, uintreg bufferSize );
+						ValueBuilder( DataBuilder* pBuilder, Value* pValue );
 
 		const Value*	getValue() const { return m_pValue; }
-		uintreg			getValueSize() const { return m_builder.getSize(); }
+		uintreg			getValueSize() const { return m_pBuilder->getSize(); }
 
 		ResultId		setVoid();
 		ResultId		setBoolean( bool value );
@@ -26,15 +27,20 @@ namespace conct
 		ResultId		setInstanceId( InstanceId value );
 		ResultId		setTypeCrc( TypeCrc value );
 
+		ResultId		setStruct( const void* pData, uintreg dataSize );
 		template< class T >
 		ResultId		setStruct( const T& value );
 
+		ResultId		setArray( const void* pData, uintreg elementSize, uintreg count );
 		template< class T >
 		ResultId		setArray( const ArrayView< T >& value );
+
+		ResultId		setValue( const Value* pValue );
 
 	private:
 
 		DataBuilder		m_builder;
+		DataBuilder*	m_pBuilder;
 		Value*			m_pValue;
 	};
 }

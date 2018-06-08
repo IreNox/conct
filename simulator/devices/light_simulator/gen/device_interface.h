@@ -1,13 +1,13 @@
 #pragma once
 
-#include "core_device.h"
+#include "conct_device.h"
 #include "conct_runtime_low.h"
 
 #include "conct_port_rs485_sim.h"
 
-#include "core_device_proxy.h"
 #include "home_light_proxy.h"
 #include "home_rgb_proxy.h"
+#include "core_device_proxy.h"
 #include "home_dimmer_proxy.h"
 
 #include "../home_light_impl.h"
@@ -23,22 +23,26 @@ namespace conct
 		void setupDevice();
 		void loopDevice();
 
-		virtual void getInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
+		virtual const char* getName() const CONCT_OVERRIDE_FINAL;
 
 	protected:
+
+		RuntimeLow m_runtime;
 
 		virtual void setup() = 0;
 		virtual void loop() = 0;
 
-	private:
+		virtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;
+		virtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;
+		virtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
 
-		RuntimeLow m_runtime;
+	private:
 
 		PortRs485Sim m_port0;
 
-		DeviceProxy m_proxyDevice;
 		LightProxy m_proxyLight;
 		RGBProxy m_proxyRGB;
+		DeviceProxy m_proxyDevice;
 		DimmerProxy m_proxyDimmer;
 
 		LightImpl m_instanceLight;

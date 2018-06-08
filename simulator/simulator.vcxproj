@@ -26,6 +26,7 @@
     <ClCompile Include="..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_value.cpp" />
+    <ClCompile Include="..\libraries\conct_core\conct_value_builder.cpp" />
     <ClCompile Include="..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\libraries\conct_core_high\conct_dynamic_string.cpp" />
     <ClCompile Include="..\libraries\conct_core_high\conct_string_tools.cpp" />
@@ -65,10 +66,12 @@
     <ClInclude Include="..\libraries\conct_core\conct_reader.h" />
     <ClInclude Include="..\libraries\conct_core\conct_relative_array.h" />
     <ClInclude Include="..\libraries\conct_core\conct_relative_pointer.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_result.h" />
     <ClInclude Include="..\libraries\conct_core\conct_string.h" />
     <ClInclude Include="..\libraries\conct_core\conct_structs.h" />
     <ClInclude Include="..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\libraries\conct_core\conct_value.h" />
+    <ClInclude Include="..\libraries\conct_core\conct_value_builder.h" />
     <ClInclude Include="..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\libraries\conct_core_high\conct_core_high.h" />
     <ClInclude Include="..\libraries\conct_core_high\conct_dynamic_string.h" />
@@ -110,6 +113,7 @@
     <None Include="..\libraries\conct_core\conct_relative_array.inl" />
     <None Include="..\libraries\conct_core\conct_relative_pointer.inl" />
     <None Include="..\libraries\conct_core\conct_string.inl" />
+    <None Include="..\libraries\conct_core\conct_value_builder.inl" />
     <None Include="..\libraries\conct_core\conct_writer.inl" />
     <None Include="..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="..\libraries\conct_runtime_high\conct_command.inl" />

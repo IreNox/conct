@@ -12,13 +12,7 @@ namespace conct
 {
 	void RuntimeHigh::setup( Device* pDevice )
 	{
-		ArrayView< LocalInstance > instances;
-		pDevice->getInstances( instances );
-
-		for( uint i = 0u; i < instances.getCount(); ++i )
-		{
-			m_instances.push_back( instances[ i ] );
-		}
+		m_pDevice = pDevice;
 	}
 
 	void RuntimeHigh::registerPort( Port* pPort )

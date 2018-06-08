@@ -15,6 +15,8 @@ namespace conct
 		void			set( T* pData, uintreg count );
 		void			clear();
 
+		bool			isSet() const;
+
 		T*				getData() { return m_pData; }
 		const T*		getData() const { return m_pData; }
 

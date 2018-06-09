@@ -1,4 +1,4 @@
 /**/.vs
-/generator/build
-/simulator/build
+/apps/generator/build
+/apps/simulator/build
 *.user

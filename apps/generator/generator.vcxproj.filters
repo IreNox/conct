@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="sources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{b3543047-4895-464d-89fa-030fb965855e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries">
+      <UniqueIdentifier>{dc85726e-6739-4116-ad68-a6202228522d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_core">
+      <UniqueIdentifier>{5fbe5e9e-a23d-417a-a4b9-4c4d31dd155c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\tool_base">
+      <UniqueIdentifier>{5e57210f-e99e-41f1-91be-9f9897994d55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared\third_party">
+      <UniqueIdentifier>{e2bc6a43-995e-48aa-af27-1d6a13023863}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\generator.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hardware.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\device.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hardware_collection.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\port.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\port_collection.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\third_party\tinyxml2.h">
+      <Filter>shared\third_party</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\interface_type.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\struct_type.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\type.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\type_collection.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\xml_helper.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\array_type.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\tool_base\base.h">
+      <Filter>shared\tool_base</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\generator.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\device.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\hardware.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\hardware_collection.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\port.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\port_collection.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\main.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\third_party\tinyxml2.cpp">
+      <Filter>shared\third_party</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\struct_type.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\type.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\type_collection.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\xml_helper.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\array_type.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\base.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\tool_base\interface_type.cpp">
+      <Filter>shared\tool_base</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -13,7 +13,7 @@ namespace conct
 
 	Guid Device::getGuid() const
 	{
-		return Guid( this );
+		return Guid( 42u );
 	}
 
 	ArrayView< Instance > Device::getInstances() const

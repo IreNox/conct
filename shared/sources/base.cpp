@@ -40,7 +40,7 @@ namespace conct
 			out <<= 1;
 			out |= ( *pBytes >> bits_read ) & 1; // item a) work from the least significant bits
 
-											   /* Increment bit counter: */
+			/* Increment bit counter: */
 			bits_read++;
 			if( bits_read > 7 )
 			{

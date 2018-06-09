@@ -14,13 +14,14 @@ namespace conct
 					~Vector();
 
 		bool		isEmpty() const;
-		uintreg		getSize() const;
+		uintreg		getCount() const;
 		uintreg		getCapacity() const;
 
 		void		reserve( uintreg size );
 
 		T&			pushBack();
 		void		pushBack( const T& value );
+		void		pushRange( const T* pData, uintreg count );
 
 		void		popBack();
 
@@ -31,13 +32,16 @@ namespace conct
 		void		eraseUnsorted( const T* pValue );
 		void		eraseUnsortedByIndex( uintreg index );
 
+		T*			getData();
+		const T*	getData() const;
+
 		T&			operator[]( uintreg index );
 		const T&	operator[]( uintreg index ) const;
 
 	private:
 
 		T*			m_pData;
-		uintreg		m_size;
+		uintreg		m_count;
 		uintreg		m_capacity;
 
 		void		checkCapacity( uintreg size );

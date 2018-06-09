@@ -1,28 +1,10 @@
 #pragma once
 
 #include "conct_core.h"
+#include "conct_value_type.h"
 
 namespace conct
 {
-	enum ValueType : uint8
-	{
-		ValueType_Void,
-		ValueType_Boolean,
-		ValueType_Integer,
-		ValueType_Unsigned,
-		ValueType_String,
-		ValueType_PercentValue,
-		ValueType_Guid,
-		ValueType_DeviceId,
-		ValueType_InstanceId,
-		ValueType_TypeCrc,
-		ValueType_Struct,
-		ValueType_Array,
-
-		ValueType_Count
-	};
-	const char*	getValueTypeName( ValueType value );
-
 	struct StringValueData
 	{
 		uint16	offset;
@@ -32,6 +14,7 @@ namespace conct
 	{
 		uint16	offset;
 		uint16	size;
+		TypeCrc	type;
 	};
 
 	struct ArrayValueData
@@ -39,6 +22,7 @@ namespace conct
 		uint16	offset;
 		uint8	count;
 		uint8	size;
+		TypeCrc	type;
 	};
 
 	union ValueData
@@ -73,10 +57,12 @@ namespace conct
 
 		const void*		getStructData() const;
 		uintreg			getStructSize() const;
+		TypeCrc			getStructType() const;
 
 		const void*		getArrayData() const;
 		uintreg			getArrayElementSize() const;
 		uintreg			getArrayCount() const;
+		TypeCrc			getArrayType() const;
 
 		void			setVoid();
 		void			setBoolean( bool value );

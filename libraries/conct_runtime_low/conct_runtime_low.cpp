@@ -1,5 +1,6 @@
 #include "conct_runtime_low.h"
 
+#include "conct_buffered_value_builder.h"
 #include "conct_device.h"
 #include "conct_functions.h"
 #include "conct_memory.h"
@@ -41,12 +42,12 @@ namespace conct
 		return m_workingData + m_workingDataOffset;
 	}
 
-	uint8 RuntimeLow::getRemainingWorkingData() const
+	uintreg RuntimeLow::getRemainingWorkingData() const
 	{
 		return sizeof( m_workingData ) - m_workingDataOffset;
 	}
 
-	void RuntimeLow::setState( State state, uint16 stateValue /* = 0u */ )
+	void RuntimeLow::setState( State state, uintreg stateValue /* = 0u */ )
 	{
 		m_state			= state;
 		m_stateValue	= stateValue;
@@ -73,10 +74,6 @@ namespace conct
 		{
 			switch( m_state )
 			{
-			//case State_ReadUntilNextMessage:
-			//	result = readUntilNextMessage( reader );
-			//	break;
-
 			case State_ReadBaseHeader:
 				result = readBaseHeader( reader );
 				break;
@@ -105,42 +102,6 @@ namespace conct
 			}
 		}
 	}
-
-	//RuntimeLow::ReadResult RuntimeLow::readUntilNextMessage( Reader& reader )
-	//{
-	//	uint16& magic = *( uint16* )m_workingData;
-
-	//	if( m_stateValue < 2u )
-	//	{
-	//		m_stateValue += reader.readShort( magic, uintreg( sizeof( s_messageBaseHeaderMagic ) - m_stateValue ) );
-
-	//		if( m_stateValue <= sizeof( s_messageBaseHeaderMagic ) )
-	//		{
-	//			return ReadResult_WaitingData;
-	//		}
-
-	//		if( magic == s_messageBaseHeaderMagic )
-	//		{
-	//			setState( State_ReadBaseHeader );
-	//			return ReadResult_Ok;
-	//		}
-	//	}
-
-	//	uint8 nextByte = 0u;
-	//	while( reader.readByte( nextByte ) )
-	//	{
-	//		magic <<= 8u;
-	//		magic |= nextByte;
-
-	//		if( magic == s_messageBaseHeaderMagic )
-	//		{
-	//			setState( State_ReadBaseHeader );
-	//			return ReadResult_Ok;
-	//		}
-	//	}
-
-	//	return ReadResult_WaitingData;
-	//}
 
 	RuntimeLow::ReadResult RuntimeLow::readBaseHeader( Reader& reader )
 	{
@@ -216,34 +177,9 @@ namespace conct
 			sendPingResponse();
 			break;
 
-		case MessageType_GetInstanceRequest:
-			{
-				const GetInstanceRequest& request = *reinterpret_cast< const GetInstanceRequest* >( m_workingData + m_destinationAddressSize );
-
-				InstanceId instanceId = m_pDevice->findFirstInstance( request.typeCrc );
-				if( instanceId == InvalidInstanceId )
-				{
-					sendErrorResponse( ResultId_NoSuchInstance );
-					return;
-				}
-
-				const LocalInstance* pInstance = m_pDevice->getInstance( instanceId );
-				if( pInstance == nullptr )
-				{
-					sendErrorResponse( ResultId_NoSuchInstance );
-					return;
-				}
-
-				GetInstanceResponse response;
-				response.instanceId = pInstance->id;
-
-				sendResponse( MessageType_GetInstanceResponse, &response, sizeof( response ) );
-			}
-			break;
-
 		case MessageType_GetPropertyRequest:
 			{
-				ValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
+				BufferedValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
 				{
 					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_destinationAddressSize );
 
@@ -288,7 +224,7 @@ namespace conct
 
 		case MessageType_CallFunctionRequest:
 			{
-				ValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
+				BufferedValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
 				{
 					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( m_workingData + m_destinationAddressSize );
 
@@ -332,7 +268,7 @@ namespace conct
 		sendResponse( MessageType_ErrorResponse, nullptr, 0u );
 	}
 
-	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uint8 dataLength )
+	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uintreg dataLength )
 	{
 		const uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
 		if( sizeof( m_workingData ) < packetSize )
@@ -353,7 +289,7 @@ namespace conct
 
 		pBaseHeader->sourceHops			= 1u;
 		pBaseHeader->destinationHops	= m_destinationAddressSize;
-		pBaseHeader->payloadSize		= dataLength;
+		pBaseHeader->payloadSize		= uint16( dataLength );
 		pBaseHeader->commandId			= m_commandId;
 		pBaseHeader->messageType		= responseType;
 		pBaseHeader->messageResult		= m_result;

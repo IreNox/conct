@@ -3,10 +3,11 @@
 #include "console_plugin.h"
 
 #include "conct_core.h"
+#include "conct_dynamic_string.h"
 #include "conct_runtime.h"
 #include "conct_structs.h"
 #include "conct_timer.h"
-#include "conct_dynamic_string.h"
+#include "conct_value_high.h"
 
 #include <vector>
 #include <deque>
@@ -40,7 +41,7 @@ namespace conct
 			State_Invalid = -1,
 
 			State_Action,
-			State_Device,
+			//State_Device,
 			State_Instance,
 			State_Type,
 			State_Property,
@@ -56,7 +57,6 @@ namespace conct
 		{
 			Action_Invalid = -1,
 
-			Action_GetInstance,
 			Action_GetProperty,
 			Action_SetProperty,
 			Action_CallFunction,
@@ -99,7 +99,7 @@ namespace conct
 		const InterfaceType*					m_pInterface;
 		const InterfaceProperty*				m_pProperty;
 		const InterfaceFunction*				m_pFunction;
-		std::vector< Value >					m_values;
+		std::vector< ValueHigh >				m_values;
 
 		ControllerDeviceVector					m_devices;
 		ControllerInstanceVector				m_instances;
@@ -117,8 +117,8 @@ namespace conct
 		void									setValueState( ValueType targetType );
 		void									setPopupState( const DynamicString& text );
 
-		bool									setValueFromString( Value& value, const DynamicString& text );
-		DynamicString							getStringFromValue( const Value& value );
+		bool									setValueFromString( ValueHigh& value, const DynamicString& text );
+		DynamicString							getStringFromValue( const ValueHigh& value );
 
 		void									drawClear() const;
 		void									drawList() const;
@@ -127,14 +127,13 @@ namespace conct
 		void									drawPopup() const;
 
 		void									buildActions();
-		void									buildDevices();
+		//void									buildDevices();
 		void									buildInstances();
 		void									buildTypes();
 		void									buildProperties();
 		void									buildFunctions();
 
 		void									executeAction( ConsoleDevice& device );
-		void									executeGetInstanceAction( ConsoleDevice& device );
 		void									executeGetPropertyAction( ConsoleDevice& device );
 		void									executeSetPropertyAction( ConsoleDevice& device );
 		void									executeCallFunctionAction( ConsoleDevice& device );

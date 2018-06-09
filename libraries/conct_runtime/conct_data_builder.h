@@ -6,6 +6,7 @@
 
 namespace conct
 {
+	class ValueHigh;
 	struct Value;
 
 	class DataBuilder
@@ -24,6 +25,11 @@ namespace conct
 		uintreg				getSize() const { return m_pData - m_pBaseData; }
 		uintreg				getRemainingSize() const { return m_pEnd - m_pData; }
 
+		void*				pushData( uintreg length );
+		void*				pushData( const void* pData, uintreg length );
+
+		const char*			pushString( const char* pString );
+
 		template< class T >
 		T*					pushStruct();
 		template< class T >
@@ -32,11 +38,8 @@ namespace conct
 		template< class T >
 		Array< T >			pushArray( uintreg count );
 
-		void*				pushData( uintreg length );
-		void*				pushData( const void* pData, uintreg length );
-
-		const char*			pushString( const char* pString );
-		void				pushValueData( Value* pTargetValue, const Value* pSourceValue );
+		template< class T >
+		void				pushValueData( Value* pTargetValue, const T* pSourceValue );
 
 		ArrayView< uint8 >	toArrayView() const;
 

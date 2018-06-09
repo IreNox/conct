@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="extern">
-      <UniqueIdentifier>{45fad8e7-bfde-4d79-bfef-3728d6ee24ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\conct_core">
-      <UniqueIdentifier>{14f85506-4610-4f8f-b417-4fa81076847d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\conct_port_rs485_sim">
-      <UniqueIdentifier>{ccd95ae6-272f-4f05-8a7a-0fdae1b13bde}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -21,14 +12,23 @@
     <Filter Include="gen">
       <UniqueIdentifier>{22bd782f-0791-4e63-bc18-2a3ef2d7ece2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="extern\conct_runtime_low">
-      <UniqueIdentifier>{1b93431c-39eb-47f8-bd15-8548c282f915}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="extern\conct_runtime">
-      <UniqueIdentifier>{9e33ed70-a1b1-48ad-ab6f-ce3e9b73b081}</UniqueIdentifier>
-    </Filter>
     <Filter Include="shared">
       <UniqueIdentifier>{84a3fe5c-9ed4-4574-bbc7-6971b35f2fb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries">
+      <UniqueIdentifier>{45fad8e7-bfde-4d79-bfef-3728d6ee24ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_core">
+      <UniqueIdentifier>{14f85506-4610-4f8f-b417-4fa81076847d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_rs485_sim">
+      <UniqueIdentifier>{ccd95ae6-272f-4f05-8a7a-0fdae1b13bde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_runtime_low">
+      <UniqueIdentifier>{1b93431c-39eb-47f8-bd15-8548c282f915}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_runtime">
+      <UniqueIdentifier>{9e33ed70-a1b1-48ad-ab6f-ce3e9b73b081}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,52 +69,40 @@
       <Filter>gen</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_value.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h">
-      <Filter>extern\conct_port_rs485_sim</Filter>
+      <Filter>libraries\conct_port_rs485_sim</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.h">
-      <Filter>extern\conct_runtime_low</Filter>
+      <Filter>libraries\conct_runtime_low</Filter>
     </ClInclude>
     <ClInclude Include="light_simulator.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h">
-      <Filter>extern\conct_runtime</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\shared\i_simulator_context.h">
       <Filter>shared</Filter>
@@ -123,25 +111,43 @@
       <Filter>shared</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_string.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_number_limits.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_memory.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_value_builder.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_core\conct_result.h">
-      <Filter>extern\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_data_builder.h">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="gen\core_device_proxy.h">
       <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_runtime.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_value.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_value_builder.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_data_builder.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_device.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_value_type.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h">
+      <Filter>libraries\conct_runtime</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,40 +179,46 @@
       <Filter>gen</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_value.cpp">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
-      <Filter>extern\conct_port_rs485_sim</Filter>
+      <Filter>libraries\conct_port_rs485_sim</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp">
-      <Filter>extern\conct_runtime_low</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_device.cpp">
-      <Filter>extern\conct_runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp">
-      <Filter>extern\conct_runtime</Filter>
+      <Filter>libraries\conct_runtime_low</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_core\conct_memory.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_value_builder.cpp">
-      <Filter>extern\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_data_builder.cpp">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
     <ClCompile Include="gen\core_device_proxy.cpp">
       <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_proxy.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_value.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_value_builder.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_data_builder.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_device.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_value_type.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp">
+      <Filter>libraries\conct_runtime</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -214,31 +226,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\libraries\conct_core\conct_reader.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_writer.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_array.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_flags.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_string.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_memory.inl">
-      <Filter>extern\conct_core</Filter>
+      <Filter>libraries\conct_core</Filter>
     </None>
-    <None Include="..\..\..\libraries\conct_core\conct_value_builder.inl">
-      <Filter>extern\conct_core</Filter>
+    <None Include="..\..\..\libraries\conct_runtime\conct_value_builder.inl">
+      <Filter>libraries\conct_runtime</Filter>
     </None>
-    <None Include="..\..\..\libraries\conct_core\conct_data_builder.inl">
-      <Filter>extern\conct_core</Filter>
+    <None Include="..\..\..\libraries\conct_runtime\conct_data_builder.inl">
+      <Filter>libraries\conct_runtime</Filter>
     </None>
   </ItemGroup>
 </Project>

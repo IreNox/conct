@@ -6,6 +6,7 @@
 #include "conct_proxy.h"
 #include "conct_reader.h"
 #include "conct_runtime.h"
+#include "conct_value_high.h"
 #include "conct_writer.h"
 
 namespace conct
@@ -225,33 +226,21 @@ namespace conct
 		switch( package.baseHeader.messageType )
 		{
 		case MessageType_ErrorResponse:
+			{
+				if( pCommandBase != nullptr )
+				{
+					pCommandBase->setResponse( package.baseHeader.messageResult );
+				}
+			}
 			break;
 
 		case MessageType_PingRequest:
+			{
+				//sendPackage( nullptr, package.sourceAddress, ArrayView< uint8 >(), MessageType_PingResponse );
+			}
 			break;
 
 		case MessageType_PingResponse:
-			break;
-
-		case MessageType_GetInstanceRequest:
-			break;
-
-		case MessageType_GetInstanceResponse:
-			{
-				const GetInstanceResponse& response = *( const GetInstanceResponse* )package.payload.data();
-
-				RemoteInstance instance;
-				instance.id = response.instanceId;
-
-				for( uintreg i = 0u; i < package.sourceAddress.size(); ++i )
-				{
-					instance.address.address[ i ] = package.sourceAddress[ i ];
-				}
-				instance.address.address[ package.sourceAddress.size() ] = InvalidDeviceId;
-
-				Command< RemoteInstance >* pCommand = static_cast< Command< RemoteInstance >* >( pCommandBase );
-				pCommand->setResponse( package.baseHeader.messageResult, instance );
-			}
 			break;
 
 		case MessageType_GetPropertyRequest:
@@ -261,7 +250,7 @@ namespace conct
 			{
 				const GetPropertyResponse& response = *( const GetPropertyResponse* )package.payload.data();
 
-				Command< Value >* pCommand = static_cast< Command< Value >* >( pCommandBase );
+				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( pCommandBase );
 				pCommand->setResponse( package.baseHeader.messageResult, response.value );
 			}
 			break;
@@ -282,7 +271,7 @@ namespace conct
 			{
 				const CallFunctionResponse& response = *( const CallFunctionResponse* )package.payload.data();
 
-				Command< Value >* pCommand = static_cast< Command< Value >* >( pCommandBase );
+				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( pCommandBase );
 				pCommand->setResponse( package.baseHeader.messageResult, response.value );
 			}
 			break;

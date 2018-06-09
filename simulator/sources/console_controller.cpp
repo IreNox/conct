@@ -227,10 +227,6 @@ namespace conct
 
 				switch( m_action )
 				{
-				case Action_GetInstance:
-					setState( State_Device );
-					break;
-
 				case Action_GetProperty:
 				case Action_SetProperty:
 				case Action_CallFunction:
@@ -245,26 +241,26 @@ namespace conct
 			}
 			break;
 
-		case State_Device:
-			{
-				m_pDevice = &m_devices[ m_index ];
+		//case State_Device:
+		//	{
+		//		m_pDevice = &m_devices[ m_index ];
 
-				switch( m_action )
-				{
-				case Action_GetInstance:
-					setState( State_Type );
-					break;
+		//		switch( m_action )
+		//		{
+		//		case Action_GetInstance:
+		//			setState( State_Type );
+		//			break;
 
-				case Action_GetProperty:
-				case Action_SetProperty:
-				case Action_CallFunction:
-				case Action_Invalid:
-				case Action_Count:
-					setState( State_Action );
-					break;
-				}
-			}
-			break;
+		//		case Action_GetProperty:
+		//		case Action_SetProperty:
+		//		case Action_CallFunction:
+		//		case Action_Invalid:
+		//		case Action_Count:
+		//			setState( State_Action );
+		//			break;
+		//		}
+		//	}
+		//	break;
 
 		case State_Instance:
 			{
@@ -281,7 +277,6 @@ namespace conct
 					setState( State_Function );
 					break;
 
-				case Action_GetInstance:
 				case Action_Invalid:
 				case Action_Count:
 					setState( State_Action );
@@ -337,7 +332,7 @@ namespace conct
 
 		case State_Value:
 			{
-				Value value;
+				ValueHigh value;
 				if( !setValueFromString( value, m_valueText ) )
 				{
 					setPopupState( "Value can't interpreted."_s );
@@ -420,9 +415,9 @@ namespace conct
 			buildActions();
 			break;
 
-		case State_Device:
-			buildDevices();
-			break;
+		//case State_Device:
+		//	buildDevices();
+		//	break;
 
 		case State_Instance:
 			buildInstances();
@@ -479,7 +474,7 @@ namespace conct
 		setState( State_Popup );
 	}
 
-	bool ConsoleController::setValueFromString( Value& value, const DynamicString& text )
+	bool ConsoleController::setValueFromString( ValueHigh& value, const DynamicString& text )
 	{
 		switch( m_valueType )
 		{
@@ -596,9 +591,9 @@ namespace conct
 		return false;
 	}
 
-	DynamicString ConsoleController::getStringFromValue( const Value& value )
+	DynamicString ConsoleController::getStringFromValue( const ValueHigh& value )
 	{
-		switch( value.type )
+		switch( value.getType() )
 		{
 		case ValueType_Void:
 			return "void"_s;
@@ -651,7 +646,7 @@ namespace conct
 		static const char* s_aStateNames[] =
 		{
 			"Action",
-			"Device",
+			//"Device",
 			"Instance",
 			"Type",
 			"Property",
@@ -747,20 +742,19 @@ namespace conct
 	void ConsoleController::buildActions()
 	{
 		m_list = {
-			"Get Instance"_s,
 			"Get Property"_s,
 			"Set Property"_s,
 			"Call Function"_s,
 		};
 	}
 
-	void ConsoleController::buildDevices()
-	{
-		for( const ControllerDevice& device : m_devices )
-		{
-			m_list.push_back( device.name );
-		}
-	}
+	//void ConsoleController::buildDevices()
+	//{
+	//	for( const ControllerDevice& device : m_devices )
+	//	{
+	//		m_list.push_back( device.name );
+	//	}
+	//}
 
 	void ConsoleController::buildInstances()
 	{
@@ -798,10 +792,6 @@ namespace conct
 	{
 		switch( m_action )
 		{
-		case Action_GetInstance:
-			executeGetInstanceAction( device );
-			break;
-
 		case Action_GetProperty:
 			executeGetPropertyAction( device );
 			break;
@@ -825,21 +815,9 @@ namespace conct
 		}
 	}
 
-	void ConsoleController::executeGetInstanceAction( ConsoleDevice& device )
-	{
-		Command< RemoteInstance >* pCommand = device.data.pController->getInstance( m_pDevice->address, m_pInterface->getCrc() );
-		if( pCommand == nullptr )
-		{
-			setPopupState( "Failed to start 'getInstance' command."_s );
-			return;
-		}
-
-		m_pRunningCommand = pCommand;
-	}
-
 	void ConsoleController::executeGetPropertyAction( ConsoleDevice& device )
 	{
-		Command< Value >* pCommand = device.data.pController->getProperty( m_pInstance->instance, m_pProperty->name.c_str() );
+		Command< ValueHigh >* pCommand = device.data.pController->getProperty( m_pInstance->instance, m_pProperty->name.c_str() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'getProperty' command."_s );
@@ -863,7 +841,7 @@ namespace conct
 
 	void ConsoleController::executeCallFunctionAction( ConsoleDevice& device )
 	{
-		ArrayView< Value > arguments;
+		ArrayView< ValueHigh > arguments;
 		arguments.set( m_values.data(), m_values.size() );
 		CommandBase* pCommand = device.data.pController->callFunction( m_pInstance->instance, m_pFunction->name.c_str(), arguments );
 		if( pCommand == nullptr )
@@ -892,23 +870,23 @@ namespace conct
 
 		switch( m_action )
 		{
-		case Action_GetInstance:
-			{
-				Command< RemoteInstance >* pCommand = static_cast< Command< RemoteInstance >* >( m_pRunningCommand );
+		//case Action_GetInstance:
+		//	{
+		//		Command< RemoteInstance >* pCommand = static_cast< Command< RemoteInstance >* >( m_pRunningCommand );
 
-				ControllerInstance instance;
-				instance.instance	= pCommand->getData();
-				instance.name		= DynamicString( m_pInterface->getFullName().c_str() ) + " @ " + m_pDevice->name;
-				instance.pType		= m_pInterface;
+		//		ControllerInstance instance;
+		//		instance.instance	= pCommand->getData();
+		//		instance.name		= DynamicString( m_pInterface->getFullName().c_str() ) + " @ " + m_pDevice->name;
+		//		instance.pType		= m_pInterface;
 
-				m_instances.push_back( instance );
-			}
-			break;
+		//		m_instances.push_back( instance );
+		//	}
+		//	break;
 
 		case Action_GetProperty:
 		case Action_CallFunction:
 			{
-				Command< Value >* pCommand = static_cast< Command< Value >* >( m_pRunningCommand );
+				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( m_pRunningCommand );
 
 				DynamicString text;
 				if( m_action == Action_GetProperty )

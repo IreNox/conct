@@ -1,5 +1,7 @@
 #pragma once
 
+#include "conct_value_builder.h"
+
 namespace conct
 {
 	template< class T >
@@ -24,6 +26,13 @@ namespace conct
 		}
 
 		return Array< T >(  pData, count );
+	}
+
+	template< class T >
+	void DataBuilder::pushValueData( Value* pTargetValue, const T* pSourceValue )
+	{
+		ValueBuilder valueBuilder( this, pTargetValue );
+		valueBuilder.setValue( pSourceValue );
 	}
 
 	template< uintreg TBufferSize >

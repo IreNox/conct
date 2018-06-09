@@ -68,12 +68,6 @@ namespace conct
 		return pData;
 	}
 
-	void DataBuilder::pushValueData( Value* pTargetValue, const Value* pSourceValue )
-	{
-		ValueBuilder valueBuilder( this, pTargetValue );
-		valueBuilder.setValue( pSourceValue );
-	}
-
 	ArrayView< uint8 > DataBuilder::toArrayView() const
 	{
 		if( isExceeded() )

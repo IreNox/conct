@@ -4,29 +4,6 @@
 
 namespace conct
 {
-	const char* getValueTypeName( ValueType value )
-	{
-		static const char* s_aValueTypeNames[] =
-		{
-			"Void",
-			"Boolean",
-			"Integer",
-			"Unsigned",
-			"String",
-			"PercentValue",
-			"Guid",
-			"Device",
-			"Instance",
-			"Type",
-			"Structure",
-			"Array"
-		};
-		CONCT_STATIC_ASSERT( CONCT_COUNT( s_aValueTypeNames ) == ValueType_Count );
-
-		CONCT_ASSERT( value < ValueType_Count );
-		return s_aValueTypeNames[ value ];
-	}
-
 	bool Value::getBoolean() const
 	{
 		CONCT_ASSERT( type == ValueType_Boolean );
@@ -103,6 +80,12 @@ namespace conct
 		return data.structure.size;
 	}
 
+	TypeCrc Value::getStructType() const
+	{
+		CONCT_ASSERT( type == ValueType_Struct );
+		return data.structure.type;
+	}
+
 	const void* Value::getArrayData() const
 	{
 		CONCT_ASSERT( type == ValueType_Array );
@@ -124,6 +107,12 @@ namespace conct
 	{
 		CONCT_ASSERT( type == ValueType_Array );
 		return data.array.count;
+	}
+
+	TypeCrc Value::getArrayType() const
+	{
+		CONCT_ASSERT( type == ValueType_Array );
+		return data.array.type;
 	}
 
 	void Value::setVoid()

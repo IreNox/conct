@@ -3,6 +3,7 @@
 #include "conct_array.h"
 #include "conct_array_view.h"
 #include "conct_command.h"
+#include "conct_value_high.h"
 #include "conct_vector.h"
 
 namespace conct
@@ -20,13 +21,10 @@ namespace conct
 		void								setup( RuntimeHigh* pRuntime );
 		void								loop();
 
-		Command< RemoteInstance >*			getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
-		Command< Array< RemoteInstance > >*	findInstances( const DeviceAddress& deviceAddress, TypeCrc typeCrc );
+		Command< ValueHigh >*				getProperty( const RemoteInstance& instance, const char* pName );
+		CommandBase*						setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value );
 
-		Command< Value >*					getProperty( const RemoteInstance& instance, const char* pName );
-		CommandBase*						setProperty( const RemoteInstance& instance, const char* pName, const Value& value );
-
-		Command< Value >*					callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< Value >& arguments );
+		Command< ValueHigh >*				callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments );
 
 		void								releaseCommand( CommandBase* pCommand );
 

@@ -23,7 +23,7 @@ namespace conct
 
 	void Controller::loop()
 	{
-		for( uintreg i = 0u; i < m_releaseCommand.getSize(); ++i )
+		for( uintreg i = 0u; i < m_releaseCommand.getCount(); ++i )
 		{
 			CommandBase* pCommand = m_releaseCommand[ i ];
 			if( !pCommand->isFinish() )
@@ -37,46 +37,29 @@ namespace conct
 		}
 	}
 
-	Command< RemoteInstance >* Controller::getInstance( const DeviceAddress& deviceAddress, TypeCrc typeCrc )
-	{
-		StructDataBuilder< GetInstanceRequest > dataBuilder;
-		GetInstanceRequest* pRequest = dataBuilder.pushGenericStruct();
-		pRequest->typeCrc = typeCrc;
-
-		return beginCommand< Command< RemoteInstance > >( deviceAddress, dataBuilder, MessageType_GetInstanceRequest );
-	}
-
-	Command< Array< RemoteInstance > >* Controller::findInstances( const DeviceAddress& deviceAddress, TypeCrc typeCrc )
-	{
-		StructDataBuilder< FindInstancesRequest > dataBuilder;
-		FindInstancesRequest* pRequest = dataBuilder.pushGenericStruct();
-		pRequest->typeCrc = typeCrc;
-
-		return beginCommand< Command< Array< RemoteInstance > > >( deviceAddress, dataBuilder, MessageType_FindInstancesRequest );
-	}
-
-	Command< Value >* Controller::getProperty( const RemoteInstance& instance, const char* pName )
+	Command< ValueHigh >* Controller::getProperty( const RemoteInstance& instance, const char* pName )
 	{
 		BufferedDataBuilder< 1024u > dataBuilder;
 		GetPropertyRequest* pRequest = dataBuilder.pushStruct< GetPropertyRequest >();
 		pRequest->instanceId	= instance.id;
 		pRequest->name			= dataBuilder.pushString( pName );
 
-		return beginCommand< Command< Value > >( instance.address, dataBuilder, MessageType_GetPropertyRequest );
+		return beginCommand< Command< ValueHigh > >( instance.address, dataBuilder, MessageType_GetPropertyRequest );
 	}
 
-	CommandBase* Controller::setProperty( const RemoteInstance& instance, const char* pName, const Value& value )
+	CommandBase* Controller::setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value )
 	{
 		BufferedDataBuilder< 1024u > dataBuilder;
 		SetPropertyRequest* pRequest = dataBuilder.pushStruct< SetPropertyRequest >();
 		pRequest->instanceId	= instance.id;
-		pRequest->value			= value;
 		pRequest->name			= dataBuilder.pushString( pName );
+
+		dataBuilder.pushValueData( &pRequest->value, &value );
 
 		return beginCommand< CommandBase >( instance.address, dataBuilder, MessageType_SetPropertyRequest );
 	}
 
-	Command< Value >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< Value >& arguments )
+	Command< ValueHigh >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments )
 	{
 		BufferedDataBuilder< 1024u > dataBuilder;
 		CallFunctionRequest* pRequest = dataBuilder.pushStruct< CallFunctionRequest >();
@@ -91,7 +74,7 @@ namespace conct
 			dataBuilder.pushValueData( &workingArguments[ i ], &arguments[ i ] );
 		}
 
-		return beginCommand< Command< Value > >( instance.address, dataBuilder, MessageType_CallFunctionRequest );
+		return beginCommand< Command< ValueHigh > >( instance.address, dataBuilder, MessageType_CallFunctionRequest );
 	}
 
 	void Controller::releaseCommand( CommandBase* pCommand )

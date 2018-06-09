@@ -68,9 +68,6 @@
     <ClInclude Include="..\shared\include\array_type.h">
       <Filter>shared\include</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_data_builder.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_flags.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
@@ -104,9 +101,6 @@
     <ClInclude Include="..\libraries\conct_core\conct_timer.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
-    <ClInclude Include="..\libraries\conct_core\conct_value.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
     <ClInclude Include="..\libraries\conct_core\conct_writer.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
@@ -124,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\shared\include\struct_type.h">
       <Filter>shared\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\libraries\conct_core\conct_value_type.h">
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -169,9 +166,6 @@
     <ClCompile Include="..\shared\sources\interface_type.cpp">
       <Filter>shared\sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_data_builder.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\libraries\conct_core\conct_functions.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
@@ -184,9 +178,6 @@
     <ClCompile Include="..\libraries\conct_core\conct_timer.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\libraries\conct_core\conct_value.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\libraries\conct_core\conct_writer.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
@@ -196,11 +187,11 @@
     <ClCompile Include="..\shared\sources\struct_type.cpp">
       <Filter>shared\sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\libraries\conct_core\conct_value_type.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\libraries\conct_core\conct_data_builder.inl">
-      <Filter>libraries\conct_core</Filter>
-    </None>
     <None Include="..\libraries\conct_core\conct_flags.inl">
       <Filter>libraries\conct_core</Filter>
     </None>

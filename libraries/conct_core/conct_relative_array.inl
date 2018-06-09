@@ -43,7 +43,7 @@ namespace conct
 		{
 			CONCT_ASSERT( ( uintptr )pData - ( uintptr )this < NumberLimits< TValueType >::max() );
 			m_size = size;
-			m_offset = ( uintptr )pData - ( uintptr )this;
+			m_offset = TValueType( uintptr( pData ) - uintptr( this ) );
 		}
 	}
 
@@ -81,7 +81,7 @@ namespace conct
 	template< class TType, class TValueType >
 	RelativeArray< TType, TValueType >& RelativeArray< TType, TValueType >::operator=( Array< TType > rhs )
 	{
-		set( rhs.getData(), rhs.getCount() );
+		set( rhs.getData(), TValueType( rhs.getCount() ) );
 		return *this;
 	}
 

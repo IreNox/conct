@@ -10,7 +10,7 @@
 #include "conct_value_high.h"
 
 #include <vector>
-#include <deque>
+#include <forward_list>
 
 namespace conct
 {
@@ -73,14 +73,15 @@ namespace conct
 		struct ControllerInstance
 		{
 			DynamicString			name;
-			RemoteInstance			instance;
+			ControllerDevice*		pDevice;
+			InstanceId				instanceId;
 			const InterfaceType*	pType;
 		};
 
 		typedef std::vector< DynamicString > StringVector;
 		typedef std::vector< State > StateVector;
-		typedef std::vector< ControllerDevice > ControllerDeviceVector;
-		typedef std::vector< ControllerInstance > ControllerInstanceVector;
+		typedef std::forward_list< ControllerDevice > ControllerDeviceList;
+		typedef std::forward_list< ControllerInstance > ControllerInstanceList;
 
 		TypeCollection*							m_pTypes;
 
@@ -101,8 +102,8 @@ namespace conct
 		const InterfaceFunction*				m_pFunction;
 		std::vector< ValueHigh >				m_values;
 
-		ControllerDeviceVector					m_devices;
-		ControllerInstanceVector				m_instances;
+		ControllerDeviceList					m_devices;
+		ControllerInstanceList					m_instances;
 
 		CommandBase*							m_pRunningCommand;
 
@@ -120,6 +121,8 @@ namespace conct
 		bool									setValueFromString( ValueHigh& value, const DynamicString& text );
 		DynamicString							getStringFromValue( const ValueHigh& value );
 
+		DynamicString							addInstance( Instance sourceInstance );
+
 		void									drawClear() const;
 		void									drawList() const;
 		void									drawValue() const;
@@ -134,9 +137,9 @@ namespace conct
 		void									buildFunctions();
 
 		void									executeAction( ConsoleDevice& device );
-		void									executeGetPropertyAction( ConsoleDevice& device );
-		void									executeSetPropertyAction( ConsoleDevice& device );
-		void									executeCallFunctionAction( ConsoleDevice& device );
+		void									executeGetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance );
+		void									executeSetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance );
+		void									executeCallFunctionAction( ConsoleDevice& device, const RemoteInstance& remoteInstance );
 
 		void									finishCommand( ConsoleDevice& device );
 	};

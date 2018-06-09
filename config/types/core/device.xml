@@ -19,13 +19,13 @@
 	<functions>
 		<function name="findInstances">
 			<return>
-				<array type="InstanceId" />
+				<array type="Instance" />
 			</return>
 			<parameters>
 				<parameter name="type" type="TypeCrc" />
 			</parameters>
 		</function>
-		<function name="findFirstInstance" return="InstanceId">
+		<function name="findFirstInstance" return="Instance">
 			<parameters>
 				<parameter name="type" type="TypeCrc" />
 			</parameters>

@@ -13,6 +13,12 @@ namespace conct
 	}
 
 	template< class T >
+	Vector< T >::Vector( const Vector& rhs )
+	{
+		*this = rhs;
+	}
+
+	template< class T >
 	Vector< T >::Vector( const std::initializer_list< T >& initList )
 	{
 		m_pData = nullptr;
@@ -48,6 +54,12 @@ namespace conct
 	uintreg Vector< T >::getCapacity() const
 	{
 		return m_capacity;
+	}
+
+	template< class T >
+	void conct::Vector<T>::clear()
+	{
+		m_count = 0u;
 	}
 
 	template< class T >
@@ -146,6 +158,14 @@ namespace conct
 	}
 
 	template< class T >
+	Vector< T >& Vector< T >::operator=( const Vector& rhs )
+	{
+		clear();
+		pushRange( rhs.getData(), rhs.getCount() );
+		return *this;
+	}
+
+	template< class T >
 	T& Vector< T >::operator[]( uintreg index )
 	{
 		CONCT_ASSERT( index < m_count );
@@ -163,6 +183,11 @@ namespace conct
 	void Vector< T >::checkCapacity( uintreg size )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( CONCT_MAX( 1u, size ) );
+		if( nextCapacity < m_capacity )
+		{
+			return;
+		}
+
 		T* pNewData = new T[ nextCapacity ];
 		CONCT_ASSERT( pNewData != nullptr );
 

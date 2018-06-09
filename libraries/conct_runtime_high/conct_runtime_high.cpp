@@ -44,21 +44,6 @@ namespace conct
 		writePort( pPort, portData );
 
 		processPackages( portData );
-
-
-// 		if( m_state == State_ExecuteCommand )
-// 		{
-// 			executeCommand();
-// 		}
-//
-// 		if( m_state == State_SendResponse )
-// 		{
-// 			sendData( pPort );
-// 		}
-// 		else
-// 		{
-// 			processData( pPort );
-// 		}
 	}
 
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )

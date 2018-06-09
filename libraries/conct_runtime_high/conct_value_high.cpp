@@ -67,12 +67,6 @@ namespace conct
 		return m_value.getUnsigned();
 	}
 
-	const char* ValueHigh::getString() const
-	{
-		CONCT_ASSERT( m_value.type == ValueType_String );
-		return m_string.toConstCharPointer();
-	}
-
 	PercentValue ValueHigh::getPercentValue() const
 	{
 		return m_value.getPercentValue();
@@ -88,14 +82,20 @@ namespace conct
 		return m_value.getDeviceId();
 	}
 
-	InstanceId ValueHigh::getInstanceId() const
+	Instance ValueHigh::getInstance() const
 	{
-		return m_value.getInstanceId();
+		return m_value.getInstance();
 	}
 
 	TypeCrc ValueHigh::getTypeCrc() const
 	{
 		return m_value.getTypeCrc();
+	}
+
+	const char* ValueHigh::getString() const
+	{
+		CONCT_ASSERT( m_value.type == ValueType_String );
+		return m_string.toConstCharPointer();
 	}
 
 	const void* ValueHigh::getStructData() const
@@ -170,9 +170,9 @@ namespace conct
 		m_value.setDeviceId( value );
 	}
 
-	void ValueHigh::setInstanceId( InstanceId value )
+	void ValueHigh::setInstance( Instance value )
 	{
-		m_value.setInstanceId( value );
+		m_value.setInstance( value );
 	}
 
 	void ValueHigh::setTypeCrc( TypeCrc value )

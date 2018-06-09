@@ -12,12 +12,12 @@ namespace conct
 			"Boolean",
 			"Integer",
 			"Unsigned",
-			"String",
 			"PercentValue",
 			"Guid",
-			"Device",
+			"DeviceId",
 			"Instance",
-			"Type",
+			"TypeCrc",
+			"String",
 			"Structure",
 			"Array"
 		};

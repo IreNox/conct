@@ -25,7 +25,7 @@ namespace conct
 		ResultId		setPercentValue( PercentValue value );
 		ResultId		setGuid( Guid value );
 		ResultId		setDeviceId( DeviceId value );
-		ResultId		setInstanceId( InstanceId value );
+		ResultId		setInstance( Instance value );
 		ResultId		setTypeCrc( TypeCrc value );
 
 		ResultId		setStruct( const void* pData, uintreg dataSize, TypeCrc type );

@@ -184,6 +184,14 @@ namespace conct
 	typedef uint16		PercentValue;
 	typedef uint32		Guid;
 
+	struct Instance
+	{
+		InstanceId	id;
+		TypeCrc		type;
+	};
+
 	static const DeviceId InvalidDeviceId = 0u;
+	static const TypeCrc InvalidTypeCrc = 0u;
 	static const InstanceId InvalidInstanceId = 0xffffu;
+	static const Instance InvalidInstance = { InvalidInstanceId, InvalidTypeCrc };
 }

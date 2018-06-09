@@ -10,6 +10,7 @@ namespace conct
 	public:
 
 					Vector();
+					Vector( const Vector& rhs );
 					Vector( const std::initializer_list< T >& initList );
 					~Vector();
 
@@ -17,6 +18,7 @@ namespace conct
 		uintreg		getCount() const;
 		uintreg		getCapacity() const;
 
+		void		clear();
 		void		reserve( uintreg size );
 
 		T&			pushBack();
@@ -34,6 +36,8 @@ namespace conct
 
 		T*			getData();
 		const T*	getData() const;
+
+		Vector&		operator=( const Vector& rhs );
 
 		T&			operator[]( uintreg index );
 		const T&	operator[]( uintreg index ) const;

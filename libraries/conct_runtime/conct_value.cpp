@@ -51,9 +51,9 @@ namespace conct
 		return data.device;
 	}
 
-	InstanceId Value::getInstanceId() const
+	Instance Value::getInstance() const
 	{
-		CONCT_ASSERT( type == ValueType_InstanceId );
+		CONCT_ASSERT( type == ValueType_Instance );
 		return data.instance;
 	}
 
@@ -156,9 +156,9 @@ namespace conct
 		data.device = value;
 	}
 
-	void Value::setInstanceId( InstanceId value )
+	void Value::setInstance( Instance value )
 	{
-		type = ValueType_InstanceId;
+		type = ValueType_Instance;
 		data.instance = value;
 	}
 

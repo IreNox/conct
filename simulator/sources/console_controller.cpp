@@ -29,16 +29,16 @@ namespace conct
 		device.name						= "Test"_s;
 		device.address.address[ 0u ]	= 1u;
 		device.address.address[ 1u ]	= 0u;
-		m_devices.push_back( device );
+		m_devices.push_front( device );
 
 		const InterfaceType* pDeviceType = pTypes->findInterface( "Core.Device", "" );
 
 		ControllerInstance instance;
 		instance.name					= DynamicString( pDeviceType->getFullName() ) + " @ " + device.name;
-		instance.instance.id			= 0u;
-		instance.instance.address		= device.address;
+		instance.pDevice				= &m_devices.front();
+		instance.instanceId				= 0u;
 		instance.pType					= pDeviceType;
-		m_instances.push_back( instance );
+		m_instances.push_front( instance );
 	}
 
 	void ConsoleController::activate( ConsoleDevice& device )
@@ -264,7 +264,19 @@ namespace conct
 
 		case State_Instance:
 			{
-				m_pInstance = &m_instances[ m_index ];
+				m_pInstance = nullptr;
+
+				uintreg index = 0u;
+				for( const ControllerInstance& instance : m_instances )
+				{
+					if( index == m_index )
+					{
+						m_pInstance = &instance;
+						break;
+					}
+
+					index++;
+				}
 
 				switch( m_action )
 				{
@@ -565,16 +577,16 @@ namespace conct
 			}
 			break;
 
-		case ValueType_InstanceId:
-			{
-				InstanceId intValue;
-				if( string_tools::tryParseUInt16( intValue, text.toConstCharPointer() ) )
-				{
-					value.setInstanceId( intValue );
-					return true;
-				}
-			}
-			break;
+		//case ValueType_Instance:
+		//	{
+		//		InstanceId intValue;
+		//		if( string_tools::tryParseUInt16( intValue, text.toConstCharPointer() ) )
+		//		{
+		//			value.setInstance( intValue );
+		//			return true;
+		//		}
+		//	}
+		//	break;
 
 		case ValueType_TypeCrc:
 			{
@@ -622,8 +634,8 @@ namespace conct
 			return string_tools::toString( value.getGuid() );
 			break;
 
-		case ValueType_InstanceId:
-			return string_tools::toString( value.getInstanceId() );
+		case ValueType_Instance:
+			return string_tools::toString( value.getInstance().id ) + ":" + string_tools::toString( value.getInstance().type );
 			break;
 
 		case ValueType_TypeCrc:
@@ -632,6 +644,33 @@ namespace conct
 		}
 
 		return DynamicString();
+	}
+
+	DynamicString ConsoleController::addInstance( Instance sourceInstance )
+	{
+		for( const ControllerInstance& instance : m_instances )
+		{
+			if( instance.instanceId == sourceInstance.id &&
+				instance.pType->getCrc() == sourceInstance.type )
+			{
+				return "\nInstance: "_s + instance.name + " already there.";
+			}
+		}
+
+		const InterfaceType* pType = m_pTypes->findInterfaceByCrc( sourceInstance.type );
+		if( pType == nullptr )
+		{
+			return "\nCould not find type with crc "_s + string_tools::toString( sourceInstance.type ) + "."_s;
+		}
+
+		ControllerInstance instance;
+		instance.name				= DynamicString( pType->getFullName().c_str() ) + " @ " + m_pInstance->pDevice->name;
+		instance.pDevice			= m_pInstance->pDevice;
+		instance.instanceId			= sourceInstance.id;
+		instance.pType				= pType;
+		m_instances.push_front( instance );
+
+		return "\nInstance added: "_s + instance.name + ".";
 	}
 
 	void ConsoleController::drawClear() const
@@ -790,18 +829,22 @@ namespace conct
 
 	void ConsoleController::executeAction( ConsoleDevice& device )
 	{
+		RemoteInstance remoteInstance;
+		remoteInstance.id		= m_pInstance->instanceId;
+		remoteInstance.address	= m_pInstance->pDevice->address;
+
 		switch( m_action )
 		{
 		case Action_GetProperty:
-			executeGetPropertyAction( device );
+			executeGetPropertyAction( device, remoteInstance );
 			break;
 
 		case Action_SetProperty:
-			executeSetPropertyAction( device );
+			executeSetPropertyAction( device, remoteInstance );
 			break;
 
 		case Action_CallFunction:
-			executeCallFunctionAction( device );
+			executeCallFunctionAction( device, remoteInstance );
 			break;
 
 		case Action_Invalid:
@@ -815,9 +858,9 @@ namespace conct
 		}
 	}
 
-	void ConsoleController::executeGetPropertyAction( ConsoleDevice& device )
+	void ConsoleController::executeGetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance )
 	{
-		Command< ValueHigh >* pCommand = device.data.pController->getProperty( m_pInstance->instance, m_pProperty->name.c_str() );
+		Command< ValueHigh >* pCommand = device.data.pController->getProperty( remoteInstance, m_pProperty->name.c_str() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'getProperty' command."_s );
@@ -827,9 +870,9 @@ namespace conct
 		m_pRunningCommand = pCommand;
 	}
 
-	void ConsoleController::executeSetPropertyAction( ConsoleDevice& device )
+	void ConsoleController::executeSetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance )
 	{
-		CommandBase* pCommand = device.data.pController->setProperty( m_pInstance->instance, m_pProperty->name.c_str(), m_values.front() );
+		CommandBase* pCommand = device.data.pController->setProperty( remoteInstance, m_pProperty->name.c_str(), m_values.front() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -839,11 +882,11 @@ namespace conct
 		m_pRunningCommand = pCommand;
 	}
 
-	void ConsoleController::executeCallFunctionAction( ConsoleDevice& device )
+	void ConsoleController::executeCallFunctionAction( ConsoleDevice& device, const RemoteInstance& remoteInstance )
 	{
 		ArrayView< ValueHigh > arguments;
 		arguments.set( m_values.data(), m_values.size() );
-		CommandBase* pCommand = device.data.pController->callFunction( m_pInstance->instance, m_pFunction->name.c_str(), arguments );
+		CommandBase* pCommand = device.data.pController->callFunction( remoteInstance, m_pFunction->name.c_str(), arguments );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -887,6 +930,7 @@ namespace conct
 		case Action_CallFunction:
 			{
 				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( m_pRunningCommand );
+				const ValueHigh& value = pCommand->getData();
 
 				DynamicString text;
 				if( m_action == Action_GetProperty )
@@ -897,7 +941,22 @@ namespace conct
 				{
 					text = "Function '"_s + m_pFunction->name.c_str() + "' returned the following value:\n"_s;
 				}
-				text += getStringFromValue( pCommand->getData() );
+				text += getStringFromValue( value );
+
+				if( value.getType() == ValueType_Instance )
+				{
+					const Instance sourceInstance = value.getInstance();
+					text += addInstance( sourceInstance );
+				}
+				else if( value.getType() == ValueType_Array && value.getArrayType() == ValueTypeTraits< Instance >::getTypeCrc() )
+				{
+					const ArrayView< Instance > instances = value.getArray< Instance >();
+					for( uintreg i = 0u; i < instances.getCount(); ++i )
+					{
+						const Instance& sourceInstance = instances[ i ];
+						text += addInstance( sourceInstance );
+					}
+				}
 
 				setPopupState( text );
 			}

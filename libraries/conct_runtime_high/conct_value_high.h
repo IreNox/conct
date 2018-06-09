@@ -3,6 +3,7 @@
 #include "conct_dynamic_string.h"
 #include "conct_value.h"
 #include "conct_vector.h"
+#include "conct_array_view.h"
 
 namespace conct
 {
@@ -23,13 +24,17 @@ namespace conct
 		PercentValue	getPercentValue() const;
 		Guid			getGuid() const;
 		DeviceId		getDeviceId() const;
-		InstanceId		getInstanceId() const;
+		Instance		getInstance() const;
 		TypeCrc			getTypeCrc() const;
 
+		template< class T >
+		const T&		getStruct() const;
 		const void*		getStructData() const;
 		uintreg			getStructSize() const;
 		TypeCrc			getStructType() const;
 
+		template< class T >
+		ArrayView< T >	getArray() const;
 		const void*		getArrayData() const;
 		uintreg			getArrayElementSize() const;
 		uintreg			getArrayCount() const;
@@ -42,7 +47,7 @@ namespace conct
 		void			setPercentValue( PercentValue value );
 		void			setGuid( Guid value );
 		void			setDeviceId( DeviceId value );
-		void			setInstanceId( InstanceId value );
+		void			setInstance( Instance value );
 		void			setTypeCrc( TypeCrc value );
 
 	private:
@@ -52,3 +57,5 @@ namespace conct
 		Vector< uint8 >	m_buffer;
 	};
 }
+
+#include "conct_value_high.inl"

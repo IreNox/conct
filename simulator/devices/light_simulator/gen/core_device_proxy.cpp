@@ -5,7 +5,6 @@
 #include "conct_device.h"
 #include "conct_array_view.h"
 #include "conct_core.h"
-#include "core_instance.h"
 
 namespace conct
 {
@@ -56,7 +55,7 @@ namespace conct
 		}
 		if( isStringEquals( pName, "findFirstInstance" ) )
 		{
-			targetValueBuilder.setInstanceId( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
+			targetValueBuilder.setInstance( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 

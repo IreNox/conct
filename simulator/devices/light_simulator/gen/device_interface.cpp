@@ -1,7 +1,5 @@
 #include "device_interface.h"
 
-#include "core_instance.h"
-
 namespace conct
 {
 	void DeviceInterface::setupDevice()

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<struct namespace="Core" name="Instance">
-	<fields>
-		<field name="Id" type="InstanceId" />
-		<field name="Type" type="TypeCrc" />
-	</fields>
-</struct>

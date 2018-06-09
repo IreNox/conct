@@ -17,7 +17,7 @@ namespace conct
 		ArrayView< Instance >	getInstances() const;
 
 		ArrayView< Instance >	findInstances( TypeCrc typeCrc );
-		InstanceId				findFirstInstance( TypeCrc typeCrc );
+		Instance				findFirstInstance( TypeCrc typeCrc );
 
 		const LocalInstance*	getInstance( InstanceId instanceId );
 

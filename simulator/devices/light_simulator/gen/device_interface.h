@@ -5,14 +5,14 @@
 
 #include "conct_port_rs485_sim.h"
 
-#include "home_light_proxy.h"
 #include "home_rgb_proxy.h"
 #include "core_device_proxy.h"
 #include "home_dimmer_proxy.h"
+#include "home_light_proxy.h"
 
-#include "../home_light_impl.h"
 #include "../home_rgb_impl.h"
 #include "../home_dimmer_impl.h"
+#include "../home_light_impl.h"
 
 namespace conct
 {
@@ -40,10 +40,10 @@ namespace conct
 
 		PortRs485Sim m_port0;
 
-		LightProxy m_proxyLight;
 		RGBProxy m_proxyRGB;
 		DeviceProxy m_proxyDevice;
 		DimmerProxy m_proxyDimmer;
+		LightProxy m_proxyLight;
 
 		LightImpl m_instanceLight;
 		DimmerImpl m_instanceDimmer;

@@ -5,12 +5,6 @@
 
 namespace conct
 {
-	struct Instance
-	{
-		InstanceId Id;
-		TypeCrc Type;
-	};
-
 	Guid Device::getGuid() const
 	{
 		return Guid( 42u );
@@ -34,7 +28,7 @@ namespace conct
 		uintreg count = 0u;
 		for( size_t i = 0u; i < instances.getCount(); ++i )
 		{
-			if( instances[ i ].Type != typeCrc )
+			if( instances[ i ].type != typeCrc )
 			{
 				continue;
 			}
@@ -45,20 +39,20 @@ namespace conct
 		return ArrayView< Instance >( resultInstances.getData(), count );
 	}
 
-	InstanceId Device::findFirstInstance( TypeCrc typeCrc )
+	Instance Device::findFirstInstance( TypeCrc typeCrc )
 	{
 		ArrayView< Instance > instances;
 		getPublicInstances( instances );
 
 		for( size_t i = 0u; i < instances.getCount(); ++i )
 		{
-			if( instances[ i ].Type == typeCrc )
+			if( instances[ i ].type == typeCrc )
 			{
-				return instances[ i ].Id;
+				return instances[ i ];
 			}
 		}
 
-		return InvalidInstanceId;
+		return InvalidInstance;
 	}
 
 	const LocalInstance* Device::getInstance( InstanceId instanceId )

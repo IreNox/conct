@@ -46,8 +46,8 @@ namespace conct
 		case ValueType_DeviceId:
 			return setDeviceId( pValue->getDeviceId() );
 
-		case ValueType_InstanceId:
-			return setInstanceId( pValue->getInstanceId() );
+		case ValueType_Instance:
+			return setInstance( pValue->getInstance() );
 
 		case ValueType_TypeCrc:
 			return setTypeCrc( pValue->getTypeCrc() );

@@ -6,8 +6,8 @@
 #include "conct_port_tcp.h"
 #include "conct_port_rs485_sim.h"
 
-#include "core_device_proxy.h"
 #include "core_router_proxy.h"
+#include "core_device_proxy.h"
 
 #include "conct_router.h"
 
@@ -38,8 +38,8 @@ namespace conct
 		PortTcp m_port0;
 		PortRs485Sim m_port1;
 
-		DeviceProxy m_proxyDevice;
 		RouterProxy m_proxyRouter;
+		DeviceProxy m_proxyDevice;
 
 		Router m_instanceRouter;
 	};

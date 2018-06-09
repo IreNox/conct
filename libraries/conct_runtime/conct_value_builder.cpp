@@ -73,9 +73,9 @@ namespace conct
 		return ResultId_Success;
 	}
 
-	ResultId ValueBuilder::setInstanceId( InstanceId value )
+	ResultId ValueBuilder::setInstance( Instance value )
 	{
-		m_pValue->setInstanceId( value );
+		m_pValue->setInstance( value );
 		return ResultId_Success;
 	}
 

@@ -12,37 +12,38 @@ namespace conct
 	{
 	public:
 
-						ValueBuilder( DataBuilder* pBuilder, Value* pValue );
+							ValueBuilder( DataBuilder* pBuilder, Value* pValue );
 
-		const Value*	getValue() const { return m_pValue; }
-		uintreg			getValueSize() const;
+		const Value*		getValue() const { return m_pValue; }
+		uintreg				getValueSize() const;
+		ArrayView< uint8 >	toArrayView() const;
 
-		ResultId		setVoid();
-		ResultId		setBoolean( bool value );
-		ResultId		setInteger( sint32 value );
-		ResultId		setUnsigned( uint32 value );
-		ResultId		setString( const char* pValue );
-		ResultId		setPercentValue( PercentValue value );
-		ResultId		setGuid( Guid value );
-		ResultId		setDeviceId( DeviceId value );
-		ResultId		setInstance( Instance value );
-		ResultId		setTypeCrc( TypeCrc value );
+		ResultId			setVoid();
+		ResultId			setBoolean( bool value );
+		ResultId			setInteger( sint32 value );
+		ResultId			setUnsigned( uint32 value );
+		ResultId			setString( const char* pValue );
+		ResultId			setPercentValue( PercentValue value );
+		ResultId			setGuid( Guid value );
+		ResultId			setDeviceId( DeviceId value );
+		ResultId			setInstance( Instance value );
+		ResultId			setTypeCrc( TypeCrc value );
 
-		ResultId		setStruct( const void* pData, uintreg dataSize, TypeCrc type );
+		ResultId			setStruct( const void* pData, uintreg dataSize, TypeCrc type );
 		template< class T >
-		ResultId		setStruct( const T& value );
+		ResultId			setStruct( const T& value );
 
-		ResultId		setArray( const void* pData, uintreg elementSize, uintreg count, TypeCrc type );
+		ResultId			setArray( const void* pData, uintreg elementSize, uintreg count, TypeCrc type );
 		template< class T >
-		ResultId		setArray( const ArrayView< T >& value );
+		ResultId			setArray( const ArrayView< T >& value );
 
 		template< class T >
-		ResultId		setValue( const T* pValue );
+		ResultId			setValue( const T* pValue );
 
 	private:
 
-		DataBuilder*	m_pBuilder;
-		Value*			m_pValue;
+		DataBuilder*		m_pBuilder;
+		Value*				m_pValue;
 	};
 }
 

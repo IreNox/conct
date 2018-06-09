@@ -1,5 +1,6 @@
 #include "conct_runtime_high.h"
 
+#include "conct_buffered_value_builder.h"
 #include "conct_command.h"
 #include "conct_device.h"
 #include "conct_port.h"
@@ -62,68 +63,20 @@ namespace conct
 
 	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
-		MessageBaseHeader baseHeader;
-
-		baseHeader.destinationHops = 0u;
-		for( uintreg i = 0u; i < DeviceAddress::Size; ++i )
+		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
+		if( result == ResultId_Success )
 		{
-			if( deviceAddress.address[ i ] == InvalidDeviceId )
+			DeviceMap::iterator it = m_devices.find( deviceAddress.address[ 0u ] );
+			if( it == m_devices.end() )
 			{
-				break;
+				return ResultId_NoSuchDevice;
 			}
+			DeviceData& deviceData = it->second;
 
-			baseHeader.destinationHops++;
+			deviceData.commands[ pCommand->getId() ] = pCommand;
 		}
 
-		if( baseHeader.destinationHops == 0u )
-		{
-			return ResultId_NoDestination;
-		}
-
-		DeviceMap::iterator it = m_devices.find( deviceAddress.address[ 0u ] );
-		if( it == m_devices.end() )
-		{
-			return ResultId_NoSuchDevice;
-		}
-		DeviceData& deviceData = it->second;
-
-		baseHeader.sourceHops		= 1u;
-		baseHeader.payloadSize		= uint16( payload.getCount() );
-		baseHeader.commandId		= pCommand->getId();
-		baseHeader.messageType		= messageType;
-		baseHeader.messageResult	= ResultId_Success;
-
-		SendPackage package;
-		package.targetDeviceId	= deviceAddress.address[ 0u ];
-		package.currentOffset	= 0u;
-
-		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getCount();
-		package.data.reserve( packageSize );
-
-		const uint8* pHeaderData = ( const uint8* )&baseHeader;
-		for( uintreg i = 0u; i < sizeof( baseHeader ); ++i )
-		{
-			package.data.push_back( pHeaderData[ i ] );
-		}
-
-		package.data.push_back( deviceData.ownDeviceId );
-
-		for( uintreg i = 0u; i < baseHeader.destinationHops; ++i )
-		{
-			package.data.push_back( deviceAddress.address[ i ] );
-		}
-
-		for( uintreg i = 0u; i < payload.getCount(); ++i )
-		{
-			package.data.push_back( payload[ i ] );
-		}
-
-		PortData& portData = m_ports[ deviceData.pTargetPort ];
-		portData.sendPackages.push( package );
-
-		deviceData.commands[ baseHeader.commandId ] = pCommand;
-
-		return ResultId_Success;
+		return result;
 	}
 
 	void RuntimeHigh::processPackages( PortData& portData )
@@ -221,7 +174,7 @@ namespace conct
 
 		case MessageType_PingRequest:
 			{
-				//sendPackage( nullptr, package.sourceAddress, ArrayView< uint8 >(), MessageType_PingResponse );
+				sendResponse( package, ArrayView< uint8 >(), MessageType_PingResponse );
 			}
 			break;
 
@@ -229,6 +182,27 @@ namespace conct
 			break;
 
 		case MessageType_GetPropertyRequest:
+			{
+				BufferedValueBuilder< 1024u > valueBuilder;
+				{
+					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( package.payload.data() );
+
+					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
+					if( pInstance == nullptr )
+					{
+						sendErrorResponse( package, ResultId_NoSuchInstance );
+						return;
+					}
+
+					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.name ) )
+					{
+						sendErrorResponse( package, ResultId_NoSuchField );
+						return;
+					}
+				}
+
+				sendResponse( package, valueBuilder.toArrayView(), MessageType_GetPropertyResponse );
+			}
 			break;
 
 		case MessageType_GetPropertyResponse:
@@ -241,6 +215,24 @@ namespace conct
 			break;
 
 		case MessageType_SetPropertyRequest:
+			{
+				const SetPropertyRequest& request = *reinterpret_cast< const SetPropertyRequest* >( package.payload.data() );
+
+				const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
+				if( pInstance == nullptr )
+				{
+					sendErrorResponse( package, ResultId_NoSuchInstance );
+					return;
+				}
+
+				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.name, request.value ) )
+				{
+					sendErrorResponse( package, ResultId_NoSuchField );
+					return;
+				}
+
+				sendResponse( package, ArrayView< uint8 >(), MessageType_SetPropertyResponse );
+			}
 			break;
 
 		case MessageType_SetPropertyResponse:
@@ -250,6 +242,27 @@ namespace conct
 			break;
 
 		case MessageType_CallFunctionRequest:
+			{
+				BufferedValueBuilder< 1024u > valueBuilder;
+				{
+					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( package.payload.data() );
+
+					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
+					if( pInstance == nullptr )
+					{
+						sendErrorResponse( package, ResultId_NoSuchInstance );
+						return;
+					}
+
+					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.name, request.arguments.toView() ) )
+					{
+						sendErrorResponse( package, ResultId_NoSuchField );
+						return;
+					}
+				}
+
+				sendResponse( package, valueBuilder.toArrayView(), MessageType_CallFunctionResponse );
+			}
 			break;
 
 		case MessageType_CallFunctionResponse:
@@ -394,11 +407,6 @@ namespace conct
 
 		switch( state )
 		{
-		//case PackageState_WaitForMagic:
-		//	package.data.waitForMagic.firstReadCounter = 0u;
-		//	package.data.waitForMagic.lastMagic = 0u;
-		//	break;
-
 		case PackageState_ReadBaseHeader:
 		case PackageState_ReadSourceAddress:
 		case PackageState_ReadDestinationAddress:
@@ -406,5 +414,94 @@ namespace conct
 			package.data.readBytes.alreadyRead = 0u;
 			break;
 		}
+	}
+
+	void RuntimeHigh::getDeviceAddress( DeviceAddress& targetAddress, const std::vector< DeviceId >& sourceAddress ) const
+	{
+		for( uintreg i = 0u; i < sourceAddress.size(); ++i )
+		{
+			targetAddress.address[ i ] = sourceAddress[ i ];
+		}
+		targetAddress.address[ sourceAddress.size() ] = InvalidDeviceId;
+	}
+
+	ResultId RuntimeHigh::sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result )
+	{
+		MessageBaseHeader baseHeader;
+
+		baseHeader.destinationHops = 0u;
+		for( uintreg i = 0u; i < DeviceAddress::Size; ++i )
+		{
+			if( deviceAddress.address[ i ] == InvalidDeviceId )
+			{
+				break;
+			}
+
+			baseHeader.destinationHops++;
+		}
+
+		if( baseHeader.destinationHops == 0u )
+		{
+			return ResultId_NoDestination;
+		}
+
+		DeviceMap::iterator it = m_devices.find( deviceAddress.address[ 0u ] );
+		if( it == m_devices.end() )
+		{
+			return ResultId_NoSuchDevice;
+		}
+		DeviceData& deviceData = it->second;
+
+		baseHeader.sourceHops		= 1u;
+		baseHeader.payloadSize		= uint16( payload.getCount() );
+		baseHeader.commandId		= commandId;
+		baseHeader.messageType		= messageType;
+		baseHeader.messageResult	= result;
+
+		SendPackage package;
+		package.targetDeviceId	= deviceAddress.address[ 0u ];
+		package.currentOffset	= 0u;
+
+		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getCount();
+		package.data.reserve( packageSize );
+
+		const uint8* pHeaderData = ( const uint8* )&baseHeader;
+		for( uintreg i = 0u; i < sizeof( baseHeader ); ++i )
+		{
+			package.data.push_back( pHeaderData[ i ] );
+		}
+
+		package.data.push_back( deviceData.ownDeviceId );
+
+		for( uintreg i = 0u; i < baseHeader.destinationHops; ++i )
+		{
+			package.data.push_back( deviceAddress.address[ i ] );
+		}
+
+		for( uintreg i = 0u; i < payload.getCount(); ++i )
+		{
+			package.data.push_back( payload[ i ] );
+		}
+
+		PortData& portData = m_ports[ deviceData.pTargetPort ];
+		portData.sendPackages.push( package );
+
+		return ResultId_Success;
+	}
+
+	ResultId RuntimeHigh::sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType )
+	{
+		DeviceAddress address;
+		getDeviceAddress( address, package.sourceAddress );
+
+		return sendPackage( address, payload, package.baseHeader.commandId, messageType, ResultId_Success );
+	}
+
+	ResultId RuntimeHigh::sendErrorResponse( const ReceivedPackage& package, ResultId result )
+	{
+		DeviceAddress address;
+		getDeviceAddress( address, package.sourceAddress );
+
+		return sendPackage( address, ArrayView< uint8 >(), package.baseHeader.commandId, MessageType_ErrorResponse, result );
 	}
 }

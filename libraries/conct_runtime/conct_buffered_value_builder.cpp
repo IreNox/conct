@@ -2,7 +2,7 @@
 
 namespace conct
 {
-	BufferedValueBuilder::BufferedValueBuilder( void* pBuffer, uintreg bufferSize )
+	BasicValueBuilder::BasicValueBuilder( void* pBuffer, uintreg bufferSize )
 		: ValueBuilder( &m_builder, static_cast< Value* >( pBuffer ) )
 	{
 		CONCT_ASSERT( bufferSize >= sizeof( Value ) );

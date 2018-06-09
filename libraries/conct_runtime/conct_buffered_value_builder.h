@@ -5,14 +5,28 @@
 
 namespace conct
 {
-	class BufferedValueBuilder : public ValueBuilder
+	class BasicValueBuilder : public ValueBuilder
 	{
 	public:
 
-					BufferedValueBuilder( void* pBuffer, uintreg bufferSize );
+					BasicValueBuilder( void* pBuffer, uintreg bufferSize );
 
 	private:
 
 		DataBuilder	m_builder;
 	};
+
+	template< uintreg TBufferSize >
+	class BufferedValueBuilder : public BasicValueBuilder
+	{
+	public:
+
+					BufferedValueBuilder();
+
+	private:
+
+		uint8		m_buffer[ TBufferSize ];
+	};
 }
+
+#include "conct_buffered_value_builder.inl"

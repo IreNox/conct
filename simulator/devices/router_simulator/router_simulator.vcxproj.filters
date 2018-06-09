@@ -167,6 +167,9 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_value_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
@@ -244,6 +247,9 @@
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_value_high.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -289,6 +295,9 @@
       <Filter>libraries\conct_runtime</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_runtime\conct_value_builder.inl">
+      <Filter>libraries\conct_runtime</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.inl">
       <Filter>libraries\conct_runtime</Filter>
     </None>
   </ItemGroup>

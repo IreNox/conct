@@ -16,6 +16,11 @@ namespace conct
 		return m_pBuilder->getSize();
 	}
 
+	ArrayView< uint8 > ValueBuilder::toArrayView() const
+	{
+		return ArrayView< uint8 >( (const uint8*)m_pValue, m_pBuilder->getSize() );
+	}
+
 	ResultId ValueBuilder::setVoid()
 	{
 		m_pValue->setVoid();

@@ -179,7 +179,7 @@ namespace conct
 
 		case MessageType_GetPropertyRequest:
 			{
-				BufferedValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
+				BasicValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
 				{
 					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( m_workingData + m_destinationAddressSize );
 
@@ -224,7 +224,7 @@ namespace conct
 
 		case MessageType_CallFunctionRequest:
 			{
-				BufferedValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
+				BasicValueBuilder valueBuilder( getWorkingData(), getRemainingWorkingData() );
 				{
 					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( m_workingData + m_destinationAddressSize );
 

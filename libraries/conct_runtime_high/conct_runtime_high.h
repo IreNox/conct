@@ -121,5 +121,11 @@ namespace conct
 		void				processPackage( PortData& portData, const ReceivedPackage& package );
 
 		void				setState( PendingReceivedPackage& package, PackageState state );
+
+		void				getDeviceAddress( DeviceAddress& targetAddress, const std::vector< DeviceId >& sourceAddress ) const;
+
+		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result );
+		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType );
+		ResultId			sendErrorResponse( const ReceivedPackage& package, ResultId result );
 	};
 }

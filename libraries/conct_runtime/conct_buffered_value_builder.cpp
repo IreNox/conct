@@ -11,5 +11,6 @@ namespace conct
 
 		Value* pValue = m_builder.pushStruct< Value >();
 		CONCT_ASSERT( pValue == pBuffer );
+		CONCT_USE( pValue );
 	}
 }

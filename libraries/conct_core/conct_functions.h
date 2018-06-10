@@ -102,7 +102,7 @@ namespace conct
 			return 64u;
 		}
 #else
-		register uint64 x = value;
+		uint64 x = value;
 		x |= ( x >> 1 );
 		x |= ( x >> 2 );
 		x |= ( x >> 4 );

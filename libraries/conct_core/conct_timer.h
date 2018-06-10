@@ -8,19 +8,23 @@ namespace conct
 	{
 	public:
 
-				Timer();
+					Timer();
 
-		void	reset();
+		void		reset();
 
-		double	getElapsedSeconds()	const;
+		double		getElapsedSeconds()	const;
 
 	private:
 
+		double		m_startTime;
+
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		uint64	m_startTime;
-		uint64	m_frequence;
+		uint64		m_frequence;
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 #else
 #	error "Platform not supported"
 #endif
+
+		double		getCurrentTime() const;
 	};
 }

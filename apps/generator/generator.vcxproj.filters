@@ -47,9 +47,6 @@
     <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
-    <ClInclude Include="..\shared\third_party\tinyxml2.h">
-      <Filter>shared\third_party</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\tool_base\interface_type.h">
       <Filter>shared\tool_base</Filter>
     </ClInclude>
@@ -70,6 +67,9 @@
     </ClInclude>
     <ClInclude Include="..\shared\tool_base\base.h">
       <Filter>shared\tool_base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\third_party\tinyxml2.h">
+      <Filter>shared\third_party</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -97,9 +97,6 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\shared\third_party\tinyxml2.cpp">
-      <Filter>shared\third_party</Filter>
-    </ClCompile>
     <ClCompile Include="..\shared\tool_base\struct_type.cpp">
       <Filter>shared\tool_base</Filter>
     </ClCompile>
@@ -120,6 +117,9 @@
     </ClCompile>
     <ClCompile Include="..\shared\tool_base\interface_type.cpp">
       <Filter>shared\tool_base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\third_party\tinyxml2.cpp">
+      <Filter>shared\third_party</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

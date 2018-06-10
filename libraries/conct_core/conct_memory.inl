@@ -4,8 +4,8 @@ namespace conct
 {
 	CONCT_FORCE_INLINE void memory::set8( void* pTargetData, uintreg count, uint8 value )
 	{
-		register uintreg remainingCount = count;
-		register uint8* pData = static_cast<uint8*>(pTargetData);
+		uintreg remainingCount = count;
+		uint8* pData = static_cast<uint8*>(pTargetData);
 		while (remainingCount-- > 0u)
 		{
 			*pData++ = value;
@@ -14,8 +14,8 @@ namespace conct
 
 	CONCT_FORCE_INLINE void memory::set16( void* pTargetData, uintreg count, uint16 value )
 	{
-		register uintreg remainingCount = count;
-		register uint16* pData = static_cast<uint16*>(pTargetData);
+		uintreg remainingCount = count;
+		uint16* pData = static_cast<uint16*>(pTargetData);
 		while (remainingCount-- > 0u)
 		{
 			*pData++ = value;
@@ -24,8 +24,8 @@ namespace conct
 
 	CONCT_FORCE_INLINE void memory::set32( void* pTargetData, uintreg count, uint32 value )
 	{
-		register uintreg remainingCount = count;
-		register uint32* pData = static_cast<uint32*>(pTargetData);
+		uintreg remainingCount = count;
+		uint32* pData = static_cast<uint32*>(pTargetData);
 		while (remainingCount-- > 0u)
 		{
 			*pData++ = value;
@@ -34,8 +34,8 @@ namespace conct
 
 	CONCT_FORCE_INLINE void memory::set64( void* pTargetData, uintreg count, uint64 value )
 	{
-		register uintreg remainingCount = count;
-		register uint64* pData = static_cast<uint64*>(pTargetData);
+		uintreg remainingCount = count;
+		uint64* pData = static_cast<uint64*>(pTargetData);
 		while (remainingCount-- > 0u)
 		{
 			*pData++ = value;

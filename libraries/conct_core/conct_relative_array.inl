@@ -1,5 +1,7 @@
 #pragma once
 
+#include "conct_functions.h"
+
 namespace conct
 {
 	template< class TType, class TValueType >

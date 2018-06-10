@@ -19,7 +19,7 @@ namespace conct
 
 	void RuntimeHigh::registerPort( Port* pPort )
 	{
-		PortData& portData = m_ports[ pPort ];
+		m_ports[ pPort ]; // create entry
 
 		const Flags8< PortFlag > flags = pPort->getFlags();
 		if( flags.isSet( PortFlag_SingleEndpoint ) )
@@ -104,9 +104,7 @@ namespace conct
 			// target not found. send error to source!
 			return;
 		}
-
 		const DeviceData& targetDevice = deviceIt->second;
-		PortData& targetPortData = m_ports[ targetDevice.pTargetPort ];
 
 		MessageBaseHeader baseHeader = sourcePackage.baseHeader;
 		baseHeader.destinationHops--;
@@ -412,6 +410,9 @@ namespace conct
 		case PackageState_ReadDestinationAddress:
 		case PackageState_ReadPayload:
 			package.data.readBytes.alreadyRead = 0u;
+			break;
+
+		case PackageState_PushToQueue:
 			break;
 		}
 	}

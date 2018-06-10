@@ -1,22 +1,22 @@
 #include "base.h"
 
-#if defined( _WIN32 )
-#	include <windows.h>
-#endif
+//#if defined( _WIN32 )
+//#	include <windows.h>
+//#endif
 
 namespace conct
 {
-	std::string getExecutableName()
-	{
-#if defined( _WIN32 )
-		char exeFileName[ MAX_PATH ];
-		GetModuleFileNameA( nullptr, exeFileName, sizeof( exeFileName ) );
-
-		return exeFileName;
-#else
-#	error "Platform not supported"
-#endif
-	}
+//	std::string getExecutableName()
+//	{
+//#if defined( _WIN32 )
+//		char exeFileName[ MAX_PATH ];
+//		GetModuleFileNameA( nullptr, exeFileName, sizeof( exeFileName ) );
+//
+//		return exeFileName;
+//#else
+//#	error "Platform not supported"
+//#endif
+//	}
 
 	// source: https://stackoverflow.com/questions/10564491/function-to-calculate-a-crc16-checksum
 	uint16_t calculateCrc16( const void* pData, size_t size )

@@ -22,6 +22,19 @@
 #	define CONCT_PLATFORM_WINDOWS	CONCT_OFF
 #endif
 
+#if defined( __ANDROID__ )
+#	define CONCT_PLATFORM_ANDROID	CONCT_ON
+#	if defined( __aarch64__ ) || defined( __amd64__ )
+#		define CONCT_POINTER_64		CONCT_ON
+#		define CONCT_REGISTER_64	CONCT_ON
+#	elif defined( __arm__ ) || defined( __i386__ )
+#		define CONCT_POINTER_32		CONCT_ON
+#		define CONCT_REGISTER_32	CONCT_ON
+#	endif
+#else
+#	define CONCT_PLATFORM_ANDROID	CONCT_OFF
+#endif
+
 #if defined( __AVR__ ) // AVR (UNO, Duemilanove, etc.)
 #	define CONCT_PLATFORM_AVR		CONCT_ON
 #	define CONCT_POINTER_16			CONCT_ON
@@ -142,6 +155,8 @@
 #endif
 
 #define CONCT_STATIC_ASSERT( expr ) static_assert( ( expr ), #expr )
+
+#define CONCT_USE( var ) (void)var
 
 namespace conct
 {

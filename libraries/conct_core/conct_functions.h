@@ -10,6 +10,18 @@
 namespace conct
 {
 	template<typename T>
+	CONCT_FORCE_INLINE T min( T a, T b )
+	{
+		return a < b ? a : b;
+	}
+
+	template<typename T>
+	CONCT_FORCE_INLINE T max( T a, T b )
+	{
+		return a > b ? a : b;
+	}
+
+	template<typename T>
 	CONCT_FORCE_INLINE T* addPointer( T* pPtr, uint byteCountToAdd )
 	{
 		return static_cast< T* >( ( void* )( ( uint8* )pPtr + byteCountToAdd ) );

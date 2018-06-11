@@ -1,10 +1,11 @@
-#include "xml_helper.h"
+#include "conct_xml_helper.h"
 
-#include "array_type.h"
-#include "interface_type.h"
-#include "type_collection.h"
+#include "conct_array_type.h"
+#include "conct_dynamic_string.h"
+#include "conct_interface_type.h"
+#include "conct_type_collection.h"
 
-#include <third_party/tinyxml2.h>
+#include <tinyxml2/tinyxml2.h>
 
 #include <iostream>
 
@@ -15,7 +16,7 @@ namespace conct
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
 		{
-			const std::string attributeValue = pAttributeValue;
+			const DynamicString attributeValue = DynamicString( pAttributeValue );
 			if( attributeValue == pName || attributeValue == "1" || attributeValue == "true" )
 			{
 				target = true;
@@ -35,12 +36,12 @@ namespace conct
 		return true;
 	}
 
-	bool loadStringValue( std::string& target, tinyxml2::XMLElement* pNode, const char* pName )
+	bool loadStringValue( DynamicString& target, tinyxml2::XMLElement* pNode, const char* pName )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
 		{
-			target = pAttributeValue;
+			target = DynamicString( pAttributeValue );
 			return true;
 		}
 
@@ -50,7 +51,7 @@ namespace conct
 			const char* pText = pChildNode->GetText();
 			if( pText != nullptr )
 			{
-				target = pText;
+				target = DynamicString( pText );
 				return true;
 			}
 		}
@@ -79,12 +80,12 @@ namespace conct
 		return false;
 	}
 
-	bool loadTypeValue( const Type** ppType, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false*/ )
+	bool loadTypeValue( const Type** ppType, tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false*/ )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
 		{
-			*ppType = typeCollection.findType( pAttributeValue, referenceNamespace );
+			*ppType = typeCollection.findType( DynamicString( pAttributeValue ), referenceNamespace );
 			if( *ppType == nullptr )
 			{
 				std::cout << "Error: Failed to find type with name '" << pAttributeValue << "' in '" << referenceNamespace << "'." << std::endl;
@@ -100,7 +101,7 @@ namespace conct
 			const char* pText = pChildNode->GetText();
 			if( pText != nullptr )
 			{
-				*ppType = typeCollection.findType( pText, referenceNamespace );
+				*ppType = typeCollection.findType( DynamicString( pText ), referenceNamespace );
 				if( *ppType == nullptr )
 				{
 					std::cout << "Error: Failed to find type with name '" << pText << "' in '" << referenceNamespace << "'." << std::endl;
@@ -131,7 +132,7 @@ namespace conct
 		return false;
 	}
 
-	bool loadInterfaceValue( const InterfaceType** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const std::string& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
+	bool loadInterfaceValue( const InterfaceType** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
 	{
 		const Type* pType = nullptr;
 		if( !loadTypeValue( &pType, pNode, pName, referenceNamespace, typeCollection, ignoreMissing ) )

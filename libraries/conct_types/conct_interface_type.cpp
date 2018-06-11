@@ -1,9 +1,9 @@
-#include "interface_type.h"
+#include "conct_interface_type.h"
 
-#include "type_collection.h"
-#include "xml_helper.h"
+#include "conct_type_collection.h"
+#include "conct_xml_helper.h"
 
-#include <third_party/tinyxml2.h>
+#include <tinyxml2/tinyxml2.h>
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ namespace conct
 		m_singleton = false;
 	}
 
-	void InterfaceType::create( const std::string& fileName, const std::string& namespaceVar, const std::string& name )
+	void InterfaceType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
 		Type::create( namespaceVar, name, name, TypeDescription_Interface, ValueType_Instance );
 		m_fileName = fileName;
@@ -25,16 +25,16 @@ namespace conct
 	bool InterfaceType::load( TypeCollection& typeCollection )
 	{
 		tinyxml2::XMLDocument document;
-		if( document.LoadFile( m_fileName.c_str() ) != tinyxml2::XML_SUCCESS )
+		if( document.LoadFile( m_fileName.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
 		{
-			std::cout << "Error: Failed to load XML from '" << m_fileName << "'. Message: " << document.ErrorStr() << std::endl;
+			std::cout << "Error: Failed to load XML from '" << m_fileName.getGenericPath() << "'. Message: " << document.ErrorStr() << std::endl;
 			return false;
 		}
 
 		tinyxml2::XMLElement* pRootNode = document.FirstChildElement( "interface" );
 		if( pRootNode == nullptr )
 		{
-			std::cout << "Error: Failed to find root node in '" << m_fileName << "'." << std::endl;
+			std::cout << "Error: Failed to find root node in '" << m_fileName.getGenericPath() << "'." << std::endl;
 			return false;
 		}
 
@@ -43,7 +43,7 @@ namespace conct
 		{
 			if( pBaseType->getDescription() != TypeDescription_Interface )
 			{
-				std::cout << "Error: Base type of '" << getFullName() << "' is not an interface in '" << m_fileName << "'." << std::endl;
+				std::cout << "Error: Base type of '" << getFullName() << "' is not an interface in '" << m_fileName.getGenericPath() << "'." << std::endl;
 				return false;
 			}
 
@@ -57,7 +57,7 @@ namespace conct
 			if( !loadStringValue( m_headerFilename, pInternalNode, "include" ) ||
 				!loadStringValue( m_cppName, pInternalNode, "class" ) )
 			{
-				std::cout << "Error: Internal type data not complete type of '" << getFullName() << "' in '" << m_fileName << "'." << std::endl;
+				std::cout << "Error: Internal type data not complete type of '" << getFullName() << "' in '" << m_fileName.getGenericPath() << "'." << std::endl;
 				return false;
 			}
 
@@ -72,7 +72,7 @@ namespace conct
 			tinyxml2::XMLElement* pPropertyNode = pPropertiesNode->FirstChildElement( "property" );
 			while( pPropertyNode != nullptr )
 			{
-				std::string propertyName;
+				DynamicString propertyName;
 				const Type* pType = nullptr;
 				if( !loadStringValue( propertyName, pPropertyNode, "name" ) ||
 					!loadTypeValue( &pType, pPropertyNode, "type", getNamespace(), typeCollection ) )
@@ -92,7 +92,7 @@ namespace conct
 					return false;
 				}
 
-				m_properties.push_back( property );
+				m_properties.pushBack( property );
 				pushDependingType( pType );
 
 				pPropertyNode = pPropertyNode->NextSiblingElement( "property" );
@@ -105,7 +105,7 @@ namespace conct
 			tinyxml2::XMLElement* pFunctionNode = pFunctionsNode->FirstChildElement( "function" );
 			while( pFunctionNode != nullptr )
 			{
-				std::string functionName;
+				DynamicString functionName;
 				const Type* pReturnType = nullptr;
 				if( !loadStringValue( functionName, pFunctionNode, "name" ) ||
 					!loadTypeValue( &pReturnType, pFunctionNode, "return", getNamespace(), typeCollection ) )
@@ -123,7 +123,7 @@ namespace conct
 					tinyxml2::XMLElement* pParameterNode = pParametersNode->FirstChildElement( "parameter" );
 					while( pParameterNode != nullptr )
 					{
-						std::string parameterName;
+						DynamicString parameterName;
 						const Type* pParameterType = nullptr;
 						if( !loadStringValue( parameterName, pParameterNode, "name" ) ||
 							!loadTypeValue( &pParameterType, pParameterNode, "type", getNamespace(), typeCollection ) )
@@ -135,14 +135,14 @@ namespace conct
 						parameter.name	= parameterName;
 						parameter.pType	= pParameterType;
 
-						function.parameters.push_back( parameter );
+						function.parameters.pushBack( parameter );
 						pushDependingType( pParameterType );
 
 						pParameterNode = pParameterNode->NextSiblingElement( "parameter" );
 					}
 				}
 
-				m_functions.push_back( function );
+				m_functions.pushBack( function );
 				pushDependingType( pReturnType );
 
 				pFunctionNode = pFunctionNode->NextSiblingElement( "function" );

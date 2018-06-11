@@ -1,6 +1,6 @@
 #pragma  once
 
-#include "type.h"
+#include "conct_type.h"
 
 namespace conct
 {

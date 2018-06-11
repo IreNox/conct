@@ -1,12 +1,14 @@
 #pragma once
 
-#include "type.h"
+#include "conct_path.h"
+#include "conct_type.h"
+#include "conct_vector.h"
 
 namespace conct
 {
 	struct InterfaceProperty
 	{
-		std::string		name;
+		DynamicString	name;
 		const Type*		pType;
 
 		bool			hasGetter;
@@ -15,15 +17,15 @@ namespace conct
 
 	struct InterfaceFunctionParameter
 	{
-		std::string		name;
+		DynamicString	name;
 		const Type*		pType;
 	};
 
 	struct InterfaceFunction
 	{
-		typedef std::vector< InterfaceFunctionParameter > ParameterVector;
+		typedef Vector< InterfaceFunctionParameter > ParameterVector;
 
-		std::string		name;
+		DynamicString	name;
 		const Type*		pReturnType;
 
 		ParameterVector	parameters;
@@ -31,7 +33,7 @@ namespace conct
 
 	struct InterfaceEvent
 	{
-		std::string		name;
+		DynamicString	name;
 		const Type*		pType;
 	};
 
@@ -41,11 +43,11 @@ namespace conct
 
 	public:
 
-		typedef std::vector< InterfaceProperty > PropertyVector;
-		typedef std::vector< InterfaceFunction > FunctionVector;
-		typedef std::vector< InterfaceEvent > EventVector;
+		typedef Vector< InterfaceProperty > PropertyVector;
+		typedef Vector< InterfaceFunction > FunctionVector;
+		typedef Vector< InterfaceEvent > EventVector;
 
-		const std::string&		getFileName() const { return m_fileName; }
+		const Path&				getFileName() const { return m_fileName; }
 
 		const InterfaceType*	getBaseType() const { return m_pBaseType; }
 
@@ -61,12 +63,12 @@ namespace conct
 	private: // friend
 
 								InterfaceType();
-		void					create( const std::string& fileName, const std::string& namespaceVar, const std::string& name );
+		void					create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name );
 		bool					load( TypeCollection& typeCollection );
 
 	private:
 
-		std::string				m_fileName;
+		Path					m_fileName;
 
 		const InterfaceType*	m_pBaseType;
 

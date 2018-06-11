@@ -1,31 +1,15 @@
-#include "base.h"
-
-//#if defined( _WIN32 )
-//#	include <windows.h>
-//#endif
+#include "conct_crc16.h"
 
 namespace conct
 {
-//	std::string getExecutableName()
-//	{
-//#if defined( _WIN32 )
-//		char exeFileName[ MAX_PATH ];
-//		GetModuleFileNameA( nullptr, exeFileName, sizeof( exeFileName ) );
-//
-//		return exeFileName;
-//#else
-//#	error "Platform not supported"
-//#endif
-//	}
-
 	// source: https://stackoverflow.com/questions/10564491/function-to-calculate-a-crc16-checksum
-	uint16_t calculateCrc16( const void* pData, size_t size )
+	uint16 calculateCrc16( const void* pData, uintreg size )
 	{
-		static const uint16_t s_crc16 = 0x8005;
+		static const uint16 s_crc16 = 0x8005;
 
-		const uint8_t* pBytes = static_cast< const uint8_t* >( pData );
+		const uint8* pBytes = static_cast< const uint8* >( pData );
 
-		uint16_t out = 0;
+		uint16 out = 0;
 		int bits_read = 0, bit_flag;
 
 		/* Sanity check: */
@@ -66,7 +50,7 @@ namespace conct
 		}
 
 		// item c) reverse the bits
-		uint16_t crc = 0;
+		uint16 crc = 0;
 		i = 0x8000;
 		int j = 0x0001;
 		for( ; i != 0; i >>=1, j <<= 1 )

@@ -5,7 +5,7 @@
 namespace conct
 {
 	template< class T >
-	Vector< T >::Vector()
+	UnsortedSet< T >::UnsortedSet()
 	{
 		m_pData = nullptr;
 		m_count = 0u;
@@ -13,13 +13,13 @@ namespace conct
 	}
 
 	template< class T >
-	Vector< T >::Vector( const Vector& rhs )
+	UnsortedSet< T >::UnsortedSet( const UnsortedSet& rhs )
 	{
 		*this = rhs;
 	}
 
 	template< class T >
-	Vector< T >::Vector( const std::initializer_list< T >& initList )
+	UnsortedSet< T >::UnsortedSet( const std::initializer_list< T >& initList )
 	{
 		m_pData = nullptr;
 		m_count = 0u;
@@ -33,87 +33,56 @@ namespace conct
 	}
 
 	template< class T >
-	Vector< T >::~Vector()
+	UnsortedSet< T >::~UnsortedSet()
 	{
 		delete[] m_pData;
 	}
 
 	template< class T >
-	bool Vector< T >::isEmpty() const
+	bool UnsortedSet< T >::isEmpty() const
 	{
 		return m_count == 0u;
 	}
 
 	template< class T >
-	uintreg Vector< T >::getCount() const
+	uintreg UnsortedSet< T >::getCount() const
 	{
 		return m_count;
 	}
 
 	template< class T >
-	uintreg Vector< T >::getCapacity() const
+	uintreg UnsortedSet< T >::getCapacity() const
 	{
 		return m_capacity;
 	}
 
 	template< class T >
-	void conct::Vector<T>::clear()
+	void conct::UnsortedSet<T>::clear()
 	{
 		m_count = 0u;
 	}
 
 	template< class T >
-	void Vector< T >::reserve( uintreg size )
+	void UnsortedSet< T >::reserve( uintreg size )
 	{
 		checkCapacity( size );
 	}
 
 	template< class T >
-	T& Vector< T >::pushBack()
-	{
-		checkCapacity( m_count + 1u );
-		return m_pData[ m_count++ ];
-	}
-
-	template< class T >
-	void Vector< T >::pushBack( const T& value )
-	{
-		checkCapacity( m_count + 1u );
-		m_pData[ m_count++ ] = value;
-	}
-
-	template< class T >
-	void conct::Vector<T>::pushRange( const T* pData, uintreg count )
-	{
-		checkCapacity( m_count + count );
-		for( uintreg i = 0u; i < count; ++i )
-		{
-			m_pData[ m_count++ ] = pData[ i ];
-		}
-	}
-
-	template< class T >
-	void Vector< T >::popBack()
-	{
-		CONCT_ASSERT( m_count > 0u );
-		m_count--;
-	}
-
-	template< class T >
-	void Vector< T >::eraseSorted( const T& value )
+	void UnsortedSet< T >::eraseSorted( const T& value )
 	{
 		eraseSorted( &value );
 	}
 
 	template< class T >
-	void Vector< T >::eraseSorted( const T* pValue )
+	void UnsortedSet< T >::eraseSorted( const T* pValue )
 	{
 		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_count );
 		eraseSortedByIndex( pValue - m_pData );
 	}
 
 	template< class T >
-	void Vector< T >::eraseSortedByIndex( uintreg index )
+	void UnsortedSet< T >::eraseSortedByIndex( uintreg index )
 	{
 		m_count--;
 		for( uintreg i = index; i < m_count; ++i )
@@ -123,20 +92,20 @@ namespace conct
 	}
 
 	template< class T >
-	void Vector< T >::eraseUnsorted( const T& value )
+	void UnsortedSet< T >::eraseUnsorted( const T& value )
 	{
 		eraseUnsorted( &value );
 	}
 
 	template< class T >
-	void Vector< T >::eraseUnsorted( const T* pValue )
+	void UnsortedSet< T >::eraseUnsorted( const T* pValue )
 	{
 		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_count );
 		eraseUnsortedByIndex( pValue - m_pData );
 	}
 
 	template< class T >
-	void Vector< T >::eraseUnsortedByIndex( uintreg index )
+	void UnsortedSet< T >::eraseUnsortedByIndex( uintreg index )
 	{
 		m_count--;
 		if( index != m_count )
@@ -146,47 +115,47 @@ namespace conct
 	}
 
 	template< class T >
-	T* conct::Vector< T >::getData()
+	T* conct::UnsortedSet< T >::getData()
 	{
 		return m_pData;
 	}
 
 	template< class T >
-	const T* conct::Vector< T >::getData() const
+	const T* conct::UnsortedSet< T >::getData() const
 	{
 		return m_pData;
 	}
 
 	template< class T >
-	T& conct::Vector<T>::getFirst()
+	T& conct::UnsortedSet<T>::getFirst()
 	{
 		CONCT_ASSERT( m_count > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	const T& conct::Vector<T>::getFirst() const
+	const T& conct::UnsortedSet<T>::getFirst() const
 	{
 		CONCT_ASSERT( m_count > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	T& conct::Vector<T>::getLast()
+	T& conct::UnsortedSet<T>::getLast()
 	{
 		CONCT_ASSERT( m_count > 0u );
 		return m_pData[ m_count - 1u ];
 	}
 
 	template< class T >
-	const T& conct::Vector<T>::getLast() const
+	const T& conct::UnsortedSet<T>::getLast() const
 	{
 		CONCT_ASSERT( m_count > 0u );
 		return m_pData[ m_count - 1u ];
 	}
 
 	template< class T >
-	Vector< T >& Vector< T >::operator=( const Vector& rhs )
+	UnsortedSet< T >& UnsortedSet< T >::operator=( const UnsortedSet& rhs )
 	{
 		clear();
 		pushRange( rhs.getData(), rhs.getCount() );
@@ -194,21 +163,21 @@ namespace conct
 	}
 
 	template< class T >
-	T& Vector< T >::operator[]( uintreg index )
+	T& UnsortedSet< T >::operator[]( uintreg index )
 	{
 		CONCT_ASSERT( index < m_count );
 		return m_pData[ index ];
 	}
 
 	template< class T >
-	const T& Vector< T >::operator[]( uintreg index ) const
+	const T& UnsortedSet< T >::operator[]( uintreg index ) const
 	{
 		CONCT_ASSERT( index < m_count );
 		return m_pData[ index ];
 	}
 
 	template< class T >
-	void Vector< T >::checkCapacity( uintreg size )
+	void UnsortedSet< T >::checkCapacity( uintreg size )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( size );
 		if( nextCapacity < m_capacity )

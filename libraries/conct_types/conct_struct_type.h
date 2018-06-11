@@ -1,12 +1,14 @@
 #pragma once
 
-#include "type.h"
+#include "conct_path.h"
+#include "conct_type.h"
+#include "conct_vector.h"
 
 namespace conct
 {
 	struct StructField
 	{
-		std::string		name;
+		DynamicString	name;
 		const Type*		pType;
 	};
 
@@ -16,21 +18,21 @@ namespace conct
 
 	public:
 
-		typedef std::vector< StructField > FieldVector;
+		typedef Vector< StructField > FieldVector;
 
-		const std::string&		getFileName() const { return m_fileName; }
+		const Path&				getFileName() const { return m_fileName; }
 
 		const FieldVector&		getFields() const { return m_fields; }
 
 	private: // friend
 
 								StructType();
-		void					create( const std::string& fileName, const std::string& namespaceVar, const std::string& name );
+		void					create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name );
 		bool					load( TypeCollection& typeCollection );
 
 	private:
 
-		std::string				m_fileName;
+		Path					m_fileName;
 
 		FieldVector				m_fields;
 	};

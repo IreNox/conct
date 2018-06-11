@@ -1,5 +1,7 @@
 #pragma once
 
+#include "conct_core.h"
+
 #include <initializer_list>
 
 namespace conct
@@ -37,10 +39,25 @@ namespace conct
 		T*			getData();
 		const T*	getData() const;
 
+		T*			getBegin();
+		const T*	getBegin() const;
+		T*			getEnd();
+		const T*	getEnd() const;
+
+		T&			getFirst();
+		const T&	getFirst() const;
+		T&			getLast();
+		const T&	getLast() const;
+
 		Vector&		operator=( const Vector& rhs );
 
 		T&			operator[]( uintreg index );
 		const T&	operator[]( uintreg index ) const;
+
+		T*			begin() { return getBegin(); }
+		const T*	begin() const { return getBegin(); }
+		T*			end() { return getEnd(); }
+		const T*	end() const { return getEnd(); }
 
 	private:
 

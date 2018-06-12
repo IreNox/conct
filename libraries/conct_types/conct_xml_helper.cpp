@@ -60,23 +60,23 @@ namespace conct
 		return false;
 	}
 
-	bool loadMemSizeValue( size_t& target, tinyxml2::XMLElement* pNode, const char* pName )
+	bool loadMemSizeValue( uintreg& target, tinyxml2::XMLElement* pNode, const char* pName )
 	{
 		int64_t value = 0u;
 		if( pNode->QueryInt64Attribute( pName, &value ) == tinyxml2::XML_SUCCESS )
 		{
-			target = (size_t)value;
+			target = ( uintreg )value;
 			return true;
 		}
 
 		tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
 		if( pChildNode != nullptr && pChildNode->QueryInt64Text( &value ) == tinyxml2::XML_SUCCESS )
 		{
-			target = (size_t)value;
+			target = ( uintreg )value;
 			return true;
 		}
 
-		std::cout << "Error: Failed to load size_t value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+		std::cout << "Error: Failed to load uintreg value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
 		return false;
 	}
 

@@ -8,18 +8,18 @@
 namespace conct
 {
 	DynamicString::DynamicString()
-		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
+		: m_pString( nullptr ), m_capacity( 0u ), m_length( 0u )
 	{
 	}
 
 	DynamicString::DynamicString( const DynamicString& string )
-		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
+		: m_pString( nullptr ), m_capacity( 0u ), m_length( 0u )
 	{
 		*this = string;
 	}
 
 	DynamicString::DynamicString( const char* pString )
-		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
+		: m_pString( nullptr ), m_capacity( 0u ), m_length( 0u )
 	{
 		const uintreg stringLength = getStringLength( pString );
 		checkCapacity( stringLength );
@@ -28,7 +28,7 @@ namespace conct
 	}
 
 	DynamicString::DynamicString( const char* pString, uintreg stringLength )
-		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
+		: m_pString( nullptr ), m_capacity( 0u ), m_length( 0u )
 	{
 		CONCT_ASSERT( getStringLength( pString ) >= stringLength );
 

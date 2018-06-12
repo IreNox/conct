@@ -11,6 +11,7 @@ namespace conct
 			"OutOfMemory",
 			"TimeOut",
 			"Unsupported",
+			"PermissionDenied",
 			"AlreadyExists",
 			"PathNotFound",
 			"NoSuchDevice",

@@ -25,6 +25,8 @@ namespace conct
 
 		typedef UnsortedSet< const Type* > TypeSet;
 
+		virtual					~Type() { }
+
 		const DynamicString&	getNamespace() const { return m_namespace; }
 		const DynamicString&	getName() const { return m_name; }
 		const DynamicString&	getCppName() const { return m_cppName; }

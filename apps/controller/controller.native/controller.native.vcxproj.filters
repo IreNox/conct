@@ -2,33 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="controller_native.cpp" />
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_memory.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_value_type.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_ascii.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_string_tools.cpp">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.cpp">
       <Filter>libraries\conct_port_tcp</Filter>
     </ClCompile>
@@ -65,102 +38,72 @@
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_value_high.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\third_party\tinyxml2.cpp">
-      <Filter>shared\third_party</Filter>
+    <ClCompile Include="..\..\..\third_party\tinyxml2\tinyxml2.cpp">
+      <Filter>third_party\tinyxml2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\array_type.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_array_type.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\base.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_interface_type.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\interface_type.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_struct_type.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\struct_type.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_type.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\type.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_type_collection.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\type_collection.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_xml_helper.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\shared\tool_base\xml_helper.cpp">
-      <Filter>shared\tool_base</Filter>
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_string_tools.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_filesystem.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_path.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_crc16.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_functions.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_memory.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_reader.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_result.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_timer.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_value_type.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_core\conct_ascii.cpp">
+      <Filter>libraries\conct_core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller_native.h" />
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_memory.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_number_limits.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_relative_array.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_relative_pointer.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_result.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_string.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_timer.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_value_type.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_array.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_ascii.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_string_tools.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_vector.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_core_high.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_dynamic_string.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_queue.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.h">
       <Filter>libraries\conct_port_tcp</Filter>
     </ClInclude>
@@ -203,32 +146,110 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_value_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\third_party\tinyxml2.h">
-      <Filter>shared\third_party</Filter>
+    <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h">
+      <Filter>third_party\tinyxml2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\array_type.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_array_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\base.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\interface_type.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_struct_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\struct_type.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\type.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_type_collection.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\type_collection.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_xml_helper.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\xml_helper.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_queue.h">
+      <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\shared\tool_base\path.h">
-      <Filter>shared\tool_base</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_string_tools.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_unsorted_set.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_vector.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_core_high.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_directory_iterator.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_dynamic_string.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_filesystem.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_path.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_ascii.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_core.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_crc16.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_flags.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_functions.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_memory.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_number_limits.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_port.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_reader.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_relative_array.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_relative_pointer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_result.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_string.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_structs.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_timer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_value_type.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_writer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_array.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h">
+      <Filter>libraries\conct_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -253,17 +274,47 @@
     <Filter Include="gen">
       <UniqueIdentifier>{39ee93d4-d9fc-4eb6-93f8-0b5f1b4f5e14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="shared">
-      <UniqueIdentifier>{c9dc54b5-8ccc-4b52-ae02-a5eabc975e9a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\tool_base">
-      <UniqueIdentifier>{a4c8f616-11b3-4f88-86f5-b31aa46b2a84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="shared\third_party">
+    <Filter Include="third_party">
       <UniqueIdentifier>{4bbcc60f-9793-45aa-aac0-1942547e6d87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\tinyxml2">
+      <UniqueIdentifier>{23b3cb85-88dc-47ab-abd9-541b80842036}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_types">
+      <UniqueIdentifier>{1365c4cf-64c9-4c35-a332-855f9c5b4cb5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\libraries\conct_runtime\conct_value_builder.inl">
+      <Filter>libraries\conct_runtime</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime\conct_value_triats.inl">
+      <Filter>libraries\conct_runtime</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.inl">
+      <Filter>libraries\conct_runtime</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime\conct_data_builder.inl">
+      <Filter>libraries\conct_runtime</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl">
+      <Filter>libraries\conct_runtime_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_runtime_high\conct_value_high.inl">
+      <Filter>libraries\conct_runtime_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core_high\conct_queue.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core_high\conct_unsorted_set.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core_high\conct_vector.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_core\conct_flags.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
     <None Include="..\..\..\libraries\conct_core\conct_memory.inl">
       <Filter>libraries\conct_core</Filter>
     </None>
@@ -287,33 +338,6 @@
     </None>
     <None Include="..\..\..\libraries\conct_core\conct_array_view.inl">
       <Filter>libraries\conct_core</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_core\conct_flags.inl">
-      <Filter>libraries\conct_core</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_core_high\conct_queue.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_core_high\conct_vector.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime\conct_value_builder.inl">
-      <Filter>libraries\conct_runtime</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime\conct_value_triats.inl">
-      <Filter>libraries\conct_runtime</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime\conct_buffered_value_builder.inl">
-      <Filter>libraries\conct_runtime</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime\conct_data_builder.inl">
-      <Filter>libraries\conct_runtime</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl">
-      <Filter>libraries\conct_runtime_high</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime_high\conct_value_high.inl">
-      <Filter>libraries\conct_runtime_high</Filter>
     </None>
   </ItemGroup>
 </Project>

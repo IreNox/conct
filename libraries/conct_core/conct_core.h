@@ -141,9 +141,9 @@
 #		define CONCT_INLINE			inline
 #		define CONCT_FORCE_INLINE	__forceinline
 #		define CONCT_NO_INLINE		__declspec(noinline)
-#	elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_GCC )
+#	elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
 #		define CONCT_INLINE			inline
-#		define CONCT_FORCE_INLINE	__attribute__((always_inline))
+#		define CONCT_FORCE_INLINE	inline __attribute__((always_inline))
 #		define CONCT_NO_INLINE		__attribute__((noinline))
 #	else
 #		error Platform not implemented

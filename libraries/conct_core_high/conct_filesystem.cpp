@@ -6,9 +6,13 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#	include <unistd.h>
+#	include <sys/stat.h>
 #endif
 
 #include <stdio.h>
+#include <cerrno>
 
 namespace conct
 {
@@ -33,6 +37,22 @@ namespace conct
 	{
 		const int errorCode = errno;
 
+		switch( errorCode )
+		{
+		case ENOENT:
+			return ResultId_PathNotFound;
+
+		case EACCES:
+		case EROFS:
+			return ResultId_PermissionDenied;
+
+		case EEXIST:
+			return ResultId_AlreadyExists;
+
+		default:
+			break;
+		}
+
 		return ResultId_Unknown;
 	}
 
@@ -40,6 +60,8 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		return ( GetFileAttributesA( path.getNativePath().toConstCharPointer() ) != INVALID_FILE_ATTRIBUTES );
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		return access( path.getNativePath().toConstCharPointer(), F_OK ) != -1;
 #endif
 	}
 
@@ -53,6 +75,14 @@ namespace conct
 		}
 
 		return !isBitSet( attributes, FILE_ATTRIBUTE_DIRECTORY );
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		struct stat fileStats;
+		if( ::stat( path.getNativePath().toConstCharPointer(), &fileStats ) != 0 )
+		{
+			return false;
+		}
+
+		return isBitSet( fileStats.st_mode, S_IFMT );
 #endif
 	}
 
@@ -60,6 +90,14 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		return isBitSet( GetFileAttributesA( path.getNativePath().toConstCharPointer() ), FILE_ATTRIBUTE_DIRECTORY );
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		struct stat fileStats;
+		if( ::stat( path.getNativePath().toConstCharPointer(), &fileStats ) != 0 )
+		{
+			return false;
+		}
+
+		return S_ISDIR( fileStats.st_mode );
 #endif
 	}
 
@@ -69,6 +107,13 @@ namespace conct
 		if( !CreateDirectoryA( path.getNativePath().toConstCharPointer(), nullptr ) )
 		{
 			return createFailureResult< void >( getResultFromLastError() );
+		}
+
+		return createSuccessResult();
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		if( mkdir( path.getNativePath().toConstCharPointer(), S_IRWXU ) != 0 )
+		{
+			return createFailureResult< void >( getResultFromErrno() );
 		}
 
 		return createSuccessResult();

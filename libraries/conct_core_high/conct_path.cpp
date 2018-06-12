@@ -131,6 +131,8 @@ namespace conct
 		char exeFileName[ MAX_PATH ];
 		GetModuleFileNameA( nullptr, exeFileName, sizeof( exeFileName ) );
 		return Path( DynamicString( exeFileName ) );
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		return Path();
 #else
 #	error "Platform not supported"
 #endif

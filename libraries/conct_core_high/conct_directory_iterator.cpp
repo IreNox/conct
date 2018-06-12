@@ -2,6 +2,8 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#	include <dirent.h>
 #endif
 
 namespace conct
@@ -42,7 +44,6 @@ namespace conct
 		{
 			if( !FindNextFileA( m_pSearchHandle, &findData ) )
 			{
-				m_currentPath.clear();
 				shutdown();
 				return false;
 			}
@@ -56,6 +57,32 @@ namespace conct
 
 		m_currentPath = m_iteratorPath.push( DynamicString( findData.cFileName ) );
 		return true;
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		if( m_pDir == nullptr )
+		{
+			m_pDir = opendir( m_iteratorPath.getNativePath().toConstCharPointer() );
+			if( m_pDir == nullptr )
+			{
+				m_currentPath.clear();
+				return false;
+			}
+		}
+
+		dirent* pDirEntry = readdir( m_pDir );
+		if( pDirEntry == nullptr )
+		{
+			shutdown();
+			return false;
+		}
+
+		if( ( pDirEntry->d_name[ 0u ] == '.' && pDirEntry->d_name[ 1u ] == '\0' ) ||
+			( pDirEntry->d_name[ 0u ] == '.' && pDirEntry->d_name[ 1u ] == '.' && pDirEntry->d_name[ 2u ] == '\0' ) )
+		{
+			return next();
+		}
+
+		m_currentPath = m_iteratorPath.push( DynamicString( pDirEntry->d_name ) );
+		return true;
 #endif
 	}
 
@@ -63,16 +90,26 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		m_pSearchHandle = INVALID_HANDLE_VALUE;
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		m_pDir = nullptr;
 #endif
 	}
 
 	void DirectoryIterator::shutdown()
 	{
+		m_currentPath.clear();
+
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		if( m_pSearchHandle != INVALID_HANDLE_VALUE )
 		{
 			FindClose( m_pSearchHandle );
 			m_pSearchHandle = INVALID_HANDLE_VALUE;
+		}
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		if( m_pDir != nullptr )
+		{
+			closedir( m_pDir );
+			m_pDir = nullptr;
 		}
 #endif
 	}

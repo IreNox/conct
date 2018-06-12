@@ -23,7 +23,7 @@ namespace conct
 
 	void Controller::loop()
 	{
-		for( uintreg i = 0u; i < m_releaseCommand.getCount(); ++i )
+		for( uintreg i = 0u; i < m_releaseCommand.getLength(); ++i )
 		{
 			CommandBase* pCommand = m_releaseCommand[ i ];
 			if( !pCommand->isFinish() )
@@ -66,10 +66,10 @@ namespace conct
 		pRequest->instanceId	= instance.id;
 		pRequest->name			= dataBuilder.pushString( pName );
 
-		Array< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getCount() );
+		Array< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getLength() );
 		pRequest->arguments		= workingArguments;
 
-		for( size_t i = 0u; i < workingArguments.getCount(); ++i )
+		for( size_t i = 0u; i < workingArguments.getLength(); ++i )
 		{
 			dataBuilder.pushValueData( &workingArguments[ i ], &arguments[ i ] );
 		}

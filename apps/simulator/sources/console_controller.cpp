@@ -1,13 +1,12 @@
 ﻿#include "console_controller.h"
 
 #include "conct_controller.h"
+#include "conct_interface_type.h"
 #include "conct_string_tools.h"
+#include "conct_type_collection.h"
 
 #include "console_input.h"
 #include "console_render.h"
-
-#include "tool_base/type_collection.h"
-#include "tool_base/interface_type.h"
 
 #include <sstream>
 
@@ -31,7 +30,7 @@ namespace conct
 		device.address.address[ 1u ]	= 0u;
 		m_devices.push_front( device );
 
-		const InterfaceType* pDeviceType = pTypes->findInterface( "Core.Device", "" );
+		const InterfaceType* pDeviceType = pTypes->findInterface( "Core.Device"_s, ""_s );
 
 		ControllerInstance instance;
 		instance.name					= DynamicString( pDeviceType->getFullName() ) + " @ " + device.name;
@@ -331,7 +330,7 @@ namespace conct
 			{
 				m_pFunction = &m_pInstance->pType->getFunctions()[ m_index ];
 
-				if( !m_pFunction->parameters.empty() )
+				if( !m_pFunction->parameters.isEmpty() )
 				{
 					setValueState( m_pFunction->parameters[ 0u ].pType->getValueType() );
 				}
@@ -359,7 +358,7 @@ namespace conct
 				}
 				else if( m_action == Action_CallFunction )
 				{
-					if( m_values.size() < m_pFunction->parameters.size() )
+					if( m_values.size() < m_pFunction->parameters.getLength() )
 					{
 						const ValueType nextType = m_pFunction->parameters[ m_values.size() ].pType->getValueType();
 						setValueState( nextType );
@@ -623,7 +622,7 @@ namespace conct
 			break;
 
 		case ValueType_String:
-			return value.getString();
+			return DynamicString( value.getString() );
 			break;
 
 		case ValueType_PercentValue:
@@ -664,7 +663,7 @@ namespace conct
 		}
 
 		ControllerInstance instance;
-		instance.name				= DynamicString( pType->getFullName().c_str() ) + " @ " + m_pInstance->pDevice->name;
+		instance.name				= pType->getFullName() + " @ " + m_pInstance->pDevice->name;
 		instance.pDevice			= m_pInstance->pDevice;
 		instance.instanceId			= sourceInstance.id;
 		instance.pType				= pType;
@@ -860,7 +859,7 @@ namespace conct
 
 	void ConsoleController::executeGetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance )
 	{
-		Command< ValueHigh >* pCommand = device.data.pController->getProperty( remoteInstance, m_pProperty->name.c_str() );
+		Command< ValueHigh >* pCommand = device.data.pController->getProperty( remoteInstance, m_pProperty->name.toConstCharPointer() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'getProperty' command."_s );
@@ -872,7 +871,7 @@ namespace conct
 
 	void ConsoleController::executeSetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance )
 	{
-		CommandBase* pCommand = device.data.pController->setProperty( remoteInstance, m_pProperty->name.c_str(), m_values.front() );
+		CommandBase* pCommand = device.data.pController->setProperty( remoteInstance, m_pProperty->name.toConstCharPointer(), m_values.front() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -886,7 +885,7 @@ namespace conct
 	{
 		ArrayView< ValueHigh > arguments;
 		arguments.set( m_values.data(), m_values.size() );
-		CommandBase* pCommand = device.data.pController->callFunction( remoteInstance, m_pFunction->name.c_str(), arguments );
+		CommandBase* pCommand = device.data.pController->callFunction( remoteInstance, m_pFunction->name.toConstCharPointer(), arguments );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -935,11 +934,11 @@ namespace conct
 				DynamicString text;
 				if( m_action == Action_GetProperty )
 				{
-					text = "Property '"_s + m_pProperty->name.c_str() + "' has the following value:\n"_s;
+					text = "Property '"_s + m_pProperty->name + "' has the following value:\n"_s;
 				}
 				else
 				{
-					text = "Function '"_s + m_pFunction->name.c_str() + "' returned the following value:\n"_s;
+					text = "Function '"_s + m_pFunction->name + "' returned the following value:\n"_s;
 				}
 				text += getStringFromValue( value );
 
@@ -951,7 +950,7 @@ namespace conct
 				else if( value.getType() == ValueType_Array && value.getArrayType() == ValueTypeTraits< Instance >::getTypeCrc() )
 				{
 					const ArrayView< Instance > instances = value.getArray< Instance >();
-					for( uintreg i = 0u; i < instances.getCount(); ++i )
+					for( uintreg i = 0u; i < instances.getLength(); ++i )
 					{
 						const Instance& sourceInstance = instances[ i ];
 						text += addInstance( sourceInstance );

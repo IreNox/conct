@@ -14,7 +14,7 @@ namespace conct
 	template< class T >
 	ResultId ValueBuilder::setArray( const ArrayView< T >& value )
 	{
-		return setArray( value.getData(), sizeof( T ), value.getCount(), ValueTypeTraits< T >::getTypeCrc() );
+		return setArray( value.getData(), sizeof( T ), value.getLength(), ValueTypeTraits< T >::getTypeCrc() );
 	}
 
 	template< class T >

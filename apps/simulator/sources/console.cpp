@@ -5,8 +5,7 @@
 #include "console_instances.h"
 #include "console_plugin.h"
 #include "console_render.h"
-
-#include "tool_base/base.h"
+#include "conct_path.h"
 
 #include <iostream>
 
@@ -21,14 +20,12 @@ namespace conct
 		ConsoleInput::setup();
 		ConsoleRenderer::setup();
 
-		std::filesystem::path exePath = getExecutableName();
-		std::filesystem::path basePath = exePath.parent_path().parent_path().parent_path().parent_path();
-		std::filesystem::path configPath = basePath;
-		configPath.append( "config" );
+		const Path exePath = Path::getExecutablePath();
+		const Path basePath = exePath.getParent().getParent().getParent().getParent().getParent();
+		const Path configPath = basePath.push( "config"_s );
+		const Path typesPath = configPath.push( "types"_s );
 
-		std::filesystem::path typesPath = configPath;
-		typesPath.append( "types" );
-		if( !m_types.load( typesPath.generic_string() ) )
+		if( !m_types.load( typesPath ) )
 		{
 			std::cout << "could not load types" << std::endl;
 			exit( 0u );

@@ -454,7 +454,7 @@ namespace conct
 		DeviceData& deviceData = it->second;
 
 		baseHeader.sourceHops		= 1u;
-		baseHeader.payloadSize		= uint16( payload.getCount() );
+		baseHeader.payloadSize		= uint16( payload.getLength() );
 		baseHeader.commandId		= commandId;
 		baseHeader.messageType		= messageType;
 		baseHeader.messageResult	= result;
@@ -463,7 +463,7 @@ namespace conct
 		package.targetDeviceId	= deviceAddress.address[ 0u ];
 		package.currentOffset	= 0u;
 
-		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getCount();
+		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getLength();
 		package.data.reserve( packageSize );
 
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
@@ -479,7 +479,7 @@ namespace conct
 			package.data.push_back( deviceAddress.address[ i ] );
 		}
 
-		for( uintreg i = 0u; i < payload.getCount(); ++i )
+		for( uintreg i = 0u; i < payload.getLength(); ++i )
 		{
 			package.data.push_back( payload[ i ] );
 		}

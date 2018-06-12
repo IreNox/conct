@@ -6,7 +6,7 @@ namespace conct
 	{
 		m_state		= CommandState_Created;
 		m_id		= id;
-		m_result	= ResultId_Timeout;
+		m_result	= ResultId_TimeOut;
 	}
 
 	void CommandBase::setSent()

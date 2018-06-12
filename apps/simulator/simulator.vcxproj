@@ -20,13 +20,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\libraries\conct_core\conct_ascii.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_functions.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_memory.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_reader.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_data_builder.cpp" />
@@ -39,14 +43,13 @@
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_router.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_value_high.cpp" />
-    <ClCompile Include="..\shared\third_party\tinyxml2.cpp" />
-    <ClCompile Include="..\shared\tool_base\array_type.cpp" />
-    <ClCompile Include="..\shared\tool_base\base.cpp" />
-    <ClCompile Include="..\shared\tool_base\interface_type.cpp" />
-    <ClCompile Include="..\shared\tool_base\struct_type.cpp" />
-    <ClCompile Include="..\shared\tool_base\type.cpp" />
-    <ClCompile Include="..\shared\tool_base\type_collection.cpp" />
-    <ClCompile Include="..\shared\tool_base\xml_helper.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_array_type.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_interface_type.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_struct_type.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
+    <ClCompile Include="..\..\third_party\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="sources\console.cpp" />
     <ClCompile Include="sources\console_controller.cpp" />
     <ClCompile Include="sources\console_input.cpp" />
@@ -61,6 +64,7 @@
     <ClInclude Include="..\..\libraries\conct_core\conct_array_view.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_ascii.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_crc16.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_flags.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_functions.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_memory.h" />
@@ -76,9 +80,13 @@
     <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_data_builder.h" />
@@ -93,14 +101,13 @@
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_router.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_value_high.h" />
-    <ClInclude Include="..\shared\third_party\tinyxml2.h" />
-    <ClInclude Include="..\shared\tool_base\array_type.h" />
-    <ClInclude Include="..\shared\tool_base\base.h" />
-    <ClInclude Include="..\shared\tool_base\interface_type.h" />
-    <ClInclude Include="..\shared\tool_base\struct_type.h" />
-    <ClInclude Include="..\shared\tool_base\type.h" />
-    <ClInclude Include="..\shared\tool_base\type_collection.h" />
-    <ClInclude Include="..\shared\tool_base\xml_helper.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_array_type.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_interface_type.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_struct_type.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_type.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
+    <ClInclude Include="..\..\third_party\tinyxml2\tinyxml2.h" />
     <ClInclude Include="devices\shared\i_simulator_context.h" />
     <ClInclude Include="devices\shared\i_simulator_port.h" />
     <ClInclude Include="include\console.h" />
@@ -124,6 +131,7 @@
     <None Include="..\..\libraries\conct_core\conct_string.inl" />
     <None Include="..\..\libraries\conct_core\conct_writer.inl" />
     <None Include="..\..\libraries\conct_core_high\conct_queue.inl" />
+    <None Include="..\..\libraries\conct_core_high\conct_unsorted_set.inl" />
     <None Include="..\..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.inl" />
     <None Include="..\..\libraries\conct_runtime\conct_data_builder.inl" />
@@ -173,19 +181,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="disable_secure_warning.props" />
+    <Import Project="..\..\disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="disable_secure_warning.props" />
+    <Import Project="..\..\disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="disable_secure_warning.props" />
+    <Import Project="..\..\disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="disable_secure_warning.props" />
+    <Import Project="..\..\disable_secure_warning.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -227,7 +235,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\libraries\conct_types;$(ProjectDir)..\..\third_party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

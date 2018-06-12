@@ -1,10 +1,9 @@
 #pragma once
 
 #include "conct_flags.h"
-#include "conct_structs.h"
 #include "conct_runtime.h"
-
-#include "tool_base/type_collection.h"
+#include "conct_structs.h"
+#include "conct_type_collection.h"
 
 #include "console_plugin.h"
 

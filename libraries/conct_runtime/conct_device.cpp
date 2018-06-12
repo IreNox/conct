@@ -26,7 +26,7 @@ namespace conct
 		getEmptyInstances( resultInstances );
 
 		uintreg count = 0u;
-		for( size_t i = 0u; i < instances.getCount(); ++i )
+		for( size_t i = 0u; i < instances.getLength(); ++i )
 		{
 			if( instances[ i ].type != typeCrc )
 			{
@@ -44,7 +44,7 @@ namespace conct
 		ArrayView< Instance > instances;
 		getPublicInstances( instances );
 
-		for( size_t i = 0u; i < instances.getCount(); ++i )
+		for( size_t i = 0u; i < instances.getLength(); ++i )
 		{
 			if( instances[ i ].type == typeCrc )
 			{
@@ -60,7 +60,7 @@ namespace conct
 		ArrayView< LocalInstance > instances;
 		getLocalInstances( instances );
 
-		if( instanceId > instances.getCount() )
+		if( instanceId > instances.getLength() )
 		{
 			return nullptr;
 		}

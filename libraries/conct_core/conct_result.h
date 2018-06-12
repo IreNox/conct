@@ -11,8 +11,10 @@ namespace conct
 		ResultId_Success,
 
 		ResultId_OutOfMemory,
-		ResultId_Timeout,
+		ResultId_TimeOut,
 		ResultId_Unsupported,
+		ResultId_AlreadyExists,
+		ResultId_PathNotFound,
 		ResultId_NoSuchDevice,
 		ResultId_NoSuchInstance,
 		ResultId_NoSuchField,
@@ -21,16 +23,19 @@ namespace conct
 
 		ResultId_Count
 	};
+	const char* getResultString( ResultId value );
 
 	struct ResultBase
 	{
-		ResultId		result;
+		ResultId			result;
 
-		inline bool		isSuccess() const { return result == ResultId_Success; }
-		inline bool		isError() const { return result != ResultId_Success; }
+		inline bool			isSuccess() const { return result == ResultId_Success; }
+		inline bool			isFailure() const { return result != ResultId_Success; }
 
-		inline bool		isBusy() const { return result == ResultId_Timeout; }
-		inline bool		isDone() const { return result != ResultId_Timeout; }
+		inline bool			isBusy() const { return result == ResultId_TimeOut; }
+		inline bool			isDone() const { return result != ResultId_TimeOut; }
+
+		inline const char*	getResultString() const { return ::conct::getResultString( result ); }
 	};
 
 	template< class TValue >
@@ -43,4 +48,36 @@ namespace conct
 	struct Result< void > : public ResultBase
 	{
 	};
+
+	template< class T >
+	inline Result< T > createSuccessResult( const T& value )
+	{
+		Result< T > result;
+		result.result = ResultId_Success;
+		result.value = value;
+		return result;
+	}
+
+	inline Result< void > createSuccessResult()
+	{
+		Result< void > result;
+		result.result = ResultId_Success;
+		return result;
+	}
+
+	template< class T >
+	inline Result< T > createFailureResult( ResultId resultId )
+	{
+		Result< T > result;
+		result.result = resultId;
+		return result;
+	}
+
+	template< >
+	inline Result< void > createFailureResult< void >( ResultId resultId )
+	{
+		Result< void > result;
+		result.result = resultId;
+		return result;
+	}
 }

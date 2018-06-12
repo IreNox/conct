@@ -10,19 +10,21 @@ namespace conct
 	public:
 
 						ArrayView();
-						ArrayView( const T* pData, uintreg count );
+						ArrayView( const T* pData, uintreg length );
 
-		void			set( const T* pData, uintreg count );
+		void			set( const T* pData, uintreg length );
+
+		bool			isSet() const { return m_pData != nullptr; }
+		uintreg			getLength() const { return m_length; }
 
 		const T*		getData() const { return m_pData; }
-		uintreg			getCount() const { return m_count; }
 
 		const T&		operator[]( uintreg index ) const;
 
 	private:
 
 		const T*		m_pData;
-		uintreg			m_count;
+		uintreg			m_length;
 	};
 }
 

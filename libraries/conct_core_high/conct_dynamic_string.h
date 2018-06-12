@@ -11,15 +11,19 @@ namespace conct
 	public:
 
 							DynamicString();
+							DynamicString( const DynamicString& string );
 		explicit			DynamicString( const char* pString );
 		explicit			DynamicString( const char* pString, uintreg stringLength );
 							~DynamicString();
 
+		bool				isEmpty() const { return m_length == 0u;}
+
+		uintreg				getLength() const { return m_length; }
+		uintreg				getCapacity() const { return m_capacity; }
+
 		void				clear();
-
-		bool				isEmpty() const;
-
-		uintreg				getLength() const;
+		void				reserve( uintreg size );
+		void				terminate( uintreg newLength );
 
 		uintreg				indexOf( char c, uintreg index = 0u ) const;
 		uintreg				indexOf( const DynamicString& str, uintreg index = 0u ) const;
@@ -57,6 +61,11 @@ namespace conct
 		char*				toCharPointer();
 		const char*			toConstCharPointer() const;
 
+		char*				getBegin();
+		const char*			getBegin() const;
+		char*				getEnd();
+		const char*			getEnd() const;
+
 		char&				operator[]( uintreg index );
 		const char&			operator[]( uintreg index ) const;
 
@@ -65,12 +74,18 @@ namespace conct
 		bool				operator==( const DynamicString& rhs ) const;
 		bool				operator==( const char* pString ) const;
 		bool				operator!=( const DynamicString& rhs ) const;
+		bool				operator!=( const char* pString ) const;
 
 		DynamicString&		operator+=( const char* pString );
 		DynamicString&		operator+=( const DynamicString& rhs );
 
 		DynamicString		operator+( const char* pString ) const;
 		DynamicString		operator+( const DynamicString& rhs ) const;
+
+		char*				begin() { return getBegin(); }
+		const char*			begin() const { return getBegin(); }
+		char*				end() { return getEnd(); }
+		const char*			end() const { return getEnd(); }
 
 	private:
 
@@ -79,8 +94,6 @@ namespace conct
 		uintreg				m_length;
 
 		void				checkCapacity( uintreg size );
-		void				terminate();
-		void				terminate( uintreg newLength );
 	};
 
 	DynamicString operator ""_s( const char* pString, size_t length );

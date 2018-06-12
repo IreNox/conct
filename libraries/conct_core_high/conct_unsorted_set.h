@@ -17,7 +17,7 @@ namespace conct
 						~UnsortedSet();
 
 		bool			isEmpty() const;
-		uintreg			getCount() const;
+		uintreg			getLength() const;
 		uintreg			getCapacity() const;
 
 		void			clear();
@@ -58,10 +58,10 @@ namespace conct
 	private:
 
 		T*				m_pData;
-		uintreg			m_count;
+		uintreg			m_length;
 		uintreg			m_capacity;
 
-		void			checkCapacity( uintreg size );
+		void			checkCapacity( uintreg capacity );
 	};
 }
 

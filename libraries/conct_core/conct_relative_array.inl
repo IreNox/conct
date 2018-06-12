@@ -83,7 +83,7 @@ namespace conct
 	template< class TType, class TValueType >
 	RelativeArray< TType, TValueType >& RelativeArray< TType, TValueType >::operator=( Array< TType > rhs )
 	{
-		set( rhs.getData(), TValueType( rhs.getCount() ) );
+		set( rhs.getData(), TValueType( rhs.getLength() ) );
 		return *this;
 	}
 

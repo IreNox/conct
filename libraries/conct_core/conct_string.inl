@@ -81,13 +81,21 @@ namespace conct
 
 	CONCT_FORCE_INLINE bool isStringEquals( const char* pString1, const char* pString2 )
 	{
-		if ( pString1 == pString2 )
+		if( pString1 == pString2 )
 		{
 			return true;
 		}
-		else if ( pString1 == nullptr || pString2 == nullptr )
+		else if( pString1 == nullptr && pString2 == nullptr )
 		{
-			return false;
+			return true;
+		}
+		else if( pString1 == nullptr )
+		{
+			return isStringEmpty( pString2 );
+		}
+		else if( pString2 == nullptr )
+		{
+			return isStringEmpty( pString1 );
 		}
 
 		uintreg index = 0u;

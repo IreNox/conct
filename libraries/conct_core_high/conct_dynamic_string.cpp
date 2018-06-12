@@ -8,27 +8,33 @@
 namespace conct
 {
 	DynamicString::DynamicString()
+		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
-		m_pString	= nullptr;
-		m_capacity	= 0u;
-		m_length	= 0u;
+	}
+
+	DynamicString::DynamicString( const DynamicString& string )
+		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
+	{
+		*this = string;
 	}
 
 	DynamicString::DynamicString( const char* pString )
+		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
 		const uintreg stringLength = getStringLength( pString );
 		checkCapacity( stringLength );
 		memory::copy( m_pString, pString, stringLength );
-		m_pString[ stringLength ] = '\0';
+		terminate( stringLength );
 	}
 
 	DynamicString::DynamicString( const char* pString, uintreg stringLength )
+		: m_pString( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
-		CONCT_ASSERT( getStringLength( pString ) <= stringLength );
+		CONCT_ASSERT( getStringLength( pString ) >= stringLength );
 
 		checkCapacity( stringLength );
 		memory::copy( m_pString, pString, stringLength );
-		m_pString[ stringLength ] = '\0';
+		terminate( stringLength );
 	}
 
 	DynamicString::~DynamicString()
@@ -46,14 +52,16 @@ namespace conct
 		m_length = 0u;
 	}
 
-	bool DynamicString::isEmpty() const
+	void DynamicString::reserve( uintreg size )
 	{
-		return m_length == 0u;
+		checkCapacity( size );
 	}
 
-	uintreg DynamicString::getLength() const
+	void DynamicString::terminate( uintreg newLength )
 	{
-		return m_length;
+		CONCT_ASSERT( newLength < m_capacity );
+		m_length = newLength;
+		m_pString[ m_length ] = '\0';
 	}
 
 	uintreg DynamicString::indexOf( char c, uintreg index /*= 0u*/ ) const
@@ -402,6 +410,26 @@ namespace conct
 		return m_pString;
 	}
 
+	char* DynamicString::getBegin()
+	{
+		return m_pString;
+	}
+
+	const char* DynamicString::getBegin() const
+	{
+		return m_pString;
+	}
+
+	char* DynamicString::getEnd()
+	{
+		return m_pString + m_length;
+	}
+
+	const char* DynamicString::getEnd() const
+	{
+		return m_pString + m_length;
+	}
+
 	char& DynamicString::operator[]( uintreg index )
 	{
 		CONCT_ASSERT( index < m_length );
@@ -467,11 +495,6 @@ namespace conct
 		return result;
 	}
 
-	bool DynamicString::operator!=( const DynamicString& rhs ) const
-	{
-		return !isStringEquals( m_pString, rhs.m_pString );
-	}
-
 	bool DynamicString::operator==( const DynamicString& rhs ) const
 	{
 		return isStringEquals( m_pString, rhs.m_pString );
@@ -480,6 +503,16 @@ namespace conct
 	bool DynamicString::operator==( const char* pString ) const
 	{
 		return isStringEquals( m_pString, pString );
+	}
+
+	bool DynamicString::operator!=( const DynamicString& rhs ) const
+	{
+		return !isStringEquals( m_pString, rhs.m_pString );
+	}
+
+	bool DynamicString::operator!=( const char* pString ) const
+	{
+		return !isStringEquals( m_pString, pString );
 	}
 
 	void DynamicString::checkCapacity( uintreg size )
@@ -499,19 +532,7 @@ namespace conct
 		m_pString = pNewString;
 		m_capacity = nextCapacity;
 
-		terminate();
-	}
-
-	void DynamicString::terminate()
-	{
-		CONCT_ASSERT( m_length < m_capacity );
-		m_pString[ m_length ] = '\0';
-	}
-
-	void DynamicString::terminate( uintreg newLength )
-	{
-		m_length = newLength;
-		terminate();
+		terminate( m_length );
 	}
 
 	DynamicString operator ""_s( const char* pString, size_t length )

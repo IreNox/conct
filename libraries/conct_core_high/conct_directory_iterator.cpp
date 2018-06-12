@@ -1,33 +1,79 @@
-#pragma once
+#include "conct_directory_iterator.h"
 
-#include "conct_dynamic_string.h"
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <windows.h>
+#endif
 
 namespace conct
 {
-	class Path
+	DirectoryIterator::DirectoryIterator( const Path& path )
 	{
-	public:
+		m_iteratorPath = path;
+		initialize();
+	}
 
-						Path();
-						Path( const DynamicString& path );
+	DirectoryIterator::DirectoryIterator( const DynamicString& path )
+	{
+		m_iteratorPath = Path( path );
+		initialize();
+	}
 
-		bool			isEmpty() { return m_path.isEmpty(); }
-		bool			isAbsolute();
-		bool			isRelative();
+	DirectoryIterator::~DirectoryIterator()
+	{
+		shutdown();
+	}
 
-		Path			getParent() const;
+	bool DirectoryIterator::next()
+	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		WIN32_FIND_DATAA findData;
+		if( m_pSearchHandle == INVALID_HANDLE_VALUE )
+		{
+			DynamicString searchPath = m_iteratorPath.getNativePath() + "\\*.*";
+			m_pSearchHandle = FindFirstFileA( searchPath.toConstCharPointer(), &findData );
 
-		Path			push( const Path& path ) const;
-		Path			push( const DynamicString& path ) const;
+			if( m_pSearchHandle == INVALID_HANDLE_VALUE )
+			{
+				m_currentPath.clear();
+				return false;
+			}
+		}
+		else
+		{
+			if( !FindNextFileA( m_pSearchHandle, &findData ) )
+			{
+				m_currentPath.clear();
+				shutdown();
+				return false;
+			}
+		}
 
-		DynamicString	getNativePath() const { return m_path; }
-		DynamicString	getGenericPath() const { return m_path; }
+		if( (findData.cFileName[ 0u ] == '.' && findData.cFileName[ 1u ] == '\0') ||
+			(findData.cFileName[ 0u ] == '.' && findData.cFileName[ 1u ] == '.' && findData.cFileName[ 2u ] == '\0' ) )
+		{
+			return next();
+		}
 
-		bool			operator==( const Path& rhs ) const;
-		bool			operator!=( const Path& rhs ) const;
+		m_currentPath = m_iteratorPath.push( DynamicString( findData.cFileName ) );
+		return true;
+#endif
+	}
 
-	private:
+	void DirectoryIterator::initialize()
+	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		m_pSearchHandle = INVALID_HANDLE_VALUE;
+#endif
+	}
 
-		DynamicString	m_path;
-	};
+	void DirectoryIterator::shutdown()
+	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		if( m_pSearchHandle != INVALID_HANDLE_VALUE )
+		{
+			FindClose( m_pSearchHandle );
+			m_pSearchHandle = INVALID_HANDLE_VALUE;
+		}
+#endif
+	}
 }

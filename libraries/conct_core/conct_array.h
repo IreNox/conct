@@ -9,29 +9,28 @@ namespace conct
 	{
 	public:
 
-						Array();
-						Array( T* pData, uintreg count );
+					Array();
+					Array( T* pData, uintreg length );
 
-		void			set( T* pData, uintreg count );
-		void			clear();
+		void		set( T* pData, uintreg length );
+		void		clear();
 
-		bool			isSet() const;
+		bool		isSet() const { return m_pData != nullptr; }
+		uintreg		getLength() const { return m_length; }
 
-		T*				getData() { return m_pData; }
-		const T*		getData() const { return m_pData; }
+		T*			getData() { return m_pData; }
+		const T*	getData() const { return m_pData; }
 
-		uintreg			getCount() const { return m_count; }
+		T&			operator[]( uintreg index );
+		const T&	operator[]( uintreg index ) const;
 
-		T*				begin() { return m_pData; }
-		T*				end() { return m_pData + m_count; }
-
-		T&				operator[]( uintreg index );
-		const T&		operator[]( uintreg index ) const;
+		T*			begin() { return m_pData; }
+		T*			end() { return m_pData + m_length; }
 
 	private:
 
-		T*		m_pData;
-		uintreg	m_count;
+		T*			m_pData;
+		uintreg		m_length;
 	};
 }
 

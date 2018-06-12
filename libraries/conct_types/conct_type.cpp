@@ -36,7 +36,7 @@ namespace conct
 			break;
 
 		default:
-			m_headerFilename = getFilename( ""_s, "h"_s );
+			m_headerFilename = getFilename( "", "h" );
 			break;
 		}
 
@@ -59,7 +59,7 @@ namespace conct
 		}
 	}
 
-	DynamicString Type::getFilename( const DynamicString& appendix, const DynamicString& extension ) const
+	DynamicString Type::getFilename( const char* pAppendix, const char* pExtension ) const
 	{
 		DynamicString filename = m_fullName;
 		for( uintreg i = 0u; i < filename.getLength(); ++i )
@@ -76,14 +76,16 @@ namespace conct
 			filename[ i ] = c;
 		}
 
-		if( !appendix.isEmpty() )
+		if( !isStringEmpty( pAppendix ) )
 		{
-			filename += "_"_s + appendix;
+			filename += "_";
+			filename += pAppendix;
 		}
 
-		if( !extension.isEmpty() )
+		if( !isStringEmpty( pExtension ) )
 		{
-			filename += "."_s + extension;
+			filename += ".";
+			filename += pExtension;
 		}
 
 		return filename;

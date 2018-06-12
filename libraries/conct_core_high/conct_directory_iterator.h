@@ -1,26 +1,33 @@
 #pragma once
 
-#include "conct_dynamic_string.h"
+#include "conct_path.h"
 
 namespace conct
 {
-	class Path;
-
 	class DirectoryIterator
 	{
 	public:
 
 						DirectoryIterator( const Path& path );
 						DirectoryIterator( const DynamicString& path );
+						~DirectoryIterator();
 
-		bool			isEnd() const;
+		bool			isEnd() const { return m_currentPath.isEmpty(); }
 
 		bool			next();
 
-		Path			getCurrent() const;
+		inline Path		getCurrent() const { return m_currentPath; }
 
 	private:
 
-		DynamicString	m_path;
+		Path			m_iteratorPath;
+		Path			m_currentPath;
+
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		void*			m_pSearchHandle;
+#endif
+
+		void			initialize();
+		void			shutdown();
 	};
 }

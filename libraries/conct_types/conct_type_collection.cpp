@@ -165,7 +165,7 @@ namespace conct
 	bool TypeCollection::loadFiles( const Path& path )
 	{
 		DirectoryIterator iterator( path );
-		while( !iterator.isEnd() )
+		while( iterator.next() )
 		{
 			const Path& currentPath = iterator.getCurrent();
 

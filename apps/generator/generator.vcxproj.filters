@@ -235,6 +235,9 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_result.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\libraries\conct_core_high\conct_queue.inl">

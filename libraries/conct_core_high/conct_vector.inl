@@ -8,7 +8,7 @@ namespace conct
 	Vector< T >::Vector()
 	{
 		m_pData = nullptr;
-		m_count = 0u;
+		m_length = 0u;
 		m_capacity = 0u;
 	}
 
@@ -22,7 +22,7 @@ namespace conct
 	Vector< T >::Vector( const std::initializer_list< T >& initList )
 	{
 		m_pData = nullptr;
-		m_count = 0u;
+		m_length = 0u;
 		m_capacity = 0u;
 
 		reserve( initList.size() );
@@ -41,13 +41,13 @@ namespace conct
 	template< class T >
 	bool Vector< T >::isEmpty() const
 	{
-		return m_count == 0u;
+		return m_length == 0u;
 	}
 
 	template< class T >
-	uintreg Vector< T >::getCount() const
+	uintreg Vector< T >::getLength() const
 	{
-		return m_count;
+		return m_length;
 	}
 
 	template< class T >
@@ -57,9 +57,9 @@ namespace conct
 	}
 
 	template< class T >
-	void conct::Vector<T>::clear()
+	void Vector<T>::clear()
 	{
-		m_count = 0u;
+		m_length = 0u;
 	}
 
 	template< class T >
@@ -69,34 +69,41 @@ namespace conct
 	}
 
 	template< class T >
+	void Vector<T>::setLength( uintreg size )
+	{
+		checkCapacity( size );
+		m_length = size;
+	}
+
+	template< class T >
 	T& Vector< T >::pushBack()
 	{
-		checkCapacity( m_count + 1u );
-		return m_pData[ m_count++ ];
+		checkCapacity( m_length + 1u );
+		return m_pData[ m_length++ ];
 	}
 
 	template< class T >
 	void Vector< T >::pushBack( const T& value )
 	{
-		checkCapacity( m_count + 1u );
-		m_pData[ m_count++ ] = value;
+		checkCapacity( m_length + 1u );
+		m_pData[ m_length++ ] = value;
 	}
 
 	template< class T >
-	void conct::Vector<T>::pushRange( const T* pData, uintreg count )
+	void Vector<T>::pushRange( const T* pData, uintreg length )
 	{
-		checkCapacity( m_count + count );
-		for( uintreg i = 0u; i < count; ++i )
+		checkCapacity( m_length + length );
+		for( uintreg i = 0u; i < length; ++i )
 		{
-			m_pData[ m_count++ ] = pData[ i ];
+			m_pData[ m_length++ ] = pData[ i ];
 		}
 	}
 
 	template< class T >
 	void Vector< T >::popBack()
 	{
-		CONCT_ASSERT( m_count > 0u );
-		m_count--;
+		CONCT_ASSERT( m_length > 0u );
+		m_length--;
 	}
 
 	template< class T >
@@ -108,15 +115,15 @@ namespace conct
 	template< class T >
 	void Vector< T >::eraseSorted( const T* pValue )
 	{
-		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_count );
+		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_length );
 		eraseSortedByIndex( pValue - m_pData );
 	}
 
 	template< class T >
 	void Vector< T >::eraseSortedByIndex( uintreg index )
 	{
-		m_count--;
-		for( uintreg i = index; i < m_count; ++i )
+		m_length--;
+		for( uintreg i = index; i < m_length; ++i )
 		{
 			m_pData[ i ] = m_pData[ i + 1u ];
 		}
@@ -131,86 +138,110 @@ namespace conct
 	template< class T >
 	void Vector< T >::eraseUnsorted( const T* pValue )
 	{
-		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_count );
+		CONCT_ASSERT( pValue >= m_pData && pValue < m_pData + m_length );
 		eraseUnsortedByIndex( pValue - m_pData );
 	}
 
 	template< class T >
 	void Vector< T >::eraseUnsortedByIndex( uintreg index )
 	{
-		m_count--;
-		if( index != m_count )
+		m_length--;
+		if( index != m_length )
 		{
-			m_pData[ index ] = m_pData[ m_count ];
+			m_pData[ index ] = m_pData[ m_length ];
 		}
 	}
 
 	template< class T >
-	T* conct::Vector< T >::getData()
+	T* Vector< T >::getData()
 	{
 		return m_pData;
 	}
 
 	template< class T >
-	const T* conct::Vector< T >::getData() const
+	const T* Vector< T >::getData() const
 	{
 		return m_pData;
 	}
 
 	template< class T >
-	T& conct::Vector<T>::getFirst()
+	T* Vector<T>::getBegin()
 	{
-		CONCT_ASSERT( m_count > 0u );
+		return m_pData;
+	}
+
+	template< class T >
+	const T* Vector<T>::getBegin() const
+	{
+		return m_pData;
+	}
+
+	template< class T >
+	T* Vector<T>::getEnd()
+	{
+		return m_pData + m_length;
+	}
+
+	template< class T >
+	const T* Vector<T>::getEnd() const
+	{
+		return m_pData + m_length;
+	}
+
+	template< class T >
+	T& Vector<T>::getFirst()
+	{
+		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	const T& conct::Vector<T>::getFirst() const
+	const T& Vector<T>::getFirst() const
 	{
-		CONCT_ASSERT( m_count > 0u );
+		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	T& conct::Vector<T>::getLast()
+	T& Vector<T>::getLast()
 	{
-		CONCT_ASSERT( m_count > 0u );
-		return m_pData[ m_count - 1u ];
+		CONCT_ASSERT( m_length > 0u );
+		return m_pData[ m_length - 1u ];
 	}
 
 	template< class T >
-	const T& conct::Vector<T>::getLast() const
+	const T& Vector<T>::getLast() const
 	{
-		CONCT_ASSERT( m_count > 0u );
-		return m_pData[ m_count - 1u ];
+		CONCT_ASSERT( m_length > 0u );
+		return m_pData[ m_length - 1u ];
 	}
 
 	template< class T >
 	Vector< T >& Vector< T >::operator=( const Vector& rhs )
 	{
 		clear();
-		pushRange( rhs.getData(), rhs.getCount() );
+		pushRange( rhs.getData(), rhs.getLength() );
 		return *this;
 	}
 
 	template< class T >
 	T& Vector< T >::operator[]( uintreg index )
 	{
-		CONCT_ASSERT( index < m_count );
+		CONCT_ASSERT( index < m_length );
 		return m_pData[ index ];
 	}
 
 	template< class T >
 	const T& Vector< T >::operator[]( uintreg index ) const
 	{
-		CONCT_ASSERT( index < m_count );
+		CONCT_ASSERT( index < m_length );
 		return m_pData[ index ];
 	}
 
 	template< class T >
-	void Vector< T >::checkCapacity( uintreg size )
+	void Vector< T >::checkCapacity( uintreg capacity )
 	{
-		const uintreg nextCapacity = getNextPowerOfTwo( size );
+		const uintreg nextCapacity = getNextPowerOfTwo( capacity );
 		if( nextCapacity < m_capacity )
 		{
 			return;
@@ -219,7 +250,7 @@ namespace conct
 		T* pNewData = new T[ nextCapacity ];
 		CONCT_ASSERT( pNewData != nullptr );
 
-		for( uintreg i = 0u; i < m_count; ++i )
+		for( uintreg i = 0u; i < m_length; ++i )
 		{
 			pNewData[ i ] = m_pData[ i ];
 		}

@@ -9,22 +9,22 @@ namespace conct
 	}
 
 	template< class T >
-	ArrayView< T >::ArrayView( const T* pData, uintreg count )
+	ArrayView< T >::ArrayView( const T* pData, uintreg length )
 	{
-		set( pData, count );
+		set( pData, length );
 	}
 
 	template< class T >
-	void ArrayView<T>::set( const T* pData, uintreg count )
+	void ArrayView<T>::set( const T* pData, uintreg length )
 	{
-		m_pData	= pData;
-		m_count	= count;
+		m_pData		= pData;
+		m_length	= length;
 	}
 
 	template< class T >
 	const T& ArrayView< T >::operator[]( uintreg index ) const
 	{
-		CONCT_ASSERT( index < m_count );
+		CONCT_ASSERT( index < m_length );
 		return m_pData[ index ];
 	}
 }

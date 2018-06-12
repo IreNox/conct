@@ -38,7 +38,7 @@ namespace conct
 
 		virtual TypeCrc			getCrc() const;
 
-		DynamicString			getFilename( const DynamicString& appendix, const DynamicString& extension ) const;
+		DynamicString			getFilename( const char* pAppendix, const char* pExtension ) const;
 
 	protected: // friend
 

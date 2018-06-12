@@ -39,12 +39,6 @@ namespace conct
 			PackageState_PushToQueue
 		};
 
-		//struct ReceivedPackageWaitForMagicData
-		//{
-		//	uintreg								firstReadCounter;
-		//	uint16								lastMagic;
-		//};
-
 		struct ReceivedPackageReadBytesData
 		{
 			uintreg								alreadyRead;
@@ -52,12 +46,13 @@ namespace conct
 
 		union ReceivedPackageStateData
 		{
-			//ReceivedPackageWaitForMagicData		waitForMagic;
 			ReceivedPackageReadBytesData		readBytes;
 		};
 
 		struct ReceivedPackage
 		{
+			DeviceId							deviceId;
+
 			MessageBaseHeader					baseHeader;
 			std::vector< DeviceId >				sourceAddress;
 			std::vector< DeviceId >				destinationAddress;
@@ -73,20 +68,23 @@ namespace conct
 
 		struct SendPackage
 		{
-			DeviceId							targetDeviceId;
+			uintreg								targetEndpointId;
 			std::vector< uint8 >				data;
 			uintreg								currentOffset;
 		};
 
 		struct PortData
 		{
-			typedef std::map< DeviceId, PendingReceivedPackage > PendingPackageMap;
+			typedef std::map< uintreg, PendingReceivedPackage > PendingPackageMap;
 			typedef std::vector< ReceivedPackage > ReceivedPackageVector;
 			typedef std::queue< SendPackage > SendPackageQueue;
+			typedef std::map< uintreg, DeviceId > EndpointDeviceMap;
 
 			PendingPackageMap		pendingPackages;
 			ReceivedPackageVector	receivedPackages;
 			SendPackageQueue		sendPackages;
+
+			EndpointDeviceMap		endpointToDevice;
 		};
 
 		struct DeviceData
@@ -94,6 +92,7 @@ namespace conct
 			typedef std::map< CommandId, CommandBase* > CommandMap;
 
 			Port*		pTargetPort;
+			uintreg		endpointId;
 			DeviceId	ownDeviceId;
 			CommandId	nextCommandId;
 			CommandMap	commands;
@@ -107,12 +106,14 @@ namespace conct
 		PortMap				m_ports;
 		DeviceMap			m_devices;
 
+		DeviceId			addDevice( Port* pPort, DeviceId ownDeviceId, uintreg endpointId );
+
 		void				readPort( Port* pPort, PortData& portData );
-		void				readPackage( Port* pPort, PortData& portData, Reader& reader, DeviceId deviceId );
+		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );
 		//void				readMagic( PendingReceivedPackage& package, Reader& reader );
 		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader );
 		void				readBytes( std::vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState );
-		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, DeviceId deviceId );
+		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId );
 
 		void				writePort( Port* pPort, PortData& portData );
 
@@ -122,7 +123,7 @@ namespace conct
 
 		void				setState( PendingReceivedPackage& package, PackageState state );
 
-		void				getDeviceAddress( DeviceAddress& targetAddress, const std::vector< DeviceId >& sourceAddress ) const;
+		void				getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const std::vector< DeviceId >& sourceAddress ) const;
 
 		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result );
 		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType );

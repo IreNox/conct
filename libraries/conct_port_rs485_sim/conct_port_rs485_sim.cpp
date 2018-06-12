@@ -21,7 +21,7 @@ namespace conct
 	{
 	}
 
-	bool PortRs485Sim::openSend( Writer& writer, uintreg size, DeviceId deviceId )
+	bool PortRs485Sim::openSend( Writer& writer, uintreg size, uintreg endpointId )
 	{
 		if( m_pCounterpartPort == nullptr )
 		{
@@ -32,7 +32,7 @@ namespace conct
 		return size > 0u;
 	}
 
-	void PortRs485Sim::closeSend( Writer& writer )
+	void PortRs485Sim::closeSend( Writer& writer, uintreg endpointId )
 	{
 		const uintreg writtenBytes = sizeof( m_sendBuffer ) - writer.getRemainingSize();
 		if( writtenBytes == 0u )
@@ -43,7 +43,7 @@ namespace conct
 		m_pCounterpartPort->pushData( m_sendBuffer, writtenBytes );
 	}
 
-	bool PortRs485Sim::openReceived( Reader& reader, DeviceId& deviceId )
+	bool PortRs485Sim::openReceived( Reader& reader, uintreg& endpointId )
 	{
 		std::lock_guard< std::mutex > lock( m_receiveMutex );
 
@@ -58,11 +58,11 @@ namespace conct
 		m_receivedPackets.pop();
 
 		reader.set( m_receiveBuffer, dataSize );
-		deviceId = 1u;
+		endpointId = 0u;
 		return true;
 	}
 
-	void PortRs485Sim::closeReceived( Reader& reader )
+	void PortRs485Sim::closeReceived( Reader& reader, uintreg endpointId )
 	{
 	}
 

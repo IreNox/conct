@@ -6,10 +6,8 @@ namespace conct
 {
 	template< class T >
 	Vector< T >::Vector()
+		: m_pData( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
-		m_pData = nullptr;
-		m_length = 0u;
-		m_capacity = 0u;
 	}
 
 	template< class T >
@@ -20,11 +18,8 @@ namespace conct
 
 	template< class T >
 	Vector< T >::Vector( const std::initializer_list< T >& initList )
+		: m_pData( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
-		m_pData = nullptr;
-		m_length = 0u;
-		m_capacity = 0u;
-
 		reserve( initList.size() );
 		for( const T& value : initList )
 		{

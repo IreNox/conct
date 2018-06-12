@@ -30,11 +30,11 @@
     <Filter Include="shared">
       <UniqueIdentifier>{37079177-96e3-4ff2-9903-31a126048f10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_port_tcp">
-      <UniqueIdentifier>{fe3335ad-9074-4d30-b62e-26ada7f5e0af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libraries\conct_core_high">
       <UniqueIdentifier>{b988e0ce-3f28-445d-b389-f7797a982cff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_tcp_server">
+      <UniqueIdentifier>{fe3335ad-9074-4d30-b62e-26ada7f5e0af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +134,6 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h">
       <Filter>libraries\conct_port_rs485_sim</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_tcp\conct_port_tcp.h">
-      <Filter>libraries\conct_port_tcp</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_device.h">
       <Filter>libraries\conct_runtime</Filter>
     </ClInclude>
@@ -175,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_controller.h">
       <Filter>libraries\conct_runtime_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h">
+      <Filter>libraries\conct_port_tcp_server</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -223,9 +223,6 @@
     <ClCompile Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp">
       <Filter>libraries\conct_port_rs485_sim</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_port_tcp\conct_port_tcp.cpp">
-      <Filter>libraries\conct_port_tcp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_proxy.cpp">
       <Filter>libraries\conct_runtime</Filter>
     </ClCompile>
@@ -258,6 +255,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_high\conct_controller.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp">
+      <Filter>libraries\conct_port_tcp_server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

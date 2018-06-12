@@ -14,21 +14,18 @@ namespace conct
 {
 	void RuntimeHigh::setup( Device* pDevice )
 	{
-		m_pDevice = pDevice;
+		m_pDevice		= pDevice;
 	}
 
 	void RuntimeHigh::registerPort( Port* pPort )
 	{
-		m_ports[ pPort ]; // create entry
+		PortData& portData = m_ports[ pPort ];
 
 		const Flags8< PortFlag > flags = pPort->getFlags();
 		if( flags.isSet( PortFlag_SingleEndpoint ) )
 		{
-			const DeviceId nextDeviceId = DeviceId( m_devices.size() + 1u );
-			DeviceData& deviceData = m_devices[ nextDeviceId ];
-			deviceData.nextCommandId	= FirstCommandId;
-			deviceData.ownDeviceId		= 1u;
-			deviceData.pTargetPort		= pPort;
+			const DeviceId deviceId = addDevice( pPort, 1u, 0u );
+			portData.endpointToDevice[ 0u ] = deviceId;
 		}
 
 		if( !flags.isSet( PortFlag_Reliable ) )
@@ -97,8 +94,8 @@ namespace conct
 
 	void RuntimeHigh::processRoute( PortData& portData, const ReceivedPackage& sourcePackage )
 	{
-		const DeviceId nextDevice = sourcePackage.destinationAddress.front();
-		DeviceMap::iterator deviceIt = m_devices.find( nextDevice );
+		const DeviceId nextDeviceId = sourcePackage.destinationAddress.front();
+		DeviceMap::iterator deviceIt = m_devices.find( nextDeviceId );
 		if( deviceIt == m_devices.end() )
 		{
 			// target not found. send error to source!
@@ -111,8 +108,8 @@ namespace conct
 		baseHeader.sourceHops++;
 
 		SendPackage package;
-		package.targetDeviceId	= nextDevice;
-		package.currentOffset	= 0u;
+		package.targetEndpointId	= targetDevice.endpointId;
+		package.currentOffset		= 0u;
 
 		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + sourcePackage.payload.size();
 		package.data.reserve( packageSize );
@@ -145,11 +142,13 @@ namespace conct
 
 	void RuntimeHigh::processPackage( PortData& portData, const ReceivedPackage& package )
 	{
-		DeviceData& deviceData = m_devices[ package.sourceAddress.front() ];
-
 		CommandBase* pCommandBase = nullptr;
-		if( package.baseHeader.commandId != InvalidCommandId )
+		if( package.baseHeader.commandId != InvalidCommandId &&
+			( package.baseHeader.messageType == MessageType_GetPropertyResponse ||
+			package.baseHeader.messageType == MessageType_SetPropertyResponse ||
+			package.baseHeader.messageType == MessageType_CallFunctionResponse ) )
 		{
+			DeviceData& deviceData = m_devices[ package.deviceId ];
 			pCommandBase = deviceData.commands[ package.baseHeader.commandId ];
 
 			if( pCommandBase == nullptr )
@@ -277,20 +276,33 @@ namespace conct
 		}
 	}
 
+	DeviceId RuntimeHigh::addDevice( Port* pPort, DeviceId ownDeviceId, uintreg endpointId )
+	{
+		const DeviceId nextDeviceId = DeviceId( m_devices.size() + 1u );
+
+		DeviceData& deviceData = m_devices[ nextDeviceId ];
+		deviceData.nextCommandId	= FirstCommandId;
+		deviceData.endpointId		= endpointId;
+		deviceData.ownDeviceId		= ownDeviceId;
+		deviceData.pTargetPort		= pPort;
+
+		return nextDeviceId;
+	}
+
 	void RuntimeHigh::readPort( Port* pPort, PortData& portData )
 	{
 		Reader reader;
-		DeviceId deviceId;
-		while( pPort->openReceived( reader, deviceId ) )
+		uintreg endpointId;
+		while( pPort->openReceived( reader, endpointId ) )
 		{
-			readPackage( pPort, portData, reader, deviceId );
-			pPort->closeReceived( reader );
+			readPackage( pPort, portData, reader, endpointId );
+			pPort->closeReceived( reader, endpointId );
 		}
 	}
 
-	void RuntimeHigh::readPackage( Port* pPort, PortData& portData, Reader& reader, DeviceId deviceId )
+	void RuntimeHigh::readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId )
 	{
-		PendingReceivedPackage& package = portData.pendingPackages[ deviceId ];
+		PendingReceivedPackage& package = portData.pendingPackages[ endpointId ];
 		while( !reader.isEnd() )
 		{
 			if( package.state == PackageState_ReadBaseHeader )
@@ -315,7 +327,7 @@ namespace conct
 
 			if( package.state == PackageState_PushToQueue )
 			{
-				readStore( pPort, portData, package, deviceId );
+				readStore( pPort, portData, package, endpointId );
 			}
 		}
 	}
@@ -349,18 +361,22 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, DeviceId deviceId )
+	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId )
 	{
-		portData.receivedPackages.push_back( package.target );
-
-		DeviceMap::iterator deviceIt = m_devices.find( deviceId );
-		if( deviceIt == m_devices.end() )
+		PortData::EndpointDeviceMap::iterator endpointIt = portData.endpointToDevice.find( endpointId );
+		if( endpointIt == portData.endpointToDevice.end() )
 		{
-			DeviceData& device = m_devices[ deviceId ];
+			const DeviceId deviceId = addDevice( pPort, package.target.destinationAddress.front(), endpointId );
+			portData.endpointToDevice[ endpointId ] = deviceId;
 
-			device.pTargetPort	= pPort;
-			device.ownDeviceId	= *package.target.destinationAddress.begin();
+			package.target.deviceId = deviceId;
 		}
+		else
+		{
+			package.target.deviceId = endpointIt->second;
+		}
+
+		portData.receivedPackages.push_back( package.target );
 
 		setState( package, PackageState_ReadBaseHeader );
 	}
@@ -376,7 +392,7 @@ namespace conct
 
 		Writer writer;
 		const uintreg remainingSize = currentPackage.data.size() - currentPackage.currentOffset;
-		if( !pPort->openSend( writer, remainingSize, currentPackage.targetDeviceId ) )
+		if( !pPort->openSend( writer, remainingSize, currentPackage.targetEndpointId ) )
 		{
 			return;
 		}
@@ -396,7 +412,7 @@ namespace conct
 			currentPackage.currentOffset = index;
 		}
 
-		pPort->closeSend( writer );
+		pPort->closeSend( writer, currentPackage.targetEndpointId );
 	}
 
 	void RuntimeHigh::setState( PendingReceivedPackage& package, PackageState state )
@@ -417,12 +433,15 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::getDeviceAddress( DeviceAddress& targetAddress, const std::vector< DeviceId >& sourceAddress ) const
+	void RuntimeHigh::getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const std::vector< DeviceId >& sourceAddress ) const
 	{
-		for( uintreg i = 0u; i < sourceAddress.size(); ++i )
+		targetAddress.address[ 0u ] = targetDeviceId;
+
+		for( uintreg i = 1u; i < sourceAddress.size(); ++i )
 		{
 			targetAddress.address[ i ] = sourceAddress[ i ];
 		}
+
 		targetAddress.address[ sourceAddress.size() ] = InvalidDeviceId;
 	}
 
@@ -460,8 +479,8 @@ namespace conct
 		baseHeader.messageResult	= result;
 
 		SendPackage package;
-		package.targetDeviceId	= deviceAddress.address[ 0u ];
-		package.currentOffset	= 0u;
+		package.targetEndpointId	= deviceData.endpointId;
+		package.currentOffset		= 0u;
 
 		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getLength();
 		package.data.reserve( packageSize );
@@ -493,7 +512,7 @@ namespace conct
 	ResultId RuntimeHigh::sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
 		DeviceAddress address;
-		getDeviceAddress( address, package.sourceAddress );
+		getDeviceAddress( address, package.deviceId, package.sourceAddress );
 
 		return sendPackage( address, payload, package.baseHeader.commandId, messageType, ResultId_Success );
 	}
@@ -501,7 +520,7 @@ namespace conct
 	ResultId RuntimeHigh::sendErrorResponse( const ReceivedPackage& package, ResultId result )
 	{
 		DeviceAddress address;
-		getDeviceAddress( address, package.sourceAddress );
+		getDeviceAddress( address, package.deviceId, package.sourceAddress );
 
 		return sendPackage( address, ArrayView< uint8 >(), package.baseHeader.commandId, MessageType_ErrorResponse, result );
 	}

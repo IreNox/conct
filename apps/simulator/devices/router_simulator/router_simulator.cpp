@@ -13,7 +13,6 @@ namespace conct
 	void RouterSimulator::setup()
 	{
 		m_device.setupDevice();
-		m_controller.setup( &m_device.getRuntime() );
 	}
 
 	void RouterSimulator::loop()
@@ -24,7 +23,7 @@ namespace conct
 	void RouterSimulator::fillData( SimulatorDeviceData& targetData )
 	{
 		targetData.name			= "Router";
-		targetData.pController	= &m_controller;
+		targetData.pController	= nullptr;
 	}
 }
 

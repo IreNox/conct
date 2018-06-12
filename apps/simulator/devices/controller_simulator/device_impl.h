@@ -4,9 +4,11 @@
 
 namespace conct
 {
-	class DeviceRouterSimulator : public DeviceInterface
+	class DeviceControllerSimulator : public DeviceInterface
 	{
 	public:
+
+		RuntimeHigh& getRuntime() { return m_runtime; }
 
 	protected:
 

@@ -2,7 +2,6 @@
 
 #include "../../include/simulator_device.h"
 
-#include "conct_controller.h"
 #include "device_impl.h"
 
 namespace conct
@@ -21,6 +20,5 @@ namespace conct
 	private:
 
 		DeviceRouterSimulator	m_device;
-		Controller				m_controller;
 	};
 }

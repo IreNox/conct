@@ -56,15 +56,15 @@ namespace conct
 	void RuntimeLow::readData( Port* pPort )
 	{
 		Reader reader;
-		DeviceId deviceId;
-		if( !pPort->openReceived( reader, deviceId ) )
+		uintreg endpointId;
+		if( !pPort->openReceived( reader, endpointId ) )
 		{
 			return;
 		}
 
 		readData( reader );
 
-		pPort->closeReceived( reader );
+		pPort->closeReceived( reader, endpointId );
 	}
 
 	void RuntimeLow::readData( Reader& reader )
@@ -301,7 +301,7 @@ namespace conct
 	void RuntimeLow::sendData( Port* pPort )
 	{
 		Writer writer;
-		if( !pPort->openSend( writer, m_stateValue, 1u ) )
+		if( !pPort->openSend( writer, m_stateValue, 0u ) )
 		{
 			return;
 		}
@@ -313,7 +313,7 @@ namespace conct
 			m_workingDataOffset += writtenBytes;
 		}
 
-		pPort->closeSend( writer );
+		pPort->closeSend( writer, 0u );
 
 		if( m_stateValue == 0u )
 		{

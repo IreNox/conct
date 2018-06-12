@@ -1,15 +1,15 @@
 #pragma once
 
 #include "conct_port.h"
-#include "i_simulator_port.h"
 
-#include <mutex>
-#include <queue>
-#include <vector>
+#include "conct_vector.h"
+
+#include <WinSock2.h>
+#include <ws2ipdef.h>
 
 namespace conct
 {
-	class PortRs485Sim : public Port, private ISimulatorPort
+	class PortTcpServer : public Port
 	{
 	public:
 
@@ -26,23 +26,20 @@ namespace conct
 
 	private:
 
-		enum
+		struct Connection
 		{
-			MaxPacketSize = 24u
+			uintreg					socket;
+			sockaddr_in6			address;
+
+			Vector< uint8 >			sendData;
+			Vector< uint8 >			receiveData;
 		};
 
-		typedef std::vector< uint8 > Packet;
-		typedef std::queue< Packet > PacketQueue;
+		uintreg						m_socket;
 
-		ISimulatorPort*				m_pCounterpartPort;
+		Vector< Connection >		m_connections;
 
-		std::mutex					m_receiveMutex;
-		PacketQueue					m_receivedPackets;
-		uint8						m_receiveBuffer[ MaxPacketSize ];
-		uint8						m_sendBuffer[ MaxPacketSize ];
-
-		virtual void				setCounterpartPort( ISimulatorPort* pPort ) CONCT_OVERRIDE_FINAL;
-
-		virtual void				pushData( const void* pData, uintreg dataSize ) CONCT_OVERRIDE_FINAL;
+		void						addConnection( uintreg socket, const sockaddr_in6& address );
+		void						updateConnection( Connection& connection );
 	};
 }

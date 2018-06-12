@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<port name="TCP-Client" library="conct_port_client" class="PortTcpClient">
+	<connection mtu="1500">
+		<reliable />
+	</connection>
+	<properties>
+		<listen_port type="int" min="1024" max="49999" default="49351" />
+	</properties>
+</port>

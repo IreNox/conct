@@ -22,11 +22,11 @@ namespace conct
 		virtual void				setup() = 0;
 		virtual void				loop() = 0;
 
-		virtual bool				openSend( Writer& writer, uintreg size, DeviceId deviceId ) = 0;
-		virtual void				closeSend( Writer& writer ) = 0;
+		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) = 0;
+		virtual void				closeSend( Writer& writer, uintreg endpointId ) = 0;
 
-		virtual bool				openReceived( Reader& reader, DeviceId& deviceId ) = 0;
-		virtual void				closeReceived( Reader& reader ) = 0;
+		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) = 0;
+		virtual void				closeReceived( Reader& reader, uintreg endpointId ) = 0;
 
 		virtual Flags8< PortFlag >	getFlags() = 0;
 	};

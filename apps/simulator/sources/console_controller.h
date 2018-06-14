@@ -26,11 +26,11 @@ namespace conct
 
 									ConsoleController( TypeCollection* pTypes );
 
-		virtual void				activate( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
-		virtual void				deactivate( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
+		virtual void				activate( ConsoleDevice& localDevice ) CONCT_OVERRIDE_FINAL;
+		virtual void				deactivate( ConsoleDevice& localDevice ) CONCT_OVERRIDE_FINAL;
 
-		virtual void				update( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
-		virtual void				draw( const ConsoleDevice& device ) const CONCT_OVERRIDE_FINAL;
+		virtual void				update( ConsoleDevice& localDevice ) CONCT_OVERRIDE_FINAL;
+		virtual void				draw( const ConsoleDevice& localDevice ) const CONCT_OVERRIDE_FINAL;
 
 		virtual const char*			getName() const CONCT_OVERRIDE_FINAL;
 
@@ -64,15 +64,31 @@ namespace conct
 			Action_Count
 		};
 
+		//enum DeviceCommandType
+		//{
+		//	DeviceCommandType_GetName,
+		//	DeviceCommandType_GetInstances,
+		//	DeviceCommandType_GetDevices,
+
+		//	DeviceCommandType_Count
+		//};
+
 		struct ControllerDevice
 		{
 			DynamicString			name;
 			DeviceAddress			address;
 		};
 
+		//struct ControllerDeviceCommand
+		//{
+		//	DeviceCommandType		type;
+
+		//	ControllerDevice*		pDevice;
+		//	CommandBase*			pCommand;
+		//};
+
 		struct ControllerInstance
 		{
-			DynamicString			name;
 			ControllerDevice*		pDevice;
 			InstanceId				instanceId;
 			const InterfaceType*	pType;
@@ -80,67 +96,72 @@ namespace conct
 
 		typedef std::vector< DynamicString > StringVector;
 		typedef std::vector< State > StateVector;
-		typedef std::forward_list< ControllerDevice > ControllerDeviceList;
-		typedef std::forward_list< ControllerInstance > ControllerInstanceList;
+		typedef std::forward_list< ControllerDevice > DeviceList;
+		typedef std::forward_list< ControllerInstance > InstanceList;
+		//typedef Vector< ControllerDeviceCommand > DeviceCommandVector;
 
-		TypeCollection*							m_pTypes;
+		TypeCollection*				m_pTypes;
+		const InterfaceType*		m_pDeviceType;
 
-		State									m_state;
-		StateVector								m_stateHistory;
-		Action									m_action;
-		uintreg									m_index;
-		uintreg									m_lastIndices[ State_Count ];
-		StringVector							m_list;
-		DynamicString							m_valueText;
-		DynamicString							m_popupText;
-		ValueType								m_valueType;
+		State						m_state;
+		StateVector					m_stateHistory;
+		Action						m_action;
+		uintreg						m_index;
+		uintreg						m_lastIndices[ State_Count ];
+		StringVector				m_list;
+		DynamicString				m_valueText;
+		DynamicString				m_popupText;
+		ValueType					m_valueType;
 
-		const ControllerDevice*					m_pDevice;
-		const ControllerInstance*				m_pInstance;
-		const InterfaceType*					m_pInterface;
-		const InterfaceProperty*				m_pProperty;
-		const InterfaceFunction*				m_pFunction;
-		std::vector< ValueHigh >				m_values;
+		const ControllerDevice*		m_pDevice;
+		const ControllerInstance*	m_pInstance;
+		const InterfaceType*		m_pInterface;
+		const InterfaceProperty*	m_pProperty;
+		const InterfaceFunction*	m_pFunction;
+		std::vector< ValueHigh >	m_values;
 
-		ControllerDeviceList					m_devices;
-		ControllerInstanceList					m_instances;
+		DeviceList					m_devices;
+		InstanceList				m_instances;
 
-		CommandBase*							m_pRunningCommand;
+		CommandBase*				m_pRunningCommand;
+		//DeviceCommandVector			m_deviceCommands;
 
-		Timer									m_timer;
+		Timer						m_timer;
 
-		void									updateList( ConsoleDevice& device );
-		void									updateValue( ConsoleDevice& device );
+		void						updateList( ConsoleDevice& localDevice );
+		void						updateValue( ConsoleDevice& localDevice );
 
-		void									previousState();
-		void									nextState( ConsoleDevice& device );
-		void									setState( State state );
-		void									setValueState( ValueType targetType );
-		void									setPopupState( const DynamicString& text );
+		void						previousState();
+		void						nextState( ConsoleDevice& localDevice );
+		void						setState( State state );
+		void						setValueState( ValueType targetType );
+		void						setPopupState( const DynamicString& text );
 
-		bool									setValueFromString( ValueHigh& value, const DynamicString& text );
-		DynamicString							getStringFromValue( const ValueHigh& value );
+		bool						setValueFromString( ValueHigh& value, const DynamicString& text ) const;
+		DynamicString				getStringFromValue( const ValueHigh& value ) const;
+		DynamicString				getInstanceName( const ControllerInstance& instance ) const;
 
-		DynamicString							addInstance( Instance sourceInstance );
+		DynamicString				addDevice( DeviceId deviceId, const DeviceAddress* pBaseAddress );
+		DynamicString				addInstance( Instance sourceInstance );
 
-		void									drawClear() const;
-		void									drawList() const;
-		void									drawValue() const;
-		void									drawLoading() const;
-		void									drawPopup() const;
+		void						drawClear() const;
+		void						drawList() const;
+		void						drawValue() const;
+		void						drawLoading() const;
+		void						drawPopup() const;
 
-		void									buildActions();
-		//void									buildDevices();
-		void									buildInstances();
-		void									buildTypes();
-		void									buildProperties();
-		void									buildFunctions();
+		void						buildActions();
+		//void						buildDevices();
+		void						buildInstances();
+		void						buildTypes();
+		void						buildProperties();
+		void						buildFunctions();
 
-		void									executeAction( ConsoleDevice& device );
-		void									executeGetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance );
-		void									executeSetPropertyAction( ConsoleDevice& device, const RemoteInstance& remoteInstance );
-		void									executeCallFunctionAction( ConsoleDevice& device, const RemoteInstance& remoteInstance );
+		void						executeAction( ConsoleDevice& localDevice );
+		void						executeGetPropertyAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance );
+		void						executeSetPropertyAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance );
+		void						executeCallFunctionAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance );
 
-		void									finishCommand( ConsoleDevice& device );
+		void						finishCommand( ConsoleDevice& localDevice );
 	};
 }

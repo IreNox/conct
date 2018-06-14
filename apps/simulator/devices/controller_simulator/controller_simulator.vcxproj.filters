@@ -207,6 +207,9 @@
     <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_client\conct_port_tcp_client.cpp">
       <Filter>libraries\conct_port_tcp_client</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_runtime.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />

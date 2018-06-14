@@ -2,6 +2,11 @@
 
 namespace conct
 {
+	DeviceInterface::DeviceInterface()
+		: m_instanceRouter( m_runtime )
+	{
+	}
+
 	void DeviceInterface::setupDevice()
 	{
 		m_port0.setup();

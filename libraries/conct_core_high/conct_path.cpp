@@ -74,7 +74,7 @@ namespace conct
 			slashIndex = 0u;
 		}
 
-		return m_path.subString( slashIndex );
+		return m_path.subString( slashIndex + 1u );
 	}
 
 	DynamicString Path::getBasename() const
@@ -115,12 +115,12 @@ namespace conct
 #endif
 	}
 
-	bool Path::operator!=( const Path& rhs ) const
+	bool Path::operator==( const Path& rhs ) const
 	{
 		return m_path == rhs.m_path;
 	}
 
-	bool Path::operator==( const Path& rhs ) const
+	bool Path::operator!=( const Path& rhs ) const
 	{
 		return m_path != rhs.m_path;
 	}

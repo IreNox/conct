@@ -3,9 +3,9 @@
 #include "conct_array_view.h"
 #include "conct_core.h"
 #include "conct_runtime.h"
+#include "conct_vector.h"
 
 #include <map>
-#include <vector>
 #include <queue>
 
 namespace conct
@@ -24,6 +24,8 @@ namespace conct
 		void					registerPort( Port* pPort );
 		void					processPort( Port* pPort );
 
+		void					getDevices( Vector< DeviceId >& devices ) const;
+
 		CommandId				getNextCommandId( DeviceId deviceId );
 
 		ResultId				sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
@@ -41,42 +43,42 @@ namespace conct
 
 		struct ReceivedPackageReadBytesData
 		{
-			uintreg								alreadyRead;
+			uintreg							alreadyRead;
 		};
 
 		union ReceivedPackageStateData
 		{
-			ReceivedPackageReadBytesData		readBytes;
+			ReceivedPackageReadBytesData	readBytes;
 		};
 
 		struct ReceivedPackage
 		{
-			DeviceId							deviceId;
+			DeviceId						deviceId;
 
-			MessageBaseHeader					baseHeader;
-			std::vector< DeviceId >				sourceAddress;
-			std::vector< DeviceId >				destinationAddress;
-			std::vector< uint8 >				payload;
+			MessageBaseHeader				baseHeader;
+			Vector< DeviceId >				sourceAddress;
+			Vector< DeviceId >				destinationAddress;
+			Vector< uint8 >					payload;
 		};
 
 		struct PendingReceivedPackage
 		{
-			PackageState						state;
-			ReceivedPackageStateData			data;
-			ReceivedPackage						target;
+			PackageState					state;
+			ReceivedPackageStateData		data;
+			ReceivedPackage					target;
 		};
 
 		struct SendPackage
 		{
-			uintreg								targetEndpointId;
-			std::vector< uint8 >				data;
-			uintreg								currentOffset;
+			uintreg							targetEndpointId;
+			Vector< uint8 >					data;
+			uintreg							currentOffset;
 		};
 
 		struct PortData
 		{
 			typedef std::map< uintreg, PendingReceivedPackage > PendingPackageMap;
-			typedef std::vector< ReceivedPackage > ReceivedPackageVector;
+			typedef Vector< ReceivedPackage > ReceivedPackageVector;
 			typedef std::queue< SendPackage > SendPackageQueue;
 			typedef std::map< uintreg, DeviceId > EndpointDeviceMap;
 
@@ -112,7 +114,7 @@ namespace conct
 		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );
 		//void				readMagic( PendingReceivedPackage& package, Reader& reader );
 		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader );
-		void				readBytes( std::vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState );
+		void				readBytes( Vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState );
 		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId );
 
 		void				writePort( Port* pPort, PortData& portData );
@@ -123,7 +125,7 @@ namespace conct
 
 		void				setState( PendingReceivedPackage& package, PackageState state );
 
-		void				getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const std::vector< DeviceId >& sourceAddress ) const;
+		void				getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const Vector< DeviceId >& sourceAddress ) const;
 
 		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result );
 		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType );

@@ -19,7 +19,16 @@ namespace conct
 
 		const T*		getData() const { return m_pData; }
 
+		const T*		getBegin() const;
+		const T*		getEnd() const;
+
+		const T&		getFirst() const;
+		const T&		getLast() const;
+
 		const T&		operator[]( uintreg index ) const;
+
+		const T*		begin() const { return getBegin(); }
+		const T*		end() const { return getEnd(); }
 
 	private:
 

@@ -4,6 +4,8 @@
 #	include <windows.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 #	include <time.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_AVR )
+#	include <arduino.h>
 #endif
 
 namespace conct
@@ -41,6 +43,8 @@ namespace conct
 		const double seconds = double( currentTime.tv_sec );
 		const double nanoseconds = double( currentTime.tv_nsec );
 		return seconds + ( nanoseconds / 1000000000.0 );
+#elif CONCT_ENABLED( CONCT_PLATFORM_AVR )
+		return micros() / 1000000;
 #endif
 	}
 }

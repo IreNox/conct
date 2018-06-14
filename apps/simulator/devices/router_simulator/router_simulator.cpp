@@ -23,6 +23,7 @@ namespace conct
 	void RouterSimulator::fillData( SimulatorDeviceData& targetData )
 	{
 		targetData.name			= "Router";
+		targetData.pRouter		= nullptr;
 		targetData.pController	= nullptr;
 	}
 }

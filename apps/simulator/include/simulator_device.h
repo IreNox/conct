@@ -7,6 +7,7 @@
 namespace conct
 {
 	class Controller;
+	class Router;
 
 	struct SimulatorInstance
 	{
@@ -19,6 +20,7 @@ namespace conct
 	{
 		std::string							name;
 
+		Router*								pRouter;
 		Controller*							pController;
 		std::vector< SimulatorInstance >	instances;
 	};

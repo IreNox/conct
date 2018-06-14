@@ -83,13 +83,13 @@ namespace conct
 	template<typename T>
 	CONCT_FORCE_INLINE T* alignPointer( T* pPtr, uintreg alignment )
 	{
-		return ( T* )alignValue( uintptr( pPtr ), alignment );
+		return ( T* )alignValue< uintreg >( uintptr( pPtr ), alignment );
 	}
 
 	template<typename T>
 	CONCT_FORCE_INLINE const T* alignPointer( const T* pPtr, uintreg alignment )
 	{
-		return ( const T* )alignValue( uintptr( pPtr ), alignment );
+		return ( const T* )alignValue< uintreg >( uintptr( pPtr ), alignment );
 	}
 
 	CONCT_FORCE_INLINE uintreg countPopulation64( uint64 w )

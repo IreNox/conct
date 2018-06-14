@@ -17,6 +17,8 @@ namespace conct
 	{
 	public:
 
+		DeviceInterface();
+
 		void setupDevice();
 		void loopDevice();
 

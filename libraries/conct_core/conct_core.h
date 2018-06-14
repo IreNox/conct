@@ -40,7 +40,7 @@
 #	define CONCT_POINTER_16			CONCT_ON
 #	define CONCT_REGISTER_8			CONCT_ON
 #else
-#	define CONCT_PLATFORM_AVR				CONCT_OFF
+#	define CONCT_PLATFORM_AVR		CONCT_OFF
 #endif
 
 #if defined( __SAM3X8E__ ) // ARM (DUE)

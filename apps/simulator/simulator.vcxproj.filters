@@ -155,6 +155,9 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_runtime\conct_runtime.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">

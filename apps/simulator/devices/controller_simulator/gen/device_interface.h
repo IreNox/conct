@@ -16,6 +16,8 @@ namespace conct
 	{
 	public:
 
+		DeviceInterface();
+
 		void setupDevice();
 		void loopDevice();
 
@@ -25,20 +27,18 @@ namespace conct
 
 		RuntimeHigh m_runtime;
 
-		virtual void setup() = 0;
-		virtual void loop() = 0;
-
-		virtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;
-		virtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;
-		virtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
-
-	private:
-
 		PortTcpClient m_port0;
 
 		DeviceProxy m_proxyDevice;
 		RouterProxy m_proxyRouter;
 
 		Router m_instanceRouter;
+
+		virtual void setup() = 0;
+		virtual void loop() = 0;
+
+		virtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;
+		virtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;
+		virtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
 	};
 }

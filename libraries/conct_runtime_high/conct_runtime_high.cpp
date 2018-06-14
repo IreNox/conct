@@ -44,6 +44,15 @@ namespace conct
 		processPackages( portData );
 	}
 
+	void RuntimeHigh::getDevices( Vector< DeviceId >& devices ) const
+	{
+		devices.reserve( m_devices.size() );
+		for( const std::pair< DeviceId, DeviceData >& kvp : m_devices )
+		{
+			devices.pushBack( kvp.first );
+		}
+	}
+
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
 	{
 		DeviceMap::iterator it = m_devices.find( deviceId );
@@ -80,7 +89,7 @@ namespace conct
 	{
 		for( const ReceivedPackage& package : portData.receivedPackages )
 		{
-			if( package.destinationAddress.size() > 1u )
+			if( package.destinationAddress.getLength() > 1u )
 			{
 				processRoute( portData, package );
 			}
@@ -94,7 +103,7 @@ namespace conct
 
 	void RuntimeHigh::processRoute( PortData& portData, const ReceivedPackage& sourcePackage )
 	{
-		const DeviceId nextDeviceId = sourcePackage.destinationAddress.front();
+		const DeviceId nextDeviceId = sourcePackage.destinationAddress[ 1u ];
 		DeviceMap::iterator deviceIt = m_devices.find( nextDeviceId );
 		if( deviceIt == m_devices.end() )
 		{
@@ -111,33 +120,20 @@ namespace conct
 		package.targetEndpointId	= targetDevice.endpointId;
 		package.currentOffset		= 0u;
 
-		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + sourcePackage.payload.size();
+		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + sourcePackage.payload.getLength();
 		package.data.reserve( packageSize );
 
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
-		for( uintreg i = 0u; i < sizeof( baseHeader ); ++i )
-		{
-			package.data.push_back( pHeaderData[ i ] );
-		}
+		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
 
-		package.data.push_back( targetDevice.ownDeviceId );
-		for( DeviceId deviceId : sourcePackage.sourceAddress )
-		{
-			package.data.push_back( deviceId );
-		}
+		package.data.pushBack( targetDevice.ownDeviceId );
+		package.data.pushBack( sourcePackage.deviceId );
+		package.data.pushRange( sourcePackage.sourceAddress.getData() + 1u, sourcePackage.sourceAddress.getLength() - 1u );
+		package.data.pushRange( sourcePackage.destinationAddress.getData() + 1u, sourcePackage.destinationAddress.getLength() - 1u );
+		package.data.pushRange( sourcePackage.payload );
 
-		for( uintreg i = 1u; i < sourcePackage.destinationAddress.size(); ++i )
-		{
-			package.data.push_back( sourcePackage.destinationAddress[ i ] );
-		}
-
-		for( uint8 byte : sourcePackage.payload )
-		{
-			package.data.push_back( byte );
-		}
-
-
-		portData.sendPackages.push( package );
+		PortData& targetPortData = m_ports[ targetDevice.pTargetPort ];
+		targetPortData.sendPackages.push( package );
 	}
 
 	void RuntimeHigh::processPackage( PortData& portData, const ReceivedPackage& package )
@@ -182,7 +178,7 @@ namespace conct
 			{
 				BufferedValueBuilder< 1024u > valueBuilder;
 				{
-					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( package.payload.data() );
+					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( package.payload.getData() );
 
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
@@ -204,7 +200,7 @@ namespace conct
 
 		case MessageType_GetPropertyResponse:
 			{
-				const GetPropertyResponse& response = *( const GetPropertyResponse* )package.payload.data();
+				const GetPropertyResponse& response = *( const GetPropertyResponse* )package.payload.getData();
 
 				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( pCommandBase );
 				pCommand->setResponse( package.baseHeader.messageResult, response.value );
@@ -213,7 +209,7 @@ namespace conct
 
 		case MessageType_SetPropertyRequest:
 			{
-				const SetPropertyRequest& request = *reinterpret_cast< const SetPropertyRequest* >( package.payload.data() );
+				const SetPropertyRequest& request = *reinterpret_cast< const SetPropertyRequest* >( package.payload.getData() );
 
 				const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 				if( pInstance == nullptr )
@@ -242,7 +238,7 @@ namespace conct
 			{
 				BufferedValueBuilder< 1024u > valueBuilder;
 				{
-					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( package.payload.data() );
+					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( package.payload.getData() );
 
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
@@ -264,7 +260,7 @@ namespace conct
 
 		case MessageType_CallFunctionResponse:
 			{
-				const CallFunctionResponse& response = *( const CallFunctionResponse* )package.payload.data();
+				const CallFunctionResponse& response = *( const CallFunctionResponse* )package.payload.getData();
 
 				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( pCommandBase );
 				pCommand->setResponse( package.baseHeader.messageResult, response.value );
@@ -345,17 +341,17 @@ namespace conct
 			// no answer id
 		}
 
-		package.target.sourceAddress.resize( package.target.baseHeader.sourceHops );
-		package.target.destinationAddress.resize( package.target.baseHeader.destinationHops );
-		package.target.payload.resize( package.target.baseHeader.payloadSize );
+		package.target.sourceAddress.setLength( package.target.baseHeader.sourceHops );
+		package.target.destinationAddress.setLength( package.target.baseHeader.destinationHops );
+		package.target.payload.setLength( package.target.baseHeader.payloadSize );
 
 		setState( package, PackageState_ReadSourceAddress );
 	}
 
-	void RuntimeHigh::readBytes( std::vector<uint8>& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState )
+	void RuntimeHigh::readBytes( Vector<uint8>& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState )
 	{
-		package.data.readBytes.alreadyRead += reader.readData( target.data(), (uintreg)target.size(), package.data.readBytes.alreadyRead );
-		if( package.data.readBytes.alreadyRead == target.size() )
+		package.data.readBytes.alreadyRead += reader.readData( target.getData(), target.getLength(), package.data.readBytes.alreadyRead );
+		if( package.data.readBytes.alreadyRead == target.getLength() )
 		{
 			setState( package, nextState );
 		}
@@ -366,7 +362,7 @@ namespace conct
 		PortData::EndpointDeviceMap::iterator endpointIt = portData.endpointToDevice.find( endpointId );
 		if( endpointIt == portData.endpointToDevice.end() )
 		{
-			const DeviceId deviceId = addDevice( pPort, package.target.destinationAddress.front(), endpointId );
+			const DeviceId deviceId = addDevice( pPort, package.target.destinationAddress.getFirst(), endpointId );
 			portData.endpointToDevice[ endpointId ] = deviceId;
 
 			package.target.deviceId = deviceId;
@@ -376,7 +372,7 @@ namespace conct
 			package.target.deviceId = endpointIt->second;
 		}
 
-		portData.receivedPackages.push_back( package.target );
+		portData.receivedPackages.pushBack( package.target );
 
 		setState( package, PackageState_ReadBaseHeader );
 	}
@@ -391,19 +387,19 @@ namespace conct
 		SendPackage& currentPackage = portData.sendPackages.front();
 
 		Writer writer;
-		const uintreg remainingSize = currentPackage.data.size() - currentPackage.currentOffset;
+		const uintreg remainingSize = currentPackage.data.getLength() - currentPackage.currentOffset;
 		if( !pPort->openSend( writer, remainingSize, currentPackage.targetEndpointId ) )
 		{
 			return;
 		}
 
 		uintreg index = currentPackage.currentOffset;
-		while( !writer.isEnd() && index < currentPackage.data.size() )
+		while( !writer.isEnd() && index < currentPackage.data.getLength() )
 		{
 			writer.writeByte( currentPackage.data[ index++ ] );
 		}
 
-		if( index == currentPackage.data.size() )
+		if( index == currentPackage.data.getLength() )
 		{
 			portData.sendPackages.pop();
 		}
@@ -433,16 +429,16 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const std::vector< DeviceId >& sourceAddress ) const
+	void RuntimeHigh::getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const Vector< DeviceId >& sourceAddress ) const
 	{
 		targetAddress.address[ 0u ] = targetDeviceId;
 
-		for( uintreg i = 1u; i < sourceAddress.size(); ++i )
+		for( uintreg i = 1u; i < sourceAddress.getLength(); ++i )
 		{
 			targetAddress.address[ i ] = sourceAddress[ i ];
 		}
 
-		targetAddress.address[ sourceAddress.size() ] = InvalidDeviceId;
+		targetAddress.address[ sourceAddress.getLength() ] = InvalidDeviceId;
 	}
 
 	ResultId RuntimeHigh::sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result )
@@ -486,22 +482,16 @@ namespace conct
 		package.data.reserve( packageSize );
 
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
-		for( uintreg i = 0u; i < sizeof( baseHeader ); ++i )
-		{
-			package.data.push_back( pHeaderData[ i ] );
-		}
+		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
 
-		package.data.push_back( deviceData.ownDeviceId );
+		package.data.pushBack( deviceData.ownDeviceId );
 
 		for( uintreg i = 0u; i < baseHeader.destinationHops; ++i )
 		{
-			package.data.push_back( deviceAddress.address[ i ] );
+			package.data.pushBack( deviceAddress.address[ i ] );
 		}
 
-		for( uintreg i = 0u; i < payload.getLength(); ++i )
-		{
-			package.data.push_back( payload[ i ] );
-		}
+		package.data.pushRange( payload );
 
 		PortData& portData = m_ports[ deviceData.pTargetPort ];
 		portData.sendPackages.push( package );

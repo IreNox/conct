@@ -12,6 +12,7 @@ namespace conct
 
 	template< class T >
 	Vector< T >::Vector( const Vector& rhs )
+		: m_pData( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
 		*this = rhs;
 	}
@@ -82,6 +83,18 @@ namespace conct
 	{
 		checkCapacity( m_length + 1u );
 		m_pData[ m_length++ ] = value;
+	}
+
+	template< class T >
+	void Vector<T>::pushRange( const Vector< T >& vector )
+	{
+		pushRange( vector.getData(), vector.getLength() );
+	}
+
+	template< class T >
+	void Vector<T>::pushRange( const ArrayView< T >& arrayView )
+	{
+		pushRange( arrayView.getData(), arrayView.getLength() );
 	}
 
 	template< class T >
@@ -209,6 +222,12 @@ namespace conct
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ m_length - 1u ];
+	}
+
+	template< class T >
+	ArrayView< T > Vector<T>::toArrayView() const
+	{
+		return ArrayView< T >( m_pData, m_length );
 	}
 
 	template< class T >

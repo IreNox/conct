@@ -241,6 +241,9 @@
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp">
       <Filter>libraries\conct_runtime_low</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_runtime.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />

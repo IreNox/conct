@@ -22,6 +22,8 @@ namespace conct
 		void					setup( Device* pDevice );
 
 		void					registerPort( Port* pPort );
+		void					unregisterPort( Port* pPort );
+
 		void					processPort( Port* pPort );
 
 		void					getDevices( Vector< DeviceId >& devices ) const;

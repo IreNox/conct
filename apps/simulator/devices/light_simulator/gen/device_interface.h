@@ -29,15 +29,6 @@ namespace conct
 
 		RuntimeLow m_runtime;
 
-		virtual void setup() = 0;
-		virtual void loop() = 0;
-
-		virtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;
-		virtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;
-		virtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
-
-	private:
-
 		PortRs485Sim m_port0;
 
 		DeviceProxy m_proxyDevice;
@@ -48,5 +39,12 @@ namespace conct
 		LightImpl m_instanceLight;
 		DimmerImpl m_instanceDimmer;
 		RGBImpl m_instanceRGB;
+
+		virtual void setup() = 0;
+		virtual void loop() = 0;
+
+		virtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;
+		virtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;
+		virtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
 	};
 }

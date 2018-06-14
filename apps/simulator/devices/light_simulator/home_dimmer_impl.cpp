@@ -1,15 +1,16 @@
 #include "home_dimmer_impl.h"
 
+#include "conct_light_control.h"
+
 namespace conct
 {
 	PercentValue DimmerImpl::getBrightness() const
 	{
-		return 0;
+		return m_pLightControl->getBrightness();
 	}
 
 	void DimmerImpl::setBrightness( PercentValue value )
 	{
-		// TODO: implement
+		m_pLightControl->setBrightness( value );
 	}
-
 }

@@ -30,6 +30,9 @@
     <Filter Include="libraries\conct_runtime">
       <UniqueIdentifier>{9e33ed70-a1b1-48ad-ab6f-ce3e9b73b081}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_light">
+      <UniqueIdentifier>{37b5539e-3949-4a91-868b-3f668065efb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -164,6 +167,9 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.h">
       <Filter>libraries\conct_runtime_low</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_light\conct_light_control.h">
+      <Filter>libraries\conct_light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -243,6 +249,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_runtime.cpp">
       <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_light\conct_light_control.cpp">
+      <Filter>libraries\conct_light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

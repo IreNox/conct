@@ -90,6 +90,11 @@ namespace conct
 
 	void ConsoleRenderer::drawText( uint16 x, uint16 y, const char* pString )
 	{
+		if( pString == nullptr )
+		{
+			return;
+		}
+
 		const HANDLE consoleHandle = GetStdHandle( STD_OUTPUT_HANDLE );
 
 		COORD coord;

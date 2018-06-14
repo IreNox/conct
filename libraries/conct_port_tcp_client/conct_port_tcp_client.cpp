@@ -17,6 +17,26 @@ namespace conct
 {
 	static const int s_tcpPort = 5489;
 
+	PortTcpClient::PortTcpClient()
+	{
+		m_config.targetHost		= "::1"_s;
+		m_config.targetPort		= s_tcpPort;
+		m_socket				= INVALID_SOCKET;
+	}
+
+	PortTcpClient::~PortTcpClient()
+	{
+		if( m_socket != INVALID_SOCKET )
+		{
+			closesocket( m_socket );
+		}
+	}
+
+	void PortTcpClient::setConfig( const PortTcpClientConfig& config )
+	{
+		m_config = config;
+	}
+
 	void PortTcpClient::setup()
 	{
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
@@ -48,7 +68,7 @@ namespace conct
 		memory::zero( address );
 		address.sin6_family = AF_INET6;
 		address.sin6_port = htons( 49351 );
-		inet_pton( AF_INET6, "::1", &address.sin6_addr );
+		inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &address.sin6_addr );
 
 		if( connect( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
 		{

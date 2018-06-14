@@ -3,12 +3,24 @@
 #include "conct_port.h"
 
 #include "conct_vector.h"
+#include "conct_dynamic_string.h"
 
 namespace conct
 {
+	struct PortTcpClientConfig
+	{
+		DynamicString		targetHost;		// IPv6 or Hostname
+		uint16				targetPort;
+	};
+
 	class PortTcpClient : public Port
 	{
 	public:
+
+									PortTcpClient();
+									~PortTcpClient();
+
+		void						setConfig( const PortTcpClientConfig& config );
 
 		virtual void				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
@@ -22,6 +34,8 @@ namespace conct
 		virtual Flags8< PortFlag >	getFlags() CONCT_OVERRIDE_FINAL;
 
 	private:
+
+		PortTcpClientConfig			m_config;
 
 		uintreg						m_socket;
 

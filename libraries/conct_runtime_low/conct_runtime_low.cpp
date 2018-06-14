@@ -171,6 +171,8 @@ namespace conct
 
 	void RuntimeLow::executeCommand()
 	{
+		m_workingDataOffset = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize;
+
 		switch( m_messageType )
 		{
 		case MessageType_PingRequest:

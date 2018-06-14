@@ -4,11 +4,13 @@
 
 namespace conct
 {
+	class LightControl;
+
 	class RGBImpl : RGB
 	{
 	public:
 
-		RGBImpl();
+		void setControl( LightControl* pLightControl ) { m_pLightControl = pLightControl; }
 
 		virtual PercentValue getRed() const CONCT_OVERRIDE_FINAL;
 		virtual void setRed( PercentValue value ) CONCT_OVERRIDE_FINAL;
@@ -16,5 +18,9 @@ namespace conct
 		virtual void setGreen( PercentValue value ) CONCT_OVERRIDE_FINAL;
 		virtual PercentValue getBlue() const CONCT_OVERRIDE_FINAL;
 		virtual void setBlue( PercentValue value ) CONCT_OVERRIDE_FINAL;
+
+	private:
+
+		LightControl * m_pLightControl;
 	};
 }

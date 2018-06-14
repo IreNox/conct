@@ -725,6 +725,7 @@ namespace conct
 		for( const ControllerInstance& instance : m_instances )
 		{
 			if( instance.instanceId == sourceInstance.id &&
+				instance.pDevice == m_pInstance->pDevice &&
 				instance.pType->getCrc() == sourceInstance.type )
 			{
 				return "\nInstance: "_s + getInstanceName( instance ) + " already there.";

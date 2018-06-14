@@ -4,7 +4,9 @@ namespace conct
 {
 	void DeviceLightSimulator::setup()
 	{
-		// TODO: implement
+		m_instanceLight.setControl( &m_lightControl );
+		m_instanceDimmer.setControl( &m_lightControl );
+		m_instanceRGB.setControl( &m_lightControl );
 	}
 
 	void DeviceLightSimulator::loop()

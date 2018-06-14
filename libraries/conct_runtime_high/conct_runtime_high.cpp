@@ -14,7 +14,7 @@ namespace conct
 {
 	void RuntimeHigh::setup( Device* pDevice )
 	{
-		m_pDevice		= pDevice;
+		m_pDevice = pDevice;
 	}
 
 	void RuntimeHigh::registerPort( Port* pPort )
@@ -32,6 +32,18 @@ namespace conct
 		{
 			// not supported
 		}
+	}
+
+	void RuntimeHigh::unregisterPort( Port* pPort )
+	{
+		PortData& portData = m_ports[ pPort ];
+
+		for( std::pair< const uintreg, DeviceId >& kvp : portData.endpointToDevice )
+		{
+			m_devices.erase( kvp.second );
+		}
+
+		m_ports.erase( pPort );
 	}
 
 	void RuntimeHigh::processPort( Port* pPort )

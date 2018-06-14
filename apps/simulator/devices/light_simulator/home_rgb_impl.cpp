@@ -1,39 +1,36 @@
 #include "home_rgb_impl.h"
 
+#include "conct_light_control.h"
+
 namespace conct
 {
-	RGBImpl::RGBImpl()
-	{
-
-	}
-
 	PercentValue RGBImpl::getRed() const
 	{
-		return 65535 / 2;
+		return m_pLightControl->getRed();
 	}
 
 	void RGBImpl::setRed( PercentValue value )
 	{
-		// TODO: implement
+		m_pLightControl->setRed( value );
 	}
 
 	PercentValue RGBImpl::getGreen() const
 	{
-		return 65535 / 3;
+		return m_pLightControl->getGreen();
 	}
 
 	void RGBImpl::setGreen( PercentValue value )
 	{
-		// TODO: implement
+		m_pLightControl->setGreen( value );
 	}
 
 	PercentValue RGBImpl::getBlue() const
 	{
-		return 65535;
+		return m_pLightControl->getBlue();
 	}
 
 	void RGBImpl::setBlue( PercentValue value )
 	{
-		// TODO: implement
+		m_pLightControl->setBlue( value );
 	}
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<device name="RaspiRouter" hardware="RaspberryPi">
+	<ports>
+		<port index="0" type="TCP-Server" />
+		<!--port index="1" type="RS-485-Simulator" /-->
+	</ports>
+	<!--instances>
+		<instance type="Home.Light" />
+		<instance type="Home.Dimmer" />
+		<instance type="Home.RGB" />
+	</instances-->
+</device>

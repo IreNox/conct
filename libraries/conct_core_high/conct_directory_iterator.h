@@ -2,7 +2,10 @@
 
 #include "conct_path.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+struct __dirstream;
+typedef __dirstream DIR;
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 struct DIR;
 #endif
 
@@ -29,7 +32,7 @@ namespace conct
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		void*			m_pSearchHandle;
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		DIR*			m_pDir;
 #endif
 

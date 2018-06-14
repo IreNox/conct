@@ -22,8 +22,8 @@ namespace conct
 		const T*		getBegin() const;
 		const T*		getEnd() const;
 
-		const T&		getFirst() const;
-		const T&		getLast() const;
+		const T&		getFront() const;
+		const T&		getBack() const;
 
 		const T&		operator[]( uintreg index ) const;
 

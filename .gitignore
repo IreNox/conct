@@ -5,3 +5,4 @@
 /apps/generator/build
 /apps/simulator/build
 *.user
+/devices/raspberry_pi_router/VisualGDB

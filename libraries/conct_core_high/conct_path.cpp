@@ -2,6 +2,9 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#	include <unistd.h>
+#	include <linux/limits.h>
 #endif
 
 namespace conct
@@ -130,6 +133,10 @@ namespace conct
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		char exeFileName[ MAX_PATH ];
 		GetModuleFileNameA( nullptr, exeFileName, sizeof( exeFileName ) );
+		return Path( DynamicString( exeFileName ) );
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+		char exeFileName[ PATH_MAX ];
+		readlink( "/proc/self/exe", exeFileName, sizeof( exeFileName ) );
 		return Path( DynamicString( exeFileName ) );
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		return Path();

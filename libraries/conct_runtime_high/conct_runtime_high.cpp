@@ -145,7 +145,7 @@ namespace conct
 		package.data.pushRange( sourcePackage.payload );
 
 		PortData& targetPortData = m_ports[ targetDevice.pTargetPort ];
-		targetPortData.sendPackages.push( package );
+		targetPortData.sendPackages.pushBack( package );
 	}
 
 	void RuntimeHigh::processPackage( PortData& portData, const ReceivedPackage& package )
@@ -374,7 +374,7 @@ namespace conct
 		PortData::EndpointDeviceMap::iterator endpointIt = portData.endpointToDevice.find( endpointId );
 		if( endpointIt == portData.endpointToDevice.end() )
 		{
-			const DeviceId deviceId = addDevice( pPort, package.target.destinationAddress.getFirst(), endpointId );
+			const DeviceId deviceId = addDevice( pPort, package.target.destinationAddress.getFront(), endpointId );
 			portData.endpointToDevice[ endpointId ] = deviceId;
 
 			package.target.deviceId = deviceId;
@@ -391,12 +391,12 @@ namespace conct
 
 	void RuntimeHigh::writePort( Port* pPort, PortData& portData )
 	{
-		if( portData.sendPackages.empty() )
+		if( portData.sendPackages.isEmpty() )
 		{
 			return;
 		}
 
-		SendPackage& currentPackage = portData.sendPackages.front();
+		SendPackage& currentPackage = portData.sendPackages.getFront();
 
 		Writer writer;
 		const uintreg remainingSize = currentPackage.data.getLength() - currentPackage.currentOffset;
@@ -413,7 +413,7 @@ namespace conct
 
 		if( index == currentPackage.data.getLength() )
 		{
-			portData.sendPackages.pop();
+			portData.sendPackages.popFront();
 		}
 		else
 		{
@@ -506,7 +506,7 @@ namespace conct
 		package.data.pushRange( payload );
 
 		PortData& portData = m_ports[ deviceData.pTargetPort ];
-		portData.sendPackages.push( package );
+		portData.sendPackages.pushBack( package );
 
 		return ResultId_Success;
 	}

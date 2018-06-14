@@ -59,9 +59,6 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
@@ -152,6 +149,9 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\generator.cpp">
@@ -240,9 +240,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\libraries\conct_core_high\conct_queue.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
     <None Include="..\..\libraries\conct_core_high\conct_vector.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
@@ -274,6 +271,9 @@
       <Filter>libraries\conct_core</Filter>
     </None>
     <None Include="..\..\libraries\conct_core_high\conct_unsorted_set.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core_high\conct_queue.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
   </ItemGroup>

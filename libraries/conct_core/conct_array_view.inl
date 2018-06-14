@@ -34,14 +34,14 @@ namespace conct
 	}
 
 	template< class T >
-	const T& ArrayView<T>::getFirst() const
+	const T& ArrayView<T>::getFront() const
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	const T& ArrayView<T>::getLast() const
+	const T& ArrayView<T>::getBack() const
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ m_length - 1u ];

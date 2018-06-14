@@ -6,7 +6,7 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 #	include <unistd.h>
 #	include <sys/stat.h>
 #endif
@@ -60,7 +60,7 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		return ( GetFileAttributesA( path.getNativePath().toConstCharPointer() ) != INVALID_FILE_ATTRIBUTES );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		return access( path.getNativePath().toConstCharPointer(), F_OK ) != -1;
 #endif
 	}
@@ -75,7 +75,7 @@ namespace conct
 		}
 
 		return !isBitSet( attributes, FILE_ATTRIBUTE_DIRECTORY );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		struct stat fileStats;
 		if( ::stat( path.getNativePath().toConstCharPointer(), &fileStats ) != 0 )
 		{
@@ -90,7 +90,7 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		return isBitSet( GetFileAttributesA( path.getNativePath().toConstCharPointer() ), FILE_ATTRIBUTE_DIRECTORY );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		struct stat fileStats;
 		if( ::stat( path.getNativePath().toConstCharPointer(), &fileStats ) != 0 )
 		{
@@ -110,7 +110,7 @@ namespace conct
 		}
 
 		return createSuccessResult();
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		if( mkdir( path.getNativePath().toConstCharPointer(), S_IRWXU ) != 0 )
 		{
 			return createFailureResult< void >( getResultFromErrno() );
@@ -128,9 +128,15 @@ namespace conct
 			return createFailureResult< DynamicString >( getResultFromErrno() );
 		}
 
-		fpos_t pos;
 		fseek( pFile, 0, SEEK_END );
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+		fpos_t pos2;
+		fgetpos( pFile, &pos2 );
+		const size_t pos = pos2.__pos;
+#else
+		fpos_t pos;
 		fgetpos( pFile, &pos );
+#endif
 		fseek( pFile, 0, SEEK_SET );
 
 		DynamicString result;
@@ -156,9 +162,15 @@ namespace conct
 			return createFailureResult< Vector< uint8 > >( getResultFromErrno() );
 		}
 
-		fpos_t pos;
 		fseek( pFile, 0, SEEK_END );
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+		fpos_t pos2;
+		fgetpos( pFile, &pos2 );
+		const size_t pos = pos2.__pos;
+#else
+		fpos_t pos;
 		fgetpos( pFile, &pos );
+#endif
 		fseek( pFile, 0, SEEK_SET );
 
 		Vector< uint8 > result;

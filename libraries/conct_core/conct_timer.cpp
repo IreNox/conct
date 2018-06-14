@@ -2,7 +2,7 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 #	include <time.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_AVR )
 #	include <arduino.h>
@@ -34,7 +34,7 @@ namespace conct
 		LARGE_INTEGER currentCounter;
 		QueryPerformanceCounter( ( LARGE_INTEGER* )&currentCounter );
 		return double( currentCounter.QuadPart ) / m_frequence;
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		timespec currentTime;
 		currentTime.tv_sec = 0;
 		currentTime.tv_nsec = 0;

@@ -32,7 +32,7 @@ namespace conct
 	{
 		while( !m_types.isEmpty() )
 		{
-			delete( m_types.getLast() );
+			delete( m_types.getBack() );
 			m_types.popBack();
 		}
 	}

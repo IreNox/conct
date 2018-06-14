@@ -4,26 +4,35 @@
 #include "conct_reader.h"
 #include "conct_writer.h"
 
-//#include <sys/socket.h>
-//#include <arpa/inet.h>
-
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <ws2ipdef.h>
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <WinSock2.h>
+#	include <WS2tcpip.h>
+#	include <ws2ipdef.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#	include <sys/socket.h>
+#	include <fcntl.h>
+#endif
 
 #include <stdio.h>
 
 namespace conct
 {
-	CONCT_STATIC_ASSERT( sizeof( uintreg ) == sizeof( SOCKET ) );
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+	CONCT_STATIC_ASSERT( sizeof( SocketType ) >= sizeof( SOCKET ) );
+#else
+	CONCT_STATIC_ASSERT( sizeof( SocketType ) >= sizeof( int ) );
+#endif
 
 	static const int s_tcpPort = 5489;
+	static const SocketType InvalidSocket = ( SocketType )-1;
 
 	void PortTcpServer::setup()
 	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
 		WSADATA wsaData;
 		WSAStartup( requestedVersion, &wsaData );
+#endif
 
 		m_socket = socket( AF_INET6, SOCK_STREAM, 0 );
 		if( m_socket == -1 )
@@ -43,7 +52,7 @@ namespace conct
 			return;
 		}
 #else
-		const int flags = fcntl( socket, F_GETFL, 0 );
+		const int flags = fcntl( m_socket, F_GETFL, 0 );
 		if( fcntl( m_socket, F_SETFL, flags | O_NONBLOCK ) == -1 )
 		{
 			return;
@@ -57,15 +66,15 @@ namespace conct
 		address.sin6_addr = in6addr_any;
 		if( bind( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
 		{
-			const int test = WSAGetLastError();
-			printf( "%u\n", test );
+			//const int test = WSAGetLastError();
+			//printf( "%u\n", test );
 			return;
 		}
 
 		if( listen( m_socket, 5 ) != 0 )
 		{
-			const int test = WSAGetLastError();
-			printf( "%u\n", test );
+			//const int test = WSAGetLastError();
+			//printf( "%u\n", test );
 			return;
 		}
 	}
@@ -73,9 +82,9 @@ namespace conct
 	void PortTcpServer::loop()
 	{
 		sockaddr_in6 address;
-		int addressLength = sizeof( address );
-		SOCKET clientSocket = accept( m_socket, (sockaddr*)&address, &addressLength );
-		if( clientSocket != INVALID_SOCKET )
+		socklen_t addressLength = sizeof( address );
+		SocketType clientSocket = accept( m_socket, (sockaddr*)&address, &addressLength );
+		if( clientSocket != InvalidSocket )
 		{
 			addConnection( clientSocket, address );
 		}
@@ -153,14 +162,14 @@ namespace conct
 		{
 			connection.sendData.clear();
 		}
-		else
-		{
-			const int test = WSAGetLastError();
-			if( test != WSAEWOULDBLOCK )
-			{
-				printf( "%u\n", test );
-			}
-		}
+		//else
+		//{
+		//	const int test = WSAGetLastError();
+		//	if( test != WSAEWOULDBLOCK )
+		//	{
+		//		printf( "%u\n", test );
+		//	}
+		//}
 
 		int receivedBytes = 0u;
 		do
@@ -169,11 +178,11 @@ namespace conct
 			receivedBytes = recv( connection.socket, ( char* )connection.receiveData.getEnd(), 2048, 0u );
 			if( receivedBytes < 0 )
 			{
-				const int test = WSAGetLastError();
-				if( test != WSAEWOULDBLOCK )
-				{
-					printf( "%u\n", test );
-				}
+				//const int test = WSAGetLastError();
+				//if( test != WSAEWOULDBLOCK )
+				//{
+				//	printf( "%u\n", test );
+				//}
 				break;
 			}
 

@@ -22,15 +22,14 @@
 #	define CONCT_PLATFORM_WINDOWS	CONCT_OFF
 #endif
 
+#if defined( __linux__ )
+#	define CONCT_PLATFORM_LINUX		CONCT_ON
+#else
+#	define CONCT_PLATFORM_LINUX		CONCT_OFF
+#endif
+
 #if defined( __ANDROID__ )
 #	define CONCT_PLATFORM_ANDROID	CONCT_ON
-#	if defined( __aarch64__ ) || defined( __amd64__ )
-#		define CONCT_POINTER_64		CONCT_ON
-#		define CONCT_REGISTER_64	CONCT_ON
-#	elif defined( __arm__ ) || defined( __i386__ )
-#		define CONCT_POINTER_32		CONCT_ON
-#		define CONCT_REGISTER_32	CONCT_ON
-#	endif
 #else
 #	define CONCT_PLATFORM_ANDROID	CONCT_OFF
 #endif
@@ -67,6 +66,16 @@
 #	define CONCT_COMPILER_GCC		CONCT_ON
 #else
 #	define CONCT_COMPILER_GCC		CONCT_OFF
+#endif
+
+#if CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
+#	if defined( __aarch64__ ) || defined( __amd64__ )
+#		define CONCT_POINTER_64		CONCT_ON
+#		define CONCT_REGISTER_64	CONCT_ON
+#	elif defined( __arm__ ) || defined( __i386__ )
+#		define CONCT_POINTER_32		CONCT_ON
+#		define CONCT_REGISTER_32	CONCT_ON
+#	endif
 #endif
 
 #if !defined( CONCT_POINTER_16 )

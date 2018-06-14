@@ -4,31 +4,35 @@
 #include "conct_reader.h"
 #include "conct_writer.h"
 
-//#include <sys/socket.h>
-//#include <arpa/inet.h>
-
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <ws2ipdef.h>
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <WinSock2.h>
+#	include <WS2tcpip.h>
+#	include <ws2ipdef.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#	include <sys/socket.h>
+#	include <arpa/inet.h>
+#	include <fcntl.h>
+#endif
 
 #include <stdio.h>
 
 namespace conct
 {
 	static const int s_tcpPort = 5489;
+	static const uintreg InvalidSocket = ( uintreg )-1;
 
 	PortTcpClient::PortTcpClient()
 	{
 		m_config.targetHost		= "::1"_s;
 		m_config.targetPort		= s_tcpPort;
-		m_socket				= INVALID_SOCKET;
+		m_socket				= InvalidSocket;
 	}
 
 	PortTcpClient::~PortTcpClient()
 	{
-		if( m_socket != INVALID_SOCKET )
+		if( m_socket != InvalidSocket )
 		{
-			closesocket( m_socket );
+			shutdown( m_socket, 0 );
 		}
 	}
 
@@ -39,9 +43,11 @@ namespace conct
 
 	void PortTcpClient::setup()
 	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
 		WSADATA wsaData;
 		WSAStartup( requestedVersion, &wsaData );
+#endif
 
 		m_socket = socket( AF_INET6, SOCK_STREAM, 0 );
 		if( m_socket == -1 )
@@ -57,7 +63,7 @@ namespace conct
 			return;
 		}
 #else
-		const int flags = fcntl( socket, F_GETFL, 0 );
+		const int flags = fcntl( m_socket, F_GETFL, 0 );
 		if( fcntl( m_socket, F_SETFL, flags | O_NONBLOCK ) == -1 )
 		{
 			return;
@@ -72,11 +78,11 @@ namespace conct
 
 		if( connect( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
 		{
-			const int test = WSAGetLastError();
-			if( test != WSAEWOULDBLOCK )
-			{
-				printf( "%u\n", test );
-			}
+			//const int test = WSAGetLastError();
+			//if( test != WSAEWOULDBLOCK )
+			//{
+			//	printf( "%u\n", test );
+			//}
 			return;
 		}
 	}
@@ -88,14 +94,14 @@ namespace conct
 		{
 			m_sendData.clear();
 		}
-		else
-		{
-			const int test = WSAGetLastError();
-			if( test != WSAEWOULDBLOCK )
-			{
-				printf( "%u\n", test );
-			}
-		}
+		//else
+		//{
+		//	const int test = WSAGetLastError();
+		//	if( test != WSAEWOULDBLOCK )
+		//	{
+		//		printf( "%u\n", test );
+		//	}
+		//}
 
 		int receivedBytes = 0u;
 		do
@@ -104,11 +110,11 @@ namespace conct
 			receivedBytes = recv( m_socket, ( char* )m_receiveData.getEnd(), 2048, 0u );
 			if( receivedBytes < 0 )
 			{
-				const int test = WSAGetLastError();
-				if( test != WSAEWOULDBLOCK )
-				{
-					printf( "%u\n", test );
-				}
+				//const int test = WSAGetLastError();
+				//if( test != WSAEWOULDBLOCK )
+				//{
+				//	printf( "%u\n", test );
+				//}
 				break;
 			}
 

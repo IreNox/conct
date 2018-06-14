@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="controller_native.cpp" />
-    <ClCompile Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.cpp">
-      <Filter>libraries\conct_port_tcp</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime\conct_value.cpp">
       <Filter>libraries\conct_runtime</Filter>
     </ClCompile>
@@ -101,12 +98,12 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_ascii.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_port_tcp_client\conct_port_tcp_client.cpp">
+      <Filter>libraries\conct_port_tcp_client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller_native.h" />
-    <ClInclude Include="..\..\..\libraries\conct_port_tcp\conct_port_tcp.h">
-      <Filter>libraries\conct_port_tcp</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_runtime\conct_proxy.h">
       <Filter>libraries\conct_runtime</Filter>
     </ClInclude>
@@ -251,6 +248,9 @@
     <ClInclude Include="..\..\..\libraries\conct_core\conct_array_view.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_port_tcp_client\conct_port_tcp_client.h">
+      <Filter>libraries\conct_port_tcp_client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="libraries">
@@ -261,9 +261,6 @@
     </Filter>
     <Filter Include="libraries\conct_core_high">
       <UniqueIdentifier>{9b4dfea9-8ad9-4d04-ba34-8db5d733f48d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libraries\conct_port_tcp">
-      <UniqueIdentifier>{cec8b5ad-5993-41ce-afc7-24350cce1b33}</UniqueIdentifier>
     </Filter>
     <Filter Include="libraries\conct_runtime">
       <UniqueIdentifier>{1cbe70eb-97a0-40df-9bd0-7be61cc303df}</UniqueIdentifier>
@@ -282,6 +279,9 @@
     </Filter>
     <Filter Include="libraries\conct_types">
       <UniqueIdentifier>{1365c4cf-64c9-4c35-a332-855f9c5b4cb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_tcp_client">
+      <UniqueIdentifier>{cec8b5ad-5993-41ce-afc7-24350cce1b33}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

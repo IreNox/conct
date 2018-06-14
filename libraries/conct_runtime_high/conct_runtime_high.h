@@ -2,11 +2,11 @@
 
 #include "conct_array_view.h"
 #include "conct_core.h"
+#include "conct_queue.h"
 #include "conct_runtime.h"
 #include "conct_vector.h"
 
 #include <map>
-#include <queue>
 
 namespace conct
 {
@@ -81,7 +81,7 @@ namespace conct
 		{
 			typedef std::map< uintreg, PendingReceivedPackage > PendingPackageMap;
 			typedef Vector< ReceivedPackage > ReceivedPackageVector;
-			typedef std::queue< SendPackage > SendPackageQueue;
+			typedef Queue< SendPackage > SendPackageQueue;
 			typedef std::map< uintreg, DeviceId > EndpointDeviceMap;
 
 			PendingPackageMap		pendingPackages;

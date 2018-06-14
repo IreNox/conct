@@ -21,11 +21,7 @@ namespace conct
 	Vector< T >::Vector( const std::initializer_list< T >& initList )
 		: m_pData( nullptr ), m_length( 0u ), m_capacity( 0u )
 	{
-		reserve( initList.size() );
-		for( const T& value : initList )
-		{
-			pushBack( value );
-		}
+		pushRange( initList.begin(), initList.size() );
 	}
 
 	template< class T >
@@ -197,28 +193,28 @@ namespace conct
 	}
 
 	template< class T >
-	T& Vector<T>::getFirst()
+	T& Vector<T>::getFront()
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	const T& Vector<T>::getFirst() const
+	const T& Vector<T>::getFront() const
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	T& Vector<T>::getLast()
+	T& Vector<T>::getBack()
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ m_length - 1u ];
 	}
 
 	template< class T >
-	const T& Vector<T>::getLast() const
+	const T& Vector<T>::getBack() const
 	{
 		CONCT_ASSERT( m_length > 0u );
 		return m_pData[ m_length - 1u ];

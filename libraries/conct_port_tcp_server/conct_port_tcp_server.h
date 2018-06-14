@@ -4,11 +4,21 @@
 
 #include "conct_vector.h"
 
-#include <WinSock2.h>
-#include <ws2ipdef.h>
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <WinSock2.h>
+#	include <ws2ipdef.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#	include <arpa/inet.h>
+#endif
 
 namespace conct
 {
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+	typedef uintreg SocketType;
+#else
+	typedef int SocketType;
+#endif
+
 	class PortTcpServer : public Port
 	{
 	public:
@@ -28,14 +38,14 @@ namespace conct
 
 		struct Connection
 		{
-			uintreg					socket;
+			SocketType				socket;
 			sockaddr_in6			address;
 
 			Vector< uint8 >			sendData;
 			Vector< uint8 >			receiveData;
 		};
 
-		uintreg						m_socket;
+		SocketType					m_socket;
 
 		Vector< Connection >		m_connections;
 

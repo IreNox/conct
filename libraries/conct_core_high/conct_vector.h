@@ -48,10 +48,10 @@ namespace conct
 		T*				getEnd();
 		const T*		getEnd() const;
 
-		T&				getFirst();
-		const T&		getFirst() const;
-		T&				getLast();
-		const T&		getLast() const;
+		T&				getFront();
+		const T&		getFront() const;
+		T&				getBack();
+		const T&		getBack() const;
 
 		ArrayView< T >	toArrayView() const;
 

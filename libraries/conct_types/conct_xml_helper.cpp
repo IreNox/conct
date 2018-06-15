@@ -3,11 +3,10 @@
 #include "conct_array_type.h"
 #include "conct_dynamic_string.h"
 #include "conct_interface_type.h"
+#include "conct_trace.h"
 #include "conct_type_collection.h"
 
 #include <tinyxml2/tinyxml2.h>
-
-#include <iostream>
 
 namespace conct
 {
@@ -28,7 +27,7 @@ namespace conct
 				return true;
 			}
 
-			std::cout << "Error: '" << attributeValue << "' is not an valid boolean attribute value for '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+			trace::write( "Error: '"_s + attributeValue + "' is not an valid boolean attribute value for '" + pName + "' from '" + pNode->Name() + "'." + "\n" );
 			return false;
 		}
 
@@ -56,7 +55,7 @@ namespace conct
 			}
 		}
 
-		std::cout << "Error: Failed to load value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+		trace::write( "Error: Failed to load value '"_s + pName + "' from '" + pNode->Name() + "'." + "\n" );
 		return false;
 	}
 
@@ -76,7 +75,7 @@ namespace conct
 			return true;
 		}
 
-		std::cout << "Error: Failed to load uintreg value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+		trace::write( "Error: Failed to load uintreg value '"_s + pName + "' from '" + pNode->Name() + "'." + "\n" );
 		return false;
 	}
 
@@ -88,7 +87,7 @@ namespace conct
 			*ppType = typeCollection.findType( DynamicString( pAttributeValue ), referenceNamespace );
 			if( *ppType == nullptr )
 			{
-				std::cout << "Error: Failed to find type with name '" << pAttributeValue << "' in '" << referenceNamespace << "'." << std::endl;
+				trace::write( "Error: Failed to find type with name '"_s + pAttributeValue + "' in '" + referenceNamespace + "'." + "\n" );
 				return false;
 			}
 
@@ -104,7 +103,7 @@ namespace conct
 				*ppType = typeCollection.findType( DynamicString( pText ), referenceNamespace );
 				if( *ppType == nullptr )
 				{
-					std::cout << "Error: Failed to find type with name '" << pText << "' in '" << referenceNamespace << "'." << std::endl;
+					trace::write( "Error: Failed to find type with name '"_s + pText + "' in '" + referenceNamespace + "'." + "\n" );
 					return false;
 				}
 
@@ -127,7 +126,7 @@ namespace conct
 
 		if( !ignoreMissing )
 		{
-			std::cout << "Error: Failed to load type value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+			trace::write( "Error: Failed to load type value '"_s + pName + "' from '" + pNode->Name() + "'." + "\n" );
 		}
 		return false;
 	}
@@ -142,7 +141,7 @@ namespace conct
 
 		if( pType->getDescription() != TypeDescription_Interface )
 		{
-			std::cout << "Error: '" << pType->getFullName() << "' is not an interface. loaded type value '" << pName << "' from '" << pNode->Name() << "'." << std::endl;
+			trace::write( "Error: '"_s + pType->getFullName() + "' is not an interface. loaded type value '" + pName + "' from '" + pNode->Name() + "'." + "\n" );
 			return false;
 		}
 

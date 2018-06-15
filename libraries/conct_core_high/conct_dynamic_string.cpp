@@ -267,7 +267,7 @@ namespace conct
 	DynamicString DynamicString::toLower() const
 	{
 		DynamicString result = *this;
-		for( size_t i = 0u; i < result.getLength(); ++i )
+		for( uintreg i = 0u; i < result.getLength(); ++i )
 		{
 			result[ i ] = ascii::toLower( result[ i ] );
 		}
@@ -278,7 +278,7 @@ namespace conct
 	DynamicString DynamicString::toUpper() const
 	{
 		DynamicString result = *this;
-		for( size_t i = 0u; i < result.getLength(); ++i )
+		for( uintreg i = 0u; i < result.getLength(); ++i )
 		{
 			result[ i ] = ascii::toUpper( result[ i ] );
 		}
@@ -535,13 +535,8 @@ namespace conct
 		terminate( m_length );
 	}
 
-	DynamicString operator ""_s( const char* pString, size_t length )
+	DynamicString operator ""_s( const char* pString, uintreg length )
 	{
 		return DynamicString( pString, length );
-	}
-
-	std::ostream& operator<<( std::ostream& o, const DynamicString& string )
-	{
-		return o << string.toConstCharPointer();
 	}
 }

@@ -176,6 +176,9 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h">
       <Filter>libraries\conct_port_tcp_server</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gen\device_interface.cpp">
@@ -261,6 +264,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_runtime.cpp">
       <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp">
+      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

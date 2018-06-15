@@ -3,6 +3,7 @@
 #include "conct_memory.h"
 #include "conct_reader.h"
 #include "conct_writer.h"
+#include "conct_trace.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <WinSock2.h>
@@ -20,6 +21,15 @@ namespace conct
 {
 	static const int s_tcpPort = 5489;
 	static const uintreg InvalidSocket = ( uintreg )-1;
+
+	int getLastError()
+	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		return WSAGetLastError();
+#else
+		return errno;
+#endif
+	}
 
 	PortTcpClient::PortTcpClient()
 	{
@@ -73,7 +83,7 @@ namespace conct
 		sockaddr_in6 address;
 		memory::zero( address );
 		address.sin6_family = AF_INET6;
-		address.sin6_port = htons( 49351 );
+		address.sin6_port = htons( m_config.targetPort );
 		inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &address.sin6_addr );
 
 		if( connect( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
@@ -89,33 +99,36 @@ namespace conct
 
 	void PortTcpClient::loop()
 	{
-		const int sendResult = send( m_socket, ( const char* )m_sendData.getData(), ( int )m_sendData.getLength(), 0u );
-		if( sendResult >= 0 )
+		if( !m_sendData.isEmpty() )
 		{
-			m_sendData.clear();
+			const int sendResult = send( m_socket, ( const char* )m_sendData.getData(), ( int )m_sendData.getLength(), 0u );
+			if( sendResult >= 0 )
+			{
+				m_sendData.clear();
+			}
+			else
+			{
+				const int error = getLastError();
+				trace::write( "Send failed with an error. Error: "_s + strerror( error ) );
+				return;
+			}
 		}
-		//else
-		//{
-		//	const int test = WSAGetLastError();
-		//	if( test != WSAEWOULDBLOCK )
-		//	{
-		//		printf( "%u\n", test );
-		//	}
-		//}
 
 		int receivedBytes = 0u;
 		do
 		{
 			m_receiveData.reserve( m_receiveData.getLength() + 2048u );
-			receivedBytes = recv( m_socket, ( char* )m_receiveData.getEnd(), 2048, 0u );
+			receivedBytes = recv( m_socket, ( char* )m_receiveData.getEnd(), 2048, 0 );
 			if( receivedBytes < 0 )
 			{
-				//const int test = WSAGetLastError();
-				//if( test != WSAEWOULDBLOCK )
-				//{
-				//	printf( "%u\n", test );
-				//}
-				break;
+				const int error = getLastError();
+				if( error != EWOULDBLOCK )
+				{
+					break;
+				}
+
+				trace::write( "Receive failed with an error. Error: "_s + strerror( error ) );
+				return;
 			}
 
 			m_receiveData.setLength( m_receiveData.getLength() + receivedBytes );

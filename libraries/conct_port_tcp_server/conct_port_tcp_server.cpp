@@ -1,7 +1,10 @@
 #include "conct_port_tcp_server.h"
 
+#include "conct_dynamic_string.h"
 #include "conct_memory.h"
 #include "conct_reader.h"
+#include "conct_string_tools.h"
+#include "conct_trace.h"
 #include "conct_writer.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -14,6 +17,8 @@
 #endif
 
 #include <stdio.h>
+#include <cstring>
+#include <errno.h>
 
 namespace conct
 {
@@ -25,6 +30,15 @@ namespace conct
 
 	static const int s_tcpPort = 5489;
 	static const SocketType InvalidSocket = ( SocketType )-1;
+
+	int getLastError()
+	{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		return WSAGetLastError();
+#else
+		return errno;
+#endif
+	}
 
 	void PortTcpServer::setup()
 	{
@@ -62,21 +76,23 @@ namespace conct
 		sockaddr_in6 address;
 		memory::zero( address );
 		address.sin6_family = AF_INET6;
-		address.sin6_port = htons( 49351 );
+		address.sin6_port = htons( s_tcpPort );
 		address.sin6_addr = in6addr_any;
 		if( bind( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
 		{
-			//const int test = WSAGetLastError();
-			//printf( "%u\n", test );
+			const int error = getLastError();
+			trace::write( "Bind failed with an error. Error: "_s + strerror( error ) + "\n" );
 			return;
 		}
 
 		if( listen( m_socket, 5 ) != 0 )
 		{
-			//const int test = WSAGetLastError();
-			//printf( "%u\n", test );
+			const int error = getLastError();
+			trace::write( "Listen failed with an error. Error: "_s + strerror( error ) + "\n" );
 			return;
 		}
+
+		trace::write( "Listen on port: "_s + string_tools::toString( s_tcpPort ) + "\n" );
 	}
 
 	void PortTcpServer::loop()
@@ -89,9 +105,17 @@ namespace conct
 			addConnection( clientSocket, address );
 		}
 
-		for( Connection& connection : m_connections )
+		for( uintreg i = 0u; i < m_connections.getLength(); ++i )
 		{
-			updateConnection( connection );
+			Connection& connection = m_connections[ i ];
+			if( !updateConnection( connection ) )
+			{
+				trace::write( "Connection closed: "_s + string_tools::toString( connection.socket ) + "\n" );
+
+				m_connections.eraseUnsorted( connection );
+				shutdown( connection.socket, 0 );
+				i--;
+			}
 		}
 	}
 
@@ -150,44 +174,75 @@ namespace conct
 
 	void PortTcpServer::addConnection( uintreg socket, const sockaddr_in6& address )
 	{
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		const int flags = fcntl( m_socket, F_GETFL, 0 );
+		if( fcntl( socket, F_SETFL, flags | O_NONBLOCK ) == -1 )
+		{
+			shutdown( socket, 0 );
+			return;
+		}
+#endif
+
 		Connection& connection = m_connections.pushBack();
 		connection.socket	= socket;
 		connection.address	= address;
+
+		trace::write( "Connection added: "_s + string_tools::toString( socket ) + "\n" );
 	}
 
-	void PortTcpServer::updateConnection( Connection& connection )
+	bool PortTcpServer::updateConnection( Connection& connection )
 	{
-		const int sendResult = send( connection.socket, ( const char* )connection.sendData.getData(), (int)connection.sendData.getLength(), 0u );
-		if( sendResult >= 0 )
+		int error = 0;
+		socklen_t len = sizeof( error );
+		int retval = getsockopt( connection.socket, SOL_SOCKET, SO_ERROR, (char*)&error, &len );
+		if( retval != 0 )
 		{
-			connection.sendData.clear();
+			trace::write( "Couldn't get socket error code. Error: "_s + strerror( retval ) + "\n" );
+			return false;
 		}
-		//else
-		//{
-		//	const int test = WSAGetLastError();
-		//	if( test != WSAEWOULDBLOCK )
-		//	{
-		//		printf( "%u\n", test );
-		//	}
-		//}
 
-		int receivedBytes = 0u;
+		if( error != 0 )
+		{
+			trace::write( "Socket has an error. Error: "_s + strerror( error ) + "\n" );
+			return false;
+		}
+
+		if( !connection.sendData.isEmpty() )
+		{
+			const int sendResult = send( connection.socket, ( const char* )connection.sendData.getData(), ( int )connection.sendData.getLength(), 0u );
+			if( sendResult >= 0 )
+			{
+				connection.sendData.clear();
+			}
+			else
+			{
+				const int error = getLastError();
+				trace::write( "Send failed with an error. Error: "_s + strerror( error ) + "\n" );
+				return false;
+			}
+		}
+
+		int receiveResult = 0u;
 		do
 		{
 			connection.receiveData.reserve( connection.receiveData.getLength() + 2048u );
-			receivedBytes = recv( connection.socket, ( char* )connection.receiveData.getEnd(), 2048, 0u );
-			if( receivedBytes < 0 )
+			receiveResult = recv( connection.socket, ( char* )connection.receiveData.getEnd(), 2048, 0 );
+			if( receiveResult < 0 )
 			{
-				//const int test = WSAGetLastError();
-				//if( test != WSAEWOULDBLOCK )
-				//{
-				//	printf( "%u\n", test );
-				//}
-				break;
+				const int error = getLastError();
+				if( error == EAGAIN || error == EWOULDBLOCK )
+				{
+					break;
+				}
+
+				trace::write( "Receive failed with an error. Error: "_s + strerror( error ) + "\n" );
+				return false;
 			}
 
-			connection.receiveData.setLength( connection.receiveData.getLength() + receivedBytes );
+			connection.receiveData.setLength( connection.receiveData.getLength() + receiveResult );
 		}
-		while( receivedBytes == 2048 );
+		while( receiveResult == 2048 );
+
+		return true;
 	}
 }

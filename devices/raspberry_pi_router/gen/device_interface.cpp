@@ -9,12 +9,12 @@ namespace conct
 
 	void DeviceInterface::setupDevice()
 	{
-		setup();
-
 		m_port0.setup();
 
 		m_runtime.setup( this );
 		m_runtime.registerPort( &m_port0 );
+
+		setup();
 	}
 
 	void DeviceInterface::loopDevice()
@@ -28,7 +28,7 @@ namespace conct
 
 	const char* DeviceInterface::getName() const
 	{
-		 return "ControllerSimulator";
+		 return "RaspiRouter";
 	}
 
 	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )

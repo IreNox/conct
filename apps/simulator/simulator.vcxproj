@@ -32,6 +32,7 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_data_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_device.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />

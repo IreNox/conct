@@ -1,11 +1,10 @@
 #include "conct_struct_type.h"
 
+#include "conct_trace.h"
 #include "conct_type_collection.h"
 #include "conct_xml_helper.h"
 
 #include <tinyxml2/tinyxml2.h>
-
-#include <iostream>
 
 namespace conct
 {
@@ -24,14 +23,14 @@ namespace conct
 		tinyxml2::XMLDocument document;
 		if( document.LoadFile( m_fileName.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
 		{
-			std::cout << "Error: Failed to load XML from '" << m_fileName.getGenericPath() << "'. Message: " << document.ErrorStr() << std::endl;
+			trace::write( "Error: Failed to load XML from '"_s + m_fileName.getGenericPath() + "'. Message: " + document.ErrorStr() + "\n" );
 			return false;
 		}
 
 		tinyxml2::XMLElement* pRootNode = document.FirstChildElement( "struct" );
 		if( pRootNode == nullptr )
 		{
-			std::cout << "Error: Failed to find root node in '" << m_fileName.getGenericPath() << "'." << std::endl;
+			trace::write( "Error: Failed to find root node in '"_s + m_fileName.getGenericPath() + "'." + "\n" );
 			return false;
 		}
 

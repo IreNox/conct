@@ -86,6 +86,7 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h" />
@@ -108,6 +109,10 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
+    <ClInclude Include="device_impl.h" />
+    <ClInclude Include="gen\core_device_proxy.h" />
+    <ClInclude Include="gen\core_router_proxy.h" />
+    <ClInclude Include="gen\device_interface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
@@ -127,6 +132,7 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_data_builder.cpp" />
@@ -146,7 +152,11 @@
     <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
-    <ClCompile Include="raspberry_pi_router.cpp" />
+    <ClCompile Include="device_impl.cpp" />
+    <ClCompile Include="gen\core_device_proxy.cpp" />
+    <ClCompile Include="gen\core_router_proxy.cpp" />
+    <ClCompile Include="gen\device_interface.cpp" />
+    <ClCompile Include="main.cpp" />
     <None Include="..\..\libraries\conct_core\conct_array.inl" />
     <None Include="..\..\libraries\conct_core\conct_array_view.inl" />
     <None Include="..\..\libraries\conct_core\conct_flags.inl" />

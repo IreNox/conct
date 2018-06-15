@@ -50,6 +50,6 @@ namespace conct
 		Vector< Connection >		m_connections;
 
 		void						addConnection( uintreg socket, const sockaddr_in6& address );
-		void						updateConnection( Connection& connection );
+		bool						updateConnection( Connection& connection );
 	};
 }

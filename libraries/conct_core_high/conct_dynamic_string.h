@@ -2,8 +2,6 @@
 
 #include "conct_string.h"
 
-#include <ostream>
-
 namespace conct
 {
 	class DynamicString
@@ -96,7 +94,5 @@ namespace conct
 		void				checkCapacity( uintreg size );
 	};
 
-	DynamicString operator ""_s( const char* pString, size_t length );
-
-	std::ostream& operator<<( std::ostream& o, const DynamicString& string );
+	DynamicString operator ""_s( const char* pString, uintreg length );
 }

@@ -67,7 +67,7 @@ namespace conct
 	{
 		checkCapacity( m_length + 1u );
 
-		const uint index = m_bottom;
+		const uintreg index = m_bottom;
 		m_bottom = ( m_bottom + 1u ) % m_capacity;
 		m_length++;
 		return m_pData[ index ];
@@ -78,7 +78,7 @@ namespace conct
 	{
 		checkCapacity( m_length + 1u );
 
-		const uint index = m_bottom;
+		const uintreg index = m_bottom;
 		m_bottom = ( m_bottom + 1u ) % m_capacity;
 		m_length++;
 		m_pData[ index ] = value;
@@ -102,7 +102,7 @@ namespace conct
 		checkCapacity( m_length + length );
 		for( uintreg i = 0u; i < length; ++i )
 		{
-			const uint index = m_bottom;
+			const uintreg index = m_bottom;
 			m_bottom = ( m_bottom + 1u ) % m_capacity;
 			m_pData[ index ] = pData[ i ];
 		}
@@ -113,7 +113,7 @@ namespace conct
 	void Queue< T >::popFront()
 	{
 		CONCT_ASSERT( m_length > 0u );
-		m_top++;
+		m_top = ( m_top + 1u ) % m_capacity;
 		m_length--;
 	}
 
@@ -126,7 +126,7 @@ namespace conct
 		}
 
 		target = m_pData[ m_top ];
-		m_top++;
+		m_top = ( m_top + 1u ) % m_capacity;
 		m_length--;
 		return true;
 	}

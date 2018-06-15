@@ -193,6 +193,7 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h" />
@@ -228,6 +229,7 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />

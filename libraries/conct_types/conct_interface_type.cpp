@@ -1,11 +1,10 @@
 #include "conct_interface_type.h"
 
+#include "conct_trace.h"
 #include "conct_type_collection.h"
 #include "conct_xml_helper.h"
 
 #include <tinyxml2/tinyxml2.h>
-
-#include <iostream>
 
 namespace conct
 {
@@ -27,14 +26,14 @@ namespace conct
 		tinyxml2::XMLDocument document;
 		if( document.LoadFile( m_fileName.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
 		{
-			std::cout << "Error: Failed to load XML from '" << m_fileName.getGenericPath() << "'. Message: " << document.ErrorStr() << std::endl;
+			trace::write( "Error: Failed to load XML from '"_s + m_fileName.getGenericPath() + "'. Message: " + document.ErrorStr() + "\n" );
 			return false;
 		}
 
 		tinyxml2::XMLElement* pRootNode = document.FirstChildElement( "interface" );
 		if( pRootNode == nullptr )
 		{
-			std::cout << "Error: Failed to find root node in '" << m_fileName.getGenericPath() << "'." << std::endl;
+			trace::write( "Error: Failed to find root node in '"_s + m_fileName.getGenericPath() + "'." + "\n" );
 			return false;
 		}
 
@@ -43,7 +42,7 @@ namespace conct
 		{
 			if( pBaseType->getDescription() != TypeDescription_Interface )
 			{
-				std::cout << "Error: Base type of '" << getFullName() << "' is not an interface in '" << m_fileName.getGenericPath() << "'." << std::endl;
+				trace::write( "Error: Base type of '"_s + getFullName() + "' is not an interface in '" + m_fileName.getGenericPath() + "'." + "\n" );
 				return false;
 			}
 
@@ -57,7 +56,7 @@ namespace conct
 			if( !loadStringValue( m_headerFilename, pInternalNode, "include" ) ||
 				!loadStringValue( m_cppName, pInternalNode, "class" ) )
 			{
-				std::cout << "Error: Internal type data not complete type of '" << getFullName() << "' in '" << m_fileName.getGenericPath() << "'." << std::endl;
+				trace::write( "Error: Internal type data not complete type of '"_s + getFullName() + "' in '" + m_fileName.getGenericPath() + "'." + "\n" );
 				return false;
 			}
 
@@ -88,7 +87,7 @@ namespace conct
 
 				if( !property.hasGetter && !property.hasSetter )
 				{
-					std::cout << "Error: Property '" << propertyName << "' in '" << getFullName() << "' has no getter and no setter." << std::endl;
+					trace::write( "Error: Property '"_s + propertyName + "' in '" + getFullName() + "' has no getter and no setter." + "\n" );
 					return false;
 				}
 

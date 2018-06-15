@@ -6,12 +6,11 @@
 #include "conct_interface_type.h"
 #include "conct_path.h"
 #include "conct_struct_type.h"
+#include "conct_trace.h"
 #include "conct_type.h"
 #include "conct_xml_helper.h"
 
 #include <tinyxml2/tinyxml2.h>
-
-#include <iostream>
 
 namespace conct
 {
@@ -48,7 +47,7 @@ namespace conct
 		{
 			if( !pInterface->load( *this ) )
 			{
-				std::cout << "Error: Failed to load interface from '" << pInterface->getFileName().getGenericPath() << "'." << std::endl;
+				trace::write( "Error: Failed to load interface from '"_s + pInterface->getFileName().getGenericPath() + "'." + "\n" );
 				return false;
 			}
 		}
@@ -57,7 +56,7 @@ namespace conct
 		{
 			if( !pStruct->load( *this ) )
 			{
-				std::cout << "Error: Failed to load struct from '" << pStruct->getFileName().getGenericPath() << "'." << std::endl;
+				trace::write( "Error: Failed to load struct from '"_s + pStruct->getFileName().getGenericPath() + "'." + "\n" );
 				return false;
 			}
 		}
@@ -182,14 +181,14 @@ namespace conct
 			tinyxml2::XMLDocument document;
 			if( document.LoadFile( currentPath.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
 			{
-				std::cout << "Error: Failed to load XML from '" << currentPath.getGenericPath() << "'. Message: " << document.ErrorStr() << std::endl;
+				trace::write( "Error: Failed to load XML from '"_s + currentPath.getGenericPath() + "'. Message: " + document.ErrorStr() + "\n" );
 				return false;
 			}
 
 			tinyxml2::XMLElement* pRootNode = document.RootElement();
 			if( pRootNode == nullptr )
 			{
-				std::cout << "Error: Failed to find root node in '" << currentPath.getGenericPath() << "'." << std::endl;
+				trace::write( "Error: Failed to find root node in '"_s + currentPath.getGenericPath() + "'." + "\n" );
 				return false;
 			}
 
@@ -228,11 +227,11 @@ namespace conct
 			}
 			else if( rootNodeName == "enum" )
 			{
-				std::cout << "Info: Enum in '" << currentPath.getGenericPath() << "' is currently not supported." << std::endl;
+				trace::write( "Info: Enum in '"_s + currentPath.getGenericPath() + "' is currently not supported." + "\n" );
 			}
 			else
 			{
-				std::cout << "Error: Unknown type '" << rootNodeName << "' in '" << currentPath.getGenericPath() << "'." << std::endl;
+				trace::write( "Error: Unknown type '"_s + rootNodeName + "' in '" + currentPath.getGenericPath() + "'." + "\n" );
 				return false;
 			}
 		}

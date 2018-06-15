@@ -1,13 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source files">
-      <UniqueIdentifier>{54f3a6c9-badc-4f9e-bec1-32e031baee9a}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="VisualGDB settings">
-      <UniqueIdentifier>{710ed453-f350-4f8c-aee6-d6ae1c467b59}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libraries">
       <UniqueIdentifier>{e15857ad-abf8-46f3-b1b0-a19f55c2ec98}</UniqueIdentifier>
     </Filter>
@@ -29,16 +22,23 @@
     <Filter Include="libraries\conct_port_tcp_server">
       <UniqueIdentifier>{01598c44-dfb9-4dd0-a1a4-e84d5159c70b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="settings">
+      <UniqueIdentifier>{710ed453-f350-4f8c-aee6-d6ae1c467b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project">
+      <UniqueIdentifier>{54f3a6c9-badc-4f9e-bec1-32e031baee9a}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="gen">
+      <UniqueIdentifier>{7c66eb55-1131-4e05-86ad-5862a3514eb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="raspberry_pi_router.cpp">
-      <Filter>Source files</Filter>
-    </ClCompile>
     <None Include="raspberry_pi_router-Debug.vgdbsettings">
-      <Filter>VisualGDB settings</Filter>
+      <Filter>settings</Filter>
     </None>
     <None Include="raspberry_pi_router-Release.vgdbsettings">
-      <Filter>VisualGDB settings</Filter>
+      <Filter>settings</Filter>
     </None>
     <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
       <Filter>libraries\conct_core</Filter>
@@ -285,6 +285,21 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
+    <ClInclude Include="device_impl.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="gen\core_device_proxy.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="gen\core_router_proxy.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="gen\device_interface.h">
+      <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\libraries\conct_core\conct_flags.inl">
@@ -341,5 +356,25 @@
     <None Include="..\..\libraries\conct_core_high\conct_vector.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="device_impl.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="gen\core_device_proxy.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="gen\core_router_proxy.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="gen\device_interface.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 <device name="RaspiRouter" hardware="RaspberryPi">
 	<ports>
 		<port index="0" type="TCP-Server" />
-		<!--port index="1" type="RS-485-Simulator" /-->
+		<port index="1" type="Serial" />
 	</ports>
 	<!--instances>
 		<instance type="Home.Light" />

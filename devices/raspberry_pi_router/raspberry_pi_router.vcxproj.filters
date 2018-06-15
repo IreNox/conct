@@ -32,6 +32,9 @@
     <Filter Include="gen">
       <UniqueIdentifier>{7c66eb55-1131-4e05-86ad-5862a3514eb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_serial">
+      <UniqueIdentifier>{3d88359e-d311-40d1-abd5-14a67b138a8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="raspberry_pi_router-Debug.vgdbsettings">
@@ -285,9 +288,6 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="device_impl.h">
-      <Filter>project</Filter>
-    </ClInclude>
     <ClInclude Include="gen\core_device_proxy.h">
       <Filter>gen</Filter>
     </ClInclude>
@@ -299,6 +299,12 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h">
       <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="device_raspi_router.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial.h">
+      <Filter>libraries\conct_port_serial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -361,9 +367,6 @@
     <ClCompile Include="main.cpp">
       <Filter>project</Filter>
     </ClCompile>
-    <ClCompile Include="device_impl.cpp">
-      <Filter>project</Filter>
-    </ClCompile>
     <ClCompile Include="gen\core_device_proxy.cpp">
       <Filter>gen</Filter>
     </ClCompile>
@@ -375,6 +378,12 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp">
       <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="device_raspi_router.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial.cpp">
+      <Filter>libraries\conct_port_serial</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 
 namespace conct
 {
-	class PortRs485 : public Port
+	class PortSerial : public Port
 	{
 	public:
 
@@ -21,6 +21,6 @@ namespace conct
 
 	private:
 
-		uint8_t			m_buffer[ 64u ];
+		uint8						m_buffer[ 32u ];
 	};
 }

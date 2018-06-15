@@ -43,7 +43,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/conct_types;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_serial;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/conct_types;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
+    <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial.h" />
     <ClInclude Include="..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_data_builder.h" />
@@ -109,7 +110,7 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
-    <ClInclude Include="device_impl.h" />
+    <ClInclude Include="device_raspi_router.h" />
     <ClInclude Include="gen\core_device_proxy.h" />
     <ClInclude Include="gen\core_router_proxy.h" />
     <ClInclude Include="gen\device_interface.h" />
@@ -133,6 +134,7 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
+    <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
     <ClCompile Include="..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_data_builder.cpp" />
@@ -152,7 +154,7 @@
     <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
-    <ClCompile Include="device_impl.cpp" />
+    <ClCompile Include="device_raspi_router.cpp" />
     <ClCompile Include="gen\core_device_proxy.cpp" />
     <ClCompile Include="gen\core_router_proxy.cpp" />
     <ClCompile Include="gen\device_interface.cpp" />

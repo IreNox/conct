@@ -1,12 +1,10 @@
-#include "device_impl.h"
-
-#include "conct_trace.h"
+#include "device_raspi_router.h"
 
 namespace conct
 {
 	void DeviceRaspiRouter::setup()
 	{
-		trace::write( "Router started!\n" );
+		// TODO: implement
 	}
 
 	void DeviceRaspiRouter::loop()

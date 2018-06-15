@@ -36,6 +36,7 @@
 
 #if defined( __AVR__ ) // AVR (UNO, Duemilanove, etc.)
 #	define CONCT_PLATFORM_AVR		CONCT_ON
+#	define CONCT_PLATFORM_ARDUINO	CONCT_ON
 #	define CONCT_POINTER_16			CONCT_ON
 #	define CONCT_REGISTER_8			CONCT_ON
 #else
@@ -44,6 +45,7 @@
 
 #if defined( __SAM3X8E__ ) // ARM (DUE)
 #	define CONCT_PLATFORM_ARM_DUE	CONCT_ON
+#	define CONCT_PLATFORM_ARDUINO	CONCT_ON
 #	define CONCT_POINTER_32			CONCT_ON
 #	define CONCT_REGISTER_32		CONCT_ON
 #else
@@ -78,27 +80,31 @@
 #	endif
 #endif
 
+#if !defined( CONCT_PLATFORM_ARDUINO )
+#	define CONCT_PLATFORM_ARDUINO	CONCT_OFF
+#endif
+
 #if !defined( CONCT_POINTER_16 )
-#	define CONCT_POINTER_16				CONCT_OFF
+#	define CONCT_POINTER_16			CONCT_OFF
 #endif
 #if !defined( CONCT_POINTER_32 )
-#	define CONCT_POINTER_32				CONCT_OFF
+#	define CONCT_POINTER_32			CONCT_OFF
 #endif
 #if !defined( CONCT_POINTER_64 )
-#	define CONCT_POINTER_64				CONCT_OFF
+#	define CONCT_POINTER_64			CONCT_OFF
 #endif
 
 #if !defined( CONCT_REGISTER_8 )
-#	define CONCT_REGISTER_8				CONCT_OFF
+#	define CONCT_REGISTER_8			CONCT_OFF
 #endif
 #if !defined( CONCT_REGISTER_16 )
-#	define CONCT_REGISTER_16			CONCT_OFF
+#	define CONCT_REGISTER_16		CONCT_OFF
 #endif
 #if !defined( CONCT_REGISTER_32 )
-#	define CONCT_REGISTER_32			CONCT_OFF
+#	define CONCT_REGISTER_32		CONCT_OFF
 #endif
 #if !defined( CONCT_REGISTER_64 )
-#	define CONCT_REGISTER_64			CONCT_OFF
+#	define CONCT_REGISTER_64		CONCT_OFF
 #endif
 
 #define CONCT_DEBUG					CONCT_ON

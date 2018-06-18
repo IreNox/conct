@@ -306,6 +306,9 @@
     <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial.h">
       <Filter>libraries\conct_port_serial</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial_linux.h">
+      <Filter>libraries\conct_port_serial</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\libraries\conct_core\conct_flags.inl">
@@ -383,6 +386,9 @@
       <Filter>project</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial.cpp">
+      <Filter>libraries\conct_port_serial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial_linux.cpp">
       <Filter>libraries\conct_port_serial</Filter>
     </ClCompile>
   </ItemGroup>

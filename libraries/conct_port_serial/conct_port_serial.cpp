@@ -16,53 +16,57 @@ namespace conct
 {
 	static const uintreg s_serialSpeed = 115200;
 
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+	void PortSerial::setConfig( const PortSerialConfig& config )
+	{
+		m_config = config;
+	}
+#endif
+
 	void PortSerial::setup()
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
-		Serial1.begin( s_serialSpeed );
-#else
-		int fd = open( "", O_RDWR | O_NOCTTY | O_SYNC );
+		m_mode		= Mode_Receive;
+		m_lastAckId	= 0xffffu;
+		m_counter	= 0u;
 
-		termios tty;
-		memory::zero( tty );
-		if( tcgetattr( fd, &tty ) != 0 )
-		{
-			trace::write( "tcgetattr failed with error: "_s + strerror( errno ) + "\n" );
-			return;
-		}
-
-		cfsetospeed( &tty, s_serialSpeed );
-		cfsetispeed( &tty, s_serialSpeed );
-
-		tty.c_cflag = ( tty.c_cflag & ~CSIZE ) | CS8;     // 8-bit chars
-														  // disable IGNBRK for mismatched speed tests; otherwise receive break
-														  // as \000 chars
-		tty.c_iflag &= ~IGNBRK;         // disable break processing
-		tty.c_lflag = 0;                // no signaling chars, no echo,
-										// no canonical processing
-		tty.c_oflag = 0;                // no remapping, no delays
-		tty.c_cc[ VMIN ]  = 0;            // read doesn't block
-		tty.c_cc[ VTIME ] = 5;            // 0.5 seconds read timeout
-
-		tty.c_iflag &= ~( IXON | IXOFF | IXANY ); // shut off xon/xoff ctrl
-
-		tty.c_cflag |= ( CLOCAL | CREAD );// ignore modem controls,
-										  // enable reading
-		tty.c_cflag &= ~( PARENB | PARODD );      // shut off parity
-		tty.c_cflag &= ~CSTOPB;
-		tty.c_cflag &= ~CRTSCTS;
-
-		if( tcsetattr( fd, TCSANOW, &tty ) != 0 )
-		{
-			trace::write( "tcsetattr failed with error: "_s + strerror( errno ) + "\n" );
-			return;
-		}
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+		Serial1.setup( m_config.portName );
 #endif
+		Serial1.begin( s_serialSpeed );
 	}
 
 	void PortSerial::loop()
 	{
+		if( m_mode == Mode_Receive )
+		{
+			while( Serial1.available() )
+			{
+				m_headerBuffer[ m_counter++ ] = Serial1.read();
 
+				if( m_counter == 2u )
+				{
+					const uint16 magic = *( uint16* )m_headerBuffer;
+					if( magic & 0xfff0u != 0x42b0u )
+					{
+						m_headerBuffer[ 0u ] = m_headerBuffer[ 1u ];
+						m_counter = 1u;
+					}
+				}
+				else if( m_counter == 3u )
+				{
+					m_remaining = ( m_headerBuffer[ 1u ] & 0xf0u ) >> 3u;
+					m_remaining |= m_headerBuffer[ 2u ] & 0x1;
+
+					uintreg type = ( m_headerBuffer[ 2u ] & 0x06u ) >> 1u;
+					if( type == Type_Hello )
+					{
+						m_lastAckId = 0u;
+						m_mode = Mode_SendAck;
+						break;
+					}
+				}
+			}
+		}
 	}
 
 	bool PortSerial::openSend( Writer& writer, uintreg size, uintreg endpointId )

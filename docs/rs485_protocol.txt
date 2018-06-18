@@ -4,16 +4,15 @@ Max Packet Size = 512 Bit = 64 Byte
 Max Payload Size = 512 Bit - 64 Bit = 448 Bit = 56 Byte
 
 PacketType:
-Data	- 0 - Data Packet
-Ack		- 1 - Acknowledge
-Missing	- 2 - Packet missing 
-Error	- 3 - Error
+Hello	- 0 - Establish Connection
+Data	- 1 - Data Packet
+Ack		- 2 - Acknowledge
 
 Header
 Bits	Count	Name		Description
-0-15	16		Magic		Everytime: RS
-16-21	 5		Size		< Max Payload Size - 56 Bytes
-22-37	16		Checksum	Fletcher’s Checksum of Payload
-38-41	 4		Type		Packet Type
-42-63	22		Id			Packet Id
-64-511	448		Payload		Packet Data
+0-11	   12	Magic		Everytime: 0x42B
+12-16	    5	Size		< Max Payload Size - 56 Bytes
+17-18	    2	Type		Packet Type
+19-23	    5	Id			Packet Id
+24-247	  226	Payload		Packet Data
+248-255	 	8	Checksum	Fletcher-8 Checksum of Payload

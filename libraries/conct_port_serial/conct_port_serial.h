@@ -3,6 +3,7 @@
 #include "conct_port.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#	include "conct_dynamic_string.h"
 #	include "conct_port_serial_linux.h"
 #endif
 
@@ -36,7 +37,7 @@ namespace conct
 
 	private:
 
-		enum Type
+		enum Type : uint8
 		{
 			Type_Hello,
 			Type_Data,
@@ -45,15 +46,14 @@ namespace conct
 			Type_Count
 		};
 
-		enum Mode
+		enum State
 		{
-			Mode_Receive,
-			Mode_SendAck,
-
-			Mode_Send,
-			Mode_WaitForAck,
-
-			Mode_Count,
+			State_Idle,
+			State_ReceivingHeader,
+			State_ReceivingData,
+			State_ReceivedPacket,
+			State_Send,
+			State_WaitingForAck
 		};
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
@@ -62,11 +62,27 @@ namespace conct
 		Serial						Serial1;
 #endif
 
-		Mode						m_mode;
-		uintreg						m_lastAckId;
+		State						m_state;
+		uintreg						m_lastSendId;
 		uintreg						m_counter;
-		uintreg						m_remaining;
 		uint8						m_headerBuffer[ 3u ];
-		uint8						m_buffer[ 32u ];
+		uint8						m_buffer[ 31u ];
+
+		uint16						getMagicFromHeader() const;
+		uint8						getSizeFromHeader() const;
+		Type						getTypeFromHeader() const;
+		uint8						getIdFromHeader() const;
+
+		void						writeHeader( uint8 size, Type type, uint8 id );
+
+		bool						updateReceiveHeader();
+		bool						updateReceiveData();
+		bool						updateSend();
+		bool						updateWaitForAck();
+
+		void						sendHello();
+		void						sendAck( uintreg packetId );
+
+		uint8						calculateChecksum() const;
 	};
 }

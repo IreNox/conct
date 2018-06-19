@@ -16,9 +16,6 @@
     <Filter Include="libraries\conct_runtime_high">
       <UniqueIdentifier>{c5d3f1a5-c7be-49d6-9aa5-7f50ab933ef6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_types">
-      <UniqueIdentifier>{24f2bdec-1e6b-40d6-b6e3-26e5461b7c91}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libraries\conct_port_tcp_server">
       <UniqueIdentifier>{01598c44-dfb9-4dd0-a1a4-e84d5159c70b}</UniqueIdentifier>
     </Filter>
@@ -34,6 +31,12 @@
     </Filter>
     <Filter Include="libraries\conct_port_serial">
       <UniqueIdentifier>{3d88359e-d311-40d1-abd5-14a67b138a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{8a299360-913c-4161-995d-58cd9f2a3860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\tiny_gpio">
+      <UniqueIdentifier>{9090cfc5-47c9-4b0c-bf81-90fbb1d636db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,24 +111,6 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_value_high.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_types\conct_array_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_types\conct_interface_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_types\conct_struct_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp">
-      <Filter>libraries\conct_types</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
       <Filter>libraries\conct_core_high</Filter>
@@ -243,24 +228,6 @@
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_value_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_types\conct_array_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_types\conct_interface_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_types\conct_struct_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_types\conct_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
@@ -308,6 +275,9 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial_linux.h">
       <Filter>libraries\conct_port_serial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\tiny_gpio\tiny_gpio.h">
+      <Filter>third_party\tiny_gpio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -390,6 +360,9 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial_linux.cpp">
       <Filter>libraries\conct_port_serial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\tiny_gpio\tiny_gpio.c">
+      <Filter>third_party\tiny_gpio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

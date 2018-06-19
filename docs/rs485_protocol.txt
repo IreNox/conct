@@ -1,18 +1,18 @@
 RS485 Protocol
 
-Max Packet Size = 512 Bit = 64 Byte
-Max Payload Size = 512 Bit - 64 Bit = 448 Bit = 56 Byte
+Max Packet Size = 280 Bit = 32 Byte
+Max Payload Size = 280 Bit - 32 Bit = 248 Bit = 31 Byte
 
 PacketType:
-Hello	- 0 - Establish Connection
+Hello	- 0 - Establish/Reset Connection
 Data	- 1 - Data Packet
 Ack		- 2 - Acknowledge
 
 Header
 Bits	Count	Name		Description
 0-11	   12	Magic		Everytime: 0x42B
-12-16	    5	Size		< Max Payload Size - 56 Bytes
+12-16	    5	Size		<= Max Payload Size - 28 Bytes
 17-18	    2	Type		Packet Type
 19-23	    5	Id			Packet Id
-24-247	  226	Payload		Packet Data
-248-255	 	8	Checksum	Fletcher-8 Checksum of Payload
+24-271	  248	Payload		Packet Data
+272-279	 	8	Checksum	Fletcher-8 Checksum of Payload

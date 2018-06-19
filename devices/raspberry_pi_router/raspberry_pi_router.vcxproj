@@ -43,7 +43,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_serial;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/conct_types;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_serial;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -105,12 +105,7 @@
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_router.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_value_high.h" />
-    <ClInclude Include="..\..\libraries\conct_types\conct_array_type.h" />
-    <ClInclude Include="..\..\libraries\conct_types\conct_interface_type.h" />
-    <ClInclude Include="..\..\libraries\conct_types\conct_struct_type.h" />
-    <ClInclude Include="..\..\libraries\conct_types\conct_type.h" />
-    <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
-    <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
+    <ClInclude Include="..\..\third_party\tiny_gpio\tiny_gpio.h" />
     <ClInclude Include="device_raspi_router.h" />
     <ClInclude Include="gen\core_device_proxy.h" />
     <ClInclude Include="gen\core_router_proxy.h" />
@@ -150,12 +145,7 @@
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_router.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_value_high.cpp" />
-    <ClCompile Include="..\..\libraries\conct_types\conct_array_type.cpp" />
-    <ClCompile Include="..\..\libraries\conct_types\conct_interface_type.cpp" />
-    <ClCompile Include="..\..\libraries\conct_types\conct_struct_type.cpp" />
-    <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp" />
-    <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
-    <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
+    <ClCompile Include="..\..\third_party\tiny_gpio\tiny_gpio.c" />
     <ClCompile Include="device_raspi_router.cpp" />
     <ClCompile Include="gen\core_device_proxy.cpp" />
     <ClCompile Include="gen\core_router_proxy.cpp" />

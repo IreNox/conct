@@ -1,6 +1,6 @@
 #include "conct_port_serial_linux.h"
 
-#if CONCT_DISABLED( CONCT_PLATFORM_LINUX )
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 
 #include "conct_dynamic_string.h"
 #include "conct_memory.h"
@@ -9,12 +9,13 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
+#include <sys/ioctl.h>
 #include <termios.h>
 #include <unistd.h>
 
 namespace conct
 {
-	void Serial::setup( const DynamicString& portName )
+	bool Serial::setup( const DynamicString& portName )
 	{
 		m_fileDescriptor = open( portName.toConstCharPointer(), O_RDWR | O_NOCTTY | O_SYNC );
 		if( m_fileDescriptor < 0 )
@@ -26,7 +27,7 @@ namespace conct
 		return true;
 	}
 
-	void Serial::begin( int speed )
+	bool Serial::begin( int speed )
 	{
 		const bool should_block = true;
 
@@ -109,7 +110,7 @@ namespace conct
 
 	uintreg Serial::readData( void* pBuffer, uintreg bufferLength )
 	{
-		int readResult = read( m_fileDescriptor, pBuffer, bufferLength );
+		int readResult = ::read( m_fileDescriptor, pBuffer, bufferLength );
 		if( readResult >= 0 )
 		{
 			return uintreg( bufferLength );
@@ -121,7 +122,7 @@ namespace conct
 
 	void Serial::write( uint8 data )
 	{
-		const int writeResult = write( m_fileDescriptor, &data, sizeof( uint8 ) );
+		const int writeResult = ::write( m_fileDescriptor, &data, sizeof( uint8 ) );
 		if( writeResult < 0 )
 		{
 			trace::write( "serial write failed with error: "_s + strerror( errno ) + "\n" );

@@ -24,6 +24,8 @@ namespace conct
 		void						setConfig( const PortSerialConfig& config );
 #endif
 
+		bool						popConnectionReset( uintreg& endpointId );
+
 		virtual void				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
@@ -46,7 +48,7 @@ namespace conct
 			Type_Count
 		};
 
-		enum State
+		enum State : uint8
 		{
 			State_Idle,
 			State_ReceivingHeader,
@@ -56,6 +58,8 @@ namespace conct
 			State_WaitingForAck
 		};
 
+		typedef uint8 Header[ 3u ];
+
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		PortSerialConfig			m_config;
 
@@ -63,17 +67,20 @@ namespace conct
 #endif
 
 		State						m_state;
+		bool						m_connectionReset;
 		uintreg						m_lastSendId;
+		uint32						m_lastSendTime;
 		uintreg						m_counter;
-		uint8						m_headerBuffer[ 3u ];
-		uint8						m_buffer[ 31u ];
+		Header						m_receiveHeader;
+		Header						m_sendHeader;
+		uint8						m_buffer[ 32u ];
 
-		uint16						getMagicFromHeader() const;
-		uint8						getSizeFromHeader() const;
-		Type						getTypeFromHeader() const;
-		uint8						getIdFromHeader() const;
+		uint16						getMagicFromHeader( const Header& header ) const;
+		uint8						getSizeFromHeader( const Header& header ) const;
+		Type						getTypeFromHeader( const Header& header ) const;
+		uint8						getIdFromHeader( const Header& header ) const;
 
-		void						writeHeader( uint8 size, Type type, uint8 id );
+		void						writeSendHeader( uint8 size, Type type, uint8 id );
 
 		bool						updateReceiveHeader();
 		bool						updateReceiveData();
@@ -83,6 +90,6 @@ namespace conct
 		void						sendHello();
 		void						sendAck( uintreg packetId );
 
-		uint8						calculateChecksum() const;
+		uint8						calculateChecksum( const Header& header ) const;
 	};
 }

@@ -44,7 +44,7 @@ namespace conct
 		const double nanoseconds = double( currentTime.tv_nsec );
 		return seconds + ( nanoseconds / 1000000000.0 );
 #elif CONCT_ENABLED( CONCT_PLATFORM_AVR )
-		return micros() / 1000000;
+		return micros() / 1000000.0;
 #endif
 	}
 }

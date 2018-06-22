@@ -3,41 +3,35 @@
 namespace conct
 {
 	DeviceInterface::DeviceInterface()
-		: m_instanceRouter( m_runtime )
 	{
 	}
 
 	void DeviceInterface::setupDevice()
 	{
-		setup();
-
 		m_port0.setup();
-		m_port1.setup();
 
 		m_runtime.setup( this );
-		m_runtime.registerPort( &m_port0 );
-		m_runtime.registerPort( &m_port1 );
+
+		setup();
 	}
 
 	void DeviceInterface::loopDevice()
 	{
 		m_port0.loop();
-		m_port1.loop();
 
 		m_runtime.processPort( &m_port0 );
-		m_runtime.processPort( &m_port1 );
 
 		loop();
 	}
 
 	const char* DeviceInterface::getName() const
 	{
-		 return "RaspiRouter";
+		 return "mega2560_rgb";
 	}
 
 	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )
 	{
-		static Instance s_instances[ 2u ];
+		static Instance s_instances[ 4u ];
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );
 	}
 
@@ -46,7 +40,9 @@ namespace conct
 		static const Instance s_instances[] =
 		{
 			{ 0, 32636 },
-			{ 1, 25653 },
+			{ 1, 24332 },
+			{ 2, 57793 },
+			{ 3, 7621 },
 		};
 
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );
@@ -57,7 +53,9 @@ namespace conct
 		static const LocalInstance s_instances[] =
 		{
 			{ 0, this, &m_proxyDevice },
-			{ 1, &m_instanceRouter, &m_proxyRouter },
+			{ 1, &m_instanceLight, &m_proxyLight },
+			{ 2, &m_instanceDimmer, &m_proxyDimmer },
+			{ 3, &m_instanceRGB, &m_proxyRGB },
 		};
 
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );

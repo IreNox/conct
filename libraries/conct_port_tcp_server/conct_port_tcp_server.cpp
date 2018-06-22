@@ -27,9 +27,18 @@ namespace conct
 #else
 	CONCT_STATIC_ASSERT( sizeof( SocketType ) >= sizeof( int ) );
 #endif
-
+	
 	static const int s_tcpPort = 5489;
 	static const SocketType InvalidSocket = ( SocketType )-1;
+
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+	static const int ErrorWouldBlock = WSAEWOULDBLOCK;
+	static const int ErrorAlreadyInProgress = WSAEALREADY;
+#else
+	static const int ErrorWouldBlock = EWOULDBLOCK;
+	static const int ErrorAlreadyInProgress = EALREADY;
+#endif
+
 
 	int getLastError()
 	{
@@ -268,7 +277,7 @@ namespace conct
 			if( receiveResult < 0 )
 			{
 				const int error = getLastError();
-				if( error == EAGAIN || error == EWOULDBLOCK )
+				if( error == EAGAIN || error == ErrorWouldBlock )
 				{
 					break;
 				}

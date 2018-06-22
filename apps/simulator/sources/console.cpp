@@ -52,7 +52,7 @@ namespace conct
 
 		m_changeFlags |= ChangeFlag_DeviceList;
 
-		selectDevice( 0u );
+		selectDevice( m_devices.getLength() - 1u );
 	}
 
 	void Console::removeDevice( ISimulatorDevice* pDevice )

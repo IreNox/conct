@@ -9,13 +9,17 @@
 #	include "conct_trace.h"
 
 #	include "conct_port_serial_arduino_interface_linux.h"
+
+#	include <unistd.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include "conct_port_serial_arduino_interface_sim.h"
+#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+#	include <arduino.h>
 #endif
 
 namespace conct
 {
-	static const uintreg s_serialSendPin = CONCT_ENABLED( CONCT_PLATFORM_LINUX ) ? 1u : 5u;
+	static const uintreg s_serialSendPin = CONCT_ENABLED( CONCT_PLATFORM_LINUX ) ? 1u : 22u;
 	static const uintreg s_serialSpeed = 115200;
 	static const uintreg s_resendTime = 200;
 
@@ -48,7 +52,7 @@ namespace conct
 		m_lastSendId			= 0u;
 		m_lastLastReceivedId	= 0u;
 		m_counter				= 0u;
-		m_flags.set( Flag_ConnectionReset );
+		m_flags.clear();
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		if( gpioInitialise() < 0 )
@@ -225,6 +229,7 @@ namespace conct
 					}
 					else
 					{
+						m_flags.set( Flag_ConnectionReset );
 						sendHello();
 					}
 					return true;
@@ -288,6 +293,12 @@ namespace conct
 			Serial1.write( m_buffer[ i ] );
 		}
 
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+		usleep( 660 );
+		Serial1.flush();
+#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+		delay( 1 );
+#endif
 		digitalWrite( s_serialSendPin, LOW );
 
 		m_lastSendTime = millis();
@@ -328,7 +339,6 @@ namespace conct
 
 		m_counter = 0u;
 		m_state = State_Send;
-		m_flags.set( Flag_ConnectionReset );
 	}
 
 	void PortSerial::sendAck( uint8 packetId )

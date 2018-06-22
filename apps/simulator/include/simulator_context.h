@@ -1,6 +1,7 @@
 #pragma once
 
 #include "conct_map.h"
+#include "conct_mutex.h"
 #include "conct_thread_local_storage.h"
 
 #define CONCT_IS_DLL CONCT_OFF
@@ -26,6 +27,8 @@ namespace conct
 		typedef Map< uintreg, ISimulatorDeviceContext* > DeviceMap;
 
 		ThreadLocalStorageHandle	m_threadDevices;
+
+		Mutex						m_mutex;
 		DeviceMap					m_devices;
 	};
 }

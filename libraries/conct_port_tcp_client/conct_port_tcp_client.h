@@ -5,6 +5,13 @@
 #include "conct_vector.h"
 #include "conct_dynamic_string.h"
 
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <WinSock2.h>
+#	include <ws2ipdef.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#	include <arpa/inet.h>
+#endif
+
 namespace conct
 {
 	struct PortTcpClientConfig
@@ -40,6 +47,9 @@ namespace conct
 		PortTcpClientConfig			m_config;
 
 		uintreg						m_socket;
+		sockaddr_in6				m_serverAddress;
+		bool						m_connectionReset;
+		bool						m_connectionLost;
 
 		Vector< uint8 >				m_sendData;
 		Vector< uint8 >				m_receiveData;

@@ -3,7 +3,8 @@
 	<connection mtu="1500">
 		<reliable />
 	</connection>
-	<properties>
-		<listen_port type="int" min="1024" max="49999" default="49351" />
-	</properties>
+	<config>
+		<parameter name="server_host" type="string" default="::1" />
+		<parameter name="server_port" type="integer" min="1024" max="49999" default="5489" />
+	</config>
 </port>

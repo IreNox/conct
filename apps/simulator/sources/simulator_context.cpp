@@ -23,7 +23,10 @@ namespace conct
 	{
 		SimulatorDeviceContext* pDevice = new SimulatorDeviceContext( deviceId );
 
-		m_devices.insert( deviceId, pDevice );
+		{
+			MutexLock lock( m_mutex );
+			m_devices.insert( deviceId, pDevice );
+		}
 		thread_local_storage::setValue( m_threadDevices, (uintptr)pDevice );
 
 		return pDevice;
@@ -31,6 +34,7 @@ namespace conct
 
 	ISimulatorDeviceContext* SimulatorContext::getDevice( uintreg deviceId )
 	{
+		MutexLock lock( m_mutex );
 		return m_devices[ deviceId ];
 	}
 

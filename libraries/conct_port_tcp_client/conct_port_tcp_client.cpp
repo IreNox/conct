@@ -22,6 +22,15 @@ namespace conct
 	static const int s_tcpPort = 5489;
 	static const uintreg InvalidSocket = ( uintreg )-1;
 
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+	static const int ErrorWouldBlock = WSAEWOULDBLOCK;
+	static const int ErrorAlreadyInProgress = WSAEALREADY;
+#else
+	static const int ErrorWouldBlock = EWOULDBLOCK;
+	static const int ErrorAlreadyInProgress = EALREADY;
+#endif
+
+
 	int getLastError()
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -36,6 +45,8 @@ namespace conct
 		m_config.targetHost		= "::1"_s;
 		m_config.targetPort		= s_tcpPort;
 		m_socket				= InvalidSocket;
+		m_connectionLost		= true;
+		m_connectionReset		= false;
 	}
 
 	PortTcpClient::~PortTcpClient()
@@ -53,7 +64,13 @@ namespace conct
 
 	bool PortTcpClient::popConnectionReset( uintreg& endpointId )
 	{
-		return false;
+		if( !m_connectionReset )
+		{
+			return false;
+		}
+
+		m_connectionReset = false;
+		return true;
 	}
 
 	void PortTcpClient::setup()
@@ -85,25 +102,50 @@ namespace conct
 		}
 #endif
 
-		sockaddr_in6 address;
-		memory::zero( address );
-		address.sin6_family = AF_INET6;
-		address.sin6_port = htons( m_config.targetPort );
-		inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &address.sin6_addr );
 
-		if( connect( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
-		{
-			//const int test = WSAGetLastError();
-			//if( test != WSAEWOULDBLOCK )
-			//{
-			//	printf( "%u\n", test );
-			//}
-			return;
-		}
+		memory::zero( m_serverAddress );
+		m_serverAddress.sin6_family = AF_INET6;
+		m_serverAddress.sin6_port = htons( m_config.targetPort );
+		inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
 	}
 
 	void PortTcpClient::loop()
 	{
+		if( m_connectionLost )
+		{
+			m_connectionReset = true;
+
+			if( connect( m_socket, ( const sockaddr* )&m_serverAddress, sizeof( m_serverAddress ) ) != 0 )
+			{
+				const int error = getLastError();
+				if( error != ErrorWouldBlock && error != ErrorAlreadyInProgress )
+				{
+					trace::write( "Couldn't connect to server. Error: "_s + strerror( error ) + "\n" );
+					m_connectionLost = true;
+					return;
+				}
+			}
+
+			m_connectionLost = false;
+		}
+
+		int error = 0;
+		socklen_t len = sizeof( error );
+		int retval = getsockopt( m_socket, SOL_SOCKET, SO_ERROR, ( char* )&error, &len );
+		if( retval != 0 )
+		{
+			trace::write( "Couldn't get socket error code. Error: "_s + strerror( retval ) + "\n" );
+			m_connectionLost = true;
+			return;
+		}
+
+		if( error != 0 )
+		{
+			trace::write( "Socket has an error. Error: "_s + strerror( error ) + "\n" );
+			m_connectionLost = true;
+			return;
+		}
+
 		if( !m_sendData.isEmpty() )
 		{
 			const int sendResult = send( m_socket, ( const char* )m_sendData.getData(), ( int )m_sendData.getLength(), 0u );
@@ -115,6 +157,7 @@ namespace conct
 			{
 				const int error = getLastError();
 				trace::write( "Send failed with an error. Error: "_s + strerror( error ) );
+				m_connectionLost = true;
 				return;
 			}
 		}
@@ -133,6 +176,7 @@ namespace conct
 				}
 
 				trace::write( "Receive failed with an error. Error: "_s + strerror( error ) );
+				m_connectionLost = true;
 				return;
 			}
 

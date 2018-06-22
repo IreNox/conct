@@ -1,5 +1,4 @@
-#include "device_mega2560_rgb.h"
-#include "gen/files.h"
+/* PWM Outputs */
 
 static const uint8_t Red = 2;
 static const uint8_t Green = 3;
@@ -7,12 +6,8 @@ static const uint8_t Blue = 4;
 
 static const uint8_t Pins[] = { Red, Green, Blue };
 
-conct::Devicemega2560_rgb device;
-
 void setup()
 {
-  device.setupDevice();
-  
 	pinMode(Red, OUTPUT);
 	pinMode(Green, OUTPUT);
 	pinMode(Blue, OUTPUT);
@@ -30,7 +25,6 @@ void SetColour (int colour, int intensity)
 
 void loop()
 {
-  device.loopDevice();
     /*for (int i=0; i <= 255; i++)
     {
       SetColour(0, i );

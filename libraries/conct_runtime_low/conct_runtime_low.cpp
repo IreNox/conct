@@ -22,6 +22,13 @@ namespace conct
 
 	void RuntimeLow::processPort( Port* pPort )
 	{
+		uintreg endpointId;
+		while( pPort->popConnectionReset( endpointId ) )
+		{
+			m_workingDataOffset = 0u;
+			setState( State_ReadBaseHeader );
+		}
+
 		if( m_state == State_ExecuteCommand )
 		{
 			executeCommand();

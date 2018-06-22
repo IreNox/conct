@@ -3,7 +3,7 @@
 #include "conct_device.h"
 #include "conct_runtime_low.h"
 
-#include "conct_port_rs485_sim.h"
+#include "conct_port_serial.h"
 
 #include "core_device_proxy.h"
 #include "home_light_proxy.h"
@@ -29,7 +29,7 @@ namespace conct
 
 		RuntimeLow m_runtime;
 
-		PortRs485Sim m_port0;
+		PortSerial m_port0;
 
 		DeviceProxy m_proxyDevice;
 		LightProxy m_proxyLight;

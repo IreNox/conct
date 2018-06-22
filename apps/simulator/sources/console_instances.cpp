@@ -25,7 +25,7 @@ namespace conct
 		uint16 y = 6u;
 		for( const SimulatorInstance& instance : device.data.instances )
 		{
-			const uint16x2 size = ConsoleRenderer::drawTextMultiline( x + 2u, y + 1u, instance.data.c_str() );
+			const uint16x2 size = ConsoleRenderer::drawTextMultiline( x + 2u, y + 1u, instance.data.toConstCharPointer() );
 			ConsoleRenderer::drawRectangle( x, y, size.x + 4u, size.y + 2u, LineType_Single );
 
 			x += size.x + 4u;

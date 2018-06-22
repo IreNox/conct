@@ -23,6 +23,8 @@ namespace conct
 	{
 	public:
 
+		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
+
 		virtual void				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
@@ -48,6 +50,7 @@ namespace conct
 		SocketType					m_socket;
 
 		Vector< Connection >		m_connections;
+		Vector< uintreg >			m_brokenConnections;
 
 		void						addConnection( uintreg socket, const sockaddr_in6& address );
 		bool						updateConnection( Connection& connection );

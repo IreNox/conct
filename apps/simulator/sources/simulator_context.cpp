@@ -1,22 +1,42 @@
 #include "simulator_context.h"
 
-#include "i_simulator_port.h"
+#include "simulator_device_context.h"
 
 namespace conct
 {
 	SimulatorContext::SimulatorContext()
 	{
+		m_threadDevices = thread_local_storage::create();
 	}
 
-	void SimulatorContext::registerPort( ISimulatorPort* pPort )
+	SimulatorContext::~SimulatorContext()
 	{
-		m_ports.push_back( pPort );
-
-		if( m_ports.size() == 2u )
+		for( const DeviceMap::PairType& pair : m_devices )
 		{
-			m_ports[ 0u ]->setCounterpartPort( m_ports[ 1u ] );
-			m_ports[ 1u ]->setCounterpartPort( m_ports[ 0u ] );
+			delete pair.value;
 		}
+
+		thread_local_storage::destroy( m_threadDevices );
+	}
+
+	ISimulatorDeviceContext* SimulatorContext::registerDevice( uintreg deviceId )
+	{
+		SimulatorDeviceContext* pDevice = new SimulatorDeviceContext( deviceId );
+
+		m_devices.insert( deviceId, pDevice );
+		thread_local_storage::setValue( m_threadDevices, (uintptr)pDevice );
+
+		return pDevice;
+	}
+
+	ISimulatorDeviceContext* SimulatorContext::getDevice( uintreg deviceId )
+	{
+		return m_devices[ deviceId ];
+	}
+
+	ISimulatorDeviceContext* SimulatorContext::getCurrentDevice()
+	{
+		return ( ISimulatorDeviceContext* )thread_local_storage::getValue( m_threadDevices );
 	}
 
 	SIMULATOR_DLL ISimulatorContext& getSimulatorContext()

@@ -22,6 +22,8 @@ namespace conct
 
 		void						setConfig( const PortTcpClientConfig& config );
 
+		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
+
 		virtual void				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 

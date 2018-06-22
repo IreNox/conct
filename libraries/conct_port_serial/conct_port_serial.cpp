@@ -8,9 +8,9 @@
 #	include "conct_memory.h"
 #	include "conct_trace.h"
 
-#	include <tiny_gpio/tiny_gpio.h>
-
-#	include <time.h>
+#	include "conct_port_serial_arduino_interface_linux.h"
+#elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include "conct_port_serial_arduino_interface_sim.h"
 #endif
 
 namespace conct
@@ -20,45 +20,6 @@ namespace conct
 	static const uintreg s_resendTime = 200;
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-	enum PinMode
-	{
-		INPUT,
-		OUTPUT
-	};
-
-	enum PinValue
-	{
-		LOW,
-		HIGH
-	};
-
-	void pinMode( uintreg pin, PinMode mode )
-	{
-		gpioSetMode( pin, mode );
-	}
-
-	PinValue digitalRead( uintreg pin )
-	{
-		return gpioRead( pin ) ? HIGH : LOW;
-	}
-
-	void digitalWrite( uintreg pin, PinValue value )
-	{
-		gpioWrite( pin, value );
-	}
-
-	uint32 millis()
-	{
-		timespec currentTime;
-		currentTime.tv_sec = 0;
-		currentTime.tv_nsec = 0;
-		clock_gettime( CLOCK_MONOTONIC, &currentTime );
-
-		uint32 result = uint32( currentTime.tv_sec ) * 1000u;
-		result += uint32( currentTime.tv_nsec ) / 1000000u;
-		return result;
-	}
-
 	void PortSerial::setConfig( const PortSerialConfig& config )
 	{
 		m_config = config;
@@ -67,25 +28,27 @@ namespace conct
 
 	bool PortSerial::popConnectionReset( uintreg& endpointId )
 	{
-		if( m_connectionReset )
+		if( !m_flags.isSet( Flag_ConnectionReset ) )
 		{
 			return false;
 		}
 
 		endpointId = 0u;
 
-		m_counter = 0u;
-		m_state = State_Idle;
+		m_counter	= 0u;
+		m_state		= State_Idle;
+		m_flags.unset( Flag_ConnectionReset );
 
 		return true;
 	}
 
 	void PortSerial::setup()
 	{
-		m_state				= State_Idle;
-		m_lastSendId		= 0u;
-		m_counter			= 0u;
-		m_connectionReset	= true;
+		m_state					= State_Idle;
+		m_lastSendId			= 0u;
+		m_lastLastReceivedId	= 0u;
+		m_counter				= 0u;
+		m_flags.set( Flag_ConnectionReset );
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		if( gpioInitialise() < 0 )
@@ -113,16 +76,18 @@ namespace conct
 			switch( m_state )
 			{
 			case State_Idle:
-			case State_ReceivingHeader:
-				running = updateReceiveHeader();
+				if( m_flags.isSet( Flag_ReceivedPacket ) )
+				{
+					running = false;
+				}
+				else
+				{
+					running = updateReceiveHeader();
+				}
 				break;
 
 			case State_ReceivingData:
 				running = updateReceiveData();
-				break;
-
-			case State_ReceivedPacket:
-				running = false;
 				break;
 
 			case State_Send:
@@ -152,7 +117,7 @@ namespace conct
 		m_counter = 0u;
 		m_lastSendId++;
 
-		const uintreg size = sizeof( m_buffer ) - writer.getRemainingSize();
+		const uint8 size = uint8( sizeof( m_buffer ) - writer.getRemainingSize() - 1u );
 		writeSendHeader( size, Type_Data, m_lastSendId );
 		m_buffer[ size ] = calculateChecksum( m_sendHeader );
 
@@ -161,11 +126,12 @@ namespace conct
 
 	bool PortSerial::openReceived( Reader& reader, uintreg& endpointId )
 	{
-		if( m_state != State_ReceivedPacket )
+		if( !m_flags.isSet( Flag_ReceivedPacket ) )
 		{
 			return false;
 		}
 
+		endpointId = 0u;
 		reader.set( m_buffer, getSizeFromHeader( m_receiveHeader ) );
 		return true;
 	}
@@ -174,6 +140,7 @@ namespace conct
 	{
 		m_counter = 0u;
 		m_state = State_Idle;
+		m_flags.unset( Flag_ReceivedPacket );
 	}
 
 	Flags8< PortFlag > PortSerial::getFlags()
@@ -186,13 +153,13 @@ namespace conct
 
 	uint16 PortSerial::getMagicFromHeader( const Header& header ) const
 	{
-		const uint16 magic = *( uint16* )header;
+		const uint16 magic = ( header[ 0u ] << 8u ) | ( ( header[ 1u ] & 0x0fu ) << 4u );
 		return ( magic & 0xfff0u );
 	}
 
 	uint8 PortSerial::getSizeFromHeader( const Header& header ) const
 	{
-		uint8 dataSize = ( header[ 1u ] & 0xf0u ) >> 4u;
+		uint8 dataSize = ( header[ 1u ] & 0xf0u ) >> 3u;
 		dataSize |= header[ 2u ] & 0x01u;
 		return dataSize;
 	}
@@ -204,13 +171,13 @@ namespace conct
 
 	uint8 PortSerial::getIdFromHeader( const Header& header ) const
 	{
-		return ( header[ 2u ] & 0x8fu ) >> 3u;
+		return ( header[ 2u ] & 0xf8u ) >> 3u;
 	}
 
 	void PortSerial::writeSendHeader( uint8 size, Type type, uint8 id )
 	{
 		m_sendHeader[ 0u ] = 0x42u;
-		m_sendHeader[ 1u ] = 0xb0u | ( ( ( size >> 1u ) & 0x0fu ) << 4u );
+		m_sendHeader[ 1u ] = 0x0bu | ( ( ( size >> 1u ) & 0x0fu ) << 4u );
 		m_sendHeader[ 2u ] = ( size & 0x01u ) | ( type << 1u ) | ( ( id & 0x1fu ) << 3u );
 	}
 
@@ -230,15 +197,21 @@ namespace conct
 			}
 			else if( m_counter == 3u )
 			{
-				const Type packetType = getTypeFromHeader();
+				const Type packetType = getTypeFromHeader( m_receiveHeader );
 				if( packetType == Type_Hello )
 				{
+					m_flags.set( Flag_ConnectionReset );
 					sendAck( getIdFromHeader( m_receiveHeader ) );
 					return true;
 				}
-				else if( packetType == Type_Data && m_state != State_WaitingForAck )
+				else if( packetType == Type_Data )
 				{
-					CONCT_ASSERT( getSizeFromHeader( m_receiveHeader ) > 0u );
+					if( m_state == State_WaitingForAck )
+					{
+						m_counter = 0u;
+						continue;
+					}
+
 					m_counter = 0u;
 					m_state = State_ReceivingData;
 					return true;
@@ -257,6 +230,7 @@ namespace conct
 					return true;
 				}
 			}
+			CONCT_ASSERT( m_counter < 3u );
 		}
 
 		return false;
@@ -276,8 +250,14 @@ namespace conct
 				const uint8 receivedChecksum = Serial1.read();
 				const uint8 localChecksum = calculateChecksum( m_receiveHeader );
 
+				const uint8 id = getIdFromHeader( m_receiveHeader );
 				if( receivedChecksum == localChecksum )
 				{
+					if( id != m_lastLastReceivedId )
+					{
+						m_flags.set( Flag_ReceivedPacket );
+					}
+					m_lastLastReceivedId = id;
 					sendAck( getIdFromHeader( m_receiveHeader ) );
 					return true;
 				}
@@ -303,17 +283,18 @@ namespace conct
 		}
 
 		const uint8 dataSize = getSizeFromHeader( m_sendHeader );
-		for( uintreg i = 0u; i < dataSize; ++i )
+		for( uintreg i = 0u; i <= dataSize; ++i )
 		{
 			Serial1.write( m_buffer[ i ] );
 		}
 
 		digitalWrite( s_serialSendPin, LOW );
 
+		m_lastSendTime = millis();
+
 		if( getTypeFromHeader( m_sendHeader ) != Type_Ack )
 		{
 			m_counter = 0u;
-			m_lastSendTime = millis();
 			m_state = State_WaitingForAck;
 			return false;
 		}
@@ -347,10 +328,10 @@ namespace conct
 
 		m_counter = 0u;
 		m_state = State_Send;
-		m_connectionReset = true;
+		m_flags.set( Flag_ConnectionReset );
 	}
 
-	void PortSerial::sendAck( uintreg packetId )
+	void PortSerial::sendAck( uint8 packetId )
 	{
 		writeSendHeader( 0u, Type_Ack, packetId );
 

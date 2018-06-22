@@ -40,6 +40,19 @@ namespace conct
 #endif
 	}
 
+	bool PortTcpServer::popConnectionReset( uintreg& endpointId )
+	{
+		if( m_brokenConnections.isEmpty() )
+		{
+			return false;
+		}
+
+		endpointId = m_brokenConnections.getBack();
+		m_brokenConnections.popBack();
+
+		return true;
+	}
+
 	void PortTcpServer::setup()
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -108,13 +121,21 @@ namespace conct
 		for( uintreg i = 0u; i < m_connections.getLength(); ++i )
 		{
 			Connection& connection = m_connections[ i ];
+			if( connection.socket == InvalidSocket )
+			{
+				continue;
+			}
+
 			if( !updateConnection( connection ) )
 			{
 				trace::write( "Connection closed: "_s + string_tools::toString( connection.socket ) + "\n" );
 
-				m_connections.eraseUnsorted( connection );
+				m_brokenConnections.pushBack( i );
 				shutdown( connection.socket, 0 );
-				i--;
+
+				connection.receiveData.clear();
+				connection.sendData.clear();
+				connection.socket = InvalidSocket;
 			}
 		}
 	}
@@ -183,9 +204,26 @@ namespace conct
 		}
 #endif
 
-		Connection& connection = m_connections.pushBack();
-		connection.socket	= socket;
-		connection.address	= address;
+		Connection* pConnection = nullptr;
+		for( size_t i = 0u; i < m_connections.getLength(); ++i )
+		{
+			Connection& connection = m_connections[ i ];
+			if( connection.socket != InvalidSocket )
+			{
+				continue;
+			}
+
+			pConnection = &connection;
+			break;
+		}
+
+		if( pConnection == nullptr )
+		{
+			pConnection	= &m_connections.pushBack();
+		}
+
+		pConnection->socket		= socket;
+		pConnection->address	= address;
 
 		trace::write( "Connection added: "_s + string_tools::toString( socket ) + "\n" );
 	}

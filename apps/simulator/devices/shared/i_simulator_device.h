@@ -1,8 +1,8 @@
 #pragma once
 
 #include "conct_core.h"
-
-#include <vector>
+#include "conct_dynamic_string.h"
+#include "conct_vector.h"
 
 namespace conct
 {
@@ -13,23 +13,23 @@ namespace conct
 	{
 		InstanceId		id;
 		TypeCrc			type;
-		std::string		data;
+		DynamicString	data;
 	};
 
 	struct SimulatorDeviceData
 	{
-		std::string							name;
+		DynamicString				name;
 
-		Router*								pRouter;
-		Controller*							pController;
-		std::vector< SimulatorInstance >	instances;
+		Router*						pRouter;
+		Controller*					pController;
+		Vector< SimulatorInstance >	instances;
 	};
 
-	class SimulatorDevice
+	class ISimulatorDevice
 	{
 	public:
 
-		virtual			~SimulatorDevice() { }
+		virtual			~ISimulatorDevice() { }
 
 		virtual void	setup() = 0;
 		virtual void	loop() = 0;
@@ -37,5 +37,5 @@ namespace conct
 		virtual void 	fillData( SimulatorDeviceData& targetData ) = 0;
 	};
 
-	typedef SimulatorDevice* ( *CreateSimulatorFunction )( );
+	typedef ISimulatorDevice* ( *CreateSimulatorFunction )( );
 }

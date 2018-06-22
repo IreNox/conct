@@ -3,8 +3,8 @@
 #include "conct_string.h"
 
 #include "conct_device.h"
-#include "conct_array_view.h"
 #include "conct_core.h"
+#include "conct_array_view.h"
 
 namespace conct
 {

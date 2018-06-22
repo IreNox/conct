@@ -101,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -137,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -158,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;ROUTERSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\..\libraries\conct_port_tcp_server;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -189,13 +189,18 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_value_type.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_writer.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_atomic.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_core_high.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_map.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_arduino_interface_sim.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.h" />
@@ -211,7 +216,8 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_value_high.h" />
     <ClInclude Include="..\shared\i_simulator_context.h" />
-    <ClInclude Include="..\shared\i_simulator_port.h" />
+    <ClInclude Include="..\shared\i_simulator_device.h" />
+    <ClInclude Include="..\shared\i_simulator_device_context.h" />
     <ClInclude Include="device_impl.h" />
     <ClInclude Include="gen\core_device_proxy.h" />
     <ClInclude Include="gen\core_instance.h" />
@@ -227,10 +233,12 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_atomic.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
-    <ClCompile Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.cpp" />
@@ -263,7 +271,10 @@
     <None Include="..\..\..\..\libraries\conct_core\conct_relative_pointer.inl" />
     <None Include="..\..\..\..\libraries\conct_core\conct_string.inl" />
     <None Include="..\..\..\..\libraries\conct_core\conct_writer.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_atomic.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_map.inl" />
     <None Include="..\..\..\..\libraries\conct_core_high\conct_queue.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
     <None Include="..\..\..\..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.inl" />
     <None Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.inl" />

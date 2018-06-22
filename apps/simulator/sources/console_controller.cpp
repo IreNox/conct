@@ -25,16 +25,6 @@ namespace conct
 		{
 			m_lastIndices[ i ] = 0u;
 		}
-
-
-
-		//ControllerDevice localDevice;
-		//localDevice.name						= "Test"_s;
-		//localDevice.address.address[ 0u ]	= 1u;
-		//localDevice.address.address[ 1u ]	= 0u;
-		//m_devices.push_front( localDevice );
-
-
 	}
 
 	void ConsoleController::activate( ConsoleDevice& localDevice )

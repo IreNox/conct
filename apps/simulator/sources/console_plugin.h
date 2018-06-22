@@ -1,8 +1,8 @@
 #pragma once
 
-#include "simulator_device.h"
+#include "conct_vector.h"
 
-#include <vector>
+#include "i_simulator_device.h"
 
 namespace conct
 {
@@ -10,9 +10,9 @@ namespace conct
 
 	struct ConsoleDevice
 	{
-		typedef std::vector< ConsolePlugin* > PluginVector;
+		typedef Vector< ConsolePlugin* > PluginVector;
 
-		SimulatorDevice*	pDevice;
+		ISimulatorDevice*	pDevice;
 		SimulatorDeviceData	data;
 
 		PluginVector		plugins;

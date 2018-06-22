@@ -19,6 +19,8 @@ namespace conct
 	{
 	public:
 
+		virtual bool				popConnectionReset( uintreg& endpointId ) = 0;
+
 		virtual void				setup() = 0;
 		virtual void				loop() = 0;
 

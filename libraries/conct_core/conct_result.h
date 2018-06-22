@@ -13,6 +13,7 @@ namespace conct
 		ResultId_OutOfMemory,
 		ResultId_TimeOut,
 		ResultId_Unsupported,
+		ResultId_ConnectionLost,
 		ResultId_PermissionDenied,
 		ResultId_AlreadyExists,
 		ResultId_PathNotFound,

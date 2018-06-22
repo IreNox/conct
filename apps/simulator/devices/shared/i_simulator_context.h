@@ -10,13 +10,15 @@
 
 namespace conct
 {
-	class ISimulatorPort;
+	class ISimulatorDeviceContext;
 
 	class ISimulatorContext
 	{
 	public:
 
-		virtual void	registerPort( ISimulatorPort* pPort ) = 0;
+		virtual ISimulatorDeviceContext*	registerDevice( uintreg deviceId ) = 0;
+		virtual ISimulatorDeviceContext*	getDevice( uintreg deviceId ) = 0;
+		virtual ISimulatorDeviceContext*	getCurrentDevice() = 0;
 	};
 
 	SIMULATOR_DLL ISimulatorContext& getSimulatorContext();

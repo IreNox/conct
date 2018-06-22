@@ -137,8 +137,14 @@
     <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp">
       <Filter>libraries\conct_types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
-      <Filter>libraries\conct_core_high</Filter>
+    <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_runtime\conct_runtime.cpp">
+      <Filter>libraries\conct_runtime</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\simulator_device_context.cpp">
+      <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
@@ -152,21 +158,24 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
-      <Filter>libraries\conct_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_runtime\conct_runtime.cpp">
-      <Filter>libraries\conct_runtime</Filter>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_thread_local_storage.cpp">
+      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_atomic.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_mutex.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\simulator_device.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\simulator_context.h">
@@ -189,9 +198,6 @@
     </ClInclude>
     <ClInclude Include="sources\console_input.h">
       <Filter>sources</Filter>
-    </ClInclude>
-    <ClInclude Include="devices\shared\i_simulator_port.h">
-      <Filter>shared</Filter>
     </ClInclude>
     <ClInclude Include="devices\shared\i_simulator_context.h">
       <Filter>shared</Filter>
@@ -310,8 +316,17 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h">
-      <Filter>libraries\conct_core_high</Filter>
+    <ClInclude Include="..\..\libraries\conct_core\conct_crc16.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\shared\i_simulator_device.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="devices\shared\i_simulator_device_context.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="include\simulator_device_context.h">
+      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h">
       <Filter>libraries\conct_core_high</Filter>
@@ -320,6 +335,9 @@
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_map.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h">
@@ -331,16 +349,25 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_thread_local_storage.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core\conct_crc16.h">
-      <Filter>libraries\conct_core</Filter>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_atomic.h">
+      <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h">
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_mutex.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
   </ItemGroup>
@@ -390,6 +417,9 @@
     <None Include="..\..\libraries\conct_runtime_high\conct_command.inl">
       <Filter>libraries\conct_runtime_high</Filter>
     </None>
+    <None Include="..\..\libraries\conct_core_high\conct_map.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
     <None Include="..\..\libraries\conct_core_high\conct_queue.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
@@ -397,6 +427,9 @@
       <Filter>libraries\conct_core_high</Filter>
     </None>
     <None Include="..\..\libraries\conct_core_high\conct_vector.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core_high\conct_atomic.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
   </ItemGroup>

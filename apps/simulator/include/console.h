@@ -10,7 +10,7 @@
 namespace conct
 {
 	class ConsolePlugin;
-	class SimulatorDevice;
+	class ISimulatorDevice;
 
 	class Console
 	{
@@ -18,8 +18,8 @@ namespace conct
 
 				Console();
 
-		void	addDevice( SimulatorDevice* pDevice );
-		void	removeDevice( SimulatorDevice* pDevice );
+		void	addDevice( ISimulatorDevice* pDevice );
+		void	removeDevice( ISimulatorDevice* pDevice );
 
 		void	update();
 
@@ -35,7 +35,7 @@ namespace conct
 			ChangeFlag_CommandLine	= 1u << 3u,
 		};
 
-		typedef std::vector< ConsoleDevice > DeviceVector;
+		typedef Vector< ConsoleDevice > DeviceVector;
 
 		Flags8< ChangeFlag >		m_changeFlags;
 

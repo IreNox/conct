@@ -50,6 +50,20 @@ namespace conct
 	{
 		PortData& portData = m_ports[ pPort ];
 
+		uintreg endpointId;
+		while( pPort->popConnectionReset( endpointId ) )
+		{
+			setState( portData.pendingPackages[ endpointId ], PackageState_ReadBaseHeader );
+
+			const DeviceId deviceId = portData.endpointToDevice[ endpointId ];
+			DeviceData& deviceData = m_devices[ deviceId ];
+
+			for( std::pair< const CommandId, CommandBase* >& pair : deviceData.commands )
+			{
+				pair.second->setResponse( ResultId_ConnectionLost );
+			}
+		}
+
 		readPort( pPort, portData );
 		writePort( pPort, portData );
 

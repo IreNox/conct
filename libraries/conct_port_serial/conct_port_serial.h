@@ -5,6 +5,8 @@
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 #	include "conct_dynamic_string.h"
 #	include "conct_port_serial_linux.h"
+#elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include "conct_port_serial_sim.h"
 #endif
 
 namespace conct
@@ -24,7 +26,7 @@ namespace conct
 		void						setConfig( const PortSerialConfig& config );
 #endif
 
-		bool						popConnectionReset( uintreg& endpointId );
+		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
 		virtual void				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
@@ -51,24 +53,31 @@ namespace conct
 		enum State : uint8
 		{
 			State_Idle,
-			State_ReceivingHeader,
 			State_ReceivingData,
-			State_ReceivedPacket,
 			State_Send,
 			State_WaitingForAck
+		};
+
+		enum Flag
+		{
+			Flag_ConnectionReset	= 1u << 0u,
+			Flag_ReceivedPacket		= 1u << 1u
 		};
 
 		typedef uint8 Header[ 3u ];
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		PortSerialConfig			m_config;
+#endif
 
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		Serial						Serial1;
 #endif
 
 		State						m_state;
-		bool						m_connectionReset;
-		uintreg						m_lastSendId;
+		Flags8< Flag >				m_flags;
+		uint8						m_lastSendId;
+		uint8						m_lastLastReceivedId;
 		uint32						m_lastSendTime;
 		uintreg						m_counter;
 		Header						m_receiveHeader;
@@ -88,7 +97,7 @@ namespace conct
 		bool						updateWaitForAck();
 
 		void						sendHello();
-		void						sendAck( uintreg packetId );
+		void						sendAck( uint8 packetId );
 
 		uint8						calculateChecksum( const Header& header ) const;
 	};

@@ -51,6 +51,11 @@ namespace conct
 		m_config = config;
 	}
 
+	bool PortTcpClient::popConnectionReset( uintreg& endpointId )
+	{
+		return false;
+	}
+
 	void PortTcpClient::setup()
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )

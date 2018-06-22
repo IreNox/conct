@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../include/simulator_device.h"
+#include "i_simulator_device.h"
 
 #include "conct_controller.h"
 
@@ -8,17 +8,17 @@
 
 namespace conct
 {
-	class ControllerSimulator : public SimulatorDevice
+	class ControllerSimulator : public ISimulatorDevice
 	{
 	public:
 
 									ControllerSimulator();
 		virtual						~ControllerSimulator();
 
-		virtual void				setup() override final;
-		virtual void				loop() override final;
+		virtual void				setup() CONCT_OVERRIDE_FINAL;
+		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
-		virtual void 				fillData( SimulatorDeviceData& targetData ) override final;
+		virtual void 				fillData( SimulatorDeviceData& targetData ) CONCT_OVERRIDE_FINAL;
 
 	private:
 

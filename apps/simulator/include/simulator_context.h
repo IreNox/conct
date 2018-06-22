@@ -1,25 +1,31 @@
 #pragma once
 
+#include "conct_map.h"
+#include "conct_thread_local_storage.h"
+
 #define CONCT_IS_DLL CONCT_OFF
 #include "i_simulator_context.h"
 
-#include <vector>
-
 namespace conct
 {
+	class ISimulatorDeviceContext;
+
 	class SimulatorContext : public ISimulatorContext
 	{
 	public:
 
-						SimulatorContext();
+											SimulatorContext();
+											~SimulatorContext();
 
-		virtual void	registerPort( ISimulatorPort* pPort ) CONCT_OVERRIDE_FINAL;
+		virtual ISimulatorDeviceContext*	registerDevice( uintreg deviceId ) CONCT_OVERRIDE_FINAL;
+		virtual ISimulatorDeviceContext*	getDevice( uintreg deviceId ) CONCT_OVERRIDE_FINAL;
+		virtual ISimulatorDeviceContext*	getCurrentDevice() CONCT_OVERRIDE_FINAL;
 
 	private:
 
-		typedef std::vector< ISimulatorPort* > PortVector;
+		typedef Map< uintreg, ISimulatorDeviceContext* > DeviceMap;
 
-		PortVector		m_ports;
-
+		ThreadLocalStorageHandle	m_threadDevices;
+		DeviceMap					m_devices;
 	};
 }

@@ -59,15 +59,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\disable_secure_warning.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\..\disable_secure_warning.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -97,7 +101,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -114,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -133,7 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -154,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;LIGHTSIMULATOR_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_rs485_sim;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\..\libraries\conct_runtime_low;$(ProjectDir)..\..\..\..\libraries\conct_port_serial;$(ProjectDir)..\..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\..\libraries\conct_light;$(ProjectDir)..\shared</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4200</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -185,8 +189,23 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_value_type.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_writer.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_atomic.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_core_high.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_filesystem.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_map.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_path.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_queue.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_unsorted_set.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_light\conct_light_control.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_arduino_interface_sim.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_device.h" />
@@ -197,7 +216,7 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_value_triats.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.h" />
     <ClInclude Include="..\shared\i_simulator_context.h" />
-    <ClInclude Include="..\shared\i_simulator_port.h" />
+    <ClInclude Include="..\shared\i_simulator_device.h" />
     <ClInclude Include="device_impl.h" />
     <ClInclude Include="gen\core_device_proxy.h" />
     <ClInclude Include="gen\device_interface.h" />
@@ -221,8 +240,17 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_atomic.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_filesystem.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_path.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_light\conct_light_control.cpp" />
-    <ClCompile Include="..\..\..\..\libraries\conct_port_rs485_sim\conct_port_rs485_sim.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_device.cpp" />
@@ -255,6 +283,11 @@
     <None Include="..\..\..\..\libraries\conct_core\conct_relative_pointer.inl" />
     <None Include="..\..\..\..\libraries\conct_core\conct_string.inl" />
     <None Include="..\..\..\..\libraries\conct_core\conct_writer.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_atomic.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_map.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_queue.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_unsorted_set.inl" />
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.inl" />
     <None Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.inl" />
     <None Include="..\..\..\..\libraries\conct_runtime\conct_value_builder.inl" />

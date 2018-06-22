@@ -32,7 +32,7 @@ namespace conct
 		}
 	}
 
-	void Console::addDevice( SimulatorDevice* pDevice )
+	void Console::addDevice( ISimulatorDevice* pDevice )
 	{
 		ConsoleDevice device;
 		device.pDevice = pDevice;
@@ -40,34 +40,37 @@ namespace conct
 
 		if( device.data.pController != nullptr )
 		{
-			device.plugins.push_back( new ConsoleController( &m_types ) );
+			device.plugins.pushBack( new ConsoleController( &m_types ) );
 		}
 
-		if( !device.data.instances.empty() )
+		if( !device.data.instances.isEmpty() )
 		{
-			device.plugins.push_back( new ConsoleInstances() );
+			device.plugins.pushBack( new ConsoleInstances() );
 		}
 
-		m_devices.push_back( device );
+		m_devices.pushBack( device );
 
 		m_changeFlags |= ChangeFlag_DeviceList;
 
-		selectDevice( m_devices.size() - 1u );
+		selectDevice( 0u );
 	}
 
-	void Console::removeDevice( SimulatorDevice* pDevice )
+	void Console::removeDevice( ISimulatorDevice* pDevice )
 	{
-		for( DeviceVector::iterator it = m_devices.begin(); it != m_devices.end(); ++it )
+		for( ConsoleDevice& device : m_devices )
 		{
-			if( it->pDevice == pDevice )
+			if( device.pDevice != pDevice )
 			{
-				for( ConsolePlugin* pPlugin : it->plugins )
-				{
-					delete pPlugin;
-				}
-
-				it = m_devices.erase( it );
+				continue;
 			}
+
+			for( ConsolePlugin* pPlugin : device.plugins )
+			{
+				delete pPlugin;
+			}
+
+			m_devices.eraseSorted( device );
+			break;
 		}
 
 		m_changeFlags |= ChangeFlag_DeviceList;
@@ -85,7 +88,7 @@ namespace conct
 			if( key >= ConsoleKey_F1 && key <= ConsoleKey_F4 )
 			{
 				const uintreg index = key - ConsoleKey_F1;
-				if( index < m_devices.size() )
+				if( index < m_devices.getLength() )
 				{
 					selectDevice( index );
 					return true;
@@ -96,7 +99,7 @@ namespace conct
 		} );
 
 		ConsoleDevice* pDevice = nullptr;
-		if( m_selectedDevice < m_devices.size() )
+		if( m_selectedDevice < m_devices.getLength() )
 		{
 			pDevice = &m_devices[ m_selectedDevice ];
 		}
@@ -111,9 +114,9 @@ namespace conct
 			if( key >= ConsoleKey_F5 && key <= ConsoleKey_F8 )
 			{
 				const uintreg index = key - ConsoleKey_F5;
-				if( index < pDevice->plugins.size() )
+				if( index < pDevice->plugins.getLength() )
 				{
-					if( m_pluginIndex < pDevice->plugins.size() )
+					if( m_pluginIndex < pDevice->plugins.getLength() )
 					{
 						pDevice->plugins[ m_pluginIndex ]->deactivate( *pDevice );
 					}
@@ -143,7 +146,7 @@ namespace conct
 		{
 			pDevice->pDevice->fillData( pDevice->data );
 
-			if( m_pluginIndex < pDevice->plugins.size() )
+			if( m_pluginIndex < pDevice->plugins.getLength() )
 			{
 				ConsolePlugin* pPlugin = pDevice->plugins[ m_pluginIndex ];
 				pPlugin->update( *pDevice );
@@ -154,10 +157,10 @@ namespace conct
 
 	void Console::selectDevice( size_t index )
 	{
-		if( m_selectedDevice < m_devices.size() )
+		if( m_selectedDevice < m_devices.getLength() )
 		{
 			ConsoleDevice& device = m_devices[ m_selectedDevice ];
-			if( m_pluginIndex < device.plugins.size() )
+			if( m_pluginIndex < device.plugins.getLength() )
 			{
 				device.plugins[ m_pluginIndex ]->deactivate( device );
 			}
@@ -167,7 +170,7 @@ namespace conct
 		m_pluginIndex = 0u;
 
 		ConsoleDevice& device = m_devices[ m_selectedDevice ];
-		if( m_pluginIndex < device.plugins.size() )
+		if( m_pluginIndex < device.plugins.getLength() )
 		{
 			device.plugins[ m_pluginIndex ]->activate( device );
 		}
@@ -184,7 +187,7 @@ namespace conct
 		size_t i = 0u;
 		for( const ConsoleDevice& device : m_devices )
 		{
-			x += ConsoleRenderer::drawButton( x, 0u, device.data.name.c_str(), i == m_selectedDevice ? LineType_Double : LineType_Single ) + 1u;
+			x += ConsoleRenderer::drawButton( x, 0u, device.data.name.toConstCharPointer(), i == m_selectedDevice ? LineType_Double : LineType_Single ) + 1u;
 			i++;
 		}
 

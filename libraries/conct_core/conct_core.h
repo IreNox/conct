@@ -7,7 +7,8 @@
 
 #define CONCT_ENABLED( value )	( ( 0 + value ) == 2 )
 #define CONCT_DISABLED( value )	( ( 0 + value ) != 2 )
-#define CONCT_IF( expr )		( ( expr ) ? CONCT_ON : CONCT_OFF )
+
+#define CONCT_STATIC_ASSERT( expr ) static_assert( ( expr ), #expr )
 
 #if defined( _WIN32 ) // Windows
 #	define CONCT_PLATFORM_WINDOWS	CONCT_ON
@@ -185,8 +186,6 @@
 #	define CONCT_NO_INLINE
 #endif
 
-#define CONCT_STATIC_ASSERT( expr ) static_assert( ( expr ), #expr )
-
 #define CONCT_USE( var ) (void)var
 
 namespace conct
@@ -205,10 +204,13 @@ namespace conct
 
 #if CONCT_ENABLED( CONCT_POINTER_16 )
 	typedef uint16		uintptr;
+	CONCT_STATIC_ASSERT( sizeof( void* ) == 2u );
 #elif CONCT_ENABLED( CONCT_POINTER_32 )
 	typedef uint32		uintptr;
+	CONCT_STATIC_ASSERT( sizeof( void* ) == 4u );
 #elif CONCT_ENABLED( CONCT_POINTER_64 )
 	typedef uint64		uintptr;
+	CONCT_STATIC_ASSERT( sizeof( void* ) == 8u );
 #endif
 
 #if CONCT_ENABLED( CONCT_REGISTER_8 )

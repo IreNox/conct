@@ -6,6 +6,7 @@
 #	include "conct_dynamic_string.h"
 #	include "conct_port_serial_linux.h"
 #elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include "conct_dynamic_string.h"
 #	include "conct_port_serial_sim.h"
 #endif
 
@@ -61,7 +62,8 @@ namespace conct
 		enum Flag
 		{
 			Flag_ConnectionReset	= 1u << 0u,
-			Flag_ReceivedPacket		= 1u << 1u
+			Flag_ReceivedPacket		= 1u << 1u,
+			Flag_AckPacket			= 1u << 2u,
 		};
 
 		typedef uint8 Header[ 3u ];
@@ -72,6 +74,9 @@ namespace conct
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		Serial						Serial1;
+
+		DynamicString				m_hexTrace;
+		DynamicString				m_charTrace;
 #endif
 
 		State						m_state;

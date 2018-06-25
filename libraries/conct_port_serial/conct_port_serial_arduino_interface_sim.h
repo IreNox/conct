@@ -26,12 +26,22 @@ namespace conct
 
 	CONCT_FORCE_INLINE PinValue digitalRead( uintreg pin )
 	{
-		return getSimulatorContext().getCurrentDevice()->getGpio( pin ) ? HIGH : LOW;
+		ISimulatorDeviceContext* pContext = getSimulatorContext().getCurrentDevice();
+		if( pContext != nullptr )
+		{
+			return pContext->getGpio( pin ) ? HIGH : LOW;
+		}
+
+		return LOW;
 	}
 
 	CONCT_FORCE_INLINE void digitalWrite( uintreg pin, PinValue value )
 	{
-		getSimulatorContext().getCurrentDevice()->setGpio( pin, value == HIGH );
+		ISimulatorDeviceContext* pContext = getSimulatorContext().getCurrentDevice();
+		if( pContext != nullptr )
+		{
+			pContext->setGpio( pin, value == HIGH );
+		}
 	}
 
 	CONCT_FORCE_INLINE uint32 millis()

@@ -236,7 +236,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\libraries\conct_types;$(ProjectDir)..\..\third_party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -264,7 +264,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\libraries\conct_types;$(ProjectDir)..\..\third_party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -281,7 +281,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)include;$(ProjectDir)devices\shared;$(ProjectDir)..\..\libraries\conct_core;$(ProjectDir)..\..\libraries\conct_core_high;$(ProjectDir)..\..\libraries\conct_runtime;$(ProjectDir)..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\libraries\conct_types;$(ProjectDir)..\..\third_party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

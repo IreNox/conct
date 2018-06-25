@@ -43,7 +43,7 @@ void loop()
     {
       SetColour(colour, 255 - i );
       SetColour((colour + 1) % 3, i );
-      delay(10);
+      //delay(10);
     }
   }
 }

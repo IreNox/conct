@@ -19,9 +19,9 @@
 
 namespace conct
 {
-	static const uintreg s_serialSendPin = CONCT_ENABLED( CONCT_PLATFORM_LINUX ) ? 1u : 22u;
-	static const uintreg s_serialSpeed = 115200;
-	static const uintreg s_resendTime = 200;
+	static const uintreg s_serialSendPin = CONCT_ENABLED( CONCT_PLATFORM_LINUX ) ? 18u : 22u;
+	static const uint32 s_serialSpeed = 115200;
+	static const uint32 s_resendTime = 400;
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 	void PortSerial::setConfig( const PortSerialConfig& config )
@@ -64,9 +64,13 @@ namespace conct
 		{
 			return;
 		}
+#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+		Serial.begin( 9600 );
+		Serial.write( "Start!\n" );
 #endif
 
 		pinMode( s_serialSendPin, OUTPUT );
+		digitalWrite( s_serialSendPin, LOW );
 		Serial1.begin( s_serialSpeed );
 
 		sendHello();
@@ -80,6 +84,11 @@ namespace conct
 			switch( m_state )
 			{
 			case State_Idle:
+				if( m_flags.isSet( Flag_AckPacket ) && millis() - m_lastSendTime > s_resendTime * 2u )
+				{
+					m_flags.unset( Flag_AckPacket );
+				}
+
 				if( m_flags.isSet( Flag_ReceivedPacket ) )
 				{
 					running = false;
@@ -107,7 +116,8 @@ namespace conct
 
 	bool PortSerial::openSend( Writer& writer, uintreg size, uintreg endpointId )
 	{
-		if( m_state != State_Idle )
+		if( m_state != State_Idle ||
+			m_flags.isSet( Flag_AckPacket ) )
 		{
 			return false;
 		}
@@ -189,7 +199,19 @@ namespace conct
 	{
 		while( Serial1.available() )
 		{
-			m_receiveHeader[ m_counter++ ] = Serial1.read();
+			const uint8 byte = Serial1.read();
+			m_receiveHeader[ m_counter++ ] = byte;
+
+			static const char s_aHexChars[] ={ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+			char hexBuffer[] = { s_aHexChars[ ( byte & 0xf0u ) >> 4u ], s_aHexChars[ byte & 0x0fu ], 0u };
+			char charBuffer[] ={ ' ', byte, 0u };
+			m_hexTrace += hexBuffer;
+			m_charTrace += charBuffer;
+#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+			Serial.write( s_aHexChars[ ( byte & 0xf0u ) >> 4u ] );
+			Serial.write( s_aHexChars[ byte & 0x0fu ] );
+#endif
 
 			if( m_counter == 2u )
 			{
@@ -201,6 +223,13 @@ namespace conct
 			}
 			else if( m_counter == 3u )
 			{
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+				trace::write( m_hexTrace );
+				trace::write( m_charTrace );
+				m_hexTrace.clear();
+				m_charTrace.clear();
+#endif
+
 				const Type packetType = getTypeFromHeader( m_receiveHeader );
 				if( packetType == Type_Hello )
 				{
@@ -261,6 +290,7 @@ namespace conct
 					if( id != m_lastLastReceivedId )
 					{
 						m_flags.set( Flag_ReceivedPacket );
+						m_flags.set( Flag_AckPacket );
 					}
 					m_lastLastReceivedId = id;
 					sendAck( getIdFromHeader( m_receiveHeader ) );
@@ -294,10 +324,14 @@ namespace conct
 		}
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		usleep( 660 );
 		Serial1.flush();
 #elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
-		delay( 1 );
+		while( !( UCSR1A & ( 1 << UDRE1 ) ) )  // Wait for empty transmit buffer
+		{
+			UCSR1A |= 1 << TXC1;  // mark transmission not complete
+		}
+		while( !( UCSR1A & ( 1 << TXC1 ) ) );   // Wait for the transmission to complete
+		//delayMicroseconds( 660 );
 #endif
 		digitalWrite( s_serialSendPin, LOW );
 
@@ -312,7 +346,7 @@ namespace conct
 
 		m_counter = 0u;
 		m_state = State_Idle;
-		return true;
+		return false;
 	}
 
 	bool PortSerial::updateWaitForAck()

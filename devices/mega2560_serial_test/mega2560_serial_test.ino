@@ -1,8 +1,8 @@
 
 void setup()
 {
-  pinMode( 5, OUTPUT );
-  digitalWrite( 5, LOW );
+  pinMode( 22, OUTPUT );
+  digitalWrite( 22, LOW );
 
   Serial.begin( 9600 );
   Serial1.begin( 115200 );
@@ -14,7 +14,7 @@ void loop()
 {
   if( Serial.available() > 0 )
   {
-    digitalWrite( 5, HIGH );
+    digitalWrite( 22, HIGH );
 
     while( Serial.available() > 0 )
     {
@@ -26,7 +26,7 @@ void loop()
     while (!(UCSR0A & (1 << TXC0)));   // Wait for the transmission to complete*/
 
     delayMicroseconds( 660 );
-    digitalWrite( 5, LOW );
+    digitalWrite( 22, LOW );
   }
   else
   {

@@ -1,35 +1,36 @@
 #include "home_rgb_impl.h"
 
+#include "light.h"
+
 namespace conct
 {
 	PercentValue RGBImpl::getRed() const
 	{
-		// TODO: implement
+		return s_light.getRed();
 	}
 
 	void RGBImpl::setRed( PercentValue value )
 	{
-		// TODO: implement
+		s_light.setRed( value );
 	}
 
 	PercentValue RGBImpl::getGreen() const
 	{
-		// TODO: implement
+		return s_light.getGreen();
 	}
 
 	void RGBImpl::setGreen( PercentValue value )
 	{
-		// TODO: implement
+		s_light.setGreen( value );
 	}
 
 	PercentValue RGBImpl::getBlue() const
 	{
-		// TODO: implement
+		return s_light.getBlue();
 	}
 
 	void RGBImpl::setBlue( PercentValue value )
 	{
-		// TODO: implement
+		s_light.setBlue( value );
 	}
-
 }

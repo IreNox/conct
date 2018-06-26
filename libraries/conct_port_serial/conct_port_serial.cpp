@@ -9,8 +9,6 @@
 #	include "conct_trace.h"
 
 #	include "conct_port_serial_arduino_interface_linux.h"
-
-#	include <unistd.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include "conct_port_serial_arduino_interface_sim.h"
 #elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
@@ -325,15 +323,12 @@ namespace conct
 			Serial1.write( m_buffer[ i ] );
 		}
 
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		Serial1.flush();
-#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+#if CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
 		while( !( UCSR1A & ( 1 << UDRE1 ) ) )  // Wait for empty transmit buffer
 		{
 			UCSR1A |= 1 << TXC1;  // mark transmission not complete
 		}
 		while( !( UCSR1A & ( 1 << TXC1 ) ) );   // Wait for the transmission to complete
-		//delayMicroseconds( 660 );
 #endif
 		digitalWrite( s_serialSendPin, LOW );
 

@@ -85,11 +85,6 @@ namespace conct
 		return true;
 	}
 
-	void Serial::flush()
-	{
-		tcdrain( m_fileDescriptor );
-	}
-
 	int Serial::available()
 	{
 		int availableBytes = 0u;

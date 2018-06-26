@@ -1,17 +1,17 @@
 #include "device_mega2560_rgb.h"
 #include "gen/files.h"
+#include "conct_light_control.h"
 
 static const uint8_t Red = 2;
 static const uint8_t Green = 3;
 static const uint8_t Blue = 4;
 
-static const uint8_t Pins[] = { Red, Green, Blue };
-
-conct::Devicemega2560_rgb device;
+conct::Devicemega2560_rgb s_device;
+conct::LightControl s_light;
 
 void setup()
 {
-  device.setupDevice();
+	s_device.setupDevice();
   
 	pinMode(Red, OUTPUT);
 	pinMode(Green, OUTPUT);
@@ -22,28 +22,13 @@ void setup()
 	analogWrite( Blue, 0 );
 }
 
-// Sets colour Red=0 Green=1 Blue=2 to specified intensity 0 (off) to 255 (max)
-void SetColour (int colour, int intensity)
-{
-	analogWrite( Pins[colour], intensity );
-}
-
 void loop()
 {
-  device.loopDevice();
-    /*for (int i=0; i <= 255; i++)
-    {
-      SetColour(0, i );
-      delay(25 );
-    }*/
-	
-  for (int colour=0; colour < 3; colour++)
-  {
-    for (int i=0; i <= 255; i++)
-    {
-      SetColour(colour, 255 - i );
-      SetColour((colour + 1) % 3, i );
-      //delay(10);
-    }
-  }
+	s_device.loopDevice();
+
+	analogWrite( Red, s_light.getRed() / 257 );
+	analogWrite( Green, s_light.getGreen() / 257 );
+	analogWrite( Blue, s_light.getBlue() / 257 );
+
+	delay(10);
 }

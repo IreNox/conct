@@ -1,15 +1,16 @@
 #include "home_light_impl.h"
 
+#include "light.h"
+
 namespace conct
 {
 	bool LightImpl::getOn() const
 	{
-		// TODO: implement
+		return s_light.getOn();
 	}
 
 	void LightImpl::setOn( bool value )
 	{
-		// TODO: implement
+		s_light.setOn( value );
 	}
-
 }

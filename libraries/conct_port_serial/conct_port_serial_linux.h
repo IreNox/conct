@@ -15,8 +15,6 @@ namespace conct
 		bool						setup( const DynamicString& portName );
 		bool						begin( int speed );
 
-		void						flush();
-
 		int							available();
 
 		int							read();

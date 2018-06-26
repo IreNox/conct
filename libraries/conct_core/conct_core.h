@@ -246,5 +246,5 @@ namespace conct
 	static const TypeCrc InvalidTypeCrc = 0u;
 	static const InstanceId InvalidInstanceId = 0xffffu;
 	static const Instance InvalidInstance = { InvalidInstanceId, InvalidTypeCrc };
-	static const PercentValue PercentValueFull = 65535u;
+	static const PercentValue PercentValueFull = 0xffffu;
 }

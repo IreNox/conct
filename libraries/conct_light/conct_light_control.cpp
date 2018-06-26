@@ -77,13 +77,12 @@ namespace conct
 
 	void LightControl::setColorValue( PercentValue& targetValue, PercentValue sourceValue )
 	{
-		m_on = m_red > 0u || m_green > 0u || m_blue > 0u;
+		targetValue = sourceValue;
 
+		m_on = m_red > 0u || m_green > 0u || m_blue > 0u;
 		if( m_on )
 		{
 			m_brightness = PercentValueFull;
 		}
-
-		targetValue = sourceValue;
 	}
 }

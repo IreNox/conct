@@ -4,6 +4,8 @@
 
 namespace conct
 {
+	class LightControl;
+
 	class LightImpl : Light
 	{
 	public:

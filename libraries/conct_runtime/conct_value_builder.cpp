@@ -54,8 +54,7 @@ namespace conct
 		}
 
 		CONCT_ASSERT( ( uintptr )pString - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
-		m_pValue->type					= ValueType_String;
-		m_pValue->data.string.offset	= uint16( ( uintptr )pString - ( uintptr )m_pValue );
+		m_pValue->setString( uint16( ( uintptr )pString - ( uintptr )m_pValue ) );
 
 		return ResultId_Success;
 	}
@@ -99,10 +98,7 @@ namespace conct
 		}
 
 		CONCT_ASSERT( ( uintptr )pStruct - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
-		m_pValue->type					= ValueType_Struct;
-		m_pValue->data.structure.offset	= uint16( ( uintptr )pStruct - ( uintptr )m_pValue );
-		m_pValue->data.structure.size	= uint16( dataSize );
-		m_pValue->data.structure.type	= type;
+		m_pValue->setStruct( uint16( ( uintptr )pStruct - ( uintptr )m_pValue ), uint16( dataSize ), type );
 
 		return ResultId_Success;
 	}
@@ -116,11 +112,7 @@ namespace conct
 		}
 
 		CONCT_ASSERT( ( uintptr )pArray - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
-		m_pValue->type				= ValueType_Array;
-		m_pValue->data.array.offset	= uint16( ( uintptr )pArray - ( uintptr )m_pValue );
-		m_pValue->data.array.size	= uint8( elementSize );
-		m_pValue->data.array.count	= uint8( count );
-		m_pValue->data.array.type	= type;
+		m_pValue->setArray( uint16( ( uintptr )pArray - ( uintptr )m_pValue ), uint8( elementSize ), uint8( count ), type );
 
 		return ResultId_Success;
 	}

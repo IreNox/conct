@@ -1,118 +1,169 @@
 #include "conct_value.h"
 
 #include "conct_functions.h"
+#include "conct_memory.h"
 
 namespace conct
 {
+	struct StringValueData
+	{
+		uint16				offset;
+	};
+
+	struct StructValueData
+	{
+		uint16				offset;
+		uint16				size;
+		TypeCrc				type;
+	};
+
+	struct ArrayValueData
+	{
+		uint16				offset;
+		uint8				count;
+		uint8				size;
+		TypeCrc				type;
+	};
+
+	union ValueData
+	{
+		bool				boolean;
+		sint32				integer;
+		uint32				unsignedInteger;
+		PercentValue		percent;
+		Guid				guid;
+		DeviceId			device;
+		Instance			instance;
+		TypeCrc				type;
+		StringValueData		string;
+		StructValueData		structure;
+		ArrayValueData		array;
+	};
+
+	ValueData getData( const uint8 data[ 6u ] )
+	{
+		ValueData result;
+		memory::copy( &result, data, 6u );
+		return result;
+	}
+
+	void setData( uint8 data[ 6u ], const ValueData& sourceData )
+	{
+		memory::copy( data, &sourceData, 6u );
+	}
+
 	bool Value::getBoolean() const
 	{
 		CONCT_ASSERT( type == ValueType_Boolean );
-		return data.boolean;
+		return getData( data ).boolean;
 	}
 
 	sint32 Value::getInteger() const
 	{
 		CONCT_ASSERT( type == ValueType_Integer );
-		return data.integer;
+		return getData( data ).integer;
 	}
 
 	uint32 Value::getUnsigned() const
 	{
 		CONCT_ASSERT( type == ValueType_Unsigned );
-		return data.unsignedInteger;
+		return getData( data ).unsignedInteger;
 	}
 
 	const char* Value::getString() const
 	{
 		CONCT_ASSERT( type == ValueType_String );
-		if( data.string.offset == 0u )
+		const ValueData valueData = getData( data );
+		if( valueData.string.offset == 0u )
 		{
 			return nullptr;
 		}
 
-		return addPointerCast< char >( this, data.string.offset );
+		return addPointerCast< char >( this, valueData.string.offset );
 	}
 
 	PercentValue Value::getPercentValue() const
 	{
 		CONCT_ASSERT( type == ValueType_PercentValue );
-		return data.percent;
+		return getData( data ).percent;
 	}
 
 	Guid Value::getGuid() const
 	{
 		CONCT_ASSERT( type == ValueType_Guid );
-		return data.guid;
+		return getData( data ).guid;
 	}
 
 	DeviceId Value::getDeviceId() const
 	{
 		CONCT_ASSERT( type == ValueType_DeviceId );
-		return data.device;
+		return getData( data ).device;
 	}
 
 	Instance Value::getInstance() const
 	{
 		CONCT_ASSERT( type == ValueType_Instance );
-		return data.instance;
+		return getData( data ).instance;
 	}
 
 	TypeCrc Value::getTypeCrc() const
 	{
 		CONCT_ASSERT( type == ValueType_TypeCrc );
-		return data.type;
+		return getData( data ).type;
 	}
 
 	const void* Value::getStructData() const
 	{
 		CONCT_ASSERT( type == ValueType_Struct );
-		if( data.structure.offset == 0u )
+		const ValueData valueData = getData( data );
+		if( valueData.structure.offset == 0u )
 		{
 			return nullptr;
 		}
 
-		return addPointer( this, data.structure.offset );
+		return addPointer( this, valueData.structure.offset );
 	}
 
-	uintreg Value::getStructSize() const
+	uint16 Value::getStructSize() const
 	{
 		CONCT_ASSERT( type == ValueType_Struct );
-		return data.structure.size;
+		return getData( data ).structure.size;
 	}
 
 	TypeCrc Value::getStructType() const
 	{
 		CONCT_ASSERT( type == ValueType_Struct );
-		return data.structure.type;
+		return getData( data ).structure.type;
 	}
 
 	const void* Value::getArrayData() const
 	{
 		CONCT_ASSERT( type == ValueType_Array );
-		if( data.array.offset == 0u )
+		const ValueData valueData = getData( data );
+		if( valueData.array.offset == 0u )
 		{
 			return nullptr;
 		}
 
-		return addPointer( this, data.array.offset );
+		return addPointer( this, valueData.array.offset );
 	}
 
-	uintreg Value::getArrayElementSize() const
+	uint8 Value::getArrayElementSize() const
 	{
 		CONCT_ASSERT( type == ValueType_Array );
-		return data.array.size;
+		return getData( data ).array.size;
 	}
 
-	uintreg Value::getArrayCount() const
+	uint8 Value::getArrayCount() const
 	{
 		CONCT_ASSERT( type == ValueType_Array );
-		return data.array.count;
+		return getData( data ).array.count;
 	}
 
 	TypeCrc Value::getArrayType() const
 	{
 		CONCT_ASSERT( type == ValueType_Array );
-		return data.array.type;
+		return getData( data ).array.type;
 	}
 
 	void Value::setVoid()
@@ -123,48 +174,93 @@ namespace conct
 	void Value::setBoolean( bool value )
 	{
 		type = ValueType_Boolean;
-		data.boolean = value;
+		ValueData valueData;
+		valueData.boolean = value;
+		setData( data, valueData );
 	}
 
 	void Value::setInteger( sint32 value )
 	{
 		type = ValueType_Integer;
-		data.integer = value;
+		ValueData valueData;
+		valueData.integer = value;
+		setData( data, valueData );
 	}
 
 	void Value::setUnsigned( uint32 value )
 	{
 		type = ValueType_Unsigned;
-		data.unsignedInteger = value;
+		ValueData valueData;
+		valueData.unsignedInteger = value;
+		setData( data, valueData );
 	}
 
 	void Value::setPercentValue( PercentValue value )
 	{
 		type = ValueType_PercentValue;
-		data.percent = value;
+		ValueData valueData;
+		valueData.percent = value;
+		setData( data, valueData );
 	}
 
 	void Value::setGuid( Guid value )
 	{
 		type = ValueType_Guid;
-		data.guid = value;
+		ValueData valueData;
+		valueData.guid = value;
+		setData( data, valueData );
 	}
 
 	void Value::setDeviceId( DeviceId value )
 	{
 		type = ValueType_DeviceId;
-		data.device = value;
+		ValueData valueData;
+		valueData.device = value;
+		setData( data, valueData );
 	}
 
 	void Value::setInstance( Instance value )
 	{
 		type = ValueType_Instance;
-		data.instance = value;
+		ValueData valueData;
+		valueData.instance = value;
+		setData( data, valueData );
 	}
 
 	void Value::setTypeCrc( TypeCrc value )
 	{
 		type = ValueType_TypeCrc;
-		data.type = value;
+		ValueData valueData;
+		valueData.type = value;
+		setData( data, valueData );
+	}
+
+	void Value::setString( uint16 offset )
+	{
+		type = ValueType_String;
+		ValueData valueData;
+		valueData.string.offset = offset;
+		setData( data, valueData );
+	}
+
+	void Value::setStruct( uint16 offset, uint16 size, TypeCrc typeCrc )
+	{
+		type = ValueType_Struct;
+		ValueData valueData;
+		valueData.structure.offset = offset;
+		valueData.structure.size = size;
+		valueData.structure.type = typeCrc;
+		setData( data, valueData );
+	}
+
+	void Value::setArray( uint16 offset, uint8 count, uint8 size, TypeCrc typeCrc )
+	{
+		type = ValueType_Array;
+		ValueData valueData;
+		valueData.array.offset = offset;
+		valueData.array.count = count;
+		valueData.array.size = size;
+		valueData.array.type = typeCrc;
+		setData( data, valueData );
 	}
 }

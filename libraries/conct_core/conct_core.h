@@ -149,8 +149,12 @@
 #define CONCT_COUNT( arr ) ( sizeof( arr ) / sizeof( *arr ) )
 
 #if CONCT_ENABLED( CONCT_COMPILER_MSVC )
+#	define CONCT_ALIGN_PREFIX( var )			__declspec( align( var ) )
+#	define CONCT_ALIGN_POSTFIX( var )
 #	define CONCT_ALIGNOF( type )				( __alignof( type ) )
 #elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
+#	define CONCT_ALIGN_PREFIX( var )
+#	define CONCT_ALIGN_POSTFIX( var )			__attribute__( ( aligned( var ) ) )
 #	define CONCT_ALIGNOF( type )				( __alignof__( type ) )
 #endif
 

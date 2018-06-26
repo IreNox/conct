@@ -13,28 +13,18 @@ namespace conct
 	{
 		if( value.type == ValueType_String )
 		{
-			m_string					= DynamicString( value.getString() );
-			m_value.type				= ValueType_String;
-			m_value.data.string.offset	= 0u;
+			m_string = DynamicString( value.getString() );
+			m_value.setString( 0u );
 		}
 		else if( value.type == ValueType_Struct )
 		{
 			m_buffer.pushRange( static_cast< const uint8* >( value.getStructData() ), value.getStructSize() );
-
-			m_value.type					= ValueType_Struct;
-			m_value.data.structure.offset	= 0u;
-			m_value.data.structure.size		= uint16( value.getStructSize() );
-			m_value.data.structure.type		= value.getStructType();
+			m_value.setStruct( 0u, value.getStructSize(), value.getStructType() );
 		}
 		else if( value.type == ValueType_Array )
 		{
 			m_buffer.pushRange( static_cast< const uint8* >( value.getArrayData() ), value.getArrayElementSize() * value.getArrayCount() );
-
-			m_value.type				= ValueType_Array;
-			m_value.data.array.offset	= 0u;
-			m_value.data.array.size		= uint8( value.getArrayElementSize() );
-			m_value.data.array.count	= uint8( value.getArrayCount() );
-			m_value.data.array.type		= value.getArrayType();
+			m_value.setArray( 0u, value.getArrayElementSize(), value.getArrayCount(), value.getArrayType() );
 		}
 		else
 		{

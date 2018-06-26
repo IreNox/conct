@@ -202,7 +202,7 @@ namespace conct
 			const uint8 byte = Serial1.read();
 			m_receiveHeader[ m_counter++ ] = byte;
 
-			static const char s_aHexChars[] ={ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+			static const char s_aHexChars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 			char hexBuffer[] = { s_aHexChars[ ( byte & 0xf0u ) >> 4u ], s_aHexChars[ byte & 0x0fu ], 0u };
 			char charBuffer[] ={ ' ', byte, 0u };
@@ -228,6 +228,8 @@ namespace conct
 				trace::write( m_charTrace );
 				m_hexTrace.clear();
 				m_charTrace.clear();
+#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+				Serial.write( '\n' );
 #endif
 
 				const Type packetType = getTypeFromHeader( m_receiveHeader );

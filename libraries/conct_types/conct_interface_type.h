@@ -58,8 +58,6 @@ namespace conct
 		const FunctionVector&	getFunctions() const { return m_functions; }
 		const EventVector&		getEvents() const { return m_events; }
 
-		//virtual TypeCrc			getCrc() const override final;
-
 	private: // friend
 
 								InterfaceType();

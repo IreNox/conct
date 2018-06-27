@@ -95,6 +95,15 @@
       <Project>{31b13a8f-7469-4c7f-ad31-e03cc428de57}</Project>
       <Name>controller.marshal</Name>
     </ProjectReference>
+    <ProjectReference Include="..\controller.native\controller.native.vcxproj">
+      <Project>{a380dc71-4ab0-41c0-84a7-b2d1f8cfbf4b}</Project>
+      <Name>controller.native</Name>
+      <TargetPlatformIdentifier>Android</TargetPlatformIdentifier>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\device.xml" />
   </ItemGroup>
   <Import Project="..\controller\controller.projitems" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

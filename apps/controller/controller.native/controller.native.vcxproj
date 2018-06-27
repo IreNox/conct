@@ -212,6 +212,7 @@
     <ClCompile Include="..\..\..\libraries\conct_types\conct_interface_type.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_struct_type.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_type.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_types_c.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_xml_helper.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyxml2\tinyxml2.cpp" />
@@ -272,6 +273,7 @@
     <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_struct_type.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_type.h" />
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_types_c.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_xml_helper.h" />
     <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h" />

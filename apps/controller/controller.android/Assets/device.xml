@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Device">
+	<internal include="conct_device.h" class="Device" />
+	<singleton />
+	<properties>
+		<property name="Name" type="String">
+			<get />
+		</property>
+		<property name="Guid" type="Guid">
+			<get />
+		</property>
+		<property name="Instances">
+			<type>
+				<array type="Instance" />
+			</type>
+			<get />
+		</property>
+	</properties>
+	<functions>
+		<function name="findInstances">
+			<return>
+				<array type="Instance" />
+			</return>
+			<parameters>
+				<parameter name="type" type="TypeCrc" />
+			</parameters>
+		</function>
+		<function name="findFirstInstance" return="Instance">
+			<parameters>
+				<parameter name="type" type="TypeCrc" />
+			</parameters>
+		</function>
+	</functions>
+</interface>

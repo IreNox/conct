@@ -16,8 +16,8 @@ namespace conct
 	{
 	public:
 
-		TypeCollection();
-		~TypeCollection();
+												TypeCollection();
+												~TypeCollection();
 
 		bool									load( const Path& path );
 

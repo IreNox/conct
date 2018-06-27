@@ -41,14 +41,26 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayType.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="Interface.cs" />
+    <Compile Include="InterfaceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StructType.cs" />
+    <Compile Include="Type.cs" />
     <Compile Include="TypeCollection.cs" />
+    <Compile Include="TypeCollectionNative.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\controller.native\controller.native.vcxproj">
+      <Project>{a380dc71-4ab0-41c0-84a7-b2d1f8cfbf4b}</Project>
+      <Name>controller.native</Name>
+      <TargetPlatformIdentifier>Android</TargetPlatformIdentifier>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

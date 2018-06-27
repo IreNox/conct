@@ -123,6 +123,9 @@
       <Filter>gen</Filter>
     </ClCompile>
     <ClCompile Include="device_android_controller.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_types_c.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controller_native.h" />
@@ -295,6 +298,9 @@
       <Filter>gen</Filter>
     </ClInclude>
     <ClInclude Include="device_android_controller.h" />
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_types_c.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="libraries">

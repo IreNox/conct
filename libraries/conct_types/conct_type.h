@@ -14,7 +14,7 @@ namespace conct
 		TypeDescription_Interface,
 		TypeDescription_Struct,
 		TypeDescription_Enum,
-		TypeDescription_Array,
+		TypeDescription_Array
 	};
 
 	class Type

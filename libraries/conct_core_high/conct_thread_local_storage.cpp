@@ -2,6 +2,8 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+#	include <pthread.h>
 #endif
 
 namespace conct
@@ -10,6 +12,13 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		return TlsAlloc();
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+		pthread_key_t key;
+		if( pthread_key_create( &key, nullptr ) != 0u )
+		{
+			return 0u;
+		}
+		return key;
 #endif
 	}
 
@@ -17,6 +26,8 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		TlsFree( handle );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+		pthread_key_delete( handle );
 #endif
 	}
 
@@ -24,6 +35,8 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		return (uintptr)TlsGetValue( handle );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+		return (uintptr)pthread_getspecific( handle );
 #endif
 	}
 
@@ -31,6 +44,8 @@ namespace conct
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		TlsSetValue( handle, (void*)value );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+		pthread_setspecific( handle, (void*)value );
 #endif
 	}
 }

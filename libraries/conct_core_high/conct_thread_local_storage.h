@@ -4,7 +4,11 @@
 
 namespace conct
 {
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 	typedef uint32 ThreadLocalStorageHandle;
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+	typedef sint32 ThreadLocalStorageHandle;
+#endif
 
 	namespace thread_local_storage
 	{

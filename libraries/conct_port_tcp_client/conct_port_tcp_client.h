@@ -8,7 +8,7 @@
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <WinSock2.h>
 #	include <ws2ipdef.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 #	include <arpa/inet.h>
 #endif
 

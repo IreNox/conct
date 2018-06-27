@@ -10,9 +10,10 @@
 #	include <WS2tcpip.h>
 #	include <ws2ipdef.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
-#	include <sys/socket.h>
 #	include <arpa/inet.h>
+#	include <errno.h>
 #	include <fcntl.h>
+#	include <sys/socket.h>
 #endif
 
 #include <stdio.h>

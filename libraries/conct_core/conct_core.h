@@ -24,17 +24,19 @@
 #	define CONCT_PLATFORM_WINDOWS	CONCT_OFF
 #endif
 
-#if defined( __linux__ )
+#if defined( __ANDROID__ )
+#	define CONCT_PLATFORM_ANDROID	CONCT_ON
+#	define CONCT_PLATFORM_POSIX		CONCT_ON
+#else
+#	define CONCT_PLATFORM_ANDROID	CONCT_OFF
+#endif
+
+#if defined( __linux__ ) && !defined( __ANDROID__ )
 #	define CONCT_PLATFORM_LINUX		CONCT_ON
+#	define CONCT_PLATFORM_POSIX		CONCT_ON
 #	define CONCT_HAS_BREAK			CONCT_ON
 #else
 #	define CONCT_PLATFORM_LINUX		CONCT_OFF
-#endif
-
-#if defined( __ANDROID__ )
-#	define CONCT_PLATFORM_ANDROID	CONCT_ON
-#else
-#	define CONCT_PLATFORM_ANDROID	CONCT_OFF
 #endif
 
 #if defined( __AVR__ ) // AVR (UNO, Duemilanove, etc.)
@@ -85,6 +87,10 @@
 
 #if !defined( CONCT_PLATFORM_ARDUINO )
 #	define CONCT_PLATFORM_ARDUINO	CONCT_OFF
+#endif
+
+#if !defined( CONCT_PLATFORM_POSIX )
+#	define CONCT_PLATFORM_POSIX		CONCT_OFF
 #endif
 
 #if !defined( CONCT_POINTER_16 )

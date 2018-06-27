@@ -26,6 +26,8 @@ namespace conct
 #	elif CONCT_ENABLED( CONCT_POINTER_32 )
 		uint32	m_data[ 6u ];
 #	endif
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+		sint32	m_data[ 1u ];
 #endif
 	};
 

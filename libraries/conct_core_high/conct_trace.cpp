@@ -5,6 +5,8 @@
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
 #	include <DbgHelp.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#	include <android/log.h>
 #endif
 
 #include <stdio.h>
@@ -16,6 +18,8 @@ namespace conct
 		puts( pString );
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		OutputDebugStringA( pString );
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		__android_log_write( ANDROID_LOG_INFO, "conct", pString );
 #endif
 	}
 

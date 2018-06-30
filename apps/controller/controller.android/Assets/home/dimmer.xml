@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Home" name="Dimmer">
+	<properties>
+		<property name="Brightness" type="PercentValue">
+			<get />
+			<set />
+		</property>
+	</properties>
+</interface>

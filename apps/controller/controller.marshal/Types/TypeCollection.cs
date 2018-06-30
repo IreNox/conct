@@ -32,7 +32,7 @@ namespace conct
 			}
 		}
 
-		bool Load(string path)
+		public bool Load(string path)
 		{
 			return TypeCollectionNative.Load(m_nativeInstance, path);
 		}

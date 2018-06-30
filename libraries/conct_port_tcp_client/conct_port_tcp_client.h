@@ -25,7 +25,7 @@ namespace conct
 	public:
 
 									PortTcpClient();
-									~PortTcpClient();
+		virtual						~PortTcpClient();
 
 		void						setConfig( const PortTcpClientConfig& config );
 

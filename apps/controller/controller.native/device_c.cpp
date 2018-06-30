@@ -9,9 +9,19 @@ DeviceAndroidController* fromHandle( conct_device_handle handle )
 	return ( DeviceAndroidController* )handle;
 }
 
+PortTcpClient* fromHandle( conct_port_handle handle )
+{
+	return ( PortTcpClient* )handle;
+}
+
 conct_device_handle toHandle( const DeviceAndroidController* pClass )
 {
 	return ( conct_device_handle )pClass;
+}
+
+conct_port_handle toHandle( const PortTcpClient* pClass )
+{
+	return ( conct_port_handle )pClass;
 }
 
 conct_controller_handle toHandle( const Controller* pClass )
@@ -39,12 +49,12 @@ void CONCT_CDECL conct_device_loop( conct_device_handle handle )
 
 conct_port_handle CONCT_CDECL conct_device_add_port( conct_device_handle handle, const char* pHostname, uint16_t hostPort )
 {
-	return nullptr;
+	return toHandle( fromHandle( handle )->addPort( pHostname, hostPort ) );
 }
 
 void CONCT_CDECL conct_device_remove_port( conct_device_handle handle, conct_port_handle portHandle )
 {
-
+	fromHandle( handle )->removePort( fromHandle( portHandle ) );
 }
 
 conct_controller_handle CONCT_CDECL conct_device_get_controller( conct_device_handle handle )

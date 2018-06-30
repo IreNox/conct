@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Router">
+	<internal include="conct_router.h" class="Router" />
+	<singleton />
+	<properties>
+		<property name="ConnectedDevices">
+			<type>
+				<array type="DeviceId" />
+			</type>
+			<get />
+		</property>
+	</properties>
+</interface>

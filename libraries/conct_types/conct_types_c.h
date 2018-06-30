@@ -1,28 +1,12 @@
 #pragma once
 
-#include <stdint.h>
+#include "conct_core_c.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Types
-
-enum conct_value_type
-{
-	conct_value_type_void,
-	conct_value_type_boolean,
-	conct_value_type_integer,
-	conct_value_type_unsigned,
-	conct_value_type_percent_value,
-	conct_value_type_guid,
-	conct_value_type_device_id,
-	conct_value_type_instance,
-	conct_value_type_type_crc,
-	conct_value_type_string,
-	conct_value_type_struct,
-	conct_value_type_array
-};
 
 enum conct_type_description
 {
@@ -32,8 +16,6 @@ enum conct_type_description
 	conct_type_description_enum,
 	conct_type_description_array
 };
-
-typedef uint16_t conct_type_crc;
 
 struct conct_type;
 typedef struct conct_type* conct_type_handle;
@@ -114,6 +96,20 @@ extern int								conct_interface_type_get_function_parameter_count( conct_inter
 
 extern const char*						conct_interface_type_get_function_parameter_name( conct_interface_type_handle handle, int functionIndex, int parameterIndex );
 extern conct_type_handle				conct_interface_type_get_function_parameter_type( conct_interface_type_handle handle, int functionIndex, int parameterIndex );
+
+// StructType
+
+extern conct_type_handle				conct_struct_type_cast_type( conct_struct_type_handle handle );
+
+extern int								conct_struct_type_get_field_count( conct_struct_type_handle handle );
+extern const char*						conct_struct_type_get_field_name( conct_struct_type_handle handle, int index );
+extern conct_type_handle				conct_struct_type_get_field_type( conct_struct_type_handle handle, int index );
+
+// ArrayType
+
+extern conct_type_handle				conct_array_type_cast_type( conct_array_type_handle handle );
+
+extern conct_type_handle				conct_array_type_get_base_type( conct_array_type_handle handle );
 
 #ifdef __cplusplus
 }

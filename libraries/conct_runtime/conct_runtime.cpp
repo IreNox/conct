@@ -25,4 +25,17 @@ namespace conct
 		// both addresses are invalid
 		return false;
 	}
+
+	void runtime::copyDeviceAddress( DeviceAddress& target, const DeviceAddress& source )
+	{
+		for( uintreg i = 0u; i < DeviceAddress::Size; ++i )
+		{
+			target.address[ i ] = source.address[ i ];
+
+			if( source.address[ i ] == InvalidDeviceId )
+			{
+				return;
+			}
+		}
+	}
 }

@@ -14,7 +14,7 @@
 
 namespace conct
 {
-	class CommandBase;
+	class Command;
 	class InterfaceType;
 	class TypeCollection;
 	struct InterfaceFunction;
@@ -123,7 +123,7 @@ namespace conct
 		DeviceList					m_devices;
 		InstanceList				m_instances;
 
-		CommandBase*				m_pRunningCommand;
+		Command*					m_pRunningCommand;
 		//DeviceCommandVector			m_deviceCommands;
 
 		Timer						m_timer;

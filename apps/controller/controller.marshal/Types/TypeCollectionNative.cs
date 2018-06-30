@@ -3,23 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace conct
 {
-	enum ValueType
-	{
-		Void,
-		Boolean,
-		Integer,
-		Unsigned,
-		PercentValue,
-		Guid,
-		DeviceId,
-		Instance,
-		TypeCrc,
-		String,
-		Struct,
-		Array
-	}
-
-	internal class TypeCollectionNative
+	internal static class TypeCollectionNative
 	{
 		[DllImport("libconct", EntryPoint = "conct_type_collection_create")]
 		public static extern IntPtr Create();
@@ -30,7 +14,7 @@ namespace conct
 		public static extern bool Load( IntPtr instance, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string path );
 
 		[DllImport("libconct", EntryPoint = "conct_type_collection_add_value_type")]
-		public static extern IntPtr AddValueType(IntPtr instance, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string namespaceVar, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string name, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string cppName, int valueType );
+		public static extern IntPtr AddValueType(IntPtr instance, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string namespaceVar, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string name, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string cppName, [param: MarshalAs(UnmanagedType.I4)] ValueType valueType );
 
 		[DllImport("libconct", EntryPoint = "conct_type_collection_find_type")]
 		public static extern IntPtr FindType(IntPtr instance, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string fullname, [param: MarshalAs(UnmanagedType.LPUTF8Str)] string referenceNamespace);

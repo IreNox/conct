@@ -1,18 +1,14 @@
 #include "conct_types_c.h"
 
+#include "conct_array_type.h"
 #include "conct_core.h"
 #include "conct_interface_type.h"
 #include "conct_path.h"
+#include "conct_struct_type.h"
 #include "conct_type.h"
 #include "conct_type_collection.h"
 
 using namespace conct;
-
-#if CONCT_ENABLED( CONCT_COMPILER_MSVC )
-# define CONCT_CDECL	__cdecl
-#elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
-# define CONCT_CDECL	__attribute__((__cdecl__))
-#endif
 
 Type* fromHandle( conct_type_handle handle )
 {
@@ -290,4 +286,38 @@ const char* CONCT_CDECL conct_interface_type_get_function_parameter_name( conct_
 conct_type_handle CONCT_CDECL conct_interface_type_get_function_parameter_type( conct_interface_type_handle handle, int functionIndex, int parameterIndex )
 {
 	return toHandle( fromHandle( handle )->getFunctions()[ uintreg( functionIndex ) ].parameters[ uintreg( parameterIndex ) ].pType );
+}
+
+// StructType
+
+conct_type_handle CONCT_CDECL conct_struct_type_cast_type( conct_struct_type_handle handle )
+{
+	return ( conct_type_handle )handle;
+}
+
+int CONCT_CDECL conct_struct_type_get_field_count( conct_struct_type_handle handle )
+{
+	return fromHandle( handle )->getFields().getLength();
+}
+
+const char* CONCT_CDECL conct_struct_type_get_field_name( conct_struct_type_handle handle, int index )
+{
+	return fromHandle( handle )->getFields()[ index ].name.toConstCharPointer();
+}
+
+conct_type_handle CONCT_CDECL conct_struct_type_get_field_type( conct_struct_type_handle handle, int index )
+{
+	return toHandle( fromHandle( handle )->getFields()[ index ].pType );
+}
+
+// ArrayType
+
+conct_type_handle CONCT_CDECL conct_array_type_cast_type( conct_array_type_handle handle )
+{
+	return ( conct_type_handle )handle;
+}
+
+conct_type_handle CONCT_CDECL conct_array_type_get_base_type( conct_array_type_handle handle )
+{
+	return toHandle( fromHandle( handle )->getBaseType() );
 }

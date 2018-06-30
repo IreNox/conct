@@ -15,7 +15,6 @@ namespace conct
 						ValueHigh( const Value& value );
 
 		ValueType		getType() const;
-		const Value&	getBaseValue() const;
 
 		bool			getBoolean() const;
 		sint32			getInteger() const;
@@ -37,7 +36,7 @@ namespace conct
 		ArrayView< T >	getArray() const;
 		const void*		getArrayData() const;
 		uintreg			getArrayElementSize() const;
-		uintreg			getArrayCount() const;
+		uintreg			getArrayLength() const;
 		TypeCrc			getArrayType() const;
 
 		void			setVoid();

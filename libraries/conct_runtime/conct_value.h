@@ -27,7 +27,7 @@ namespace conct
 
 		const void*		getArrayData() const;
 		uint8			getArrayElementSize() const;
-		uint8			getArrayCount() const;
+		uint8			getArrayLength() const;
 		TypeCrc			getArrayType() const;
 
 		void			setVoid();
@@ -42,6 +42,6 @@ namespace conct
 
 		void			setString( uint16 offset );
 		void			setStruct( uint16 offset, uint16 size, TypeCrc typeCrc );
-		void			setArray( uint16 offset, uint8 count, uint8 size, TypeCrc typeCrc );
+		void			setArray( uint16 offset, uint8 size, uint8 length, TypeCrc typeCrc );
 	};
 }

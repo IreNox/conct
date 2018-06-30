@@ -17,6 +17,6 @@ namespace conct
 	{
 		CONCT_ASSERT( sizeof( T ) == getArrayElementSize() );
 		CONCT_ASSERT( getArrayType() == ValueTypeTraits< T >::getTypeCrc() );
-		return ArrayView< T >( ( const T* )m_buffer.getData(), getArrayCount() );
+		return ArrayView< T >( ( const T* )m_buffer.getData(), getArrayLength() );
 	}
 }

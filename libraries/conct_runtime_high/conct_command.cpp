@@ -2,21 +2,32 @@
 
 namespace conct
 {
-	CommandBase::CommandBase( CommandId id )
+	Command::Command( CommandId id )
 	{
 		m_state		= CommandState_Created;
 		m_id		= id;
 		m_result	= ResultId_TimeOut;
 	}
 
-	void CommandBase::setSent()
+	void Command::setSent()
 	{
 		m_state = CommandState_WaitForResponse;
 	}
 
-	void CommandBase::setResponse( ResultId result )
+	void Command::setResponse( ResultId result )
 	{
 		m_state = CommandState_Finish;
 		m_result = result;
+	}
+
+	ValueCommand::ValueCommand( CommandId id )
+		: Command( id )
+	{
+	}
+
+	void ValueCommand::setResponse( ResultId result, const ValueHigh& value )
+	{
+		m_value = value;
+		Command::setResponse( result );
 	}
 }

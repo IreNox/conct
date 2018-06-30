@@ -33,7 +33,7 @@ namespace conct
 		template< class T >
 		ResultId			setStruct( const T& value );
 
-		ResultId			setArray( const void* pData, uintreg elementSize, uintreg count, TypeCrc type );
+		ResultId			setArray( const void* pData, uintreg elementSize, uintreg length, TypeCrc type );
 		template< class T >
 		ResultId			setArray( const ArrayView< T >& value );
 

@@ -103,16 +103,16 @@ namespace conct
 		return ResultId_Success;
 	}
 
-	ResultId ValueBuilder::setArray( const void* pData, uintreg elementSize, uintreg count, TypeCrc type )
+	ResultId ValueBuilder::setArray( const void* pData, uintreg elementSize, uintreg length, TypeCrc type )
 	{
-		void* pArray = m_pBuilder->pushData( pData, elementSize * count );
+		void* pArray = m_pBuilder->pushData( pData, elementSize * length );
 		if( pArray == nullptr )
 		{
 			return ResultId_OutOfMemory;
 		}
 
 		CONCT_ASSERT( ( uintptr )pArray - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
-		m_pValue->setArray( uint16( ( uintptr )pArray - ( uintptr )m_pValue ), uint8( elementSize ), uint8( count ), type );
+		m_pValue->setArray( uint16( ( uintptr )pArray - ( uintptr )m_pValue ), uint8( elementSize ), uint8( length ), type );
 
 		return ResultId_Success;
 	}

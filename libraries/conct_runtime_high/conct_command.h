@@ -1,6 +1,7 @@
 #pragma once
 
 #include "conct_runtime.h"
+#include "conct_value_high.h"
 
 namespace conct
 {
@@ -13,13 +14,13 @@ namespace conct
 		CommandState_Finish,
 	};
 
-	class CommandBase
+	class Command
 	{
 		friend class RuntimeHigh;
 
 	public:
 
-						CommandBase( CommandId id );
+						Command( CommandId id );
 
 		CommandState	getState() const { return m_state; }
 		CommandId		getId() const { return m_id; }
@@ -28,7 +29,7 @@ namespace conct
 		bool			isBusy() const { return m_state == CommandState_WaitForResponse; }
 		bool			isFinish() const { return m_state == CommandState_Finish; }
 		bool			isOk() const { return m_result == ResultId_Success; }
-		bool			hasError() const { return m_result != ResultId_Success; }
+		bool			isFailure() const { return m_result != ResultId_Success; }
 
 	protected:
 
@@ -42,25 +43,22 @@ namespace conct
 		ResultId		m_result;
 	};
 
-	template< class TData >
-	class Command : public CommandBase
+	class ValueCommand : public Command
 	{
 		friend class RuntimeHigh;
 
 	public:
 
-						Command( CommandId id );
+							ValueCommand( CommandId id );
 
-		const TData&	getData() const { return m_data; }
+		const ValueHigh&	getValue() const { return m_value; }
 
 	protected:
 
-		void			setResponse( ResultId result, const TData& data );
+		void				setResponse( ResultId result, const ValueHigh& data );
 
 	private:
 
-		TData			m_data;
+		ValueHigh			m_value;
 	};
 }
-
-#include "conct_command.inl"

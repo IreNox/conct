@@ -13,7 +13,7 @@ namespace conct
 	class Device;
 	class Port;
 	class Reader;
-	class CommandBase;
+	class Command;
 
 	class RuntimeHigh
 	{
@@ -30,7 +30,7 @@ namespace conct
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
-		ResultId				sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
+		ResultId				sendPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
 
 	private:
 
@@ -93,7 +93,7 @@ namespace conct
 
 		struct DeviceData
 		{
-			typedef std::map< CommandId, CommandBase* > CommandMap;
+			typedef std::map< CommandId, Command* > CommandMap;
 
 			Port*		pTargetPort;
 			uintreg		endpointId;

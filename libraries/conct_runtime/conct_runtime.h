@@ -116,5 +116,7 @@ namespace conct
 	{
 		bool		isDeviceAddressEmpty( const DeviceAddress& address );
 		bool		isDeviceAddressEquals( const DeviceAddress& lhs, const DeviceAddress& rhs );
+
+		void		copyDeviceAddress( DeviceAddress& target, const DeviceAddress& source );
 	}
 }

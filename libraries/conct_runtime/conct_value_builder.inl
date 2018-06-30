@@ -56,7 +56,7 @@ namespace conct
 			return setStruct( pValue->getStructData(), pValue->getStructSize(), pValue->getStructType() );
 
 		case ValueType_Array:
-			return setArray( pValue->getArrayData(), pValue->getArrayElementSize(), pValue->getArrayCount(), pValue->getArrayType() );
+			return setArray( pValue->getArrayData(), pValue->getArrayElementSize(), pValue->getArrayLength(), pValue->getArrayType() );
 
 		case ValueType_Count:
 			break;

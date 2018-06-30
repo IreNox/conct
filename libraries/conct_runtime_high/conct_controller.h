@@ -21,18 +21,18 @@ namespace conct
 		void								setup( RuntimeHigh* pRuntime );
 		void								loop();
 
-		Command< ValueHigh >*				getProperty( const RemoteInstance& instance, const char* pName );
-		CommandBase*						setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value );
+		ValueCommand*						getProperty( const RemoteInstance& instance, const char* pName );
+		Command*							setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value );
 
-		Command< ValueHigh >*				callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments );
+		ValueCommand*						callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments );
 
-		void								releaseCommand( CommandBase* pCommand );
+		void								releaseCommand( Command* pCommand );
 
 	private:
 
 		RuntimeHigh*						m_pRuntime;
 
-		Vector< CommandBase* >				m_releaseCommand;
+		Vector< Command* >					m_releaseCommand;
 
 		template< class TCommand >
 		TCommand*							beginCommand( const DeviceAddress& deviceAddress, const DataBuilder& payload, MessageType messageType );

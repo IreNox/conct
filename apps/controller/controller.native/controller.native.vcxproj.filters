@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="controller_native.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyxml2\tinyxml2.cpp">
       <Filter>third_party\tinyxml2</Filter>
     </ClCompile>
@@ -126,9 +125,12 @@
     <ClCompile Include="..\..\..\libraries\conct_types\conct_types_c.cpp">
       <Filter>libraries\conct_types</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.cpp">
+      <Filter>libraries\conct_runtime_high</Filter>
+    </ClCompile>
+    <ClCompile Include="device_c.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="controller_native.h" />
     <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h">
       <Filter>third_party\tinyxml2</Filter>
     </ClInclude>
@@ -301,6 +303,13 @@
     <ClInclude Include="..\..\..\libraries\conct_types\conct_types_c.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.h">
+      <Filter>libraries\conct_runtime_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_core_c.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="device_c.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="libraries">
@@ -390,9 +399,6 @@
       <Filter>libraries\conct_runtime</Filter>
     </None>
     <None Include="..\..\..\libraries\conct_runtime_high\conct_value_high.inl">
-      <Filter>libraries\conct_runtime_high</Filter>
-    </None>
-    <None Include="..\..\..\libraries\conct_runtime_high\conct_command.inl">
       <Filter>libraries\conct_runtime_high</Filter>
     </None>
   </ItemGroup>

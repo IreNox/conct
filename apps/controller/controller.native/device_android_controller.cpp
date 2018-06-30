@@ -4,11 +4,11 @@ namespace conct
 {
 	void DeviceAndroidController::setup()
 	{
-		// TODO: implement
+		m_controller.setup( &m_runtime );
 	}
 
 	void DeviceAndroidController::loop()
 	{
-		// TODO: implement
+		m_controller.loop();
 	}
 }

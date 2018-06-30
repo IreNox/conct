@@ -23,8 +23,8 @@ namespace conct
 		}
 		else if( value.type == ValueType_Array )
 		{
-			m_buffer.pushRange( static_cast< const uint8* >( value.getArrayData() ), value.getArrayElementSize() * value.getArrayCount() );
-			m_value.setArray( 0u, value.getArrayElementSize(), value.getArrayCount(), value.getArrayType() );
+			m_buffer.pushRange( static_cast< const uint8* >( value.getArrayData() ), value.getArrayElementSize() * value.getArrayLength() );
+			m_value.setArray( 0u, value.getArrayElementSize(), value.getArrayLength(), value.getArrayType() );
 		}
 		else
 		{
@@ -35,11 +35,6 @@ namespace conct
 	ValueType ValueHigh::getType() const
 	{
 		return m_value.type;
-	}
-
-	const Value& ValueHigh::getBaseValue() const
-	{
-		return m_value;
 	}
 
 	bool ValueHigh::getBoolean() const
@@ -115,9 +110,9 @@ namespace conct
 		return m_value.getArrayElementSize();
 	}
 
-	uintreg ValueHigh::getArrayCount() const
+	uintreg ValueHigh::getArrayLength() const
 	{
-		return m_value.getArrayCount();
+		return m_value.getArrayLength();
 	}
 
 	TypeCrc ValueHigh::getArrayType() const

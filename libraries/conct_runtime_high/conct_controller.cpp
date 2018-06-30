@@ -25,7 +25,7 @@ namespace conct
 	{
 		for( uintreg i = 0u; i < m_releaseCommand.getLength(); ++i )
 		{
-			CommandBase* pCommand = m_releaseCommand[ i ];
+			Command* pCommand = m_releaseCommand[ i ];
 			if( !pCommand->isFinish() )
 			{
 				continue;
@@ -37,17 +37,17 @@ namespace conct
 		}
 	}
 
-	Command< ValueHigh >* Controller::getProperty( const RemoteInstance& instance, const char* pName )
+	ValueCommand* Controller::getProperty( const RemoteInstance& instance, const char* pName )
 	{
 		BufferedDataBuilder< 1024u > dataBuilder;
 		GetPropertyRequest* pRequest = dataBuilder.pushStruct< GetPropertyRequest >();
 		pRequest->instanceId	= instance.id;
 		pRequest->name			= dataBuilder.pushString( pName );
 
-		return beginCommand< Command< ValueHigh > >( instance.address, dataBuilder, MessageType_GetPropertyRequest );
+		return beginCommand< ValueCommand >( instance.address, dataBuilder, MessageType_GetPropertyRequest );
 	}
 
-	CommandBase* Controller::setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value )
+	Command* Controller::setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value )
 	{
 		BufferedDataBuilder< 1024u > dataBuilder;
 		SetPropertyRequest* pRequest = dataBuilder.pushStruct< SetPropertyRequest >();
@@ -56,10 +56,10 @@ namespace conct
 
 		dataBuilder.pushValueData( &pRequest->value, &value );
 
-		return beginCommand< CommandBase >( instance.address, dataBuilder, MessageType_SetPropertyRequest );
+		return beginCommand< Command >( instance.address, dataBuilder, MessageType_SetPropertyRequest );
 	}
 
-	Command< ValueHigh >* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments )
+	ValueCommand* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments )
 	{
 		BufferedDataBuilder< 1024u > dataBuilder;
 		CallFunctionRequest* pRequest = dataBuilder.pushStruct< CallFunctionRequest >();
@@ -74,10 +74,10 @@ namespace conct
 			dataBuilder.pushValueData( &workingArguments[ i ], &arguments[ i ] );
 		}
 
-		return beginCommand< Command< ValueHigh > >( instance.address, dataBuilder, MessageType_CallFunctionRequest );
+		return beginCommand< ValueCommand >( instance.address, dataBuilder, MessageType_CallFunctionRequest );
 	}
 
-	void Controller::releaseCommand( CommandBase* pCommand )
+	void Controller::releaseCommand( Command* pCommand )
 	{
 		m_releaseCommand.pushBack( pCommand );
 	}

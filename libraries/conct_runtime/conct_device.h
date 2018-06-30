@@ -12,6 +12,8 @@ namespace conct
 	{
 	public:
 
+		virtual					~Device() { }
+
 		virtual const char*		getName() const = 0;
 		Guid					getGuid() const;
 		ArrayView< Instance >	getInstances() const;

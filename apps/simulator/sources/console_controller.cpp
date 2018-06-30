@@ -924,7 +924,7 @@ namespace conct
 
 	void ConsoleController::executeGetPropertyAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance )
 	{
-		Command< ValueHigh >* pCommand = localDevice.data.pController->getProperty( remoteInstance, m_pProperty->name.toConstCharPointer() );
+		ValueCommand* pCommand = localDevice.data.pController->getProperty( remoteInstance, m_pProperty->name.toConstCharPointer() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'getProperty' command."_s );
@@ -936,7 +936,7 @@ namespace conct
 
 	void ConsoleController::executeSetPropertyAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance )
 	{
-		CommandBase* pCommand = localDevice.data.pController->setProperty( remoteInstance, m_pProperty->name.toConstCharPointer(), m_values.front() );
+		Command* pCommand = localDevice.data.pController->setProperty( remoteInstance, m_pProperty->name.toConstCharPointer(), m_values.front() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -950,7 +950,7 @@ namespace conct
 	{
 		ArrayView< ValueHigh > arguments;
 		arguments.set( m_values.data(), m_values.size() );
-		CommandBase* pCommand = localDevice.data.pController->callFunction( remoteInstance, m_pFunction->name.toConstCharPointer(), arguments );
+		Command* pCommand = localDevice.data.pController->callFunction( remoteInstance, m_pFunction->name.toConstCharPointer(), arguments );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -967,7 +967,7 @@ namespace conct
 			return;
 		}
 
-		if( m_pRunningCommand->hasError() )
+		if( m_pRunningCommand->isFailure() )
 		{
 			setPopupState( "Command failed."_s );
 			localDevice.data.pController->releaseCommand( m_pRunningCommand );
@@ -993,8 +993,8 @@ namespace conct
 		case Action_GetProperty:
 		case Action_CallFunction:
 			{
-				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( m_pRunningCommand );
-				const ValueHigh& value = pCommand->getData();
+				ValueCommand* pCommand = static_cast< ValueCommand* >( m_pRunningCommand );
+				const ValueHigh& value = pCommand->getValue();
 
 				DynamicString text;
 				if( m_action == Action_GetProperty )

@@ -58,7 +58,7 @@ namespace conct
 			const DeviceId deviceId = portData.endpointToDevice[ endpointId ];
 			DeviceData& deviceData = m_devices[ deviceId ];
 
-			for( std::pair< const CommandId, CommandBase* >& pair : deviceData.commands )
+			for( std::pair< const CommandId, Command* >& pair : deviceData.commands )
 			{
 				pair.second->setResponse( ResultId_ConnectionLost );
 			}
@@ -93,7 +93,7 @@ namespace conct
 		return commandId;
 	}
 
-	ResultId RuntimeHigh::sendPackage( CommandBase* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
+	ResultId RuntimeHigh::sendPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
 		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
 		if( result == ResultId_Success )
@@ -164,16 +164,16 @@ namespace conct
 
 	void RuntimeHigh::processPackage( PortData& portData, const ReceivedPackage& package )
 	{
-		CommandBase* pCommandBase = nullptr;
+		Command* pCommand = nullptr;
 		if( package.baseHeader.commandId != InvalidCommandId &&
 			( package.baseHeader.messageType == MessageType_GetPropertyResponse ||
 			package.baseHeader.messageType == MessageType_SetPropertyResponse ||
 			package.baseHeader.messageType == MessageType_CallFunctionResponse ) )
 		{
 			DeviceData& deviceData = m_devices[ package.deviceId ];
-			pCommandBase = deviceData.commands[ package.baseHeader.commandId ];
+			pCommand = deviceData.commands[ package.baseHeader.commandId ];
 
-			if( pCommandBase == nullptr )
+			if( pCommand == nullptr )
 			{
 				// error
 				return;
@@ -184,9 +184,9 @@ namespace conct
 		{
 		case MessageType_ErrorResponse:
 			{
-				if( pCommandBase != nullptr )
+				if( pCommand != nullptr )
 				{
-					pCommandBase->setResponse( package.baseHeader.messageResult );
+					pCommand->setResponse( package.baseHeader.messageResult );
 				}
 			}
 			break;
@@ -228,8 +228,8 @@ namespace conct
 			{
 				const GetPropertyResponse& response = *( const GetPropertyResponse* )package.payload.getData();
 
-				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( pCommandBase );
-				pCommand->setResponse( package.baseHeader.messageResult, response.value );
+				ValueCommand* pValueCommand = static_cast< ValueCommand* >( pCommand );
+				pValueCommand->setResponse( package.baseHeader.messageResult, response.value );
 			}
 			break;
 
@@ -256,7 +256,7 @@ namespace conct
 
 		case MessageType_SetPropertyResponse:
 			{
-				pCommandBase->setResponse( package.baseHeader.messageResult );
+				pCommand->setResponse( package.baseHeader.messageResult );
 			}
 			break;
 
@@ -288,8 +288,8 @@ namespace conct
 			{
 				const CallFunctionResponse& response = *( const CallFunctionResponse* )package.payload.getData();
 
-				Command< ValueHigh >* pCommand = static_cast< Command< ValueHigh >* >( pCommandBase );
-				pCommand->setResponse( package.baseHeader.messageResult, response.value );
+				ValueCommand* pValueCommand = static_cast< ValueCommand* >( pCommand );
+				pValueCommand->setResponse( package.baseHeader.messageResult, response.value );
 			}
 			break;
 

@@ -20,8 +20,8 @@ namespace conct
 	struct ArrayValueData
 	{
 		uint16				offset;
-		uint8				count;
 		uint8				size;
+		uint8				length;
 		TypeCrc				type;
 	};
 
@@ -154,10 +154,10 @@ namespace conct
 		return getData( data ).array.size;
 	}
 
-	uint8 Value::getArrayCount() const
+	uint8 Value::getArrayLength() const
 	{
 		CONCT_ASSERT( type == ValueType_Array );
-		return getData( data ).array.count;
+		return getData( data ).array.length;
 	}
 
 	TypeCrc Value::getArrayType() const
@@ -253,13 +253,13 @@ namespace conct
 		setData( data, valueData );
 	}
 
-	void Value::setArray( uint16 offset, uint8 count, uint8 size, TypeCrc typeCrc )
+	void Value::setArray( uint16 offset, uint8 size, uint8 length, TypeCrc typeCrc )
 	{
 		type = ValueType_Array;
 		ValueData valueData;
 		valueData.array.offset = offset;
-		valueData.array.count = count;
 		valueData.array.size = size;
+		valueData.array.length = length;
 		valueData.array.type = typeCrc;
 		setData( data, valueData );
 	}

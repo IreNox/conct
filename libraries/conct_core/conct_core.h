@@ -164,6 +164,12 @@
 #	define CONCT_ALIGNOF( type )				( __alignof__( type ) )
 #endif
 
+#if CONCT_ENABLED( CONCT_COMPILER_MSVC )
+#	define CONCT_CDECL							__cdecl
+#elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
+#	define CONCT_CDECL							__attribute__((__cdecl__))
+#endif
+
 
 #if CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
 #	define CONCT_OFFSETOF( type, member )		( __builtin_offsetof( type, member ) )

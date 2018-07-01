@@ -1,12 +1,9 @@
 ﻿using System;
+using System.IO;
 
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
-using System.IO;
 
 namespace conct
 {
@@ -19,19 +16,20 @@ namespace conct
         {
 			m_system = new ConctSystem();
 
-			string dataPath = MoveAssets();
-			if (!m_system.Load(dataPath))
-			{
-				throw new Exception();
-			}
-
 			TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            LoadApplication(new App());
+			//global::Plugin.CrossPlatformTintedImage.Android.TintedImageRenderer.Init();
+			LoadApplication(new App(m_system));
+
+			string dataPath = MoveAssets();
+			if (!m_system.Load(dataPath))
+			{
+				App.Current.MainPage.DisplayAlert("conct.controller", "Failed to load configuration!", "Close");
+			}
 		}
 
 		private string MoveAssets()

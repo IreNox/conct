@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace controller
+namespace conct
 {
-    class MainDataView
+    class MainViewModel
     {
         public string[] Favorites
         {

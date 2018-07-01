@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:conct"
+             xmlns:controls="clr-namespace:Plugin.CrossPlatformTintedImage.Abstractions;assembly=Plugin.CrossPlatformTintedImage.Abstractions"
+             x:Class="conct.SettingsPage"
+             Title="Settings">
+    <StackLayout>
+        <Label Text="Servers:" />
+        <ListView ItemsSource="{Binding Servers}" ItemSelected="Server_Selected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="5,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--controls:TintedImage Source="{local:ImageResource icon_monitor.png}" TintColor="{Binding Color}" MinimumWidthRequest="30" MinimumHeightRequest="30" /-->
+                            <Image Source="{local:ImageResource icon_monitor.png}" MinimumWidthRequest="30" MinimumHeightRequest="30" />
+                            <Label Grid.Column="1" Text="{Binding Title}" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+  </StackLayout>
+</ContentPage>

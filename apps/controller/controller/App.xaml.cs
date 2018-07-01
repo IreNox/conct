@@ -2,16 +2,20 @@ using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation (XamlCompilationOptions.Compile)]
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace conct
 {
 	public partial class App : Application
 	{
-		public App ()
+		private ConctSystem m_system;
+
+		public App(ConctSystem system)
 		{
+			m_system = system;
+
 			InitializeComponent();
 
-			MainPage = new MainPage();
+			MainPage = new Main();
 		}
 
 		protected override void OnStart ()
@@ -27,6 +31,20 @@ namespace conct
 		protected override void OnResume ()
 		{
 			// Handle when your app resumes
+		}
+
+		public static ConctSystem System
+		{
+			get
+			{
+				App app = Application.Current as App;
+				if (app == null)
+				{
+					return null;
+				}
+
+				return app.m_system;
+			}
 		}
 	}
 }

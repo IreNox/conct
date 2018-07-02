@@ -22,7 +22,7 @@ namespace conct
 
 		private TypeCollection m_typeCollection;
 
-		private string m_dataPath;
+		private string m_configPath;
 		private List<ServerData> m_servers;
 
 		public ConctSystem()
@@ -49,13 +49,13 @@ namespace conct
 			}
 		}
 
-		public bool Load(string path)
+		public bool Load(string configPath, string typesPath)
 		{
-			m_dataPath = path;
+			m_configPath = configPath;
 
 			bool result = true;
-			result &= LoadConfig(path);
-			result &= m_typeCollection.Load(path);
+			result &= LoadConfig();
+			result &= m_typeCollection.Load(typesPath);
 
 			return result;
 		}
@@ -95,9 +95,9 @@ namespace conct
 			SaveConfig();
 		}
 
-		private bool LoadConfig(string path)
+		private bool LoadConfig()
 		{
-			string configPath = Path.Combine(path, "config.xml");
+			string configPath = Path.Combine(m_configPath, "config.xml");
 
 			m_servers = new List<ServerData>();
 
@@ -131,7 +131,7 @@ namespace conct
 
 		private void SaveConfig()
 		{
-			string configPath = Path.Combine(m_dataPath, "config.xml");
+			string configPath = Path.Combine(m_configPath, "config.xml");
 
 			try
 			{

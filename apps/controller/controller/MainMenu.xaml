@@ -2,41 +2,35 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="conct.MainMenu"
-             xmlns:local="clr-namespace:conct"
              Title="Master">
     <StackLayout>
         <ListView x:Name="MenuItemsListView"
-              SeparatorVisibility="None"
-              HasUnevenRows="true"
-              ItemsSource="{Binding MenuItems}">
+                  SeparatorVisibility="None"
+                  HasUnevenRows="true"
+                  ItemsSource="{Binding MenuItems}">
             <ListView.Header>
-                <AbsoluteLayout>
-                    <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" Source="{local:ImageResource menu_header.png}" />
-                    <!--HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Aspect="AspectFill"-->
-                    <Grid AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1" BackgroundColor="Transparent">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="10"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="80"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                        </Grid.RowDefinitions>
-                        <Label Grid.Column="1" Grid.Row="2" Text="conct.controller" Style="{DynamicResource SubtitleStyle}"/>
-                    </Grid>
-                </AbsoluteLayout>
+                <Grid BackgroundColor="DarkBlue">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="4" Source="menu_header.png" HorizontalOptions="FillAndExpand" Aspect="AspectFill" />
+                    <Label Grid.Column="1" Grid.Row="2" Text="conct.controller" Style="{DynamicResource SubtitleStyle}" BackgroundColor="GhostWhite" />
+                </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-                            <Label VerticalOptions="FillAndExpand"
-                    VerticalTextAlignment="Center"
-                    Text="{Binding Title}"
-                    FontSize="24"/>
+                        <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                            <Image Source="{Binding Image}" Scale="0.75" Margin="0,0,5,0" />
+                            <Label VerticalOptions="FillAndExpand" VerticalTextAlignment="Center" Text="{Binding Title}" FontSize="24" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

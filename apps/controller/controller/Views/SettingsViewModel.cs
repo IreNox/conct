@@ -20,9 +20,9 @@ namespace conct
 			get
 			{
 				int value = Title.GetHashCode();
-				int red = (value << 24) & 0xff;
-				int green = (value << 16) & 0xff;
-				int blue = (value << 8) & 0xff;
+				int red = (value >> 0) & 0xff;
+				int green = (value >> 8) & 0xff;
+				int blue = (value >> 16) & 0xff;
 				return Color.FromArgb(red, green, blue);
 			}
 		}

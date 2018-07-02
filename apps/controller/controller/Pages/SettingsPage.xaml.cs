@@ -35,7 +35,7 @@ namespace conct
 
 			ServerData server = ((ServerViewModel)e.SelectedItem).Data;
 
-			var action = await DisplayActionSheet("Action", "Cancel", "Delete", "Edit");
+			var action = await DisplayActionSheet("Select a action", "Cancel", "Delete", "Edit");
 			if(action == "Delete")
 			{
 				App.System.RemoveServer(server);

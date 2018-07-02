@@ -9,13 +9,6 @@ using Xamarin.Forms.Xaml;
 
 namespace conct
 {
-	public class MainMenuItem
-	{
-		public int Id { get; set; }
-		public string Title { get; set; }
-		public System.Type TargetType { get; set; }
-	}
-
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Main : MasterDetailPage
     {

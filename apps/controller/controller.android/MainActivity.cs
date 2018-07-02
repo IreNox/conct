@@ -22,24 +22,29 @@ namespace conct
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-			//global::Plugin.CrossPlatformTintedImage.Android.TintedImageRenderer.Init();
+			global::Plugin.CrossPlatformTintedImage.Android.TintedImageRenderer.Init();
 			LoadApplication(new App(m_system));
 
-			string dataPath = MoveAssets();
-			if (!m_system.Load(dataPath))
+			(string configPath, string typesPath) = MoveAssets();
+			if (!m_system.Load(configPath, typesPath))
 			{
 				App.Current.MainPage.DisplayAlert("conct.controller", "Failed to load configuration!", "Close");
 			}
 		}
 
-		private string MoveAssets()
+		private (string, string) MoveAssets()
 		{
-			string[] pathes = new string[] { "core", "home" };
-			string dataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
+			string appDataPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData);
 
+			string configPath = Path.Combine(appDataPath, "config");
+			string typesPath = Path.Combine(appDataPath, "types");
+			Directory.CreateDirectory(configPath);
+			Directory.CreateDirectory(typesPath);
+
+			string[] pathes = new string[] { "core", "home" };
 			foreach (string path in pathes)
 			{
-				string targetPath = Path.Combine(dataPath, path);
+				string targetPath = Path.Combine(typesPath, path);
 				Directory.CreateDirectory(targetPath);
 
 				string[] files = Assets.List(path);
@@ -54,15 +59,7 @@ namespace conct
 				}
 			}
 
-			//var directories = Directory.EnumerateDirectories("./");
-			//string name = ApplicationContext.PackageName;
-			//ApplicationInfo appInfo = ApplicationContext.PackageManager.GetApplicationInfo(PackageName, 0);
-			//string path2 = appInfo.SourceDir;
-			//var fgfhg = Directory.GetFiles(path);
-			//var xx = Directory.GetDirectories(path);
-			//string bla = File.ReadAllText(path);
-
-			return dataPath;
+			return (configPath, typesPath);
 		}
 	}
 }

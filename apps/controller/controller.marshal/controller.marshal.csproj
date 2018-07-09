@@ -70,9 +70,9 @@
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="27.0.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\controller.native\controller.native.vcxproj">
+    <ProjectReference Include="..\controller.native\controller.native.android.vcxproj">
       <Project>{a380dc71-4ab0-41c0-84a7-b2d1f8cfbf4b}</Project>
-      <Name>controller.native</Name>
+      <Name>controller.native.android</Name>
       <TargetPlatformIdentifier>Android</TargetPlatformIdentifier>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

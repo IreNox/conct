@@ -39,12 +39,6 @@ namespace conct
 				return false;
 			}
 
-			Type instanceType = FindType("Instance", "");
-			if (instanceType != null)
-			{
-				instanceType.ManagedType = typeof(Instance);
-			}
-
 			return true;
 		}
 
@@ -113,6 +107,48 @@ namespace conct
 			{
 				case TypeDescription.Value:
 					type = new Type(typeHandle);
+
+					switch (type.ValueType)
+					{
+						case ValueType.Boolean:
+							type.ManagedType = typeof(Boolean);
+							break;
+
+						case ValueType.Integer:
+							type.ManagedType = typeof(Int32);
+							break;
+
+						case ValueType.Unsigned:
+							type.ManagedType = typeof(UInt32);
+							break;
+
+						case ValueType.PercentValue:
+							type.ManagedType = typeof(UInt16);
+							break;
+
+						case ValueType.Guid:
+							type.ManagedType = typeof(UInt32);
+							break;
+
+						case ValueType.DeviceId:
+							type.ManagedType = typeof(Byte);
+							break;
+
+						case ValueType.Instance:
+							type.ManagedType = typeof(Instance);
+							break;
+
+						case ValueType.TypeCrc:
+							type.ManagedType = typeof(UInt16);
+							break;
+
+						case ValueType.String:
+							type.ManagedType = typeof(String);
+							break;
+
+						default:
+							break;
+					}
 					break;
 
 				case TypeDescription.Interface:

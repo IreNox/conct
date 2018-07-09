@@ -121,7 +121,6 @@
     <ClCompile Include="gen\device_interface.cpp">
       <Filter>gen</Filter>
     </ClCompile>
-    <ClCompile Include="device_android_controller.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_types_c.cpp">
       <Filter>libraries\conct_types</Filter>
     </ClCompile>
@@ -129,6 +128,7 @@
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
     <ClCompile Include="device_c.cpp" />
+    <ClCompile Include="device_controller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h">
@@ -299,7 +299,6 @@
     <ClInclude Include="gen\device_interface.h">
       <Filter>gen</Filter>
     </ClInclude>
-    <ClInclude Include="device_android_controller.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_types_c.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
@@ -310,6 +309,7 @@
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
     <ClInclude Include="device_c.h" />
+    <ClInclude Include="device_controller.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="libraries">

@@ -11,6 +11,16 @@ namespace conct
 			m_nativeInstance = DeviceAddressNative.Create();
 		}
 
+		public DeviceAddress(DeviceAddress copy)
+		{
+			m_nativeInstance = DeviceAddressNative.Duplicate(copy.NativeInstance);
+		}
+
+		internal DeviceAddress(IntPtr nativeInstance)
+		{
+			m_nativeInstance = nativeInstance;
+		}
+
 		public void Dispose()
 		{
 			if (m_nativeInstance != IntPtr.Zero)
@@ -18,11 +28,6 @@ namespace conct
 				DeviceAddressNative.Destroy(m_nativeInstance);
 				m_nativeInstance = IntPtr.Zero;
 			}
-		}
-
-		internal DeviceAddress(IntPtr nativeInstance)
-		{
-			m_nativeInstance = nativeInstance;
 		}
 
 		internal IntPtr NativeInstance
@@ -51,6 +56,16 @@ namespace conct
 			}
 		}
 
+		public void Push(byte deviceId)
+		{
+			DeviceAddressNative.Push(m_nativeInstance, deviceId);
+		}
+
+		public byte Pop()
+		{
+			return DeviceAddressNative.Pop(m_nativeInstance);
+		}
+
 		public override bool Equals(object obj)
 		{
 			DeviceAddress address = obj as DeviceAddress;
@@ -64,8 +79,7 @@ namespace conct
 
 		public override int GetHashCode()
 		{
-			// TODO?
-			return base.GetHashCode();
+			return Text.GetHashCode();
 		}
 
 		public static bool operator ==(DeviceAddress lhs, DeviceAddress rhs)

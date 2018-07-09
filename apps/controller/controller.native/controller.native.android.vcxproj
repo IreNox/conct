@@ -217,8 +217,8 @@
     <ClCompile Include="..\..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_xml_helper.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyxml2\tinyxml2.cpp" />
-    <ClCompile Include="device_android_controller.cpp" />
     <ClCompile Include="device_c.cpp" />
+    <ClCompile Include="device_controller.cpp" />
     <ClCompile Include="gen\core_device_proxy.cpp" />
     <ClCompile Include="gen\device_interface.cpp" />
   </ItemGroup>
@@ -280,8 +280,8 @@
     <ClInclude Include="..\..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_xml_helper.h" />
     <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h" />
-    <ClInclude Include="device_android_controller.h" />
     <ClInclude Include="device_c.h" />
+    <ClInclude Include="device_controller.h" />
     <ClInclude Include="gen\core_device_proxy.h" />
     <ClInclude Include="gen\device_interface.h" />
   </ItemGroup>

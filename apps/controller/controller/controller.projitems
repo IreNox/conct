@@ -15,6 +15,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\DeviceInstanceControl.xaml.cs">
       <DependentUpon>DeviceInstanceControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\TestControl.xaml.cs">
+      <DependentUpon>TestControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NumericValidationBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
@@ -105,9 +109,13 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="$(MSBuildThisFileDirectory)Controls\DeviceInstanceControl.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Controls\DeviceInstanceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Controls\TestControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

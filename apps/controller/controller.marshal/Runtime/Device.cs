@@ -43,6 +43,11 @@ namespace conct
 			DeviceNative.RemovePort(m_nativeInstance, portHandle);
 		}
 
+		public bool IsThisDevice(DeviceAddress address)
+		{
+			return DeviceNative.IsThisDevice(m_nativeInstance, address.NativeInstance);
+		}
+
 		public Controller Controller
 		{
 			get

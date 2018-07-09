@@ -78,6 +78,11 @@ namespace conct
 			get { return m_typeCollection; }
 		}
 
+		public Device Device
+		{
+			get { return m_device; }
+		}
+
 		public Controller Controller
 		{
 			get { return m_controller; }

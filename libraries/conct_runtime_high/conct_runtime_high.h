@@ -28,6 +28,7 @@ namespace conct
 
 		uintreg					getDeviceCount() const;
 		void					getDevices( Vector< DeviceId >& devices ) const;
+		bool					isThisDevice( const DeviceAddress& address ) const;
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 

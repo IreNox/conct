@@ -1,5 +1,10 @@
-﻿<Grid xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 			 x:Class="conct.DeviceInstanceControl">
-	<Label Text="{Binding TypeName}" />
-</Grid>
+	<ContentView.Content>
+		<StackLayout x:Name="BaseLayout" Orientation="Vertical">
+			<Label Text="{Binding TypeName}" FontSize="Large" BackgroundColor="Accent" />
+		</StackLayout>
+	</ContentView.Content>
+</ContentView>

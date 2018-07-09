@@ -16,6 +16,7 @@ namespace conct
 
 		private Command m_nameCommand;
 		private Command m_instancesCommand;
+		private Command m_devicesCommand;
 
 		public ConnectedDevice(DeviceAddress address)
 		{
@@ -52,7 +53,9 @@ namespace conct
 
 		private void Controller_CommandChanged(Controller sender, Command command)
 		{
-			if (command != m_nameCommand && command != m_instancesCommand)
+			if (command != m_nameCommand &&
+				command != m_instancesCommand &&
+				command != m_devicesCommand)
 			{
 				return;
 			}
@@ -61,23 +64,49 @@ namespace conct
 			{
 				if (command == m_nameCommand)
 				{
-					m_name = m_nameCommand.ResultValue.String;
+					m_name = command.ResultValue.String;
 					OnPropertyChanged("Name");
 
 					m_nameCommand = null;
 				}
 				else if (command == m_instancesCommand)
 				{
-					Value value = m_instancesCommand.ResultValue;
+					Type routerType = App.System.Types.FindType("Core.Router", "");
 
+					Value value = command.ResultValue;
 					object[] instances = value.GetArray(App.System.Types);
 
 					foreach (Instance instance in instances.Cast<Instance>())
 					{
 						m_instances.Add(new DeviceInstance(this, instance));
+
+						if (instance.TypeCrc == routerType.Crc)
+						{
+							m_devicesCommand = App.System.Controller.GetProperty(m_address, instance.InstanceId, "ConnectedDevices");
+						}
 					}
 
 					m_instancesCommand = null;
+				}
+				else if (command == m_devicesCommand)
+				{
+					Value value = command.ResultValue;
+					object[] instances = value.GetArray(App.System.Types);
+
+					foreach (byte deviceId in instances.Cast<byte>())
+					{
+						DeviceAddress address = new DeviceAddress(m_address);
+						address.Push(deviceId);
+
+						if(App.System.Device.IsThisDevice(address))
+						{
+							continue;
+						}
+
+						App.System.Devices.Add(new ConnectedDevice(address));
+					}
+
+					m_devicesCommand = null;
 				}
 			}
 			else
@@ -85,7 +114,7 @@ namespace conct
 				// display error
 			}
 
-			if (m_nameCommand == null && m_instancesCommand == null)
+			if (m_nameCommand == null && m_instancesCommand == null && m_devicesCommand == null)
 			{
 				sender.CommandChanged -= Controller_CommandChanged;
 			}

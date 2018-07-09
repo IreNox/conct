@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using Xamarin.Forms;
 
 namespace conct
@@ -13,7 +10,7 @@ namespace conct
 		{
 			InitializeComponent();
 
-			this.BindingContext = new DeviceListViewModel();
+			BindingContext = new DeviceListViewModel();
 		}
 
 		private void Device_Selected(object sender, SelectedItemChangedEventArgs e)
@@ -26,6 +23,7 @@ namespace conct
 			ConnectedDevice device = (ConnectedDevice)e.SelectedItem;
 
 			Navigation.PushAsync(new DevicePage(device));
+			((ListView)sender).SelectedItem = null;
 		}
 	}
 }

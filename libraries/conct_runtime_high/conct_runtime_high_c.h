@@ -58,6 +58,7 @@ CONCT_DLL conct_value_handle			CONCT_CDECL conct_value_command_get_value( conct_
 // DeviceAddress
 
 CONCT_DLL conct_device_address_handle	CONCT_CDECL conct_device_address_create();
+CONCT_DLL conct_device_address_handle	CONCT_CDECL conct_device_address_duplicate( conct_device_address_handle handle );
 CONCT_DLL void							CONCT_CDECL conct_device_address_destroy( conct_device_address_handle handle );
 
 CONCT_DLL int							CONCT_CDECL conct_device_address_get_device_count( conct_device_address_handle handle );

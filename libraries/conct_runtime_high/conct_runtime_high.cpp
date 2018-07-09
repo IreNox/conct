@@ -24,7 +24,7 @@ namespace conct
 		const Flags8< PortFlag > flags = pPort->getFlags();
 		if( flags.isSet( PortFlag_SingleEndpoint ) )
 		{
-			const DeviceId deviceId = addDevice( pPort, 1u, 0u );
+			const DeviceId deviceId = addDevice( pPort, InvalidDeviceId, 0u );
 			portData.endpointToDevice[ 0u ] = deviceId;
 		}
 
@@ -82,6 +82,28 @@ namespace conct
 		{
 			devices.pushBack( kvp.first );
 		}
+	}
+
+	bool RuntimeHigh::isThisDevice( const DeviceAddress& address ) const
+	{
+		if( address.address[ 0u ] == InvalidDeviceId )
+		{
+			return false;
+		}
+
+		DeviceMap::const_iterator it = m_devices.find( address.address[ 0u ] );
+		if( it == m_devices.end() )
+		{
+			return false;
+		}
+
+		if( it->second.ownDeviceId == InvalidDeviceId ||
+			address.address[ 1u ] == InvalidDeviceId )
+		{
+			return false;
+		}
+
+		return it->second.ownDeviceId == address.address[ 1u ];
 	}
 
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
@@ -397,17 +419,25 @@ namespace conct
 
 	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId )
 	{
+		const DeviceId ownDeviceId = package.target.destinationAddress.getFront();
+
 		PortData::EndpointDeviceMap::iterator endpointIt = portData.endpointToDevice.find( endpointId );
 		if( endpointIt == portData.endpointToDevice.end() )
 		{
-			const DeviceId deviceId = addDevice( pPort, package.target.destinationAddress.getFront(), endpointId );
+			const DeviceId deviceId = addDevice( pPort, ownDeviceId, endpointId );
 			portData.endpointToDevice[ endpointId ] = deviceId;
 
 			package.target.deviceId = deviceId;
 		}
 		else
 		{
-			package.target.deviceId = endpointIt->second;
+			const DeviceId deviceId = endpointIt->second;
+			DeviceData& deviceData = m_devices[ deviceId ];
+
+			CONCT_ASSERT( deviceData.ownDeviceId == InvalidDeviceId || deviceData.ownDeviceId == ownDeviceId );
+			deviceData.ownDeviceId = ownDeviceId;
+
+			package.target.deviceId = deviceId;
 		}
 
 		portData.receivedPackages.pushBack( package.target );

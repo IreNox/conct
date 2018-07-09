@@ -105,9 +105,9 @@
       <Project>{31b13a8f-7469-4c7f-ad31-e03cc428de57}</Project>
       <Name>controller.marshal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\controller.native\controller.native.vcxproj">
+    <ProjectReference Include="..\controller.native\controller.native.android.vcxproj">
       <Project>{a380dc71-4ab0-41c0-84a7-b2d1f8cfbf4b}</Project>
-      <Name>controller.native</Name>
+      <Name>controller.native.android</Name>
       <TargetPlatformIdentifier>Android</TargetPlatformIdentifier>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

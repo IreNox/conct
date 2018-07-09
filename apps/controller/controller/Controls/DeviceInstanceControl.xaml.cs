@@ -8,8 +8,8 @@ using Xamarin.Forms;
 
 namespace conct
 {
-    public sealed partial class DeviceInstanceControl : StackLayout
-    {
+    public partial class DeviceInstanceControl : ContentView
+	{
 		private DeviceInstance m_instance;
 
         public DeviceInstanceControl(DeviceInstance instance)
@@ -19,6 +19,8 @@ namespace conct
             InitializeComponent();
 
 			BindingContext = new DeviceInstanceViewModel(instance);
+
+			BuildUI();
         }
 
 		public DeviceInstance Instance
@@ -88,7 +90,7 @@ namespace conct
 					Children = { nameLabel, control }
 				};
 
-				Children.Add(propLayout);
+				BaseLayout.Children.Add(propLayout);
 			}
 		}
     }

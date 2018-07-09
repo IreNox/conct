@@ -21,6 +21,8 @@ CONCT_DLL conct_controller_handle		CONCT_CDECL conct_device_get_controller( conc
 CONCT_DLL int							CONCT_CDECL conct_device_get_connected_device_count( conct_device_handle handle );
 CONCT_DLL conct_device_address_handle	CONCT_CDECL conct_device_get_connected_device( conct_device_handle handle, int index );
 
+CONCT_DLL bool							CONCT_CDECL conct_device_is_this_device( conct_device_handle handle, conct_device_address_handle addressHandle );
+
 #ifdef __cplusplus
 }
 #endif

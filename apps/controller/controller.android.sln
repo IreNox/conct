@@ -9,7 +9,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "controller", "controller\co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "controller.marshal", "controller.marshal\controller.marshal.csproj", "{31B13A8F-7469-4C7F-AD31-E03CC428DE57}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "controller.native", "controller.native\controller.native.vcxproj", "{A380DC71-4AB0-41C0-84A7-B2D1F8CFBF4B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "controller.native.android", "controller.native\controller.native.android.vcxproj", "{A380DC71-4AB0-41C0-84A7-B2D1F8CFBF4B}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

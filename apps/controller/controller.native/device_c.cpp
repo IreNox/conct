@@ -67,7 +67,7 @@ CONCT_DLL int CONCT_CDECL conct_device_get_connected_device_count( conct_device_
 	return int( fromHandle( handle )->getRuntime().getDeviceCount() );
 }
 
-CONCT_DLL conct_device_address_handle	CONCT_CDECL conct_device_get_connected_device( conct_device_handle handle, int index )
+CONCT_DLL conct_device_address_handle CONCT_CDECL conct_device_get_connected_device( conct_device_handle handle, int index )
 {
 	Vector< DeviceId > devices;
 	fromHandle( handle )->getRuntime().getDevices( devices );
@@ -76,4 +76,9 @@ CONCT_DLL conct_device_address_handle	CONCT_CDECL conct_device_get_connected_dev
 	conct_device_address_handle addressHandle = conct_device_address_create();
 	conct_device_address_push_device( addressHandle, deviceId );
 	return addressHandle;
+}
+
+CONCT_DLL bool CONCT_CDECL conct_device_is_this_device( conct_device_handle handle, conct_device_address_handle addressHandle )
+{
+	return fromHandle( handle )->getRuntime().isThisDevice( *(DeviceAddress*)addressHandle );
 }

@@ -140,6 +140,13 @@ CONCT_DLL conct_device_address_handle CONCT_CDECL conct_device_address_create()
 	return toHandle( pAddress );
 }
 
+CONCT_DLL conct_device_address_handle CONCT_CDECL conct_device_address_duplicate( conct_device_address_handle handle )
+{
+	DeviceAddress* pAddress = new DeviceAddress();
+	*pAddress = *fromHandle( handle );
+	return toHandle( pAddress );
+}
+
 CONCT_DLL void CONCT_CDECL conct_device_address_destroy( conct_device_address_handle handle )
 {
 	delete fromHandle( handle );

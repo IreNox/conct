@@ -25,5 +25,9 @@ namespace conct
 		public static extern int GetConnectedDeviceCount(IntPtr deviceHandle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_get_connected_device")]
 		public static extern IntPtr GetConnectedDevice(IntPtr deviceHandle, int index);
+
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_is_this_device")]
+		[return: MarshalAs(UnmanagedType.U1)]
+		public static extern bool IsThisDevice(IntPtr deviceHandle, IntPtr addressHandle);
 	}
 }

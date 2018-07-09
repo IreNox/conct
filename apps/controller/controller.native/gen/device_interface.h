@@ -3,7 +3,6 @@
 #include "conct_device.h"
 #include "conct_runtime_high.h"
 
-#include "conct_port_tcp_client.h"
 
 #include "core_device_proxy.h"
 
@@ -25,7 +24,6 @@ namespace conct
 
 		RuntimeHigh m_runtime;
 
-		PortTcpClient m_port0;
 
 		DeviceProxy m_proxyDevice;
 

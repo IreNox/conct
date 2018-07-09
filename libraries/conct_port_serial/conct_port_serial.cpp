@@ -44,7 +44,7 @@ namespace conct
 		return true;
 	}
 
-	void PortSerial::setup()
+	bool PortSerial::setup()
 	{
 		m_state					= State_Idle;
 		m_lastSendId			= 0u;
@@ -55,12 +55,12 @@ namespace conct
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		if( gpioInitialise() < 0 )
 		{
-			return;
+			return false;
 		}
 
 		if( !Serial1.setup( m_config.portName ) )
 		{
-			return;
+			return false;
 		}
 #elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
 		Serial.begin( 9600 );
@@ -72,6 +72,8 @@ namespace conct
 		Serial1.begin( s_serialSpeed );
 
 		sendHello();
+
+		return true;
 	}
 
 	void PortSerial::loop()

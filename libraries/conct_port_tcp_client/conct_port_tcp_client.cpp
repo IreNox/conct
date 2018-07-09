@@ -2,8 +2,9 @@
 
 #include "conct_memory.h"
 #include "conct_reader.h"
-#include "conct_writer.h"
+#include "conct_string_tools.h"
 #include "conct_trace.h"
+#include "conct_writer.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <WinSock2.h>
@@ -13,6 +14,7 @@
 #	include <arpa/inet.h>
 #	include <errno.h>
 #	include <fcntl.h>
+#	include <netdb.h>
 #	include <sys/socket.h>
 #endif
 
@@ -74,7 +76,7 @@ namespace conct
 		return true;
 	}
 
-	void PortTcpClient::setup()
+	bool PortTcpClient::setup()
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
@@ -85,7 +87,9 @@ namespace conct
 		m_socket = socket( AF_INET6, SOCK_STREAM, 0 );
 		if( m_socket == -1 )
 		{
-			return;
+			const int error = getLastError();
+			trace::write( "Failed to create Socket. Error: "_s + strerror( error ) );
+			return false;
 		}
 
 		// set non blocking
@@ -93,21 +97,56 @@ namespace conct
 		unsigned long nonBlocking = 1;
 		if( ioctlsocket( m_socket, FIONBIO, &nonBlocking ) == SOCKET_ERROR )
 		{
-			return;
+			trace::write( "Failed to set non blocking mode." );
+			return false;
 		}
 #else
 		const int flags = fcntl( m_socket, F_GETFL, 0 );
 		if( fcntl( m_socket, F_SETFL, flags | O_NONBLOCK ) == -1 )
 		{
-			return;
+			const int error = getLastError();
+			trace::write( "Failed to set non blocking mode. Error: "_s + strerror( error ) );
+			return false;
 		}
 #endif
 
+		addrinfo addressHint;
+		memory::zero( addressHint );
 
-		memory::zero( m_serverAddress );
-		m_serverAddress.sin6_family = AF_INET6;
+		addressHint.ai_socktype = SOCK_STREAM;
+		addressHint.ai_flags = AI_ADDRCONFIG;
+		addressHint.ai_family = AF_INET6;
+		addressHint.ai_protocol = IPPROTO_TCP;
+
+		addrinfo* pAddressResults = nullptr;
+		const int result = getaddrinfo( m_config.targetHost.toConstCharPointer(), nullptr, &addressHint, &pAddressResults );
+		if( result != 0 )
+		{
+			const char* pErrorName = "";
+#if CONCT_DISABLED( CONCT_PLATFORM_WINDOWS )
+			if( result == EAI_SYSTEM )
+			{
+				const int error = getLastError();
+				pErrorName = strerror( error );
+			}
+			else
+			{
+				pErrorName = gai_strerror( result );
+			}
+#endif
+			trace::write( "Failed to get address. Error: "_s + pErrorName );
+			return false;
+		}
+
+		const addrinfo& addressResult = pAddressResults[ 0u ];
+		m_serverAddress = *(sockaddr_in6*)addressResult.ai_addr;
 		m_serverAddress.sin6_port = htons( m_config.targetPort );
-		inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
+
+		freeaddrinfo( pAddressResults );
+		return true;
+		//memory::zero( m_serverAddress );
+		//m_serverAddress.sin6_family = AF_INET6;
+		//inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
 	}
 
 	void PortTcpClient::loop()
@@ -121,7 +160,7 @@ namespace conct
 				const int error = getLastError();
 				if( error != ErrorWouldBlock && error != ErrorAlreadyInProgress )
 				{
-					trace::write( "Couldn't connect to server. Error: "_s + strerror( error ) + "\n" );
+					trace::write( "Couldn't connect to server. Error: "_s + strerror( error ) );
 					m_connectionLost = true;
 					return;
 				}
@@ -135,14 +174,14 @@ namespace conct
 		int retval = getsockopt( m_socket, SOL_SOCKET, SO_ERROR, ( char* )&error, &len );
 		if( retval != 0 )
 		{
-			trace::write( "Couldn't get socket error code. Error: "_s + strerror( retval ) + "\n" );
+			trace::write( "Couldn't get socket error code. Error: "_s + strerror( retval ) );
 			m_connectionLost = true;
 			return;
 		}
 
 		if( error != 0 )
 		{
-			trace::write( "Socket has an error. Error: "_s + strerror( error ) + "\n" );
+			trace::write( "Socket has an error. Error: "_s + strerror( error ) );
 			m_connectionLost = true;
 			return;
 		}

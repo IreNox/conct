@@ -2,16 +2,34 @@
 
 namespace conct
 {
-	public class Command
+	public class Command : IDisposable
 	{
+		private Controller m_controller;
 		private IntPtr m_nativeInstance;
 		private bool m_returnsValue;
 		private Value m_resultValue;
 
-		internal Command(IntPtr nativeInstance, bool returnsValue)
+		internal Command(Controller controller, IntPtr nativeInstance, bool returnsValue)
 		{
+			m_controller = controller;
 			m_nativeInstance = nativeInstance;
 			m_returnsValue = returnsValue;
+		}
+
+		public void Dispose()
+		{
+			if (m_nativeInstance != IntPtr.Zero)
+			{
+				m_controller.ReleaseCommand(this);
+				m_nativeInstance = IntPtr.Zero;
+			}
+
+			m_controller = null;
+		}
+
+		internal IntPtr NativeInstance
+		{
+			get { return m_nativeInstance; }
 		}
 
 		public bool IsBusy

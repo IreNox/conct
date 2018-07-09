@@ -70,6 +70,11 @@ namespace conct
 		processPackages( portData );
 	}
 
+	uintreg RuntimeHigh::getDeviceCount() const
+	{
+		return m_devices.size();
+	}
+
 	void RuntimeHigh::getDevices( Vector< DeviceId >& devices ) const
 	{
 		devices.reserve( m_devices.size() );
@@ -109,6 +114,11 @@ namespace conct
 		}
 
 		return result;
+	}
+
+	bool RuntimeHigh::popFinishCommand( Command*& pCommand )
+	{
+		return m_finishCommands.tryPopFront( pCommand );
 	}
 
 	void RuntimeHigh::processPackages( PortData& portData )
@@ -178,6 +188,8 @@ namespace conct
 				// error
 				return;
 			}
+
+			m_finishCommands.pushBack( pCommand );
 		}
 
 		switch( package.baseHeader.messageType )

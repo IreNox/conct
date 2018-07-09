@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace conct
 {
@@ -11,6 +12,9 @@ namespace conct
 		public Device()
 		{
 			m_nativeInstance = DeviceNative.Create();
+
+			IntPtr controllerHandle = DeviceNative.GetController(m_nativeInstance);
+			m_controller = new Controller(controllerHandle);
 		}
 
 		public void Dispose()
@@ -38,13 +42,24 @@ namespace conct
 		{
 			get
 			{
-				if (m_controller == null)
+				return m_controller;
+			}
+		}
+
+		public List<DeviceAddress> ConnectedDevices
+		{
+			get
+			{
+				List<DeviceAddress> devices = new List<DeviceAddress>();
+
+				int count = DeviceNative.GetConnectedDeviceCount(m_nativeInstance);
+				for (int i = 0; i < count; i++)
 				{
-					IntPtr controllerHandle = DeviceNative.GetController(m_nativeInstance);
-					m_controller = new Controller(controllerHandle);
+					IntPtr addressHandle = DeviceNative.GetConnectedDevice(m_nativeInstance, i);
+					devices.Add(new DeviceAddress(addressHandle));
 				}
 
-				return m_controller;
+				return devices;
 			}
 		}
 	}

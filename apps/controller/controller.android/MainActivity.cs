@@ -10,11 +10,11 @@ namespace conct
     [Activity(Label = "controller", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-		private ConctSystem m_system;
+		private Conct m_system;
 
         protected override void OnCreate(Bundle bundle)
         {
-			m_system = new ConctSystem();
+			m_system = new Conct();
 
 			TabLayoutResource = Resource.Layout.Tabbar;
 			ToolbarResource = Resource.Layout.Toolbar;
@@ -26,10 +26,7 @@ namespace conct
 			LoadApplication(new App(m_system));
 
 			(string configPath, string typesPath) = MoveAssets();
-			if (!m_system.Load(configPath, typesPath))
-			{
-				App.Current.MainPage.DisplayAlert("conct.controller", "Failed to load configuration!", "Close");
-			}
+			m_system.Load(configPath, typesPath);
 		}
 
 		private (string, string) MoveAssets()

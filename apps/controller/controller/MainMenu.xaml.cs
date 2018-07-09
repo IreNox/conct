@@ -33,7 +33,8 @@ namespace conct
             {
                 MenuItems = new ObservableCollection<MainMenuItem>(new[]
                 {
-                    new MainMenuItem() { Image = "icon_house.png", Title = "Home", TargetType=typeof(HomePage) },
+					new MainMenuItem() { Image = "icon_house.png", Title = "Favorites", TargetType=typeof(FavoritesPage) },
+					new MainMenuItem() { Image = "icon_house.png", Title = "Devices", TargetType=typeof(DevicesPage) },
                     new MainMenuItem() { Image = "icon_settings.png", Title = "Settings", TargetType=typeof(SettingsPage) },
 					new MainMenuItem() { Image = "icon_chat.png", Title = "Credits", TargetType=typeof(CreditsPage) },
                 });

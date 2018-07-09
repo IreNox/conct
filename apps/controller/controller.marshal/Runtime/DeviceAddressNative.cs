@@ -1,0 +1,28 @@
+﻿using System;
+using System.Runtime.InteropServices;
+
+namespace conct
+{
+	internal static class DeviceAddressNative
+	{
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_create")]
+		public static extern IntPtr Create();
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_destroy")]
+		public static extern void Destroy(IntPtr handle);
+
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_get_device_count")]
+		public static extern int GetDeviceCount(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_get_device_id")]
+		public static extern Byte GetDevice(IntPtr handle, int index);
+
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_push_device")]
+		public static extern void Push(IntPtr handle, Byte deviceId);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_pop_device")]
+		public static extern Byte Pop(IntPtr handle);
+
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_is_empty")]
+		public static extern bool IsEmpty(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_is_equals")]
+		public static extern bool IsEquals(IntPtr handle1, IntPtr handle2);
+	}
+}

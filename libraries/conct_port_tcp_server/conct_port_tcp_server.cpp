@@ -27,7 +27,7 @@ namespace conct
 #else
 	CONCT_STATIC_ASSERT( sizeof( SocketType ) >= sizeof( int ) );
 #endif
-	
+
 	static const int s_tcpPort = 5489;
 	static const SocketType InvalidSocket = ( SocketType )-1;
 
@@ -62,7 +62,7 @@ namespace conct
 		return true;
 	}
 
-	void PortTcpServer::setup()
+	bool PortTcpServer::setup()
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
@@ -73,7 +73,7 @@ namespace conct
 		m_socket = socket( AF_INET6, SOCK_STREAM, 0 );
 		if( m_socket == -1 )
 		{
-			return;
+			return false;
 		}
 
 		// reuse address
@@ -85,13 +85,13 @@ namespace conct
 		unsigned long nonBlocking = 1;
 		if( ioctlsocket( m_socket, FIONBIO, &nonBlocking ) == SOCKET_ERROR )
 		{
-			return;
+			return false;
 		}
 #else
 		const int flags = fcntl( m_socket, F_GETFL, 0 );
 		if( fcntl( m_socket, F_SETFL, flags | O_NONBLOCK ) == -1 )
 		{
-			return;
+			return false;
 		}
 #endif
 
@@ -104,17 +104,18 @@ namespace conct
 		{
 			const int error = getLastError();
 			trace::write( "Bind failed with an error. Error: "_s + strerror( error ) + "\n" );
-			return;
+			return false;
 		}
 
 		if( listen( m_socket, 5 ) != 0 )
 		{
 			const int error = getLastError();
 			trace::write( "Listen failed with an error. Error: "_s + strerror( error ) + "\n" );
-			return;
+			return false;
 		}
 
 		trace::write( "Listen on port: "_s + string_tools::toString( s_tcpPort ) + "\n" );
+		return true;
 	}
 
 	void PortTcpServer::loop()

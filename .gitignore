@@ -1,6 +1,7 @@
 /**/.vs
 /apps/controller/build
 /apps/controller/controller.android/obj
+/apps/controller/controller.desktop/obj
 /apps/controller/controller.marshal/obj
 /apps/generator/build
 /apps/simulator/build

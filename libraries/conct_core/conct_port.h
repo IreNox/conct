@@ -21,7 +21,7 @@ namespace conct
 
 		virtual bool				popConnectionReset( uintreg& endpointId ) = 0;
 
-		virtual void				setup() = 0;
+		virtual bool				setup() = 0;
 		virtual void				loop() = 0;
 
 		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) = 0;

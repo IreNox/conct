@@ -1,12 +1,12 @@
 #include "device_c.h"
 
-#include "device_android_controller.h"
+#include "device_controller.h"
 
 using namespace conct;
 
-DeviceAndroidController* fromHandle( conct_device_handle handle )
+DeviceController* fromHandle( conct_device_handle handle )
 {
-	return ( DeviceAndroidController* )handle;
+	return (DeviceController* )handle;
 }
 
 PortTcpClient* fromHandle( conct_port_handle handle )
@@ -14,7 +14,7 @@ PortTcpClient* fromHandle( conct_port_handle handle )
 	return ( PortTcpClient* )handle;
 }
 
-conct_device_handle toHandle( const DeviceAndroidController* pClass )
+conct_device_handle toHandle( const DeviceController* pClass )
 {
 	return ( conct_device_handle )pClass;
 }
@@ -31,33 +31,49 @@ conct_controller_handle toHandle( const Controller* pClass )
 
 conct_device_handle CONCT_CDECL conct_device_create()
 {
-	DeviceAndroidController* pDevice = new DeviceAndroidController();
+	DeviceController* pDevice = new DeviceController();
 	pDevice->setupDevice();
 
 	return toHandle( pDevice );
 }
 
-void CONCT_CDECL conct_device_destroy( conct_device_handle handle )
+CONCT_DLL void CONCT_CDECL conct_device_destroy( conct_device_handle handle )
 {
 	delete fromHandle( handle );
 }
 
-void CONCT_CDECL conct_device_loop( conct_device_handle handle )
+CONCT_DLL void CONCT_CDECL conct_device_loop( conct_device_handle handle )
 {
 	fromHandle( handle )->loopDevice();
 }
 
-conct_port_handle CONCT_CDECL conct_device_add_port( conct_device_handle handle, const char* pHostname, uint16_t hostPort )
+CONCT_DLL conct_port_handle CONCT_CDECL conct_device_add_port( conct_device_handle handle, const char* pHostname, uint16_t hostPort )
 {
 	return toHandle( fromHandle( handle )->addPort( pHostname, hostPort ) );
 }
 
-void CONCT_CDECL conct_device_remove_port( conct_device_handle handle, conct_port_handle portHandle )
+CONCT_DLL void CONCT_CDECL conct_device_remove_port( conct_device_handle handle, conct_port_handle portHandle )
 {
 	fromHandle( handle )->removePort( fromHandle( portHandle ) );
 }
 
-conct_controller_handle CONCT_CDECL conct_device_get_controller( conct_device_handle handle )
+CONCT_DLL conct_controller_handle CONCT_CDECL conct_device_get_controller( conct_device_handle handle )
 {
 	return toHandle( &fromHandle( handle )->getController() );
+}
+
+CONCT_DLL int CONCT_CDECL conct_device_get_connected_device_count( conct_device_handle handle )
+{
+	return int( fromHandle( handle )->getRuntime().getDeviceCount() );
+}
+
+CONCT_DLL conct_device_address_handle	CONCT_CDECL conct_device_get_connected_device( conct_device_handle handle, int index )
+{
+	Vector< DeviceId > devices;
+	fromHandle( handle )->getRuntime().getDevices( devices );
+
+	const DeviceId deviceId = devices[ index ];
+	conct_device_address_handle addressHandle = conct_device_address_create();
+	conct_device_address_push_device( addressHandle, deviceId );
+	return addressHandle;
 }

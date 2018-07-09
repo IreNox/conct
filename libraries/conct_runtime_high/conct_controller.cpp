@@ -23,9 +23,18 @@ namespace conct
 
 	void Controller::loop()
 	{
+		Command* pCommand = nullptr;
+		while( m_pRuntime->popFinishCommand( pCommand ) )
+		{
+			for( uintreg i = 0u; i < m_callbacks.getLength(); ++i )
+			{
+				m_callbacks[ i ]( pCommand );
+			}
+		}
+
 		for( uintreg i = 0u; i < m_releaseCommand.getLength(); ++i )
 		{
-			Command* pCommand = m_releaseCommand[ i ];
+			pCommand = m_releaseCommand[ i ];
 			if( !pCommand->isFinish() )
 			{
 				continue;
@@ -80,6 +89,23 @@ namespace conct
 	void Controller::releaseCommand( Command* pCommand )
 	{
 		m_releaseCommand.pushBack( pCommand );
+	}
+
+	void Controller::registerCommandCallback( ControllerCommandCallback callback )
+	{
+		m_callbacks.pushBack( callback );
+	}
+
+	void Controller::unregisterCommandCallback( ControllerCommandCallback callback )
+	{
+		for( uintreg i = 0u; i < m_callbacks.getLength(); ++i )
+		{
+			if( m_callbacks[ i ] == callback )
+			{
+				m_callbacks.eraseUnsortedByIndex( i );
+				return;
+			}
+		}
 	}
 
 	template< class TCommand >

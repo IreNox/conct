@@ -1,5 +1,7 @@
 #pragma once
 
+#include "conct_platform.h"
+
 #include <stdint.h>
 
 #ifdef __cplusplus

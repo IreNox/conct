@@ -39,6 +39,11 @@ conct_value_command_handle toHandle( const ValueCommand* pClass )
 	return ( conct_value_command_handle )pClass;
 }
 
+conct_device_address_handle toHandle( const DeviceAddress* pClass )
+{
+	return ( conct_device_address_handle )pClass;
+}
+
 conct_value_handle toHandle( const ValueHigh* pClass )
 {
 	return ( conct_value_handle )pClass;
@@ -46,7 +51,7 @@ conct_value_handle toHandle( const ValueHigh* pClass )
 
 // Controller
 
-conct_value_command_handle CONCT_CDECL conct_controller_get_property( conct_controller_handle handle, conct_device_address_handle addressHandle, conct_instance_id instanceId, const char* pName )
+CONCT_DLL conct_value_command_handle CONCT_CDECL conct_controller_get_property( conct_controller_handle handle, conct_device_address_handle addressHandle, conct_instance_id instanceId, const char* pName )
 {
 	RemoteInstance instance;
 	runtime::copyDeviceAddress( instance.address, *fromHandle( addressHandle ) );
@@ -55,7 +60,7 @@ conct_value_command_handle CONCT_CDECL conct_controller_get_property( conct_cont
 	return toHandle( fromHandle( handle )->getProperty( instance, pName ) );
 }
 
-conct_command_handle CONCT_CDECL conct_controller_set_property( conct_controller_handle handle, conct_device_address_handle addressHandle, conct_instance_id instanceId, const char* pName, conct_value_handle valueHandle )
+CONCT_DLL conct_command_handle CONCT_CDECL conct_controller_set_property( conct_controller_handle handle, conct_device_address_handle addressHandle, conct_instance_id instanceId, const char* pName, conct_value_handle valueHandle )
 {
 	RemoteInstance instance;
 	runtime::copyDeviceAddress( instance.address, *fromHandle( addressHandle ) );
@@ -64,7 +69,7 @@ conct_command_handle CONCT_CDECL conct_controller_set_property( conct_controller
 	return toHandle( fromHandle( handle )->setProperty( instance, pName, *fromHandle( valueHandle ) ) );
 }
 
-conct_value_command_handle CONCT_CDECL conct_controller_call_function( conct_controller_handle handle, conct_device_address_handle addressHandle, conct_instance_id instanceId, const char* pName, conct_value_handle* pValueHandles, int valueCount )
+CONCT_DLL conct_value_command_handle CONCT_CDECL conct_controller_call_function( conct_controller_handle handle, conct_device_address_handle addressHandle, conct_instance_id instanceId, const char* pName, conct_value_handle* pValueHandles, int valueCount )
 {
 	RemoteInstance instance;
 	runtime::copyDeviceAddress( instance.address, *fromHandle( addressHandle ) );
@@ -76,41 +81,51 @@ conct_value_command_handle CONCT_CDECL conct_controller_call_function( conct_con
 	return toHandle( fromHandle( handle )->callFunction( instance, pName, parameters ) );
 }
 
-void CONCT_CDECL conct_controller_release_command( conct_controller_handle handle, conct_command_handle commandHandle )
+CONCT_DLL void CONCT_CDECL conct_controller_release_command( conct_controller_handle handle, conct_command_handle commandHandle )
 {
 	fromHandle( handle )->releaseCommand( fromHandle( commandHandle ) );
 }
 
+CONCT_DLL void CONCT_CDECL conct_controller_register_command_callback( conct_controller_handle handle, conct_controller_command_callback callback )
+{
+	fromHandle( handle )->registerCommandCallback( (ControllerCommandCallback)callback );
+}
+
+CONCT_DLL void CONCT_CDECL conct_controller_unregister_command_callback( conct_controller_handle handle, conct_controller_command_callback callback )
+{
+	fromHandle( handle )->unregisterCommandCallback( (ControllerCommandCallback)callback );
+}
+
 // Command
 
-bool CONCT_CDECL conct_command_is_busy( conct_command_handle handle )
+CONCT_DLL bool CONCT_CDECL conct_command_is_busy( conct_command_handle handle )
 {
 	return fromHandle( handle )->isBusy();
 }
 
-bool CONCT_CDECL conct_command_is_finish( conct_command_handle handle )
+CONCT_DLL bool CONCT_CDECL conct_command_is_finish( conct_command_handle handle )
 {
 	return fromHandle( handle )->isFinish();
 }
 
-bool CONCT_CDECL conct_command_is_ok( conct_command_handle handle )
+CONCT_DLL bool CONCT_CDECL conct_command_is_ok( conct_command_handle handle )
 {
 	return fromHandle( handle )->isOk();
 }
 
-bool CONCT_CDECL conct_command_is_failure( conct_command_handle handle )
+CONCT_DLL bool CONCT_CDECL conct_command_is_failure( conct_command_handle handle )
 {
 	return fromHandle( handle )->isFailure();
 }
 
 // ValueCommand
 
-extern conct_command_handle conct_value_command_cast_command( conct_value_command_handle handle )
+CONCT_DLL conct_command_handle CONCT_CDECL conct_value_command_cast_command( conct_value_command_handle handle )
 {
 	return ( conct_command_handle )handle;
 }
 
-conct_value_handle CONCT_CDECL conct_value_command_get_value( conct_value_command_handle handle )
+CONCT_DLL conct_value_handle CONCT_CDECL conct_value_command_get_value( conct_value_command_handle handle )
 {
 	ValueHigh* pValue = new ValueHigh( fromHandle(handle)->getValue() );
 	return toHandle( pValue );
@@ -118,146 +133,216 @@ conct_value_handle CONCT_CDECL conct_value_command_get_value( conct_value_comman
 
 // DeviceAddress
 
-
-// Value
-
-conct_value_handle CONCT_CDECL conct_value_create()
+CONCT_DLL conct_device_address_handle CONCT_CDECL conct_device_address_create()
 {
-	return toHandle( new ValueHigh() );
+	DeviceAddress* pAddress = new DeviceAddress();
+	pAddress->address[ 0u ] = InvalidDeviceId;
+	return toHandle( pAddress );
 }
 
-void CONCT_CDECL conct_value_destroy( conct_value_handle handle )
+CONCT_DLL void CONCT_CDECL conct_device_address_destroy( conct_device_address_handle handle )
 {
 	delete fromHandle( handle );
 }
 
-conct_value_type CONCT_CDECL conct_value_get_type( conct_value_handle handle )
+CONCT_DLL int CONCT_CDECL conct_device_address_get_device_count( conct_device_address_handle handle )
+{
+	DeviceAddress* pAdress = fromHandle( handle );
+	for( int i = 0u; i < DeviceAddress::Size; ++i )
+	{
+		if( pAdress->address[ i ] == InvalidDeviceId )
+		{
+			return i;
+		}
+	}
+
+	return 0u;
+}
+
+CONCT_DLL conct_device_id CONCT_CDECL conct_device_address_get_device_id( conct_device_address_handle handle, int index )
+{
+	return fromHandle( handle )->address[ index ];
+}
+
+CONCT_DLL void CONCT_CDECL conct_device_address_push_device( conct_device_address_handle handle, conct_device_id deviceId )
+{
+	DeviceAddress* pAdress = fromHandle( handle );
+	for( uintreg i = 0u; i < DeviceAddress::Size - 1u; ++i )
+	{
+		if( pAdress->address[ i ] == InvalidDeviceId )
+		{
+			pAdress->address[ i ] = deviceId;
+			pAdress->address[ i + 1u ] = InvalidDeviceId;
+			return;
+		}
+	}
+}
+
+CONCT_DLL conct_device_id CONCT_CDECL conct_device_address_pop_device( conct_device_address_handle handle )
+{
+	DeviceAddress* pAdress = fromHandle( handle );
+	for( uintreg i = 1u; i < DeviceAddress::Size; ++i )
+	{
+		if( pAdress->address[ i ] == InvalidDeviceId )
+		{
+			const DeviceId deviceId = pAdress->address[ i - 1u ];
+			pAdress->address[ i - 1u ] = InvalidDeviceId;
+			return deviceId;
+		}
+	}
+
+	return InvalidDeviceId;
+}
+
+CONCT_DLL bool CONCT_CDECL conct_device_address_is_empty( conct_device_address_handle handle )
+{
+	return runtime::isDeviceAddressEmpty( *fromHandle( handle ) );
+}
+
+CONCT_DLL bool CONCT_CDECL conct_device_address_is_equals( conct_device_address_handle handle1, conct_device_address_handle handle2 )
+{
+	return runtime::isDeviceAddressEquals( *fromHandle( handle1 ), *fromHandle( handle2 ) );
+}
+
+// Value
+
+CONCT_DLL conct_value_handle CONCT_CDECL conct_value_create()
+{
+	return toHandle( new ValueHigh() );
+}
+
+CONCT_DLL void CONCT_CDECL conct_value_destroy( conct_value_handle handle )
+{
+	delete fromHandle( handle );
+}
+
+CONCT_DLL conct_value_type CONCT_CDECL conct_value_get_type( conct_value_handle handle )
 {
 	return ( conct_value_type )fromHandle( handle )->getType();
 }
 
-bool CONCT_CDECL conct_value_get_boolean( conct_value_handle handle )
+CONCT_DLL bool CONCT_CDECL conct_value_get_boolean( conct_value_handle handle )
 {
 	return fromHandle( handle )->getBoolean();
 }
 
-int CONCT_CDECL conct_value_get_integer( conct_value_handle handle )
+CONCT_DLL int CONCT_CDECL conct_value_get_integer( conct_value_handle handle )
 {
 	return fromHandle( handle )->getInteger();
 }
 
-unsigned CONCT_CDECL conct_value_get_unsigned( conct_value_handle handle )
+CONCT_DLL unsigned CONCT_CDECL conct_value_get_unsigned( conct_value_handle handle )
 {
 	return fromHandle( handle )->getUnsigned();
 }
 
-const char* CONCT_CDECL conct_value_get_string( conct_value_handle handle )
+CONCT_DLL const char* CONCT_CDECL conct_value_get_string( conct_value_handle handle )
 {
 	return fromHandle( handle )->getString();
 }
 
-conct_percent_value CONCT_CDECL conct_value_get_percent_value( conct_value_handle handle )
+CONCT_DLL conct_percent_value CONCT_CDECL conct_value_get_percent_value( conct_value_handle handle )
 {
 	return fromHandle( handle )->getPercentValue();
 }
 
-conct_guid CONCT_CDECL conct_value_get_guid( conct_value_handle handle )
+CONCT_DLL conct_guid CONCT_CDECL conct_value_get_guid( conct_value_handle handle )
 {
 	return fromHandle( handle )->getGuid();
 }
 
-conct_device_id CONCT_CDECL conct_value_get_device_id( conct_value_handle handle )
+CONCT_DLL conct_device_id CONCT_CDECL conct_value_get_device_id( conct_value_handle handle )
 {
 	return fromHandle( handle )->getDeviceId();
 }
 
-struct conct_instance CONCT_CDECL conct_value_get_instance( conct_value_handle handle )
+CONCT_DLL struct conct_instance CONCT_CDECL conct_value_get_instance( conct_value_handle handle )
 {
 	const Instance instance = fromHandle( handle )->getInstance();
 	return *( conct_instance* )&instance;
 }
 
-conct_type_crc CONCT_CDECL conct_value_get_type_crc( conct_value_handle handle )
+CONCT_DLL conct_type_crc CONCT_CDECL conct_value_get_type_crc( conct_value_handle handle )
 {
 	return fromHandle( handle )->getTypeCrc();
 }
 
-const void* CONCT_CDECL conct_value_get_struct_data( conct_value_handle handle )
+CONCT_DLL const void* CONCT_CDECL conct_value_get_struct_data( conct_value_handle handle )
 {
 	return fromHandle( handle )->getStructData();
 }
 
-int CONCT_CDECL conct_value_get_struct_size( conct_value_handle handle )
+CONCT_DLL int CONCT_CDECL conct_value_get_struct_size( conct_value_handle handle )
 {
-	return fromHandle( handle )->getStructSize();
+	return int( fromHandle( handle )->getStructSize() );
 }
 
-conct_type_crc CONCT_CDECL conct_value_get_struct_type( conct_value_handle handle )
+CONCT_DLL conct_type_crc CONCT_CDECL conct_value_get_struct_type( conct_value_handle handle )
 {
 	return fromHandle( handle )->getStructType();
 }
 
-const void* CONCT_CDECL conct_value_get_array_data( conct_value_handle handle )
+CONCT_DLL const void* CONCT_CDECL conct_value_get_array_data( conct_value_handle handle )
 {
 	return fromHandle( handle )->getArrayData();
 }
 
-int CONCT_CDECL conct_value_get_array_element_size( conct_value_handle handle )
+CONCT_DLL int CONCT_CDECL conct_value_get_array_element_size( conct_value_handle handle )
 {
-	return fromHandle( handle )->getArrayElementSize();
+	return int( fromHandle( handle )->getArrayElementSize() );
 }
 
-int CONCT_CDECL conct_value_get_array_length( conct_value_handle handle )
+CONCT_DLL int CONCT_CDECL conct_value_get_array_length( conct_value_handle handle )
 {
-	return fromHandle( handle )->getArrayLength();
+	return int( fromHandle( handle )->getArrayLength() );
 }
 
-conct_type_crc CONCT_CDECL conct_value_get_array_type( conct_value_handle handle )
+CONCT_DLL conct_type_crc CONCT_CDECL conct_value_get_array_type( conct_value_handle handle )
 {
 	return fromHandle( handle )->getArrayType();
 }
 
-void CONCT_CDECL conct_value_set_void( conct_value_handle handle )
+CONCT_DLL void CONCT_CDECL conct_value_set_void( conct_value_handle handle )
 {
 	fromHandle( handle )->setVoid();
 }
 
-void CONCT_CDECL conct_value_set_boolean( conct_value_handle handle, bool value )
+CONCT_DLL void CONCT_CDECL conct_value_set_boolean( conct_value_handle handle, bool value )
 {
 	fromHandle( handle )->setBoolean( value );
 }
 
-void CONCT_CDECL conct_value_set_integer( conct_value_handle handle, int value )
+CONCT_DLL void CONCT_CDECL conct_value_set_integer( conct_value_handle handle, int value )
 {
 	fromHandle( handle )->setInteger( value );
 }
 
-void CONCT_CDECL conct_value_set_unsigned( conct_value_handle handle, unsigned value )
+CONCT_DLL void CONCT_CDECL conct_value_set_unsigned( conct_value_handle handle, unsigned value )
 {
 	fromHandle( handle )->setUnsigned( value );
 }
 
-void CONCT_CDECL conct_value_set_percent_value( conct_value_handle handle, conct_percent_value value )
+CONCT_DLL void CONCT_CDECL conct_value_set_percent_value( conct_value_handle handle, conct_percent_value value )
 {
 	fromHandle( handle )->setPercentValue( value );
 }
 
-void CONCT_CDECL conct_value_set_guid( conct_value_handle handle, conct_guid value )
+CONCT_DLL void CONCT_CDECL conct_value_set_guid( conct_value_handle handle, conct_guid value )
 {
 	fromHandle( handle )->setGuid( value );
 }
 
-void CONCT_CDECL conct_value_set_device_id( conct_value_handle handle, conct_device_id value )
+CONCT_DLL void CONCT_CDECL conct_value_set_device_id( conct_value_handle handle, conct_device_id value )
 {
 	fromHandle( handle )->setDeviceId( value );
 }
 
-void CONCT_CDECL conct_value_set_instance( conct_value_handle handle, struct conct_instance value )
+CONCT_DLL void CONCT_CDECL conct_value_set_instance( conct_value_handle handle, struct conct_instance value )
 {
 	fromHandle( handle )->setInstance( *(Instance*)&value );
 }
 
-void CONCT_CDECL conct_value_set_type_crc( conct_value_handle handle, conct_type_crc value )
+CONCT_DLL void CONCT_CDECL conct_value_set_type_crc( conct_value_handle handle, conct_type_crc value )
 {
 	fromHandle( handle )->setTypeCrc( value );
 }

@@ -2,7 +2,8 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="conct.MainMenu"
-             Title="Master">
+             Title="Master"
+             BackgroundColor="DarkGray">
     <StackLayout>
         <ListView x:Name="MenuItemsListView"
                   SeparatorVisibility="None"
@@ -22,7 +23,7 @@
                         <RowDefinition Height="10"/>
                     </Grid.RowDefinitions>
                     <Image Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="4" Source="menu_header.png" HorizontalOptions="FillAndExpand" Aspect="AspectFill" />
-                    <Label Grid.Column="1" Grid.Row="2" Text="conct.controller" Style="{DynamicResource SubtitleStyle}" BackgroundColor="GhostWhite" />
+                    <Label Grid.Column="1" Grid.Row="2" Text="conct.controller" Style="{DynamicResource SubtitleStyle}" TextColor="Accent" />
                 </Grid>
             </ListView.Header>
             <ListView.ItemTemplate>

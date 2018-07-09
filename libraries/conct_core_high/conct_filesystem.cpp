@@ -142,7 +142,7 @@ namespace conct
 		DynamicString result;
 		result.reserve( uintreg( pos ) );
 
-		if( fread( result.toCharPointer(), 1u, pos, pFile ) != pos )
+		if( fread( result.toCharPointer(), 1u, size_t( pos ), pFile ) != pos )
 		{
 			fclose( pFile );
 			return createFailureResult< DynamicString >( getResultFromErrno() );
@@ -176,7 +176,7 @@ namespace conct
 		Vector< uint8 > result;
 		result.setLength( uintreg( pos ) );
 
-		if( fread( result.getData(), 1u, pos, pFile ) != pos )
+		if( fread( result.getData(), 1u, size_t( pos ), pFile ) != pos )
 		{
 			fclose( pFile );
 			return createFailureResult< Vector< uint8 > >( getResultFromErrno() );

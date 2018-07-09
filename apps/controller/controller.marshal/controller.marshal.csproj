@@ -41,12 +41,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Misc.cs" />
     <Compile Include="Core\ValueType.cs" />
     <Compile Include="Runtime\Command.cs" />
     <Compile Include="Runtime\CommandNative.cs" />
     <Compile Include="Runtime\ControllerNative.cs" />
     <Compile Include="Runtime\Device.cs" />
     <Compile Include="Runtime\DeviceAddress.cs" />
+    <Compile Include="Runtime\DeviceAddressNative.cs" />
     <Compile Include="Runtime\DeviceNative.cs" />
     <Compile Include="Runtime\Instance.cs" />
     <Compile Include="Runtime\Value.cs" />

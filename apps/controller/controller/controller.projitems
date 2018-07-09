@@ -9,10 +9,6 @@
     <Import_RootNamespace>conct</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml" />
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -24,6 +20,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)MainMenuItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\CreditsPage.xaml.cs">
       <DependentUpon>CreditsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\FavoritesPage.xaml.cs">
+      <DependentUpon>FavoritesPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsConnectionPage.xaml.cs">
@@ -38,13 +38,27 @@
       <DependentUpon>MainMenu.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Views\MainViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DevicesViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\DevicesPage.xaml.cs">
+      <DependentUpon>DevicesPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ServerViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\SettingsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Extensions\Collection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Conct.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\Config.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\ConnectedDevice.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\DevicesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Main.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -66,6 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\CreditsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\FavoritesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>

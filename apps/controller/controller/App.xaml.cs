@@ -7,9 +7,9 @@ namespace conct
 {
 	public partial class App : Application
 	{
-		private ConctSystem m_system;
+		private Conct m_system;
 
-		public App(ConctSystem system)
+		public App(Conct system)
 		{
 			m_system = system;
 
@@ -33,7 +33,7 @@ namespace conct
 			// Handle when your app resumes
 		}
 
-		public static ConctSystem System
+		public static Conct System
 		{
 			get
 			{

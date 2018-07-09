@@ -5,13 +5,38 @@ using System;
 
 namespace conct
 {
-	public class Controller
+	public class Controller : IDisposable
 	{
+		public event Event<Controller, Command> CommandChanged;
+
 		private IntPtr m_nativeInstance;
+		private IntPtr m_nativeCallback;
+		private List<Command> m_commands;
 
 		internal Controller(IntPtr nativeInstance)
 		{
 			m_nativeInstance = nativeInstance;
+			m_commands = new List<Command>();
+
+			m_nativeCallback = Marshal.GetFunctionPointerForDelegate<ControllerNative.CommandChangedDelegate>(HandleCallback);
+			ControllerNative.RegisterCommandCallback(m_nativeInstance, m_nativeCallback);
+		}
+
+		public void Dispose()
+		{
+			while(m_commands.Count > 0)
+			{
+				m_commands[0].Dispose();
+			}
+
+			if (m_nativeCallback != IntPtr.Zero)
+			{
+				ControllerNative.UnregisterCommandCallback(m_nativeInstance, m_nativeCallback);
+				m_nativeCallback = IntPtr.Zero;
+			}
+
+			m_nativeInstance = IntPtr.Zero;
+			m_commands = null;
 		}
 
 		public Command GetProperty(DeviceAddress deviceAddress, UInt16 instanceId, string name)
@@ -22,7 +47,9 @@ namespace conct
 				return null;
 			}
 
-			return new Command(commandHandle, true);
+			Command command = new Command(this, commandHandle, true);
+			m_commands.Add(command);
+			return command;
 		}
 
 		public Command SetProperty(DeviceAddress deviceAddress, UInt16 instanceId, string name, Value value)
@@ -33,7 +60,9 @@ namespace conct
 				return null;
 			}
 
-			return new Command(commandHandle, false);
+			Command command = new Command(this, commandHandle, false);
+			m_commands.Add(command);
+			return command;
 		}
 
 		public Command CallFunction(DeviceAddress deviceAddress, UInt16 instanceId, string name, Value[] values)
@@ -55,7 +84,29 @@ namespace conct
 				return null;
 			}
 
-			return new Command(commandHandle, true);
+			Command command = new Command(this, commandHandle, true);
+			m_commands.Add(command);
+			return command;
+		}
+
+		internal void ReleaseCommand(Command command)
+		{
+			m_commands.Remove(command);
+			ControllerNative.ReleaseCommand(m_nativeInstance, command.NativeInstance);
+		}
+
+		private void HandleCallback(IntPtr commandHandle)
+		{
+			if (CommandChanged == null)
+			{
+				return;
+			}
+
+			Command command = m_commands.FirstOrDefault(c => c.NativeInstance == commandHandle);
+			if (command != null)
+			{
+				CommandChanged(this, command);
+			}
 		}
 	}
 }

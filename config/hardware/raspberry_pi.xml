@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<hardware name="RaspberryPi" runtime="high">
-	<specifications>
-		<program>-1</program>
-		<ram>-1</ram>
-		<flash>-1</flash>
-	</specifications>
-</hardware>

@@ -26,11 +26,13 @@ namespace conct
 
 		void					processPort( Port* pPort );
 
+		uintreg					getDeviceCount() const;
 		void					getDevices( Vector< DeviceId >& devices ) const;
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
 		ResultId				sendPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
+		bool					popFinishCommand( Command*& pCommand );
 
 	private:
 
@@ -104,17 +106,19 @@ namespace conct
 
 		typedef std::map< Port*, PortData > PortMap;
 		typedef std::map< DeviceId, DeviceData > DeviceMap;
+		typedef Queue< Command* > CommandQueue;
 
 		Device*				m_pDevice;
 
 		PortMap				m_ports;
 		DeviceMap			m_devices;
 
+		CommandQueue		m_finishCommands;
+
 		DeviceId			addDevice( Port* pPort, DeviceId ownDeviceId, uintreg endpointId );
 
 		void				readPort( Port* pPort, PortData& portData );
 		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );
-		//void				readMagic( PendingReceivedPackage& package, Reader& reader );
 		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader );
 		void				readBytes( Vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState );
 		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId );

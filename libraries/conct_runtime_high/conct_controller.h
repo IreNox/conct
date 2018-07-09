@@ -11,6 +11,8 @@ namespace conct
 	class DataBuilder;
 	class RuntimeHigh;
 
+	typedef void( CONCT_CDECL *ControllerCommandCallback )( Command* pCommand );
+
 	class Controller
 	{
 	public:
@@ -28,10 +30,14 @@ namespace conct
 
 		void								releaseCommand( Command* pCommand );
 
+		void								registerCommandCallback( ControllerCommandCallback callback );
+		void								unregisterCommandCallback( ControllerCommandCallback callback );
+
 	private:
 
 		RuntimeHigh*						m_pRuntime;
 
+		Vector< ControllerCommandCallback >	m_callbacks;
 		Vector< Command* >					m_releaseCommand;
 
 		template< class TCommand >

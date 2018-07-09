@@ -31,7 +31,7 @@ namespace conct
 
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
-		virtual void				setup() CONCT_OVERRIDE_FINAL;
+		virtual bool				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
 		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) CONCT_OVERRIDE_FINAL;

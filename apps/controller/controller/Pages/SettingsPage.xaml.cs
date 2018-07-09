@@ -22,7 +22,6 @@ namespace conct
 
 		protected override void OnAppearing()
 		{
-			RefreshServers();
 			base.OnAppearing();
 		}
 
@@ -35,15 +34,28 @@ namespace conct
 
 			ServerData server = ((ServerViewModel)e.SelectedItem).Data;
 
-			var action = await DisplayActionSheet("Select a action", "Cancel", "Delete", "Edit");
-			if(action == "Delete")
+			List<string> options = new List<string>();
+			options.Add("Edit");
+
+			if(server.Handle == IntPtr.Zero)
 			{
-				App.System.RemoveServer(server);
-				RefreshServers();
+				options.Add("Reconnect");
 			}
-			else if(action == "Edit")
+
+			options.Add("Delete");
+
+			var action = await DisplayActionSheet("Select a action", "Cancel", null, options.ToArray());
+			if (action == "Edit")
 			{
 				await Navigation.PushAsync(new SettingsConnectionPage(server));
+			}
+			else if (action == "Reconnect")
+			{
+				App.System.ReconnectServer(server);
+			}
+			else if (action == "Delete")
+			{
+				App.System.RemoveServer(server);
 			}
 
 			ListView listView = (ListView)sender;
@@ -53,11 +65,6 @@ namespace conct
 		private void AddServer()
 		{
 			Navigation.PushAsync(new SettingsConnectionPage(null));
-		}
-
-		private void RefreshServers()
-		{
-			((SettingsViewModel)BindingContext).OnPropertyChanged("Servers");
 		}
 	}
 }

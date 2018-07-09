@@ -431,19 +431,14 @@ namespace conct
 			return;
 		}
 
-		uintreg index = currentPackage.currentOffset;
-		while( !writer.isEnd() && index < currentPackage.data.getLength() )
+		while( !writer.isEnd() && currentPackage.currentOffset < currentPackage.data.getLength() )
 		{
-			writer.writeByte( currentPackage.data[ index++ ] );
+			writer.writeByte( currentPackage.data[ currentPackage.currentOffset++ ] );
 		}
 
-		if( index == currentPackage.data.getLength() )
+		if( currentPackage.currentOffset == currentPackage.data.getLength() )
 		{
 			portData.sendPackages.popFront();
-		}
-		else
-		{
-			currentPackage.currentOffset = index;
 		}
 
 		pPort->closeSend( writer, currentPackage.targetEndpointId );

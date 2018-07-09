@@ -28,6 +28,11 @@ namespace conct
 			}
 		}
 
+		public void Loop()
+		{
+			DeviceNative.Loop(m_nativeInstance);
+		}
+
 		public IntPtr AddPort(string hostname, UInt16 hostPort)
 		{
 			return DeviceNative.AddPort(m_nativeInstance, hostname, hostPort);

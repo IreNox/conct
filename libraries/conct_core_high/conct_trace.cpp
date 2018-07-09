@@ -18,6 +18,7 @@ namespace conct
 		puts( pString );
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		OutputDebugStringA( pString );
+		OutputDebugStringA( "\n" );
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		__android_log_write( ANDROID_LOG_INFO, "conct", pString );
 #endif

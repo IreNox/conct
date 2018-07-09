@@ -26,5 +26,7 @@ namespace conct
 	private:
 
 		Controller					m_controller;
+
+		Vector< PortTcpClient* >	m_ports;
 	};
 }

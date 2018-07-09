@@ -67,6 +67,11 @@ namespace conct
 			return result;
 		}
 
+		public void Loop()
+		{
+			m_device.Loop();
+		}
+
 		public Controller Controller
 		{
 			get { return m_controller; }

@@ -18,12 +18,22 @@ namespace conct
 			return nullptr;
 		}
 
+		m_ports.pushBack( pPort );
 		m_runtime.registerPort( pPort );
 		return pPort;
 	}
 
 	void DeviceController::removePort( PortTcpClient* pPort )
 	{
+		for( uintreg i = 0u; i < m_ports.getLength(); ++i )
+		{
+			if( m_ports[ i ] == pPort )
+			{
+				m_ports.eraseUnsortedByIndex( i );
+				break;
+			}
+		}
+
 		m_runtime.unregisterPort( pPort );
 		delete pPort;
 	}
@@ -35,6 +45,12 @@ namespace conct
 
 	void DeviceController::loop()
 	{
+		for( PortTcpClient* pPort : m_ports )
+		{
+			pPort->loop();
+			m_runtime.processPort( pPort );
+		}
+
 		m_controller.loop();
 	}
 }

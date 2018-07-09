@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace conct.Core
+namespace conct
 {
 	public enum ValueType
 	{

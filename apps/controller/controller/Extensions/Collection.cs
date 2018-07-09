@@ -7,7 +7,7 @@ namespace conct
 {
 	public static class CollectionExtensions
 	{
-		public static void Sync<TTarget, TSource>(this ObservableCollection<TTarget> targets, IEnumerable<TSource> sources, Func<TSource, TTarget, bool> compareFunc, Func<TSource, TTarget> createFunc)
+		public static void Sync<TTarget, TSource>(this ICollection<TTarget> targets, IEnumerable<TSource> sources, Func<TSource, TTarget, bool> compareFunc, Func<TSource, TTarget> createFunc)
 		{
 			List<TTarget> targetsToRemove = new List<TTarget>();
 			foreach (TTarget target in targets)

@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
+using System;
 
 namespace conct
 {
@@ -11,7 +12,7 @@ namespace conct
 		private DeviceAddress m_address;
 
 		private string m_name;
-		private ObservableCollection<Instance> m_instances;
+		private ObservableCollection<DeviceInstance> m_instances;
 
 		private Command m_nameCommand;
 		private Command m_instancesCommand;
@@ -20,7 +21,7 @@ namespace conct
 		{
 			m_address = address;
 			m_name = address.Text;
-			m_instances = new ObservableCollection<Instance>();
+			m_instances = new ObservableCollection<DeviceInstance>();
 
 			Controller controller = App.System.Controller;
 			controller.CommandChanged += Controller_CommandChanged;
@@ -44,7 +45,7 @@ namespace conct
 			get { return m_address.Text; }
 		}
 
-		public ObservableCollection<Instance> Instances
+		public ObservableCollection<DeviceInstance> Instances
 		{
 			get { return m_instances; }
 		}
@@ -62,10 +63,21 @@ namespace conct
 				{
 					m_name = m_nameCommand.ResultValue.String;
 					OnPropertyChanged("Name");
+
+					m_nameCommand = null;
 				}
 				else if (command == m_instancesCommand)
 				{
-					//m_instancesCommand.ResultValue.Instance
+					Value value = m_instancesCommand.ResultValue;
+
+					object[] instances = value.GetArray(App.System.Types);
+
+					foreach (Instance instance in instances.Cast<Instance>())
+					{
+						m_instances.Add(new DeviceInstance(this, instance));
+					}
+
+					m_instancesCommand = null;
 				}
 			}
 			else
@@ -73,7 +85,10 @@ namespace conct
 				// display error
 			}
 
-			sender.CommandChanged -= Controller_CommandChanged;
+			if (m_nameCommand == null && m_instancesCommand == null)
+			{
+				sender.CommandChanged -= Controller_CommandChanged;
+			}
 			command.Dispose();
 		}
 

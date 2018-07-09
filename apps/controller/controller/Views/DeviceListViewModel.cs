@@ -5,9 +5,9 @@ using System.Text;
 
 namespace conct
 {
-    public class DevicesViewModel
+    public class DeviceListViewModel
 	{
-		public DevicesViewModel()
+		public DeviceListViewModel()
 		{
 		}
 

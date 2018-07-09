@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 
 namespace conct
 {
-    public class SettingsViewModel
+    public class ServerListViewModel
 	{
 		private ObservableCollection<ServerViewModel> m_servers;
 
-		public SettingsViewModel()
+		public ServerListViewModel()
 		{
 			m_servers = new ObservableCollection<ServerViewModel>();
 			SyncServers();

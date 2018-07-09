@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace conct
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class FavoritesPage : ContentPage
+	public partial class FavoriteListPage : ContentPage
 	{
-		public FavoritesPage()
+		public FavoriteListPage()
 		{
 			InitializeComponent();
 		}

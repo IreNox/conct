@@ -35,7 +35,7 @@ namespace conct
 
 			DirectoryInfo executableDir = Directory.GetParent(Assembly.GetExecutingAssembly().Location);
 			string configPath = executableDir.ToString();
-			string typesPath = System.IO.Path.Combine(executableDir.Parent.Parent.Parent.ToString(), "config/types");
+			string typesPath = System.IO.Path.Combine(executableDir.Parent.Parent.Parent.Parent.FullName, "config/types");
 			m_system.Load(configPath, typesPath);
 		}
 	}

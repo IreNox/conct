@@ -10,19 +10,14 @@ using Xamarin.Forms.Xaml;
 namespace conct
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SettingsPage : ContentPage
+    public partial class ServerListPage : ContentPage
     {
-        public SettingsPage()
+        public ServerListPage()
         {
             InitializeComponent();
-			BindingContext = new SettingsViewModel();
+			BindingContext = new ServerListViewModel();
 
 			ToolbarItems.Add(new ToolbarItem("Add Server", null, AddServer));
-		}
-
-		protected override void OnAppearing()
-		{
-			base.OnAppearing();
 		}
 
 		private async void Server_Selected(object sender, SelectedItemChangedEventArgs e)
@@ -47,7 +42,7 @@ namespace conct
 			var action = await DisplayActionSheet("Select a action", "Cancel", null, options.ToArray());
 			if (action == "Edit")
 			{
-				await Navigation.PushAsync(new SettingsConnectionPage(server));
+				await Navigation.PushAsync(new ServerPage(server));
 			}
 			else if (action == "Reconnect")
 			{
@@ -64,7 +59,7 @@ namespace conct
 
 		private void AddServer()
 		{
-			Navigation.PushAsync(new SettingsConnectionPage(null));
+			Navigation.PushAsync(new ServerPage(null));
 		}
 	}
 }

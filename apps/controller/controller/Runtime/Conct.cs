@@ -73,6 +73,11 @@ namespace conct
 			m_device.Loop();
 		}
 
+		public TypeCollection Types
+		{
+			get { return m_typeCollection; }
+		}
+
 		public Controller Controller
 		{
 			get { return m_controller; }

@@ -9,7 +9,7 @@
     <MasterDetailPage.Detail>
         <NavigationPage>
             <x:Arguments>
-                <local:DevicesPage />
+				<local:FavoriteListPage />
             </x:Arguments>
         </NavigationPage>
     </MasterDetailPage.Detail>

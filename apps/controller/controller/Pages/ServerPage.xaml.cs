@@ -10,11 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace conct
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class SettingsConnectionPage : ContentPage
+	public partial class ServerPage : ContentPage
 	{
 		private ServerData m_data;
 
-		public SettingsConnectionPage(ServerData data)
+		public ServerPage(ServerData data)
 		{
 			InitializeComponent();
 

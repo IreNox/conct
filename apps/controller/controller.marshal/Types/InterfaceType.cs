@@ -2,7 +2,7 @@
 
 namespace conct
 {
-	struct InterfaceProperty
+	public struct InterfaceProperty
 	{
 		public string Name;
 		public Type Type;
@@ -10,14 +10,14 @@ namespace conct
 		public bool HasSetter;
 	}
 
-	struct InterfaceFunction
+	public struct InterfaceFunction
 	{
 		public string Name;
 		public Type ReturnType;
 		public InterfaceFunctionParameter[] Parameters;
 	}
 
-	struct InterfaceFunctionParameter
+	public struct InterfaceFunctionParameter
 	{
 		public string Name;
 		public Type Type;
@@ -36,22 +36,22 @@ namespace conct
 			m_collection = collection;
         }
 
-		Type BaseType
+		public Type BaseType
 		{
 			get { return m_collection.GetTypeFromHandle(InterfaceTypeNative.GetBaseType(m_nativeInstance)); }
 		}
 
-		bool Internal
+		public bool Internal
 		{
 			get { return InterfaceTypeNative.GetInternal(m_nativeInstance); }
 		}
 
-		bool Singleton
+		public bool Singleton
 		{
 			get { return InterfaceTypeNative.GetSingleton(m_nativeInstance); }
 		}
 
-		InterfaceProperty[] Properties
+		public InterfaceProperty[] Properties
 		{
 			get
 			{
@@ -60,7 +60,7 @@ namespace conct
 			}
 		}
 
-		InterfaceFunction[] Functions
+		public InterfaceFunction[] Functions
 		{
 			get
 			{

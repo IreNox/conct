@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Text;
 
 namespace conct
 {
@@ -17,9 +16,14 @@ namespace conct
 			m_device.PropertyChanged += Device_PropertyChanged;
 		}
 
-		public String Title
+		public string Title
 		{
 			get { return m_device.Name; }
+		}
+
+		public ObservableCollection<DeviceInstance> Instances
+		{
+			get { return m_device.Instances; }
 		}
 
 		private void Device_PropertyChanged(object sender, PropertyChangedEventArgs e)

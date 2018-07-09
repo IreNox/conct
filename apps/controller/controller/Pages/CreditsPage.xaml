@@ -4,9 +4,14 @@
              x:Class="conct.CreditsPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+            <Label Text="Programming:" Font="Bold" />
+			<Label Text="Tim Boden" />
+			<Label Text=" " />
+			<Label Text="Icons:" Font="Bold" />
+			<Label Text="Made by Gregor Cresnar from www.flaticon.com is licensed by CC 3.0 BY" />
+			<Label Text=" " />
+			<Label Text="Pictures:" Font="Bold" />
+			<Label Text="picture license" />
+		</StackLayout>
     </ContentPage.Content>
 </ContentPage>

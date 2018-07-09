@@ -12,6 +12,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\DeviceInstanceControl.xaml.cs">
+      <DependentUpon>DeviceInstanceControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\NumericValidationBehavior.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Main.xaml.cs">
       <DependentUpon>Main.xaml</DependentUpon>
@@ -22,29 +25,34 @@
       <DependentUpon>CreditsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\FavoritesPage.xaml.cs">
-      <DependentUpon>FavoritesPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\DevicePage.xaml.cs">
+      <DependentUpon>DevicePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\FavoriteListPage.xaml.cs">
+      <DependentUpon>FavoriteListPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsConnectionPage.xaml.cs">
-      <DependentUpon>SettingsConnectionPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\ServerPage.xaml.cs">
+      <DependentUpon>ServerPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\ServerListPage.xaml.cs">
+      <DependentUpon>ServerListPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\DeviceInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceInstanceViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\DevicesViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Pages\DevicesPage.xaml.cs">
-      <DependentUpon>DevicesPage.xaml</DependentUpon>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceListViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\DeviceListPage.xaml.cs">
+      <DependentUpon>DeviceListPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Views\ServerViewModel.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Views\SettingsViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ServerListViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Extensions\Collection.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Conct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\Config.cs" />
@@ -55,7 +63,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\DevicesPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\DeviceListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -67,13 +75,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\SettingsPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\ServerListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\SettingsConnectionPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\ServerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -85,9 +93,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\FavoritesPage.xaml">
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\FavoriteListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\DevicePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Controls\DeviceInstanceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

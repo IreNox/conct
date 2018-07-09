@@ -146,6 +146,20 @@ namespace conct
 	}
 
 	template< class T >
+	T& Queue<T>::operator[]( uintreg index )
+	{
+		const uintreg queueIndex = (m_top + index) % m_capacity;
+		return m_pData[ queueIndex ];
+	}
+
+	template< class T >
+	const T& Queue<T>::operator[]( uintreg index ) const
+	{
+		const uintreg queueIndex = (m_top + index) % m_capacity;
+		return m_pData[ queueIndex ];
+	}
+
+	template< class T >
 	Queue< T >& Queue< T >::operator=( const Queue& rhs )
 	{
 		clear();
@@ -167,11 +181,13 @@ namespace conct
 
 		for( uintreg i = 0u; i < m_length; ++i )
 		{
-			pNewData[ i ] = m_pData[ i ];
+			pNewData[ i ] = (*this)[ i ];
 		}
 
 		delete[] m_pData;
 		m_pData = pNewData;
+		m_top = 0u;
+		m_bottom = m_length;
 		m_capacity = nextCapacity;
 	}
 }

@@ -105,6 +105,8 @@ CONCT_DLL void							CONCT_CDECL conct_value_set_guid( conct_value_handle handle
 CONCT_DLL void							CONCT_CDECL conct_value_set_device_id( conct_value_handle handle, conct_device_id value );
 CONCT_DLL void							CONCT_CDECL conct_value_set_instance( conct_value_handle handle, struct conct_instance value );
 CONCT_DLL void							CONCT_CDECL conct_value_set_type_crc( conct_value_handle handle, conct_type_crc value );
+CONCT_DLL void							CONCT_CDECL conct_value_set_struct( conct_value_handle handle, const void* pData, int size, conct_type_crc type );
+CONCT_DLL void							CONCT_CDECL conct_value_set_array( conct_value_handle handle, const void* pData, int elementSize, int length, conct_type_crc type );
 
 #ifdef __cplusplus
 }

@@ -36,6 +36,9 @@ namespace conct
 		T&				getFront();
 		const T&		getFront() const;
 
+		T&				operator[]( uintreg index );
+		const T&		operator[]( uintreg index ) const;
+
 		Queue&			operator=( const Queue& rhs );
 
 	private:

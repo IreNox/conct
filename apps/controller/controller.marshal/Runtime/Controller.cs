@@ -10,6 +10,7 @@ namespace conct
 		public event Event<Controller, Command> CommandChanged;
 
 		private IntPtr m_nativeInstance;
+		private ControllerNative.CommandChangedDelegate m_managedCallback;
 		private IntPtr m_nativeCallback;
 		private List<Command> m_commands;
 
@@ -18,7 +19,8 @@ namespace conct
 			m_nativeInstance = nativeInstance;
 			m_commands = new List<Command>();
 
-			m_nativeCallback = Marshal.GetFunctionPointerForDelegate<ControllerNative.CommandChangedDelegate>(HandleCallback);
+			m_managedCallback = HandleCallback;
+			m_nativeCallback = Marshal.GetFunctionPointerForDelegate<ControllerNative.CommandChangedDelegate>(m_managedCallback);
 			ControllerNative.RegisterCommandCallback(m_nativeInstance, m_nativeCallback);
 		}
 
@@ -33,6 +35,7 @@ namespace conct
 			{
 				ControllerNative.UnregisterCommandCallback(m_nativeInstance, m_nativeCallback);
 				m_nativeCallback = IntPtr.Zero;
+				m_managedCallback = null;
 			}
 
 			m_nativeInstance = IntPtr.Zero;

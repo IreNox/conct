@@ -34,7 +34,18 @@ namespace conct
 
 		public bool Load(string path)
 		{
-			return TypeCollectionNative.Load(m_nativeInstance, path);
+			if (!TypeCollectionNative.Load(m_nativeInstance, path))
+			{
+				return false;
+			}
+
+			Type instanceType = FindType("Instance", "");
+			if (instanceType != null)
+			{
+				instanceType.ManagedType = typeof(Instance);
+			}
+
+			return true;
 		}
 
 		public Type FindType(string name, string referenceNamespace)
@@ -47,6 +58,11 @@ namespace conct
 		{
 			IntPtr typeHandle = TypeCollectionNative.FindTypeByCrc(m_nativeInstance, typeCrc);
 			return GetTypeFromHandle(typeHandle);
+		}
+
+		public Type FindTypeByManagedType(System.Type type)
+		{
+			return m_types.FirstOrDefault(t => t.ManagedType == type);
 		}
 
 		public InterfaceType FindInterface(string name, string referenceNamespace)
@@ -64,6 +80,12 @@ namespace conct
 		public StructType FindStruct(string name, string referenceNamespace)
 		{
 			IntPtr typeHandle = TypeCollectionNative.FindStruct(m_nativeInstance, name, referenceNamespace);
+			return GetTypeFromHandle(typeHandle) as StructType;
+		}
+
+		public StructType FindStructByCrc(UInt16 typeCrc)
+		{
+			IntPtr typeHandle = TypeCollectionNative.FindStructByCrc(m_nativeInstance, typeCrc);
 			return GetTypeFromHandle(typeHandle) as StructType;
 		}
 

@@ -43,11 +43,14 @@ namespace conct
 		void			setBoolean( bool value );
 		void			setInteger( sint32 value );
 		void			setUnsigned( uint32 value );
+		void			setString( const char* pValue );
 		void			setPercentValue( PercentValue value );
 		void			setGuid( Guid value );
 		void			setDeviceId( DeviceId value );
 		void			setInstance( Instance value );
 		void			setTypeCrc( TypeCrc value );
+		void			setStruct( const void* pData, uintreg size, TypeCrc type );
+		void			setArray( const void* pData, uintreg elementSize, uintreg length, TypeCrc type );
 
 	private:
 

@@ -46,6 +46,7 @@ CONCT_DLL conct_type_handle					CONCT_CDECL conct_type_collection_find_type_by_c
 CONCT_DLL conct_interface_type_handle		CONCT_CDECL conct_type_collection_find_interface( conct_type_collection_handle handle, const char* pFullname, const char* pReferenceNamespace );
 CONCT_DLL conct_interface_type_handle		CONCT_CDECL conct_type_collection_find_interface_by_crc( conct_type_collection_handle handle, conct_type_crc typeCrc );
 CONCT_DLL conct_struct_type_handle			CONCT_CDECL conct_type_collection_find_struct( conct_type_collection_handle handle, const char* pFullname, const char* pReferenceNamespace );
+CONCT_DLL conct_struct_type_handle			CONCT_CDECL conct_type_collection_find_struct_by_crc( conct_type_collection_handle handle, conct_type_crc typeCrc );
 
 CONCT_DLL conct_array_type_handle			CONCT_CDECL conct_type_collection_make_array( conct_type_collection_handle handle, conct_type_handle typeHandle );
 

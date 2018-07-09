@@ -9,8 +9,10 @@ namespace conct
 		public static extern IntPtr GetBaseType(IntPtr handle);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_internal")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool GetInternal(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_singleton")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool GetSingleton(IntPtr handle);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_count")]
@@ -21,8 +23,10 @@ namespace conct
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_type")]
 		public static extern IntPtr GetPropertyType(IntPtr handle, int index);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_has_getter")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool GetPropertyHasGetter(IntPtr handle, int index);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_has_setter")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool GetPropertyHasSetter(IntPtr handle, int index);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_function_count")]

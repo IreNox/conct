@@ -131,7 +131,7 @@ namespace conct
 		return nullptr;
 	}
 
-	const conct::StructType* TypeCollection::findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace )
+	const StructType* TypeCollection::findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
 		if( pType != nullptr && pType->getDescription() == TypeDescription_Struct )
@@ -142,7 +142,18 @@ namespace conct
 		return nullptr;
 	}
 
-	const conct::ArrayType* TypeCollection::makeArray( const Type* pBaseType )
+	const StructType* TypeCollection::findStructByCrc( TypeCrc typeCrc )
+	{
+		const Type* pType = findTypeByCrc( typeCrc );
+		if( pType != nullptr && pType->getDescription() == TypeDescription_Struct )
+		{
+			return static_cast<const StructType*>(pType);
+		}
+
+		return nullptr;
+	}
+
+	const ArrayType* TypeCollection::makeArray( const Type* pBaseType )
 	{
 		for( const ArrayType* pArray : m_arrays )
 		{

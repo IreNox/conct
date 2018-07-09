@@ -5,6 +5,7 @@ namespace conct
 	public class Type
 	{
 		protected IntPtr m_nativeInstance;
+		private System.Type m_managedType;
 
 		public Type(IntPtr nativeInstance)
 		{
@@ -54,6 +55,12 @@ namespace conct
 		public UInt16 Crc
 		{
 			get { return TypeNative.GetCrc(m_nativeInstance); }
+		}
+
+		public System.Type ManagedType
+		{
+			get { return m_managedType; }
+			set { m_managedType = value; }
 		}
 	}
 }

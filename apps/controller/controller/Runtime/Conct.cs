@@ -26,6 +26,7 @@ namespace conct
 			m_device = new Device();
 			m_controller = m_device.Controller;
 			m_typeCollection = new TypeCollection();
+			m_devices = new ObservableCollection<ConnectedDevice>();
 		}
 
 		public void Dispose()
@@ -57,7 +58,7 @@ namespace conct
 			result &= LoadConfig();
 			result &= m_typeCollection.Load(typesPath);
 
-			LoadDevices();
+			SyncDevices();
 
 			if (!result)
 			{
@@ -91,6 +92,11 @@ namespace conct
 		{
 			ServerData data = AddServerInternal(config);
 			SaveConfig();
+
+			if (data.Handle != IntPtr.Zero)
+			{
+				SyncDevices();
+			}
 
 			return data;
 		}
@@ -129,6 +135,7 @@ namespace conct
 			if (data.Handle != IntPtr.Zero)
 			{
 				m_device.RemovePort(data.Handle);
+				SyncDevices();
 			}
 
 			m_servers.Remove(data);
@@ -178,8 +185,6 @@ namespace conct
 				XmlSerializer serializer = new XmlSerializer(typeof(SystemConfig));
 				using (XmlWriter writer = XmlWriter.Create(configPath))
 				{
-					writer.Settings.NewLineHandling = NewLineHandling.Entitize;
-
 					SystemConfig config = new SystemConfig();
 					config.Servers = m_servers.Select(s => s.Config).ToArray();
 
@@ -192,16 +197,9 @@ namespace conct
 			}
 		}
 
-		private void LoadDevices()
+		private void SyncDevices()
 		{
-			m_devices = new ObservableCollection<ConnectedDevice>();
-
-			List<DeviceAddress> addresses = m_device.ConnectedDevices;
-			foreach (DeviceAddress address in addresses)
-			{
-				ConnectedDevice device = new ConnectedDevice(address);
-				m_devices.Add(device);
-			}
+			m_devices.Sync(m_device.ConnectedDevices, (s, t) => t.Address == s, s => new ConnectedDevice(s));
 		}
 	}
 }

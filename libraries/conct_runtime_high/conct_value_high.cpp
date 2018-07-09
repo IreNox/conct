@@ -140,6 +140,12 @@ namespace conct
 		m_value.setUnsigned( value );
 	}
 
+	void ValueHigh::setString( const char* pValue )
+	{
+		m_string = DynamicString( pValue );
+		m_value.setString( 0u );
+	}
+
 	void ValueHigh::setPercentValue( PercentValue value )
 	{
 		m_value.setPercentValue( value );
@@ -163,5 +169,19 @@ namespace conct
 	void ValueHigh::setTypeCrc( TypeCrc value )
 	{
 		m_value.setTypeCrc( value );
+	}
+
+	void ValueHigh::setStruct( const void* pData, uintreg size, TypeCrc type )
+	{
+		m_buffer.clear();
+		m_buffer.pushRange( (const uint8*)pData, size );
+		m_value.setStruct( 0u, uint16( size ), type );
+	}
+
+	void ValueHigh::setArray( const void* pData, uintreg elementSize, uintreg length, TypeCrc type )
+	{
+		m_buffer.clear();
+		m_buffer.pushRange( (const uint8*)pData, elementSize * length );
+		m_value.setArray( 0u, uint8( elementSize ), uint8( length ), type );
 	}
 }

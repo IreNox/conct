@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace conct
 {
@@ -87,6 +88,125 @@ namespace conct
 		{
 			get { return ValueNative.GetTypeCrc(m_nativeInstance); }
 			set { ValueNative.SetTypeCrc(m_nativeInstance, value); }
+		}
+
+		public object GetStruct(TypeCollection types)
+		{
+			UInt16 structTypeCrc = ValueNative.GetStructType(m_nativeInstance);
+			StructType structType = types.FindStructByCrc(structTypeCrc);
+			if(structType == null || structType.ManagedType == null)
+			{
+				return null;
+			}
+
+			if (ValueNative.GetStructSize(m_nativeInstance) != Marshal.SizeOf(structType.ManagedType))
+			{
+				return null;
+			}
+
+			IntPtr structData = ValueNative.GetStructData(m_nativeInstance);
+			return Marshal.PtrToStructure(structData, structType.ManagedType);
+		}
+
+		public void SetStruct(TypeCollection types, object data)
+		{
+			if (data == null)
+			{
+				throw new ArgumentNullException("data");
+			}
+
+			Type type = types.FindTypeByManagedType(data.GetType());
+			if (type == null)
+			{
+				throw new Exception("Type not found for " + data.GetType().FullName);
+			}
+
+			int structSize = Marshal.SizeOf(type.ManagedType);
+			IntPtr structData = Marshal.AllocHGlobal(structSize);
+
+			Marshal.StructureToPtr(data, structData, false);
+			ValueNative.SetStruct(m_nativeInstance, structData, structSize, type.Crc);
+
+			Marshal.FreeHGlobal(structData);
+		}
+
+		public object[] GetArray(TypeCollection types)
+		{
+			UInt16 arrayTypeCrc = ValueNative.GetArrayType(m_nativeInstance);
+			Type arrayType = types.FindTypeByCrc(arrayTypeCrc);
+			if (arrayType == null || arrayType.ManagedType == null)
+			{
+				return null;
+			}
+
+			int elementSize = ValueNative.GetArrayElementSize(m_nativeInstance);
+			if ( elementSize != Marshal.SizeOf(arrayType.ManagedType))
+			{
+				return null;
+			}
+
+			int length = ValueNative.GetArrayLength(m_nativeInstance);
+			object[] array = new object[length];
+
+			IntPtr arrayData = ValueNative.GetArrayData(m_nativeInstance);
+			for (int i = 0; i < length; i++)
+			{
+				array[i] = Marshal.PtrToStructure(arrayData, arrayType.ManagedType);
+				arrayData += elementSize;
+			}
+
+			return array;
+		}
+
+		public void SetArray(TypeCollection types, object[] array, System.Type managedType = null)
+		{
+			if (array == null)
+			{
+				throw new ArgumentNullException("array");
+			}
+
+			if (managedType == null && array.Length == 0)
+			{
+				throw new ArgumentNullException("managedType");
+			}
+
+			if (managedType == null)
+			{
+				managedType = array[0].GetType();
+			}
+
+			Type type = types.FindTypeByManagedType(managedType);
+			if (type == null)
+			{
+				throw new Exception("Type not found for " + managedType.FullName);
+			}
+
+			int elementSize = Marshal.SizeOf(managedType);
+			if (array.Length == 0)
+			{
+				ValueNative.SetArray(m_nativeInstance, IntPtr.Zero, elementSize, 0, type.Crc);
+				return;
+			}
+
+			IntPtr arrayData = Marshal.AllocHGlobal(elementSize * array.Length);
+			for (int i = 0; i < array.Length; i++)
+			{
+				if(array[i] == null)
+				{
+					throw new ArgumentNullException("array[" + i.ToString() + "]");
+				}
+
+				if (array[i].GetType() != managedType)
+				{
+					throw new Exception("Type '" + array[i].GetType().FullName + "' in array[" + i.ToString() + "] doesn't match given Type '" + managedType.FullName + "'");
+				}
+
+				Marshal.StructureToPtr(array[i], arrayData, false);
+				arrayData += elementSize;
+			}
+
+			ValueNative.SetArray(m_nativeInstance, arrayData, elementSize, array.Length, type.Crc);
+			Marshal.FreeHGlobal(arrayData);
 		}
 	}
 }

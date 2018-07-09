@@ -20,27 +20,26 @@ namespace conct
 
 			m_timer = new Timer(15.0);
 			m_timer.Elapsed += Timer_Elapsed;
-			m_timer.Start();
 		}
 
 		private void Timer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			m_system.Loop();
+			Xamarin.Forms.Device.BeginInvokeOnMainThread(() => m_system.Loop());
 		}
 
-		protected override void OnStart ()
+		protected override void OnStart()
 		{
-			// Handle when your app starts
+			m_timer.Start();
 		}
 
-		protected override void OnSleep ()
+		protected override void OnSleep()
 		{
-			// Handle when your app sleeps
+			m_timer.Stop();
 		}
 
-		protected override void OnResume ()
+		protected override void OnResume()
 		{
-			// Handle when your app resumes
+			m_timer.Start();
 		}
 
 		public static Conct System

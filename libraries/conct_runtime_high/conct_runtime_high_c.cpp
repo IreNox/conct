@@ -322,6 +322,11 @@ CONCT_DLL void CONCT_CDECL conct_value_set_unsigned( conct_value_handle handle, 
 	fromHandle( handle )->setUnsigned( value );
 }
 
+CONCT_DLL void CONCT_CDECL conct_value_set_string( conct_value_handle handle, const char* pValue )
+{
+	fromHandle( handle )->setString( pValue );
+}
+
 CONCT_DLL void CONCT_CDECL conct_value_set_percent_value( conct_value_handle handle, conct_percent_value value )
 {
 	fromHandle( handle )->setPercentValue( value );
@@ -345,4 +350,14 @@ CONCT_DLL void CONCT_CDECL conct_value_set_instance( conct_value_handle handle, 
 CONCT_DLL void CONCT_CDECL conct_value_set_type_crc( conct_value_handle handle, conct_type_crc value )
 {
 	fromHandle( handle )->setTypeCrc( value );
+}
+
+CONCT_DLL void CONCT_CDECL conct_value_set_struct( conct_value_handle handle, const void* pData, int size, conct_type_crc type )
+{
+	fromHandle( handle )->setStruct( pData, size, type );
+}
+
+CONCT_DLL void CONCT_CDECL conct_value_set_array( conct_value_handle handle, const void* pData, int elementSize, int length, conct_type_crc type )
+{
+	fromHandle( handle )->setArray( pData, elementSize, length, type );
 }

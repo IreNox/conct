@@ -28,6 +28,7 @@ namespace conct
 		const InterfaceType*					findInterface( const DynamicString& fullName, const DynamicString& referenceNamespace );
 		const InterfaceType*					findInterfaceByCrc( TypeCrc typeCrc );
 		const StructType*						findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const StructType*						findStructByCrc( TypeCrc typeCrc );
 
 		const ArrayType*						makeArray( const Type* pBaseType );
 

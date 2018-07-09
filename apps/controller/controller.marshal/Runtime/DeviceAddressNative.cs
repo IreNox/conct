@@ -21,8 +21,10 @@ namespace conct
 		public static extern Byte Pop(IntPtr handle);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_is_empty")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool IsEmpty(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_address_is_equals")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool IsEquals(IntPtr handle1, IntPtr handle2);
 	}
 }

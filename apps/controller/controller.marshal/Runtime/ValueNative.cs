@@ -15,6 +15,7 @@ namespace conct
 		public static extern ValueType GetType(IntPtr handle);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_boolean")]
+		[return: MarshalAs(UnmanagedType.U1)]
 		public static extern bool GetBoolean(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_integer")]
 		public static extern int GetInteger(IntPtr handle);
@@ -34,6 +35,22 @@ namespace conct
 		public static extern Instance GetInstance(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_type_crc")]
 		public static extern UInt16 GetTypeCrc(IntPtr handle);
+
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_struct_data")]
+		public static extern IntPtr GetStructData(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_struct_size")]
+		public static extern int GetStructSize(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_struct_type")]
+		public static extern UInt16 GetStructType(IntPtr handle);
+
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_array_data")]
+		public static extern IntPtr GetArrayData(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_array_element_size")]
+		public static extern int GetArrayElementSize(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_array_length")]
+		public static extern int GetArrayLength(IntPtr handle);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_array_type")]
+		public static extern UInt16 GetArrayType(IntPtr handle);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_void")]
 		public static extern void SetVoid(IntPtr handle);
@@ -55,5 +72,9 @@ namespace conct
 		public static extern void SetInstance(IntPtr handle, [param: MarshalAs(UnmanagedType.Struct)] Instance value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_type_crc")]
 		public static extern void SetTypeCrc(IntPtr handle, UInt16 value);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_struct")]
+		public static extern void SetStruct(IntPtr handle, IntPtr data, int size, UInt16 type);
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_array")]
+		public static extern void SetArray(IntPtr handle, IntPtr data, int elementSize, int length, UInt16 type);
 	}
 }

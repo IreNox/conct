@@ -34,7 +34,12 @@ namespace conct
 			get { return m_name; }
 		}
 
-		public string Address
+		public DeviceAddress Address
+		{
+			get { return m_address; }
+		}
+
+		public string AddressText
 		{
 			get { return m_address.Text; }
 		}

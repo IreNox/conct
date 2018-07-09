@@ -107,6 +107,11 @@ CONCT_DLL conct_struct_type_handle CONCT_CDECL conct_type_collection_find_struct
 	return toHandle( fromHandle( handle )->findStruct( DynamicString( pFullname ), DynamicString( pReferenceNamespace ) ) );
 }
 
+CONCT_DLL conct_struct_type_handle CONCT_CDECL conct_type_collection_find_struct_by_crc( conct_type_collection_handle handle, conct_type_crc typeCrc )
+{
+	return toHandle( fromHandle( handle )->findStructByCrc( typeCrc ) );
+}
+
 CONCT_DLL conct_array_type_handle CONCT_CDECL conct_type_collection_make_array( conct_type_collection_handle handle, conct_type_handle typeHandle )
 {
 	return toHandle( fromHandle( handle )->makeArray( fromHandle( typeHandle ) ) );

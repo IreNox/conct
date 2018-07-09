@@ -17,7 +17,7 @@
                             <controls:TintedImage Source="icon_monitor.png" TintColor="Black" />
                             <StackLayout Grid.Column="1" Orientation="Vertical" Padding="0" Margin="0" Spacing="0">
                                 <Label Text="{Binding Name}" Margin="0,5" />
-                                <Label Text="{Binding Address}" FontSize="Micro" Margin="0" />
+                                <Label Text="{Binding AddressText}" FontSize="Micro" Margin="0" />
                             </StackLayout>
                         </Grid>
                     </ViewCell>

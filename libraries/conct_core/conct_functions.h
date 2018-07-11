@@ -22,25 +22,25 @@ namespace conct
 	}
 
 	template<typename T>
-	CONCT_FORCE_INLINE T* addPointer( T* pPtr, uint byteCountToAdd )
+	CONCT_FORCE_INLINE T* addPointer( T* pPtr, uintreg byteCountToAdd )
 	{
 		return static_cast< T* >( ( void* )( ( uint8* )pPtr + byteCountToAdd ) );
 	}
 
 	template<typename T>
-	CONCT_FORCE_INLINE const T* addPointer( const T* pPtr, uint byteCountToAdd )
+	CONCT_FORCE_INLINE const T* addPointer( const T* pPtr, uintreg byteCountToAdd )
 	{
 		return static_cast< const T* >( ( const void* )( ( const uint8* )pPtr + byteCountToAdd ) );
 	}
 
 	template<typename T>
-	CONCT_FORCE_INLINE T* addPointerCast( void* pPtr, uint byteCountToAdd )
+	CONCT_FORCE_INLINE T* addPointerCast( void* pPtr, uintreg byteCountToAdd )
 	{
 		return static_cast< T* >( static_cast< void* >( static_cast< uint8* >( pPtr ) + byteCountToAdd ) );
 	}
 
 	template<typename T>
-	CONCT_FORCE_INLINE const T* addPointerCast( const void* pPtr, uint byteCountToAdd )
+	CONCT_FORCE_INLINE const T* addPointerCast( const void* pPtr, uintreg byteCountToAdd )
 	{
 		return static_cast< const T* >( static_cast< const void* >( static_cast< const uint8* >( pPtr ) + byteCountToAdd ) );
 	}
@@ -125,7 +125,8 @@ namespace conct
 #endif
 	}
 
-	CONCT_FORCE_INLINE uint clamp( uint value, uint min, uint max )
+	template<class T>
+	CONCT_FORCE_INLINE T clamp( T value, T min, T max )
 	{
 		return ( value < min ? min : value > max ? max : value );
 	}

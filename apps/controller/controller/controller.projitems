@@ -49,6 +49,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Runtime\DeviceInstance.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Runtime\DeviceInstanceProperty.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)System\BidirectionalDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceInstanceViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceViewModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\DeviceListViewModel.cs" />

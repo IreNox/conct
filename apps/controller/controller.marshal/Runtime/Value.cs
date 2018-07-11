@@ -57,7 +57,7 @@ namespace conct
 		public string String
 		{
 			get { return ValueNative.GetString(m_nativeInstance); }
-			//set { ValueNative.SetString(m_nativeInstance, value); }
+			set { ValueNative.SetString(m_nativeInstance, value); }
 		}
 
 		public UInt16 PercentValue

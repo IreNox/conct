@@ -14,7 +14,8 @@ namespace conct
 {
 	void RuntimeHigh::setup( Device* pDevice )
 	{
-		m_pDevice = pDevice;
+		m_pDevice		= pDevice;
+		m_nextDeviceId	= FirstDeviceId;
 	}
 
 	void RuntimeHigh::registerPort( Port* pPort )
@@ -25,7 +26,12 @@ namespace conct
 		if( flags.isSet( PortFlag_SingleEndpoint ) )
 		{
 			const DeviceId deviceId = addDevice( pPort, InvalidDeviceId, 0u );
-			portData.endpointToDevice[ 0u ] = deviceId;
+
+			EndpointData endpointData;
+			endpointData.endpointId	= 0u;
+			endpointData.mode		= EndpointMode_Sending;
+			endpointData.deviceId	= deviceId;
+			portData.endpointToDevice[ 0u ] = endpointData;
 		}
 
 		if( !flags.isSet( PortFlag_Reliable ) )
@@ -38,9 +44,9 @@ namespace conct
 	{
 		PortData& portData = m_ports[ pPort ];
 
-		for( std::pair< const uintreg, DeviceId >& kvp : portData.endpointToDevice )
+		for( PortData::EndpointDeviceMap::PairType& kvp : portData.endpointToDevice )
 		{
-			m_devices.erase( kvp.second );
+			m_devices.erase( kvp.value.deviceId );
 		}
 
 		m_ports.erase( pPort );
@@ -55,12 +61,13 @@ namespace conct
 		{
 			setState( portData.pendingPackages[ endpointId ], PackageState_ReadBaseHeader );
 
-			const DeviceId deviceId = portData.endpointToDevice[ endpointId ];
-			DeviceData& deviceData = m_devices[ deviceId ];
+			const EndpointData& endpointData = portData.endpointToDevice[ endpointId ];
+			DeviceData& deviceData = m_devices[ endpointData.deviceId ];
 
-			for( std::pair< const CommandId, Command* >& pair : deviceData.commands )
+			for( DeviceData::CommandMap::PairType& pair : deviceData.commands )
 			{
-				pair.second->setResponse( ResultId_ConnectionLost );
+				m_finishCommands.pushBack( pair.value );
+				pair.value->setResponse( ResultId_ConnectionLost );
 			}
 		}
 
@@ -72,15 +79,15 @@ namespace conct
 
 	uintreg RuntimeHigh::getDeviceCount() const
 	{
-		return m_devices.size();
+		return m_devices.getLength();
 	}
 
 	void RuntimeHigh::getDevices( Vector< DeviceId >& devices ) const
 	{
-		devices.reserve( m_devices.size() );
-		for( const std::pair< DeviceId, DeviceData >& kvp : m_devices )
+		devices.reserve( m_devices.getLength() );
+		for( const DeviceMap::PairType& kvp : m_devices )
 		{
-			devices.pushBack( kvp.first );
+			devices.pushBack( kvp.key );
 		}
 	}
 
@@ -91,31 +98,31 @@ namespace conct
 			return false;
 		}
 
-		DeviceMap::const_iterator it = m_devices.find( address.address[ 0u ] );
-		if( it == m_devices.end() )
+		const DeviceData* pDeviceData = nullptr;
+		if( !m_devices.find( pDeviceData, address.address[ 0u ] ) )
 		{
 			return false;
 		}
 
-		if( it->second.ownDeviceId == InvalidDeviceId ||
+		if( pDeviceData->ownDeviceId == InvalidDeviceId ||
 			address.address[ 1u ] == InvalidDeviceId )
 		{
 			return false;
 		}
 
-		return it->second.ownDeviceId == address.address[ 1u ];
+		return pDeviceData->ownDeviceId == address.address[ 1u ];
 	}
 
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
 	{
-		DeviceMap::iterator it = m_devices.find( deviceId );
-		if( it == m_devices.end() )
+		DeviceData* pDeviceData = nullptr;
+		if( !m_devices.find( pDeviceData, deviceId ) )
 		{
 			return InvalidCommandId;
 		}
 
-		const CommandId commandId = it->second.nextCommandId;
-		while( ++it->second.nextCommandId == InvalidCommandId );
+		const CommandId commandId = pDeviceData->nextCommandId;
+		while( ++pDeviceData->nextCommandId == InvalidCommandId );
 
 		return commandId;
 	}
@@ -125,14 +132,13 @@ namespace conct
 		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
 		if( result == ResultId_Success )
 		{
-			DeviceMap::iterator it = m_devices.find( deviceAddress.address[ 0u ] );
-			if( it == m_devices.end() )
+			DeviceData* pDeviceData = nullptr;
+			if( !m_devices.find( pDeviceData, deviceAddress.address[ 0u ] ) )
 			{
 				return ResultId_NoSuchDevice;
 			}
-			DeviceData& deviceData = it->second;
 
-			deviceData.commands[ pCommand->getId() ] = pCommand;
+			pDeviceData->commands[ pCommand->getId() ] = pCommand;
 		}
 
 		return result;
@@ -162,20 +168,20 @@ namespace conct
 	void RuntimeHigh::processRoute( PortData& portData, const ReceivedPackage& sourcePackage )
 	{
 		const DeviceId nextDeviceId = sourcePackage.destinationAddress[ 1u ];
-		DeviceMap::iterator deviceIt = m_devices.find( nextDeviceId );
-		if( deviceIt == m_devices.end() )
+
+		DeviceData* pTargetDeviceData = nullptr;
+		if( !m_devices.find( pTargetDeviceData, nextDeviceId ) )
 		{
 			// target not found. send error to source!
 			return;
 		}
-		const DeviceData& targetDevice = deviceIt->second;
 
 		MessageBaseHeader baseHeader = sourcePackage.baseHeader;
 		baseHeader.destinationHops--;
 		baseHeader.sourceHops++;
 
 		SendPackage package;
-		package.targetEndpointId	= targetDevice.endpointId;
+		package.targetEndpointId	= pTargetDeviceData->endpointId;
 		package.currentOffset		= 0u;
 
 		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + sourcePackage.payload.getLength();
@@ -184,13 +190,13 @@ namespace conct
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
 		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
 
-		package.data.pushBack( targetDevice.ownDeviceId );
+		package.data.pushBack( pTargetDeviceData->ownDeviceId );
 		package.data.pushBack( sourcePackage.deviceId );
 		package.data.pushRange( sourcePackage.sourceAddress.getData() + 1u, sourcePackage.sourceAddress.getLength() - 1u );
 		package.data.pushRange( sourcePackage.destinationAddress.getData() + 1u, sourcePackage.destinationAddress.getLength() - 1u );
 		package.data.pushRange( sourcePackage.payload );
 
-		PortData& targetPortData = m_ports[ targetDevice.pTargetPort ];
+		PortData& targetPortData = m_ports[ pTargetDeviceData->pTargetPort ];
 		targetPortData.sendPackages.pushBack( package );
 	}
 
@@ -334,7 +340,13 @@ namespace conct
 
 	DeviceId RuntimeHigh::addDevice( Port* pPort, DeviceId ownDeviceId, uintreg endpointId )
 	{
-		const DeviceId nextDeviceId = DeviceId( m_devices.size() + 1u );
+		if( m_nextDeviceId == InvalidDeviceId )
+		{
+			return InvalidDeviceId;
+		}
+
+		const DeviceId nextDeviceId = m_nextDeviceId;
+		m_nextDeviceId++;
 
 		DeviceData& deviceData = m_devices[ nextDeviceId ];
 		deviceData.nextCommandId	= FirstCommandId;
@@ -421,21 +433,31 @@ namespace conct
 	{
 		const DeviceId ownDeviceId = package.target.destinationAddress.getFront();
 
-		PortData::EndpointDeviceMap::iterator endpointIt = portData.endpointToDevice.find( endpointId );
-		if( endpointIt == portData.endpointToDevice.end() )
+		EndpointData* pEndpointData = nullptr;
+		if( portData.endpointToDevice.find( pEndpointData, endpointId ) )
 		{
-			const DeviceId deviceId = addDevice( pPort, ownDeviceId, endpointId );
-			portData.endpointToDevice[ endpointId ] = deviceId;
-
-			package.target.deviceId = deviceId;
-		}
-		else
-		{
-			const DeviceId deviceId = endpointIt->second;
+			const DeviceId deviceId = pEndpointData->deviceId;
 			DeviceData& deviceData = m_devices[ deviceId ];
 
 			CONCT_ASSERT( deviceData.ownDeviceId == InvalidDeviceId || deviceData.ownDeviceId == ownDeviceId );
 			deviceData.ownDeviceId = ownDeviceId;
+
+			package.target.deviceId = deviceId;
+
+			if( pEndpointData->mode != EndpointMode_Full )
+			{
+				pEndpointData->mode = EndpointMode_Sending;
+			}
+		}
+		else
+		{
+			const DeviceId deviceId = addDevice( pPort, ownDeviceId, endpointId );
+
+			EndpointData endpointData;
+			endpointData.endpointId	= endpointId;
+			endpointData.mode		= EndpointMode_Full;
+			endpointData.deviceId	= deviceId;
+			portData.endpointToDevice[ endpointId ] = endpointData;
 
 			package.target.deviceId = deviceId;
 		}
@@ -454,6 +476,17 @@ namespace conct
 
 		SendPackage& currentPackage = portData.sendPackages.getFront();
 
+		EndpointData& endpointData = portData.endpointToDevice[ currentPackage.targetEndpointId ];
+		if( endpointData.mode == EndpointMode_Receiving )
+		{
+			// HACK: to avoid reallocation during push, so getFront stays stable
+			portData.sendPackages.reserve( portData.sendPackages.getLength() + 1u );
+
+			portData.sendPackages.pushBack( portData.sendPackages.getFront() );
+			portData.sendPackages.popFront();
+			return;
+		}
+
 		Writer writer;
 		const uintreg remainingSize = currentPackage.data.getLength() - currentPackage.currentOffset;
 		if( !pPort->openSend( writer, remainingSize, currentPackage.targetEndpointId ) )
@@ -469,6 +502,11 @@ namespace conct
 		if( currentPackage.currentOffset == currentPackage.data.getLength() )
 		{
 			portData.sendPackages.popFront();
+
+			if( endpointData.mode != EndpointMode_Full )
+			{
+				endpointData.mode = EndpointMode_Receiving;
+			}
 		}
 
 		pPort->closeSend( writer, currentPackage.targetEndpointId );
@@ -524,12 +562,11 @@ namespace conct
 			return ResultId_NoDestination;
 		}
 
-		DeviceMap::iterator it = m_devices.find( deviceAddress.address[ 0u ] );
-		if( it == m_devices.end() )
+		DeviceData* pDeviceData = nullptr;
+		if( !m_devices.find( pDeviceData, deviceAddress.address[ 0u ] ) )
 		{
 			return ResultId_NoSuchDevice;
 		}
-		DeviceData& deviceData = it->second;
 
 		baseHeader.sourceHops		= 1u;
 		baseHeader.payloadSize		= uint16( payload.getLength() );
@@ -538,7 +575,7 @@ namespace conct
 		baseHeader.messageResult	= result;
 
 		SendPackage package;
-		package.targetEndpointId	= deviceData.endpointId;
+		package.targetEndpointId	= pDeviceData->endpointId;
 		package.currentOffset		= 0u;
 
 		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getLength();
@@ -547,7 +584,7 @@ namespace conct
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
 		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
 
-		package.data.pushBack( deviceData.ownDeviceId );
+		package.data.pushBack( pDeviceData->ownDeviceId );
 
 		for( uintreg i = 0u; i < baseHeader.destinationHops; ++i )
 		{
@@ -556,7 +593,7 @@ namespace conct
 
 		package.data.pushRange( payload );
 
-		PortData& portData = m_ports[ deviceData.pTargetPort ];
+		PortData& portData = m_ports[ pDeviceData->pTargetPort ];
 		portData.sendPackages.pushBack( package );
 
 		return ResultId_Success;

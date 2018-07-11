@@ -64,7 +64,33 @@ namespace conct
 	}
 
 	template< class TKey, class TValue >
-	bool Map<TKey, TValue>::find( TValue& target, const TKey& key )
+	bool Map<TKey, TValue>::find( TValue*& target, const TKey& key )
+	{
+		const uintreg index = findIndex( key );
+		if( index == (uintreg)-1 )
+		{
+			return false;
+		}
+
+		target = &m_pData[ index ].value;
+		return true;
+	}
+
+	template< class TKey, class TValue >
+	bool Map<TKey, TValue>::find( const TValue*& target, const TKey& key ) const
+	{
+		const uintreg index = findIndex( key );
+		if( index == (uintreg)-1 )
+		{
+			return false;
+		}
+
+		target = &m_pData[ index ].value;
+		return true;
+	}
+
+	template< class TKey, class TValue >
+	bool Map<TKey, TValue>::findAndCopy( TValue& target, const TKey& key ) const
 	{
 		const uintreg index = findIndex( key );
 		if( index == ( uintreg )-1 )
@@ -88,14 +114,14 @@ namespace conct
 	template< class TKey, class TValue >
 	bool Map<TKey, TValue>::erase( const TKey& key )
 	{
-		const uint index = findIndex( key );
+		const uintreg index = findIndex( key );
 		if( index == ( uintreg )-1 )
 		{
 			return false;
 		}
 
 		m_length--;
-		for( uint i = index; i < m_length; ++i )
+		for( uintreg i = index; i < m_length; ++i )
 		{
 			m_pData[ i ] = m_pData[ i + 1u ];
 		}
@@ -186,7 +212,7 @@ namespace conct
 	void Map< TKey, TValue >::checkCapacity( uintreg capacity )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( capacity );
-		if( nextCapacity < m_capacity )
+		if( nextCapacity <= m_capacity )
 		{
 			return;
 		}

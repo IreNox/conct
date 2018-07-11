@@ -55,6 +55,7 @@ namespace conct
 	};
 
 	static const DeviceId InvalidDeviceId = 0u;
+	static const DeviceId FirstDeviceId = 1u;
 	static const TypeCrc InvalidTypeCrc = 0u;
 	static const InstanceId InvalidInstanceId = 0xffffu;
 	static const Instance InvalidInstance = { InvalidInstanceId, InvalidTypeCrc };

@@ -2,11 +2,10 @@
 
 #include "conct_array_view.h"
 #include "conct_core.h"
+#include "conct_map.h"
 #include "conct_queue.h"
 #include "conct_runtime.h"
 #include "conct_vector.h"
-
-#include <map>
 
 namespace conct
 {
@@ -36,6 +35,13 @@ namespace conct
 		bool					popFinishCommand( Command*& pCommand );
 
 	private:
+
+		enum EndpointMode
+		{
+			EndpointMode_Full,
+			EndpointMode_Receiving,
+			EndpointMode_Sending,
+		};
 
 		enum PackageState
 		{
@@ -80,12 +86,19 @@ namespace conct
 			uintreg							currentOffset;
 		};
 
+		struct EndpointData
+		{
+			uintreg			endpointId;
+			EndpointMode	mode;
+			DeviceId		deviceId;
+		};
+
 		struct PortData
 		{
-			typedef std::map< uintreg, PendingReceivedPackage > PendingPackageMap;
+			typedef Map< uintreg, PendingReceivedPackage > PendingPackageMap;
 			typedef Vector< ReceivedPackage > ReceivedPackageVector;
 			typedef Queue< SendPackage > SendPackageQueue;
-			typedef std::map< uintreg, DeviceId > EndpointDeviceMap;
+			typedef Map< uintreg, EndpointData > EndpointDeviceMap;
 
 			PendingPackageMap		pendingPackages;
 			ReceivedPackageVector	receivedPackages;
@@ -96,7 +109,7 @@ namespace conct
 
 		struct DeviceData
 		{
-			typedef std::map< CommandId, Command* > CommandMap;
+			typedef Map< CommandId, Command* > CommandMap;
 
 			Port*		pTargetPort;
 			uintreg		endpointId;
@@ -105,14 +118,15 @@ namespace conct
 			CommandMap	commands;
 		};
 
-		typedef std::map< Port*, PortData > PortMap;
-		typedef std::map< DeviceId, DeviceData > DeviceMap;
+		typedef Map< Port*, PortData > PortMap;
+		typedef Map< DeviceId, DeviceData > DeviceMap;
 		typedef Queue< Command* > CommandQueue;
 
 		Device*				m_pDevice;
 
 		PortMap				m_ports;
 		DeviceMap			m_devices;
+		DeviceId			m_nextDeviceId;
 
 		CommandQueue		m_finishCommands;
 

@@ -78,10 +78,10 @@ namespace conct
 
 	void Console::update()
 	{
-		if( ConsoleInput::ConsoleInput::getKeyState( ConsoleKey_Escape ) )
-		{
-			exit( 0u );
-		}
+		//if( ConsoleInput::ConsoleInput::getKeyState( ConsoleKey_Escape ) )
+		//{
+		//	exit( 0u );
+		//}
 
 		ConsoleInput::readKey( [ this ]( ConsoleKey key )
 		{

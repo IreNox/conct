@@ -220,7 +220,7 @@ namespace conct
 	void UnsortedSet< T >::checkCapacity( uintreg capacity )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( capacity );
-		if( nextCapacity < m_capacity )
+		if( nextCapacity <= m_capacity )
 		{
 			return;
 		}

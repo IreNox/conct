@@ -163,7 +163,17 @@ namespace conct
 	Queue< T >& Queue< T >::operator=( const Queue& rhs )
 	{
 		clear();
-		pushRange( rhs.getData(), rhs.getLength() );
+		checkCapacity( rhs.m_length );
+
+		for( uintreg i = 0u; i < rhs.m_length; ++i )
+		{
+			m_pData[ i ] = rhs[ i ];
+		}
+
+		m_top		= 0u;
+		m_bottom	= rhs.m_length;
+		m_length	= rhs.m_length;
+
 		return *this;
 	}
 
@@ -171,7 +181,7 @@ namespace conct
 	void Queue< T >::checkCapacity( uintreg capacity )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( capacity );
-		if( nextCapacity < m_capacity )
+		if( nextCapacity <= m_capacity )
 		{
 			return;
 		}

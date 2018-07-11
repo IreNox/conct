@@ -73,7 +73,7 @@ namespace conct
 			drawCharacterRepeated( x + 1u, y + height - 1u, pType[ 4u ], width - 2u );
 		}
 
-		for( uint i = 0u; i < height - 2u; ++i )
+		for( uint16 i = 0u; i < height - 2u; ++i )
 		{
 			drawCharacter( x, y + i + 1u, pType[ 5u ] );
 			drawCharacter( x + width - 1u, y + i + 1u, pType[ 5u ] );
@@ -82,7 +82,7 @@ namespace conct
 
 	void ConsoleRenderer::drawFillRectangle( uint16 x, uint16 y, uint16 width, uint16 height, wchar_t c )
 	{
-		for( uint i = 0u; i < height; ++i )
+		for( uint16 i = 0u; i < height; ++i )
 		{
 			drawCharacterRepeated( x, y + i, c, width );
 		}

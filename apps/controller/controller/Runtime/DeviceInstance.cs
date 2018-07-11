@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.Linq;
 
 namespace conct
 {
     public class DeviceInstance
     {
+		public event Event<DeviceInstance, DeviceInstanceProperty> PropertyChanged;
+
 		private ConnectedDevice m_device;
 		private Instance m_instance;
 		private InterfaceType m_type;
+		private List<DeviceInstanceProperty> m_properties;
 
 		public DeviceInstance(ConnectedDevice device, Instance instance)
 		{
@@ -20,6 +24,8 @@ namespace conct
 			{
 				throw new Exception("Type not found for crc: " + instance.TypeCrc.ToString());
 			}
+
+			m_properties = m_type.Properties.Select(p => new DeviceInstanceProperty(this, p)).ToList();
 		}
 
 		public ConnectedDevice Device
@@ -36,5 +42,18 @@ namespace conct
 		{
 			get { return m_type; }
 		}
-    }
+
+		public IEnumerable<DeviceInstanceProperty> Properties
+		{
+			get { return m_properties; }
+		}
+
+		public void OnPropertyChanged(DeviceInstanceProperty property)
+		{
+			if (PropertyChanged != null)
+			{
+				PropertyChanged(this, property);
+			}
+		}
+	}
 }

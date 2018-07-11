@@ -33,7 +33,9 @@ namespace conct
 		void					clear();
 		void					reserve( uintreg size );
 
-		bool					find( TValue& target, const TKey& key );
+		bool					find( TValue*& target, const TKey& key );
+		bool					find( const TValue*& target, const TKey& key ) const;
+		bool					findAndCopy( TValue& target, const TKey& key ) const;
 
 		bool					insert( const TKey& key, const TValue& value );
 		bool					erase( const TKey& key );

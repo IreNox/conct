@@ -6,7 +6,8 @@ namespace conct
 {
 	void ConsoleInstances::activate( ConsoleDevice& device )
 	{
-
+		const uint16x2 size = ConsoleRenderer::getSize();
+		ConsoleRenderer::drawFillRectangle( 0u, 6u, size.x, size.y - 6u, L' ' );
 	}
 
 	void ConsoleInstances::deactivate( ConsoleDevice& device )

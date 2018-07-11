@@ -252,7 +252,7 @@ namespace conct
 	void Vector< T >::checkCapacity( uintreg capacity )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( capacity );
-		if( nextCapacity < m_capacity )
+		if( nextCapacity <= m_capacity )
 		{
 			return;
 		}

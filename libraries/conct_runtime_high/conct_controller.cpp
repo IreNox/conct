@@ -78,7 +78,7 @@ namespace conct
 		Array< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getLength() );
 		pRequest->arguments		= workingArguments;
 
-		for( size_t i = 0u; i < workingArguments.getLength(); ++i )
+		for( uintreg i = 0u; i < workingArguments.getLength(); ++i )
 		{
 			dataBuilder.pushValueData( &workingArguments[ i ], &arguments[ i ] );
 		}

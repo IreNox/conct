@@ -190,40 +190,52 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\disable_secure_warning.props" />
+    <Import Project="..\..\..\config\disable_secure_warning.props" />
+    <Import Project="..\base_path.props" />
+    <Import Project="..\..\..\config\include_runtime_high.props" />
+    <Import Project="..\..\..\config\include_port_tcp_client.props" />
+    <Import Project="..\..\..\config\include_third_party.props" />
+    <Import Project="..\..\..\config\target_pathes.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\disable_secure_warning.props" />
+    <Import Project="..\..\..\config\disable_secure_warning.props" />
+    <Import Project="..\base_path.props" />
+    <Import Project="..\..\..\config\include_runtime_high.props" />
+    <Import Project="..\..\..\config\include_port_tcp_client.props" />
+    <Import Project="..\..\..\config\include_third_party.props" />
+    <Import Project="..\..\..\config\target_pathes.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\disable_secure_warning.props" />
+    <Import Project="..\..\..\config\disable_secure_warning.props" />
+    <Import Project="..\base_path.props" />
+    <Import Project="..\..\..\config\include_runtime_high.props" />
+    <Import Project="..\..\..\config\include_port_tcp_client.props" />
+    <Import Project="..\..\..\config\include_third_party.props" />
+    <Import Project="..\..\..\config\target_pathes.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\disable_secure_warning.props" />
+    <Import Project="..\..\..\config\disable_secure_warning.props" />
+    <Import Project="..\base_path.props" />
+    <Import Project="..\..\..\config\include_runtime_high.props" />
+    <Import Project="..\..\..\config\include_port_tcp_client.props" />
+    <Import Project="..\..\..\config\include_third_party.props" />
+    <Import Project="..\..\..\config\target_pathes.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)build\$(Configuration)_$(Platform)\obj\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -232,7 +244,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;CONTROLLERNATIVEDESKTOP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_types;$(ProjectDir)..\..\..\libraries\conct_port_tcp_client;$(ProjectDir)..\..\..\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -247,7 +258,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;CONTROLLERNATIVEDESKTOP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_types;$(ProjectDir)..\..\..\libraries\conct_port_tcp_client;$(ProjectDir)..\..\..\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -264,7 +274,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;CONTROLLERNATIVEDESKTOP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_types;$(ProjectDir)..\..\..\libraries\conct_port_tcp_client;$(ProjectDir)..\..\..\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -283,7 +292,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;CONTROLLERNATIVEDESKTOP_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\libraries\conct_core;$(ProjectDir)..\..\..\libraries\conct_core_high;$(ProjectDir)..\..\..\libraries\conct_runtime;$(ProjectDir)..\..\..\libraries\conct_runtime_high;$(ProjectDir)..\..\..\libraries\conct_types;$(ProjectDir)..\..\..\libraries\conct_port_tcp_client;$(ProjectDir)..\..\..\third_party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

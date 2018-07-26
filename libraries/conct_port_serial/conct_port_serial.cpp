@@ -9,10 +9,14 @@
 #	include "conct_trace.h"
 
 #	include "conct_port_serial_arduino_interface_linux.h"
-#elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-#	include "conct_port_serial_arduino_interface_sim.h"
+#elif CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
+#	include "simulator/conct_port_serial_arduino_interface_sim.h"
+#elif CONCT_ENABLED( CONCT_ENVIRONMENT_TESTS )
+#	include "test/conct_port_serial_arduino_interface_test.h"
 #elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
 #	include <arduino.h>
+#else
+#	error "Unsupported platform"
 #endif
 
 namespace conct

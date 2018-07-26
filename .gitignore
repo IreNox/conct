@@ -5,5 +5,6 @@
 /apps/controller/controller.marshal/obj
 /apps/generator/build
 /apps/simulator/build
+/apps/tests/build
 *.user
 /devices/raspberry_pi_router/VisualGDB

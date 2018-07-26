@@ -1,6 +1,6 @@
 #include "conct_port_serial_sim.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
 
 #include "i_simulator_context.h"
 #include "i_simulator_device_context.h"

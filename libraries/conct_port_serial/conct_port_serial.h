@@ -4,10 +4,17 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 #	include "conct_dynamic_string.h"
-#	include "conct_port_serial_linux.h"
-#elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include "linux/conct_port_serial_linux.h"
+#endif
+
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
 #	include "conct_dynamic_string.h"
-#	include "conct_port_serial_sim.h"
+#	include "simulator/conct_port_serial_sim.h"
+#endif
+
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_TESTS )
+#	include "conct_dynamic_string.h"
+#	include "test/conct_port_serial_test.h"
 #endif
 
 namespace conct
@@ -72,7 +79,7 @@ namespace conct
 		PortSerialConfig			m_config;
 #endif
 
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) || CONCT_ENABLED( CONCT_ENVIRONMENT_TESTS )
 		Serial						Serial1;
 
 		DynamicString				m_hexTrace;

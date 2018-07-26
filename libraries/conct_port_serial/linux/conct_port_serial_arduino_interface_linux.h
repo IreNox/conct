@@ -2,6 +2,8 @@
 
 #include "conct_core.h"
 
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+
 #include <tiny_gpio/tiny_gpio.h>
 
 #include <time.h>
@@ -45,5 +47,7 @@ namespace conct
 		uint32 result = uint32( currentTime.tv_sec ) * 1000u;
 		result += uint32( currentTime.tv_nsec ) / 1000000u;
 		return result;
-	}	
+	}
 }
+
+#endif

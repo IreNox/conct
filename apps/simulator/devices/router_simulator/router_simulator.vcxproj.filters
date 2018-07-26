@@ -36,6 +36,9 @@
     <Filter Include="libraries\conct_port_serial">
       <UniqueIdentifier>{ccd95ae6-272f-4f05-8a7a-0fdae1b13bde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_serial\simulator">
+      <UniqueIdentifier>{94a6424e-ed18-4c50-83f5-00ee4f57deee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gen\device_interface.h">
@@ -176,12 +179,6 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h">
       <Filter>libraries\conct_port_serial</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_arduino_interface_sim.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\i_simulator_device.h">
       <Filter>shared</Filter>
     </ClInclude>
@@ -196,6 +193,12 @@
     </ClInclude>
     <ClInclude Include="..\shared\i_simulator_device_context.h">
       <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h">
+      <Filter>libraries\conct_port_serial\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h">
+      <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -286,11 +289,11 @@
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp">
       <Filter>libraries\conct_port_serial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.cpp">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_atomic.cpp">
       <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp">
+      <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

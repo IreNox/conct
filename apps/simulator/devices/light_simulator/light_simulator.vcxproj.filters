@@ -36,6 +36,9 @@
     <Filter Include="libraries\conct_core_high">
       <UniqueIdentifier>{8ea5d58a-2173-44b7-ba9b-9efba7e9f3f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_serial\simulator">
+      <UniqueIdentifier>{0d08fab1-8b53-4413-9c37-b31767c4884a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -170,12 +173,6 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h">
       <Filter>libraries\conct_port_serial</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_arduino_interface_sim.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\i_simulator_device.h">
       <Filter>shared</Filter>
     </ClInclude>
@@ -217,6 +214,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.h">
       <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h">
+      <Filter>libraries\conct_port_serial\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h">
+      <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -301,9 +304,6 @@
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp">
       <Filter>libraries\conct_port_serial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.cpp">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
@@ -327,6 +327,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
       <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp">
+      <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

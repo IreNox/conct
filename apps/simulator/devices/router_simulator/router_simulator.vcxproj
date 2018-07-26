@@ -211,8 +211,8 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_arduino_interface_sim.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.h" />
@@ -250,7 +250,7 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial_sim.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.cpp" />

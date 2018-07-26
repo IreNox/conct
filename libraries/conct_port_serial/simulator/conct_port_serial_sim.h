@@ -2,7 +2,7 @@
 
 #include "conct_core.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
 
 namespace conct
 {

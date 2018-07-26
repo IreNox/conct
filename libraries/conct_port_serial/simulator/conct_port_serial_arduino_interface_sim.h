@@ -3,6 +3,8 @@
 #include "conct_core.h"
 #include "conct_timer.h"
 
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
+
 #include "i_simulator_context.h"
 #include "i_simulator_device_context.h"
 
@@ -50,3 +52,5 @@ namespace conct
 		return uint32( s_timer.getElapsedSeconds() * 1000.0 );
 	}
 }
+
+#endif

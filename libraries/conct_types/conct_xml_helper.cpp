@@ -10,6 +10,31 @@
 
 namespace conct
 {
+	bool loadDocument( tinyxml2::XMLDocument& document, const Path& path )
+	{
+		if( document.LoadFile( path.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
+		{
+			trace::fileError( path.getNativePath(), document.ErrorLineNum(), "Error: Failed to load XML. Message: "_s + document.ErrorStr() + "\n" );
+			return false;
+		}
+
+		tinyxml2::XMLUnknown* pUserData = document.NewUnknown( path.getNativePath().toConstCharPointer() );
+		document.SetUserData( pUserData );
+
+		return true;
+	}
+
+	void traceNodeError( tinyxml2::XMLElement* pNode, const char* pText )
+	{
+		traceNodeError( pNode, DynamicString( pText ) );
+	}
+
+	void traceNodeError( tinyxml2::XMLElement* pNode, const DynamicString& text )
+	{
+		tinyxml2::XMLUnknown* pUserData = static_cast<tinyxml2::XMLUnknown*>(pNode->GetDocument()->GetUserData());
+		trace::fileError( pUserData->Value(), pNode->GetLineNum(), text );
+	}
+
 	bool loadBooleanValue( bool& target, tinyxml2::XMLElement* pNode, const char* pName )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
@@ -27,7 +52,7 @@ namespace conct
 				return true;
 			}
 
-			trace::write( "Error: '"_s + attributeValue + "' is not an valid boolean attribute value for '" + pName + "' from '" + pNode->Name() + "'." + "\n" );
+			traceNodeError( pNode, "Error: '"_s + attributeValue + "' is not an valid boolean attribute value for '" + pName + "'.\n" );
 			return false;
 		}
 
@@ -35,7 +60,7 @@ namespace conct
 		return true;
 	}
 
-	bool loadStringValue( DynamicString& target, tinyxml2::XMLElement* pNode, const char* pName )
+	bool loadStringValue( DynamicString& target, tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
@@ -55,11 +80,14 @@ namespace conct
 			}
 		}
 
-		trace::write( "Error: Failed to load value '"_s + pName + "' from '" + pNode->Name() + "'." + "\n" );
+		if( !ignoreMissing )
+		{
+			traceNodeError( pNode, "Error: Failed to load value '"_s + pName + "'.\n" );
+		}
 		return false;
 	}
 
-	bool loadMemSizeValue( uintreg& target, tinyxml2::XMLElement* pNode, const char* pName )
+	bool loadMemSizeValue( uintreg& target, tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
 	{
 		int64_t value = 0u;
 		if( pNode->QueryInt64Attribute( pName, &value ) == tinyxml2::XML_SUCCESS )
@@ -75,7 +103,10 @@ namespace conct
 			return true;
 		}
 
-		trace::write( "Error: Failed to load uintreg value '"_s + pName + "' from '" + pNode->Name() + "'." + "\n" );
+		if( !ignoreMissing )
+		{
+			traceNodeError( pNode, "Error: Failed to load uintreg value '"_s + pName + "'.\n" );
+		}
 		return false;
 	}
 
@@ -87,7 +118,7 @@ namespace conct
 			*ppType = typeCollection.findType( DynamicString( pAttributeValue ), referenceNamespace );
 			if( *ppType == nullptr )
 			{
-				trace::write( "Error: Failed to find type with name '"_s + pAttributeValue + "' in '" + referenceNamespace + "'." + "\n" );
+				traceNodeError( pNode, "Error: Failed to find type with name '"_s + pAttributeValue + "' in '" + referenceNamespace + "'.\n" );
 				return false;
 			}
 
@@ -103,7 +134,7 @@ namespace conct
 				*ppType = typeCollection.findType( DynamicString( pText ), referenceNamespace );
 				if( *ppType == nullptr )
 				{
-					trace::write( "Error: Failed to find type with name '"_s + pText + "' in '" + referenceNamespace + "'." + "\n" );
+					traceNodeError( pNode, "Error: Failed to find type with name '"_s + pText + "' in '" + referenceNamespace + "'.\n" );
 					return false;
 				}
 
@@ -126,7 +157,7 @@ namespace conct
 
 		if( !ignoreMissing )
 		{
-			trace::write( "Error: Failed to load type value '"_s + pName + "' from '" + pNode->Name() + "'." + "\n" );
+			traceNodeError( pNode, "Error: Failed to load type value '"_s + pName + "' from '" + pNode->Name() + "'.\n" );
 		}
 		return false;
 	}
@@ -141,7 +172,7 @@ namespace conct
 
 		if( pType->getDescription() != TypeDescription_Interface )
 		{
-			trace::write( "Error: '"_s + pType->getFullName() + "' is not an interface. loaded type value '" + pName + "' from '" + pNode->Name() + "'." + "\n" );
+			traceNodeError( pNode, "Error: '"_s + pType->getFullName() + "' is not an interface. loaded type value '" + pName + "'.\n" );
 			return false;
 		}
 

@@ -13,6 +13,16 @@ namespace conct
 	{
 	}
 
+	Path::Path( const char* pPath )
+	{
+		m_path = DynamicString( pPath ).replace( '\\', '/' );
+
+		while( m_path.endsWith( '/' ) )
+		{
+			m_path = m_path.popBack();
+		}
+	}
+
 	Path::Path( const DynamicString& path )
 	{
 		m_path = path.replace( '\\', '/' );

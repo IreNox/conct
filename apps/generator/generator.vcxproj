@@ -61,6 +61,7 @@
     <ClInclude Include="include\hardware_collection.h" />
     <ClInclude Include="include\port.h" />
     <ClInclude Include="include\port_collection.h" />
+    <ClInclude Include="include\port_parameter.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\libraries\conct_core\conct_ascii.cpp" />
@@ -92,6 +93,7 @@
     <ClCompile Include="sources\main.cpp" />
     <ClCompile Include="sources\port.cpp" />
     <ClCompile Include="sources\port_collection.cpp" />
+    <ClCompile Include="sources\port_parameter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\libraries\conct_core\conct_array.inl" />

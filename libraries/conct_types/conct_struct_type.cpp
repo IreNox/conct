@@ -21,9 +21,8 @@ namespace conct
 	bool StructType::load( TypeCollection& typeCollection )
 	{
 		tinyxml2::XMLDocument document;
-		if( document.LoadFile( m_fileName.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
+		if( !loadDocument( document, m_fileName ) )
 		{
-			trace::write( "Error: Failed to load XML from '"_s + m_fileName.getGenericPath() + "'. Message: " + document.ErrorStr() + "\n" );
 			return false;
 		}
 

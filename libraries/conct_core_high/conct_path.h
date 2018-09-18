@@ -9,6 +9,7 @@ namespace conct
 	public:
 
 						Path();
+		explicit		Path( const char* pPath );
 		explicit		Path( const DynamicString& path );
 
 		bool			isEmpty() const { return m_path.isEmpty(); }

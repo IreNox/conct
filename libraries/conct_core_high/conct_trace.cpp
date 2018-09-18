@@ -1,6 +1,7 @@
 #include "conct_trace.h"
 
 #include "conct_dynamic_string.h"
+#include "conct_string_tools.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
@@ -27,5 +28,16 @@ namespace conct
 	void trace::write( const DynamicString& string )
 	{
 		write( string.toConstCharPointer() );
+	}
+
+	void trace::fileError( const char* pFilename, int line, const DynamicString& string )
+	{
+		fileError( DynamicString( pFilename ), line, string );
+	}
+
+	void trace::fileError( const DynamicString& filename, int line, const DynamicString& string )
+	{
+		const DynamicString text = filename + "(" + string_tools::toString( line ) + "): " + string;
+		write( text.toConstCharPointer() );
 	}
 }

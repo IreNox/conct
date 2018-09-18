@@ -190,9 +190,8 @@ namespace conct
 			}
 
 			tinyxml2::XMLDocument document;
-			if( document.LoadFile( currentPath.getNativePath().toConstCharPointer() ) != tinyxml2::XML_SUCCESS )
+			if( !loadDocument( document, currentPath ) )
 			{
-				trace::write( "Error: Failed to load XML from '"_s + currentPath.getGenericPath() + "'. Message: " + document.ErrorStr() + "\n" );
 				return false;
 			}
 

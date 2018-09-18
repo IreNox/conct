@@ -4,8 +4,30 @@
 		<single_device />
 		<reliable />
 	</connection>
-	<config>
-		<parameter name="device_id" type="integer" min="0" max="256" default="0" />
-		<parameter name="speed" type="integer" min="1024" max="49999" default="115200" />
-	</config>
+	<parameters>
+		<parameter name="port_name" type="string">
+			<required />
+			<filters>
+				<filter type="runtime" value="high" />
+			</filters>
+		</parameter>
+		<parameter name="speed" type="integer" default="115200">
+			<values>
+				<value>110</value>
+				<value>300</value>
+				<value>600</value>
+				<value>1200</value>
+				<value>2400</value>
+				<value>4800</value>
+				<value>9600</value>
+				<value>14400</value>
+				<value>19200</value>
+				<value>38400</value>
+				<value>57600</value>
+				<value>115200</value>
+				<value>128000</value>
+				<value>256000</value>
+			</values>
+		</parameter>
+	</parameters>
 </port>

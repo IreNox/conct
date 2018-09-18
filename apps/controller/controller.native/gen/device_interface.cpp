@@ -23,7 +23,7 @@ namespace conct
 
 	const char* DeviceInterface::getName() const
 	{
-		 return "AndroidController";
+		 return "Controller";
 	}
 
 	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )

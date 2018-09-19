@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<port name="TCP-Client" library="conct_port_tcp_client" class="PortTcpClient">
+<port name="TCP-Client" library="conct_port_tcp_client" class="PortTcpClient" parameters_struct="PortTcpClientParameters">
 	<connection mtu="1500">
 		<reliable />
 	</connection>

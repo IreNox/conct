@@ -2,6 +2,8 @@
 
 #include "conct_core.h"
 
+#include <initializer_list>
+
 namespace conct
 {
 	template< class T >
@@ -9,31 +11,33 @@ namespace conct
 	{
 	public:
 
-						ArrayView();
-						ArrayView( const T* pData, uintreg length );
+							ArrayView();
+							ArrayView( const T* pData, uintreg length );
+		constexpr			ArrayView( const std::initializer_list< T >& initList );
 
-		void			set( const T* pData, uintreg length );
+		constexpr void		set( const T* pData, uintreg length );
 
-		bool			isSet() const { return m_pData != nullptr; }
-		uintreg			getLength() const { return m_length; }
+		constexpr bool		isSet() const { return m_pData != nullptr; }
+		constexpr uintreg	getLength() const { return m_length; }
 
-		const T*		getData() const { return m_pData; }
 
-		const T*		getBegin() const;
-		const T*		getEnd() const;
+		const T*			getData() const { return m_pData; }
 
-		const T&		getFront() const;
-		const T&		getBack() const;
+		const T*			getBegin() const;
+		const T*			getEnd() const;
 
-		const T&		operator[]( uintreg index ) const;
+		const T&			getFront() const;
+		const T&			getBack() const;
 
-		const T*		begin() const { return getBegin(); }
-		const T*		end() const { return getEnd(); }
+		const T&			operator[]( uintreg index ) const;
+
+		const T*			begin() const { return getBegin(); }
+		const T*			end() const { return getEnd(); }
 
 	private:
 
-		const T*		m_pData;
-		uintreg			m_length;
+		const T*			m_pData;
+		uintreg				m_length;
 	};
 }
 

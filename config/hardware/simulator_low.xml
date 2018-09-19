@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <hardware name="SimulatorLow" runtime="low">
+	<system>windows</system>
+	<environment>simulator</environment>
 	<specifications>
 		<program>-1</program>
 		<ram>-1</ram>

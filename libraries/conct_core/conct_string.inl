@@ -112,6 +112,31 @@ namespace conct
 		return pString1[ index ] == pString2[ index ] != '\0';
 	}
 
+	CONCT_FORCE_INLINE StringCompareResult compareStrings( const char* pString1, const char* pString2 )
+	{
+		while( *pString1 != '\0' && *pString2 != '\0' )
+		{
+			if( *pString1 < *pString2 )
+			{
+				return StringCompareResult_Lower;
+			}
+			else if( *pString1 > *pString2 )
+			{
+				return StringCompareResult_Greater;
+			}
+
+			pString1++;
+			pString2++;
+		}
+
+		if( *pString1 == '\0' && *pString2 == '\0' )
+		{
+			return StringCompareResult_Equals;
+		}
+
+		return *pString1 == '\0' ? StringCompareResult_Lower : StringCompareResult_Greater;
+	}
+
 	CONCT_FORCE_INLINE bool doesStringStartWith( const char* pString, const char* pValue )
 	{
 		if( pString == nullptr || pValue == nullptr )

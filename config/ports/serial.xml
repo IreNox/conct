@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<port name="Serial" library="conct_port_serial" class="PortSerial">
+<port name="Serial" library="conct_port_serial" class="PortSerial" parameters_struct="PortSerialParameters">
 	<connection mtu="56">
 		<single_device />
 		<reliable />

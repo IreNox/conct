@@ -15,7 +15,14 @@ namespace conct
 	}
 
 	template< class T >
-	void ArrayView<T>::set( const T* pData, uintreg length )
+	constexpr ArrayView< T >::ArrayView( const std::initializer_list< T >& initList )
+		: m_pData( initList.begin() )
+		, m_length( initList.size() )
+	{
+	}
+
+	template< class T >
+	constexpr void ArrayView<T>::set( const T* pData, uintreg length )
 	{
 		m_pData		= pData;
 		m_length	= length;

@@ -74,6 +74,11 @@ namespace conct
 		bool				operator!=( const DynamicString& rhs ) const;
 		bool				operator!=( const char* pString ) const;
 
+		bool				operator<( const DynamicString& rhs ) const;
+		bool				operator<=( const DynamicString& rhs ) const;
+		bool				operator>( const DynamicString& rhs ) const;
+		bool				operator>=( const DynamicString& rhs ) const;
+
 		DynamicString&		operator+=( const char* pString );
 		DynamicString&		operator+=( const DynamicString& rhs );
 

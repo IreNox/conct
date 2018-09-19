@@ -2,18 +2,12 @@
 
 #include "conct_array_view.h"
 #include "conct_core.h"
+#include "conct_pair.h"
 
 #include <initializer_list>
 
 namespace conct
 {
-	template< class TKey, class TValue >
-	struct Pair
-	{
-		TKey	key;
-		TValue	value;
-	};
-
 	template< class TKey, class TValue >
 	class Map
 	{
@@ -32,6 +26,8 @@ namespace conct
 
 		void					clear();
 		void					reserve( uintreg size );
+
+		bool					hasKey( const TKey& key ) const;
 
 		bool					find( TValue*& target, const TKey& key );
 		bool					find( const TValue*& target, const TKey& key ) const;

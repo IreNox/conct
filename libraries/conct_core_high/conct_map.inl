@@ -64,6 +64,12 @@ namespace conct
 	}
 
 	template< class TKey, class TValue >
+	bool conct::Map<TKey, TValue>::hasKey( const TKey& key ) const
+	{
+		return findIndex( key ) != (uintreg)-1;
+	}
+
+	template< class TKey, class TValue >
 	bool Map<TKey, TValue>::find( TValue*& target, const TKey& key )
 	{
 		const uintreg index = findIndex( key );
@@ -204,7 +210,12 @@ namespace conct
 	const TValue& Map< TKey, TValue >::operator[]( const TKey& key ) const
 	{
 		const uintreg index = findIndex( key );
-		CONCT_ASSERT( index != ( uintreg )-1 );
+		if( index == (uintreg)-1 )
+		{
+			static TValue emptyValue = TValue();
+			return emptyValue;
+		}
+
 		return m_pData[ index ].value;
 	}
 

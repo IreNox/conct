@@ -515,6 +515,28 @@ namespace conct
 		return !isStringEquals( m_pString, pString );
 	}
 
+	bool DynamicString::operator<( const DynamicString& rhs ) const
+	{
+		return compareStrings( m_pString, rhs.m_pString ) == StringCompareResult_Lower;
+	}
+
+	bool DynamicString::operator<=( const DynamicString& rhs ) const
+	{
+		const StringCompareResult result = compareStrings( m_pString, rhs.m_pString );
+		return result == StringCompareResult_Lower || result == StringCompareResult_Equals;
+	}
+
+	bool DynamicString::operator>( const DynamicString& rhs ) const
+	{
+		return compareStrings( m_pString, rhs.m_pString ) == StringCompareResult_Greater;
+	}
+
+	bool DynamicString::operator>=( const DynamicString& rhs ) const
+	{
+		const StringCompareResult result = compareStrings( m_pString, rhs.m_pString );
+		return result == StringCompareResult_Greater || result == StringCompareResult_Equals;
+	}
+
 	void DynamicString::checkCapacity( uintreg size )
 	{
 		const uintreg nextCapacity = getNextPowerOfTwo( size + 1u );

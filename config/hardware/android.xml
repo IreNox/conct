@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<hardware name="HighEnd" runtime="high">
+<hardware name="Android" runtime="high">
+	<system>android</system>
+	<environment>production</environment>
 	<specifications>
 		<program>-1</program>
 		<ram>-1</ram>

@@ -1,12 +1,11 @@
 #pragma  once
 
+#include "conct_array_view.h"
 #include "conct_core.h"
+#include "conct_dynamic_string.h"
+#include "conct_pair.h"
 
-namespace tinyxml2
-{
-	class XMLDocument;
-	class XMLElement;
-}
+#include <tinyxml2/tinyxml2.h>
 
 namespace conct
 {
@@ -26,4 +25,9 @@ namespace conct
 	bool	loadMemSizeValue( uintreg& target, tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing = false );
 	bool	loadTypeValue( const Type** ppType, tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing = false );
 	bool	loadInterfaceValue( const InterfaceType** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing = false );
+
+	template< class TEnum >
+	bool	loadEnumValue( TEnum& target, tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< Pair< TEnum, const char*> >& mapping, bool ignoreMissing = false );
 }
+
+#include "conct_xml_helper.inl"

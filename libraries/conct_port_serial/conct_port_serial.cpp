@@ -116,7 +116,7 @@ namespace conct
 	void PortSerial::closeSend( Writer& writer, uintreg endpointId )
 	{
 		m_counter = 0u;
-		m_lastSendId++;
+		m_lastSendId = (m_lastSendId + 1u) % 32u;
 
 		const uint8 size = uint8( sizeof( m_buffer ) - writer.getRemainingSize() - 1u );
 		writeSendHeader( size, Type_Data, m_lastSendId );
@@ -353,16 +353,17 @@ namespace conct
 	{
 		writeSendHeader( 0u, Type_Hello, 0u );
 
-		m_counter = 0u;
-		m_state = State_Send;
+		m_lastSendId	= 0u;
+		m_counter		= 0u;
+		m_state			= State_Send;
 	}
 
 	void PortSerial::sendAck( uint8 packetId )
 	{
 		writeSendHeader( 0u, Type_Ack, packetId );
 
-		m_counter = 0u;
-		m_state = State_Send;
+		m_counter		= 0u;
+		m_state			= State_Send;
 	}
 
 	uint8 PortSerial::calculateChecksum( const Header& header ) const

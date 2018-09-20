@@ -58,11 +58,6 @@ namespace conct
 
 	void SimulatorDeviceContext::writeSerialData( uint8 byte )
 	{
-		if( getGpio( 5u ) )
-		{
-			return;
-		}
-
 		MutexLock lock( m_serialMutex );
 		m_serialData.pushBack( byte );
 	}

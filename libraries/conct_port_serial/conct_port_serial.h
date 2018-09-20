@@ -67,8 +67,7 @@ namespace conct
 		enum Flag
 		{
 			Flag_ConnectionReset	= 1u << 0u,
-			Flag_ReceivedPacket		= 1u << 1u,
-			Flag_AckPacket			= 1u << 2u,
+			Flag_ReceivedPacket		= 1u << 1u
 		};
 
 		typedef uint8 Header[ 3u ];

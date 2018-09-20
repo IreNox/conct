@@ -399,7 +399,7 @@ namespace conct
 		{
 			m_stateHistory.clear();
 		}
-		else if( m_state == State_Value )
+		else if( m_state == State_Value && state == State_Value )
 		{
 			m_list.push_back( m_valueText );
 		}
@@ -793,7 +793,9 @@ namespace conct
 		ConsoleRenderer::drawText( 0u, 6u, titleText.toConstCharPointer() );
 		ConsoleRenderer::drawRectangle( 0u, 7u, size.x, 3u, LineType_Single );
 		ConsoleRenderer::drawText( 2u, 8u, m_valueText.toConstCharPointer() );
-		ConsoleRenderer::drawCharacter( uint16( 2u + m_valueText.getLength() ), 8u, ' ' );
+
+		const uint16 textEndX = uint16( 2u + m_valueText.getLength() );
+		ConsoleRenderer::drawCharacterRepeated( textEndX, 8u, ' ', size.x - textEndX - 2u );
 
 		ConsoleRenderer::setCursorPosition( uint16( 2u + m_index ), 8u );
 	}

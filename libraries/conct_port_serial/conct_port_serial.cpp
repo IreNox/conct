@@ -21,8 +21,7 @@
 
 namespace conct
 {
-	static const uintreg s_serialSendPin = CONCT_ENABLED( CONCT_PLATFORM_LINUX ) ? 18u : 22u;
-	static const uint32 s_resendTime = 400;
+	static const uint32 s_resendTime = 100;
 
 	bool PortSerial::popConnectionReset( uintreg& endpointId )
 	{
@@ -63,8 +62,6 @@ namespace conct
 		Serial.write( "Start!\n" );
 #endif
 
-		pinMode( s_serialSendPin, OUTPUT );
-		digitalWrite( s_serialSendPin, LOW );
 		Serial1.begin( parameters.speed );
 
 		sendHello();
@@ -80,11 +77,6 @@ namespace conct
 			switch( m_state )
 			{
 			case State_Idle:
-				if( m_flags.isSet( Flag_AckPacket ) && millis() - m_lastSendTime > s_resendTime * 2u )
-				{
-					m_flags.unset( Flag_AckPacket );
-				}
-
 				if( m_flags.isSet( Flag_ReceivedPacket ) )
 				{
 					running = false;
@@ -112,8 +104,7 @@ namespace conct
 
 	bool PortSerial::openSend( Writer& writer, uintreg size, uintreg endpointId )
 	{
-		if( m_state != State_Idle ||
-			m_flags.isSet( Flag_AckPacket ) )
+		if( m_state != State_Idle )
 		{
 			return false;
 		}
@@ -288,7 +279,6 @@ namespace conct
 					if( id != m_lastLastReceivedId )
 					{
 						m_flags.set( Flag_ReceivedPacket );
-						m_flags.set( Flag_AckPacket );
 					}
 					m_lastLastReceivedId = id;
 					sendAck( getIdFromHeader( m_receiveHeader ) );
@@ -308,8 +298,6 @@ namespace conct
 
 	bool PortSerial::updateSend()
 	{
-		digitalWrite( s_serialSendPin, HIGH );
-
 		for( uintreg i = 0u; i < sizeof( m_sendHeader ); ++i )
 		{
 			Serial1.write( m_sendHeader[ i ] );
@@ -328,7 +316,6 @@ namespace conct
 		}
 		while( !( UCSR1A & ( 1 << TXC1 ) ) );   // Wait for the transmission to complete
 #endif
-		digitalWrite( s_serialSendPin, LOW );
 
 		m_lastSendTime = millis();
 

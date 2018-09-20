@@ -8,11 +8,10 @@ namespace conct
 	{
 		PortTcpClient* pPort = new PortTcpClient();
 
-		PortTcpClientConfig config;
-		config.targetHost	= DynamicString( pHostname );
-		config.targetPort	= hostPort;
-		pPort->setConfig( config );
-		if( !pPort->setup() )
+		PortTcpClientParameters parameters;
+		parameters.serverHost	= DynamicString( pHostname );
+		parameters.serverPort	= hostPort;
+		if( !pPort->setup( parameters ) )
 		{
 			delete pPort;
 			return nullptr;

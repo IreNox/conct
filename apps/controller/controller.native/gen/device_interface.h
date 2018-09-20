@@ -5,7 +5,9 @@
 
 
 #include "core_device_proxy.h"
+#include "core_router_proxy.h"
 
+#include "conct_router.h"
 
 namespace conct
 {
@@ -26,7 +28,9 @@ namespace conct
 
 
 		DeviceProxy m_proxyDevice;
+		RouterProxy m_proxyRouter;
 
+		Router m_instanceRouter;
 
 		virtual void setup() = 0;
 		virtual void loop() = 0;

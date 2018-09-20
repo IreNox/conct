@@ -3,6 +3,7 @@
 namespace conct
 {
 	DeviceInterface::DeviceInterface()
+		: m_instanceRouter( m_runtime )
 	{
 	}
 
@@ -28,7 +29,7 @@ namespace conct
 
 	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )
 	{
-		static Instance s_instances[ 1u ];
+		static Instance s_instances[ 2u ];
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );
 	}
 
@@ -37,6 +38,7 @@ namespace conct
 		static const Instance s_instances[] =
 		{
 			{ 0, 32636 },
+			{ 1, 25653 },
 		};
 
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );
@@ -47,6 +49,7 @@ namespace conct
 		static const LocalInstance s_instances[] =
 		{
 			{ 0, this, &m_proxyDevice },
+			{ 1, &m_instanceRouter, &m_proxyRouter },
 		};
 
 		instances.set( s_instances, CONCT_COUNT( s_instances ) );

@@ -40,9 +40,6 @@ namespace conct
 
 	bool LightProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		Light* pTypedInstance = static_cast< Light* >( pInstance );
-
-
 		return false;
 	}
 }

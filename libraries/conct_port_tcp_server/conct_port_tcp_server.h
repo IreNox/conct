@@ -2,6 +2,7 @@
 
 #include "conct_port.h"
 
+#include "conct_dynamic_string.h"
 #include "conct_vector.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -19,13 +20,20 @@ namespace conct
 	typedef int SocketType;
 #endif
 
+	struct PortTcpServerParameters
+	{
+		DynamicString	listenAddress;
+		int				listenPort;
+	};
+
 	class PortTcpServer : public Port
 	{
 	public:
 
+		bool						setup( const PortTcpServerParameters& parameters );
+
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
-		virtual bool				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
 		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) CONCT_OVERRIDE_FINAL;

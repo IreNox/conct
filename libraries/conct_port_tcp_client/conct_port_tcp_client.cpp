@@ -22,7 +22,6 @@
 
 namespace conct
 {
-	static const int s_tcpPort = 5489;
 	static const uintreg InvalidSocket = ( uintreg )-1;
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -45,8 +44,6 @@ namespace conct
 
 	PortTcpClient::PortTcpClient()
 	{
-		m_config.targetHost		= "::1"_s;
-		m_config.targetPort		= s_tcpPort;
 		m_socket				= InvalidSocket;
 		m_connectionLost		= true;
 		m_connectionReset		= false;
@@ -60,23 +57,7 @@ namespace conct
 		}
 	}
 
-	void PortTcpClient::setConfig( const PortTcpClientConfig& config )
-	{
-		m_config = config;
-	}
-
-	bool PortTcpClient::popConnectionReset( uintreg& endpointId )
-	{
-		if( !m_connectionReset )
-		{
-			return false;
-		}
-
-		m_connectionReset = false;
-		return true;
-	}
-
-	bool PortTcpClient::setup()
+	bool PortTcpClient::setup( const PortTcpClientParameters& parameters )
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
@@ -119,7 +100,7 @@ namespace conct
 		addressHint.ai_protocol = IPPROTO_TCP;
 
 		addrinfo* pAddressResults = nullptr;
-		const int result = getaddrinfo( m_config.targetHost.toConstCharPointer(), nullptr, &addressHint, &pAddressResults );
+		const int result = getaddrinfo( parameters.serverHost.toConstCharPointer(), nullptr, &addressHint, &pAddressResults );
 		if( result != 0 )
 		{
 			const char* pErrorName = "";
@@ -140,13 +121,24 @@ namespace conct
 
 		const addrinfo& addressResult = pAddressResults[ 0u ];
 		m_serverAddress = *(sockaddr_in6*)addressResult.ai_addr;
-		m_serverAddress.sin6_port = htons( m_config.targetPort );
+		m_serverAddress.sin6_port = htons( parameters.serverPort );
 
 		freeaddrinfo( pAddressResults );
 		return true;
 		//memory::zero( m_serverAddress );
 		//m_serverAddress.sin6_family = AF_INET6;
-		//inet_pton( AF_INET6, m_config.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
+		//inet_pton( AF_INET6, parameters.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
+	}
+
+	bool PortTcpClient::popConnectionReset( uintreg& endpointId )
+	{
+		if( !m_connectionReset )
+		{
+			return false;
+		}
+
+		m_connectionReset = false;
+		return true;
 	}
 
 	void PortTcpClient::loop()

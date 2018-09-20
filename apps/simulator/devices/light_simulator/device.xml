@@ -3,7 +3,7 @@
 	<ports>
 		<port index="0" type="Serial">
 			<parameters>
-				<parameter name="speed" value="9600">
+				<parameter name="speed" value="9600" />
 			</parameters>
 		</port>
 	</ports>

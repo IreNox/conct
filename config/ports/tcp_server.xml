@@ -5,7 +5,7 @@
 		<reliable />
 	</connection>
 	<parameters>
-		<parameter name="listen_address" type="string" default="any" />
-		<parameter name="listen_port" type="integer" min="1024" max="49999" default="5489" />
+		<parameter name="listenAddress" type="string" default="::0" />
+		<parameter name="listenPort" type="integer" min="1024" max="49999" default="5489" />
 	</parameters>
 </port>

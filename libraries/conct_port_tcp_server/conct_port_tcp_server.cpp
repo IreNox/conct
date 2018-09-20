@@ -28,7 +28,6 @@ namespace conct
 	CONCT_STATIC_ASSERT( sizeof( SocketType ) >= sizeof( int ) );
 #endif
 
-	static const int s_tcpPort = 5489;
 	static const SocketType InvalidSocket = ( SocketType )-1;
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -49,20 +48,7 @@ namespace conct
 #endif
 	}
 
-	bool PortTcpServer::popConnectionReset( uintreg& endpointId )
-	{
-		if( m_brokenConnections.isEmpty() )
-		{
-			return false;
-		}
-
-		endpointId = m_brokenConnections.getBack();
-		m_brokenConnections.popBack();
-
-		return true;
-	}
-
-	bool PortTcpServer::setup()
+	bool PortTcpServer::setup( const PortTcpServerParameters& parameters )
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
@@ -78,7 +64,7 @@ namespace conct
 
 		// reuse address
 		int reuseaddr = 1;
-		setsockopt( m_socket, SOL_SOCKET, SO_REUSEADDR, ( const char* )&reuseaddr, sizeof( reuseaddr ) );
+		setsockopt( m_socket, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuseaddr, sizeof( reuseaddr ) );
 
 		// set non blocking
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
@@ -95,11 +81,47 @@ namespace conct
 		}
 #endif
 
+		addrinfo addressHint;
+		memory::zero( addressHint );
+
+		addressHint.ai_socktype = SOCK_STREAM;
+		addressHint.ai_flags = AI_ADDRCONFIG;
+		addressHint.ai_family = AF_INET6;
+		addressHint.ai_protocol = IPPROTO_TCP;
+
+		addrinfo* pAddressResults = nullptr;
+		const int result = getaddrinfo( parameters.listenAddress.toConstCharPointer(), nullptr, &addressHint, &pAddressResults );
+		if( result != 0 )
+		{
+			const char* pErrorName = "";
+#if CONCT_DISABLED( CONCT_PLATFORM_WINDOWS )
+			if( result == EAI_SYSTEM )
+			{
+				const int error = getLastError();
+				pErrorName = strerror( error );
+			}
+			else
+			{
+				pErrorName = gai_strerror( result );
+			}
+#endif
+			trace::write( "Failed to get address. Error: "_s + pErrorName );
+			return false;
+		}
+
+		const addrinfo& addressResult = pAddressResults[ 0u ];
+
 		sockaddr_in6 address;
-		memory::zero( address );
-		address.sin6_family = AF_INET6;
-		address.sin6_port = htons( s_tcpPort );
-		address.sin6_addr = in6addr_any;
+		address = *(sockaddr_in6*)addressResult.ai_addr;
+		address.sin6_port = htons( parameters.listenPort );
+
+		freeaddrinfo( pAddressResults );
+
+		//sockaddr_in6 address;
+		//memory::zero( address );
+		//address.sin6_family = AF_INET6;
+		//address.sin6_port = htons( parameters.listenPort );
+		//address.sin6_addr = in6addr_any;
 		if( bind( m_socket, (const sockaddr*)&address, sizeof( address ) ) != 0 )
 		{
 			const int error = getLastError();
@@ -114,7 +136,20 @@ namespace conct
 			return false;
 		}
 
-		trace::write( "Listen on port: "_s + string_tools::toString( s_tcpPort ) + "\n" );
+		trace::write( "Listen on port: "_s + string_tools::toString( parameters.listenPort ) + "\n" );
+		return true;
+	}
+
+	bool PortTcpServer::popConnectionReset( uintreg& endpointId )
+	{
+		if( m_brokenConnections.isEmpty() )
+		{
+			return false;
+		}
+
+		endpointId = m_brokenConnections.getBack();
+		m_brokenConnections.popBack();
+
 		return true;
 	}
 

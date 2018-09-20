@@ -8,8 +8,8 @@ namespace conct
 	{
 	public:
 
-		Router&			getRouter() { return m_instanceRouter; }
 		RuntimeHigh&	getRuntime() { return m_runtime; }
+		Router&			getRouter() { return m_instanceRouter; }
 
 	protected:
 

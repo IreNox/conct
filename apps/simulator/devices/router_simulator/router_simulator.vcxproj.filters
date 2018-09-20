@@ -297,9 +297,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="device.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\..\..\..\libraries\conct_core\conct_memory.inl">
       <Filter>libraries\conct_core</Filter>
     </None>
@@ -360,5 +357,8 @@
     <None Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="device.xml" />
   </ItemGroup>
 </Project>

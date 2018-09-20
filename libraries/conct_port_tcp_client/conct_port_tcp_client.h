@@ -14,10 +14,10 @@
 
 namespace conct
 {
-	struct PortTcpClientConfig
+	struct PortTcpClientParameters
 	{
-		DynamicString		targetHost;		// IPv6 or Hostname
-		uint16				targetPort;
+		DynamicString		serverHost;		// IPv6 or Hostname
+		int					serverPort;
 	};
 
 	class PortTcpClient : public Port
@@ -27,11 +27,10 @@ namespace conct
 									PortTcpClient();
 		virtual						~PortTcpClient();
 
-		void						setConfig( const PortTcpClientConfig& config );
+		bool						setup( const PortTcpClientParameters& parameters );
 
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
-		virtual bool				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
 		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) CONCT_OVERRIDE_FINAL;
@@ -43,8 +42,6 @@ namespace conct
 		virtual Flags8< PortFlag >	getFlags() CONCT_OVERRIDE_FINAL;
 
 	private:
-
-		PortTcpClientConfig			m_config;
 
 		uintreg						m_socket;
 		sockaddr_in6				m_serverAddress;

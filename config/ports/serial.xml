@@ -6,9 +6,8 @@
 	</connection>
 	<parameters>
 		<parameter name="port_name" type="string">
-			<required />
 			<filters>
-				<filter type="runtime" value="high" />
+				<filter type="system" value="linux" />
 			</filters>
 		</parameter>
 		<parameter name="speed" type="integer" default="115200">

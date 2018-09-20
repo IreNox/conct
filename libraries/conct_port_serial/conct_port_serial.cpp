@@ -22,15 +22,7 @@
 namespace conct
 {
 	static const uintreg s_serialSendPin = CONCT_ENABLED( CONCT_PLATFORM_LINUX ) ? 18u : 22u;
-	static const uint32 s_serialSpeed = 115200;
 	static const uint32 s_resendTime = 400;
-
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-	void PortSerial::setConfig( const PortSerialConfig& config )
-	{
-		m_config = config;
-	}
-#endif
 
 	bool PortSerial::popConnectionReset( uintreg& endpointId )
 	{
@@ -48,7 +40,7 @@ namespace conct
 		return true;
 	}
 
-	bool PortSerial::setup()
+	bool PortSerial::setup( const PortSerialParameters& parameters )
 	{
 		m_state					= State_Idle;
 		m_lastSendId			= 0u;
@@ -62,7 +54,7 @@ namespace conct
 			return false;
 		}
 
-		if( !Serial1.setup( m_config.portName ) )
+		if( !Serial1.setup( parameters.portName ) )
 		{
 			return false;
 		}
@@ -73,7 +65,7 @@ namespace conct
 
 		pinMode( s_serialSendPin, OUTPUT );
 		digitalWrite( s_serialSendPin, LOW );
-		Serial1.begin( s_serialSpeed );
+		Serial1.begin( parameters.speed );
 
 		sendHello();
 

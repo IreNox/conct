@@ -19,24 +19,22 @@
 
 namespace conct
 {
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-	struct PortSerialConfig
+	struct PortSerialParameters
 	{
-		DynamicString portName;
-	};
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+		DynamicString	portName;
 #endif
+		int				speed;
+	};
 
 	class PortSerial : public Port
 	{
 	public:
 
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		void						setConfig( const PortSerialConfig& config );
-#endif
+		bool						setup( const PortSerialParameters& parameters );
 
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
-		virtual bool				setup() CONCT_OVERRIDE_FINAL;
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
 
 		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) CONCT_OVERRIDE_FINAL;
@@ -74,10 +72,6 @@ namespace conct
 		};
 
 		typedef uint8 Header[ 3u ];
-
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		PortSerialConfig			m_config;
-#endif
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) || CONCT_ENABLED( CONCT_ENVIRONMENT_TESTS )
 		Serial						Serial1;

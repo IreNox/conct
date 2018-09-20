@@ -5,7 +5,7 @@
 		<reliable />
 	</connection>
 	<parameters>
-		<parameter name="port_name" type="string">
+		<parameter name="portName" type="string">
 			<filters>
 				<filter type="system" value="linux" />
 			</filters>

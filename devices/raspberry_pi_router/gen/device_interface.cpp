@@ -9,14 +9,20 @@ namespace conct
 
 	void DeviceInterface::setupDevice()
 	{
-		setup();
-
-		m_port0.setup();
-		m_port1.setup();
+		PortTcpServerParameters port0Parameters;
+		port0Parameters.listenAddress = "::0"_s;
+		port0Parameters.listenPort = 5489;
+		m_port0.setup( port0Parameters );
+		PortSerialParameters port1Parameters;
+		port1Parameters.portName = "/dev/serial0"_s;
+		port1Parameters.speed = 115200;
+		m_port1.setup( port1Parameters );
 
 		m_runtime.setup( this );
 		m_runtime.registerPort( &m_port0 );
 		m_runtime.registerPort( &m_port1 );
+
+		setup();
 	}
 
 	void DeviceInterface::loopDevice()

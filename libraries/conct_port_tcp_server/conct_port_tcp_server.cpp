@@ -12,8 +12,9 @@
 #	include <WS2tcpip.h>
 #	include <ws2ipdef.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-#	include <sys/socket.h>
 #	include <fcntl.h>
+#	include <netdb.h>
+#	include <sys/socket.h>
 #endif
 
 #include <stdio.h>

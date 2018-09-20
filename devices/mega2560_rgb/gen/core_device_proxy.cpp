@@ -22,11 +22,13 @@ namespace conct
 			targetValueBuilder.setString( pTypedInstance->getName() );
 			return true;
 		}
+
 		if( isStringEquals( pName, "Guid" ) )
 		{
 			targetValueBuilder.setGuid( pTypedInstance->getGuid() );
 			return true;
 		}
+
 		if( isStringEquals( pName, "Instances" ) )
 		{
 			targetValueBuilder.setArray( pTypedInstance->getInstances() );
@@ -38,9 +40,6 @@ namespace conct
 
 	bool DeviceProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
 	{
-		Device* pTypedInstance = static_cast< Device* >( pInstance );
-
-
 		return false;
 	}
 
@@ -53,6 +52,7 @@ namespace conct
 			targetValueBuilder.setArray( pTypedInstance->findInstances( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
+
 		if( isStringEquals( pName, "findFirstInstance" ) )
 		{
 			targetValueBuilder.setInstance( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );

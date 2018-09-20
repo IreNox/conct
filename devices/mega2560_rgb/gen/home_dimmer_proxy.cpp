@@ -40,9 +40,6 @@ namespace conct
 
 	bool DimmerProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
-
-
 		return false;
 	}
 }

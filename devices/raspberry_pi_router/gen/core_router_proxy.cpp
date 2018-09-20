@@ -28,17 +28,11 @@ namespace conct
 
 	bool RouterProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
 	{
-		Router* pTypedInstance = static_cast< Router* >( pInstance );
-
-
 		return false;
 	}
 
 	bool RouterProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		Router* pTypedInstance = static_cast< Router* >( pInstance );
-
-
 		return false;
 	}
 }

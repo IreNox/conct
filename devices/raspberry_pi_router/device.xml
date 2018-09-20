@@ -2,7 +2,11 @@
 <device name="RaspiRouter" hardware="RaspberryPi">
 	<ports>
 		<port index="0" type="TCP-Server" />
-		<port index="1" type="Serial" />
+		<port index="1" type="Serial">
+			<parameters>
+				<parameter name="portName" value="/dev/serial0" />
+			</parameters>
+		</port>
 	</ports>
 	<!--instances>
 		<instance type="Home.Light" />

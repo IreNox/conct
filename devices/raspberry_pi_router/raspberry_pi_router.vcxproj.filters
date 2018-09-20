@@ -38,6 +38,9 @@
     <Filter Include="third_party\tiny_gpio">
       <UniqueIdentifier>{9090cfc5-47c9-4b0c-bf81-90fbb1d636db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_serial\linux">
+      <UniqueIdentifier>{b199fc34-5a4e-4f96-aee4-9255c9def3f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="raspberry_pi_router-Debug.vgdbsettings">
@@ -273,11 +276,14 @@
     <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial.h">
       <Filter>libraries\conct_port_serial</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial_linux.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\tiny_gpio\tiny_gpio.h">
       <Filter>third_party\tiny_gpio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_serial\linux\conct_port_serial_arduino_interface_linux.h">
+      <Filter>libraries\conct_port_serial\linux</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_serial\linux\conct_port_serial_linux.h">
+      <Filter>libraries\conct_port_serial\linux</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -358,11 +364,14 @@
     <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial.cpp">
       <Filter>libraries\conct_port_serial</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial_linux.cpp">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\tiny_gpio\tiny_gpio.c">
       <Filter>third_party\tiny_gpio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_port_serial\linux\conct_port_serial_linux.cpp">
+      <Filter>libraries\conct_port_serial\linux</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="device.xml" />
   </ItemGroup>
 </Project>

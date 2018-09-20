@@ -21,11 +21,13 @@ namespace conct
 			targetValueBuilder.setPercentValue( pTypedInstance->getRed() );
 			return true;
 		}
+
 		if( isStringEquals( pName, "Green" ) )
 		{
 			targetValueBuilder.setPercentValue( pTypedInstance->getGreen() );
 			return true;
 		}
+
 		if( isStringEquals( pName, "Blue" ) )
 		{
 			targetValueBuilder.setPercentValue( pTypedInstance->getBlue() );
@@ -44,11 +46,13 @@ namespace conct
 			pTypedInstance->setRed( value.getPercentValue() );
 			return true;
 		}
+
 		if( isStringEquals( pName, "Green" ) )
 		{
 			pTypedInstance->setGreen( value.getPercentValue() );
 			return true;
 		}
+
 		if( isStringEquals( pName, "Blue" ) )
 		{
 			pTypedInstance->setBlue( value.getPercentValue() );
@@ -60,9 +64,6 @@ namespace conct
 
 	bool RGBProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
 	{
-		RGB* pTypedInstance = static_cast< RGB* >( pInstance );
-
-
 		return false;
 	}
 }

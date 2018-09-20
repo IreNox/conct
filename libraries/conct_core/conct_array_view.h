@@ -2,8 +2,6 @@
 
 #include "conct_core.h"
 
-#include <initializer_list>
-
 namespace conct
 {
 	template< class T >
@@ -13,12 +11,11 @@ namespace conct
 
 							ArrayView();
 							ArrayView( const T* pData, uintreg length );
-		constexpr			ArrayView( const std::initializer_list< T >& initList );
 
-		constexpr void		set( const T* pData, uintreg length );
+		void				set( const T* pData, uintreg length );
 
-		constexpr bool		isSet() const { return m_pData != nullptr; }
-		constexpr uintreg	getLength() const { return m_length; }
+		bool				isSet() const { return m_pData != nullptr; }
+		uintreg				getLength() const { return m_length; }
 
 
 		const T*			getData() const { return m_pData; }

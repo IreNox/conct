@@ -8,7 +8,7 @@
 #	include "conct_memory.h"
 #	include "conct_trace.h"
 
-#	include "conct_port_serial_arduino_interface_linux.h"
+#	include "linux/conct_port_serial_arduino_interface_linux.h"
 #elif CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
 #	include "simulator/conct_port_serial_arduino_interface_sim.h"
 #elif CONCT_ENABLED( CONCT_ENVIRONMENT_TESTS )
@@ -48,11 +48,6 @@ namespace conct
 		m_flags.clear();
 
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		if( gpioInitialise() < 0 )
-		{
-			return false;
-		}
-
 		if( !Serial1.setup( parameters.portName ) )
 		{
 			return false;

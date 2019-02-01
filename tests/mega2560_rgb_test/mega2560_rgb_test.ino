@@ -1,8 +1,8 @@
 /* PWM Outputs */
 
-static const uint8_t Red = 2;
-static const uint8_t Green = 3;
-static const uint8_t Blue = 4;
+static const uint8_t Red = 9;
+static const uint8_t Green = 10;
+static const uint8_t Blue = 11;
 
 static const uint8_t Pins[] = { Red, Green, Blue };
 
@@ -30,7 +30,10 @@ void loop()
       SetColour(0, i );
       delay(25 );
     }*/
-	
+
+  TCCR1B |= 0x04;
+  TCCR1B &= 0xfc;
+
   for (int colour=0; colour < 3; colour++)
   {
     for (int i=0; i <= 255; i++)

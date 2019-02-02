@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<port name="NRF24L01-Server" library="conct_port_nrf24l01_server" class="PortNRF24L01Server" parameters_struct="PortNRF24L01ServerParameters">
+	<requirements>
+		<allocation />
+		<gpio />
+		<spi />
+	</requirements>
+	<connection mtu="32">
+		<multi_device />
+		<reliable />
+	</connection>
+	<parameters>
+		<parameter name="base_address" type="string" default="00001" />
+		<parameter name="cePin0" type="integer" default="22">
+			<filters>
+				<filter type="system" value="linux" />
+			</filters>
+		</parameter>
+		<parameter name="cePin1" type="integer" default="0">
+			<filters>
+				<filter type="system" value="linux" />
+			</filters>
+		</parameter>
+	</parameters>
+</port>

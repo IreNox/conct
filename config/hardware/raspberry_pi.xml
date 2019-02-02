@@ -2,9 +2,13 @@
 <hardware name="RaspberryPi" runtime="high">
 	<system>linux</system>
 	<environment>production</environment>
-	<specifications>
-		<program>-1</program>
-		<ram>-1</ram>
-		<flash>-1</flash>
-	</specifications>
+	<memory>
+		<dynamic />
+	</memory>
+	<capabilities>
+		<allocation />
+		<gpio />
+		<spi />
+		<sockets />
+	</capabilities>
 </hardware>

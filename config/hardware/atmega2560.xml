@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<hardware name="ATmega2560" runtime="low">
+<hardware name="ATMega2560" runtime="low">
 	<system>arduino</system>
 	<environment>production</environment>
-	<specifications>
+	<memory>
 		<program>262144</program>
 		<ram>8192</ram>
 		<flash>8192</flash>
-	</specifications>
-	<services>
-		<slave />
-	</services>
+	</memory>
+	<capabilities>
+		<gpio />
+		<spi />
+	</capabilities>
 </hardware>

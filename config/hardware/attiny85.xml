@@ -2,12 +2,10 @@
 <hardware name="ATtiny85" runtime="low">
 	<system>arduino</system>
 	<environment>production</environment>
-	<specifications>
+	<memory>
 		<program>8192</program>
 		<ram>512</ram>
 		<flash>512</flash>
-	</specifications>
-	<services>
-		<slave />
-	</services>
+	</memory>
+	<capabilities />
 </hardware>

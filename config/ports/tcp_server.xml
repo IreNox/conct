@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <port name="TCP-Server" library="conct_port_tcp_server" class="PortTcpServer" parameters_struct="PortTcpServerParameters">
+	<requirements>
+		<allocation />
+		<sockets />
+	</requirements>
 	<connection mtu="1500">
 		<multi_device />
 		<reliable />

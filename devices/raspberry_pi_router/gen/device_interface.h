@@ -4,7 +4,7 @@
 #include "conct_runtime_high.h"
 
 #include "conct_port_tcp_server.h"
-#include "conct_port_serial.h"
+#include "conct_port_nrf24l01_server.h"
 
 #include "core_device_proxy.h"
 #include "core_router_proxy.h"
@@ -29,7 +29,7 @@ namespace conct
 		RuntimeHigh m_runtime;
 
 		PortTcpServer m_port0;
-		PortSerial m_port1;
+		PortNRF24L01Server m_port1;
 
 		DeviceProxy m_proxyDevice;
 		RouterProxy m_proxyRouter;

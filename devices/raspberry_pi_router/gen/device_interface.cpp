@@ -13,9 +13,10 @@ namespace conct
 		port0Parameters.listenAddress = "::0"_s;
 		port0Parameters.listenPort = 5489;
 		m_port0.setup( port0Parameters );
-		PortSerialParameters port1Parameters;
-		port1Parameters.portName = "/dev/serial0"_s;
-		port1Parameters.speed = 115200;
+		PortNRF24L01ServerParameters port1Parameters;
+		port1Parameters.address = "00001"_s;
+		port1Parameters.cePin = 22;
+		port1Parameters.speed = 4000000;
 		m_port1.setup( port1Parameters );
 
 		m_runtime.setup( this );

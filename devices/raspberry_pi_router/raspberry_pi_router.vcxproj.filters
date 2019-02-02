@@ -29,17 +29,23 @@
     <Filter Include="gen">
       <UniqueIdentifier>{7c66eb55-1131-4e05-86ad-5862a3514eb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_port_serial">
-      <UniqueIdentifier>{3d88359e-d311-40d1-abd5-14a67b138a8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="third_party">
       <UniqueIdentifier>{8a299360-913c-4161-995d-58cd9f2a3860}</UniqueIdentifier>
     </Filter>
     <Filter Include="third_party\tiny_gpio">
       <UniqueIdentifier>{9090cfc5-47c9-4b0c-bf81-90fbb1d636db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_port_serial\linux">
-      <UniqueIdentifier>{b199fc34-5a4e-4f96-aee4-9255c9def3f8}</UniqueIdentifier>
+    <Filter Include="libraries\conct_port_nrf24l01_server">
+      <UniqueIdentifier>{3d88359e-d311-40d1-abd5-14a67b138a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\rft24">
+      <UniqueIdentifier>{54675efa-a924-414b-8b61-54a4199ce372}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\rft24\utility">
+      <UniqueIdentifier>{e3858fc1-8082-4978-8857-3659b63d685f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\rft24\utility\RPi">
+      <UniqueIdentifier>{761e9626-8c70-40a3-ba73-6846ec54f172}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -273,17 +279,38 @@
     <ClInclude Include="device_raspi_router.h">
       <Filter>project</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_port_serial\conct_port_serial.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\third_party\tiny_gpio\tiny_gpio.h">
       <Filter>third_party\tiny_gpio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_port_serial\linux\conct_port_serial_arduino_interface_linux.h">
-      <Filter>libraries\conct_port_serial\linux</Filter>
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01_server\conct_port_nrf24l01_server.h">
+      <Filter>libraries\conct_port_nrf24l01_server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_port_serial\linux\conct_port_serial_linux.h">
-      <Filter>libraries\conct_port_serial\linux</Filter>
+    <ClInclude Include="..\..\libraries\rf24\RF24.h">
+      <Filter>libraries\rft24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\RF24_config.h">
+      <Filter>libraries\rft24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\nRF24L01.h">
+      <Filter>libraries\rft24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\printf.h">
+      <Filter>libraries\rft24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\includes.h">
+      <Filter>libraries\rft24\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\bcm2835.h">
+      <Filter>libraries\rft24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\includes.h">
+      <Filter>libraries\rft24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\RF24_arch_config.h">
+      <Filter>libraries\rft24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\spi.h">
+      <Filter>libraries\rft24\utility\RPi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -361,14 +388,20 @@
     <ClCompile Include="device_raspi_router.cpp">
       <Filter>project</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_port_serial\conct_port_serial.cpp">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\third_party\tiny_gpio\tiny_gpio.c">
       <Filter>third_party\tiny_gpio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_port_serial\linux\conct_port_serial_linux.cpp">
-      <Filter>libraries\conct_port_serial\linux</Filter>
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01_server\conct_port_nrf24l01_server.cpp">
+      <Filter>libraries\conct_port_nrf24l01_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\rf24\RF24.cpp">
+      <Filter>libraries\rft24</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\rf24\utility\RPi\spi.cpp">
+      <Filter>libraries\rft24\utility\RPi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\rf24\utility\RPi\bcm2835.c">
+      <Filter>libraries\rft24\utility\RPi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

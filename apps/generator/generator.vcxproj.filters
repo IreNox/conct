@@ -158,6 +158,9 @@
     <ClInclude Include="include\port_parameter.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\capabilities.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\generator.cpp">
@@ -248,6 +251,9 @@
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
     <ClCompile Include="sources\port_parameter.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\capabilities.cpp">
       <Filter>sources</Filter>
     </ClCompile>
   </ItemGroup>

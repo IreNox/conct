@@ -55,6 +55,7 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
     <ClInclude Include="..\..\third_party\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="include\capabilities.h" />
     <ClInclude Include="include\device.h" />
     <ClInclude Include="include\generator.h" />
     <ClInclude Include="include\hardware.h" />
@@ -86,6 +87,7 @@
     <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
     <ClCompile Include="..\..\third_party\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="sources\capabilities.cpp" />
     <ClCompile Include="sources\device.cpp" />
     <ClCompile Include="sources\generator.cpp" />
     <ClCompile Include="sources\hardware.cpp" />

@@ -3,12 +3,12 @@
 namespace conct
 {
 	template< class TEnum >
-	bool loadEnumValue( TEnum& target, tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< Pair< TEnum, const char*> >& mapping, bool ignoreMissing /*= false */ )
+	bool loadEnumValue( TEnum& target, const tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< Pair< TEnum, const char*> >& mapping, bool ignoreMissing /*= false */ )
 	{
 		const char* pStringValue = pNode->Attribute( pName );
 		if( pStringValue == nullptr )
 		{
-			tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
+			const tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
 			if( pChildNode != nullptr )
 			{
 				pStringValue = pChildNode->GetText();

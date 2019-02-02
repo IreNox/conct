@@ -24,18 +24,18 @@ namespace conct
 		return true;
 	}
 
-	void traceNodeError( tinyxml2::XMLElement* pNode, const char* pText )
+	void traceNodeError( const tinyxml2::XMLElement* pNode, const char* pText )
 	{
 		traceNodeError( pNode, DynamicString( pText ) );
 	}
 
-	void traceNodeError( tinyxml2::XMLElement* pNode, const DynamicString& text )
+	void traceNodeError( const tinyxml2::XMLElement* pNode, const DynamicString& text )
 	{
 		tinyxml2::XMLUnknown* pUserData = static_cast<tinyxml2::XMLUnknown*>(pNode->GetDocument()->GetUserData());
 		trace::fileError( pUserData->Value(), pNode->GetLineNum(), text );
 	}
 
-	bool loadBooleanValue( bool& target, tinyxml2::XMLElement* pNode, const char* pName )
+	bool loadBooleanValue( bool& target, const tinyxml2::XMLElement* pNode, const char* pName )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
@@ -60,7 +60,7 @@ namespace conct
 		return true;
 	}
 
-	bool loadStringValue( DynamicString& target, tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
+	bool loadStringValue( DynamicString& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
@@ -69,7 +69,7 @@ namespace conct
 			return true;
 		}
 
-		tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
+		const tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
 		if( pChildNode != nullptr )
 		{
 			const char* pText = pChildNode->GetText();
@@ -87,7 +87,7 @@ namespace conct
 		return false;
 	}
 
-	bool loadMemSizeValue( uintreg& target, tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
+	bool loadMemSizeValue( uintreg& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
 	{
 		int64_t value = 0u;
 		if( pNode->QueryInt64Attribute( pName, &value ) == tinyxml2::XML_SUCCESS )
@@ -96,7 +96,7 @@ namespace conct
 			return true;
 		}
 
-		tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
+		const tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
 		if( pChildNode != nullptr && pChildNode->QueryInt64Text( &value ) == tinyxml2::XML_SUCCESS )
 		{
 			target = ( uintreg )value;
@@ -110,7 +110,7 @@ namespace conct
 		return false;
 	}
 
-	bool loadTypeValue( const Type** ppType, tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false*/ )
+	bool loadTypeValue( const Type** ppType, const tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false*/ )
 	{
 		const char* pAttributeValue = pNode->Attribute( pName );
 		if( pAttributeValue != nullptr )
@@ -125,7 +125,7 @@ namespace conct
 			return true;
 		}
 
-		tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
+		const tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
 		if( pChildNode != nullptr )
 		{
 			const char* pText = pChildNode->GetText();
@@ -142,7 +142,7 @@ namespace conct
 			}
 			else
 			{
-				tinyxml2::XMLElement* pArrayNode = pChildNode->FirstChildElement( "array" );
+				const tinyxml2::XMLElement* pArrayNode = pChildNode->FirstChildElement( "array" );
 				if( pArrayNode != nullptr )
 				{
 					const Type* pInnerType = nullptr;
@@ -162,7 +162,7 @@ namespace conct
 		return false;
 	}
 
-	bool loadInterfaceValue( const InterfaceType** ppInterface, tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
+	bool loadInterfaceValue( const InterfaceType** ppInterface, const tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing /*= false */ )
 	{
 		const Type* pType = nullptr;
 		if( !loadTypeValue( &pType, pNode, pName, referenceNamespace, typeCollection, ignoreMissing ) )

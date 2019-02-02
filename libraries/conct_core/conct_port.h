@@ -29,6 +29,6 @@ namespace conct
 		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) = 0;
 		virtual void				closeReceived( Reader& reader, uintreg endpointId ) = 0;
 
-		virtual Flags8< PortFlag >	getFlags() = 0;
+		virtual Flags8< PortFlag >	getFlags() const = 0;
 	};
 }

@@ -231,7 +231,7 @@ namespace conct
 		connection.receiveData.clear();
 	}
 
-	Flags8< PortFlag > PortTcpServer::getFlags()
+	Flags8< PortFlag > PortTcpServer::getFlags() const
 	{
 		Flags8< PortFlag > flags;
 		flags |= PortFlag_MultiEndpoint;

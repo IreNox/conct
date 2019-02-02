@@ -1,0 +1,44 @@
+NRF24L01 Protocol
+
+Max Packet Size = 256 Bit = 32 Byte
+Max Payload Size = 256 Bit - 32 Bit = 224 Bit = 28 Byte
+
+PacketType
+Protocol	- 0 - Protocol Packet
+Data		- 1 - Data Packet
+
+Header
+Bits	Count	Name		Description
+0-11	   12	Magic		Everytime: 0xE67
+12-16	    5	Size		Data Size in bytes(<= Max Payload Size - 28 Bytes)
+17-17	    1	Type		Packet Type(see PacketType)
+18-23	    6	Id			Packet Id
+24-247	  224	Payload		Packet Data
+248-255	    8	Checksum	Fletcher-8 Checksum of Packet
+
+ProtocolMessageType
+Request		- 0 - Request Address
+Address		- 1 - Address assigned
+Depleted	- 2 - No address available
+Ack			- 3 - Acknowledge Packet
+Reset		- 4 - Connection reset
+
+ProtocolMessageHeader
+Bits	Count	Name		Description
+0-2		3		Type		Message Type(see ProtocolMessageType)
+3-7		5		Padding		Padding to the full byte
+
+Address Message Data
+Bits	Count	Name		Description
+0-40	40		Address		Assigned client address
+
+Depleted Message Data
+Bits	Count	Name		Description
+
+Ack Message Data
+Bits	Count	Name		Description
+0-5		6		Id			Acknowledged Packet Id
+
+Reset Message Data
+Bits	Count	Name		Description
+0-5		6		Id			Acknowledged Packet Id

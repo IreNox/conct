@@ -69,6 +69,20 @@ namespace conct
 	}
 
 	template< class T >
+	bool UnsortedSet<T>::contains( const T& value ) const
+	{
+		for( uintreg i = 0u; i < m_length; ++i )
+		{
+			if( m_pData[ i ] == value )
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	template< class T >
 	bool UnsortedSet<T>::insert( const T& value )
 	{
 		for( uintreg i = 0u; i < m_length; ++i )

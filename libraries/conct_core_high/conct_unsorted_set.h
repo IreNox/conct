@@ -23,6 +23,7 @@ namespace conct
 		void			clear();
 		void			reserve( uintreg size );
 
+		bool			contains( const T& value ) const;
 		bool			insert( const T& value );
 
 		void			eraseSorted( const T& value );

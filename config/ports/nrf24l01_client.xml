@@ -9,15 +9,7 @@
 		<reliable />
 	</connection>	
 	<parameters>
-		<parameter name="cePin" type="integer" default="22">
-			<filters>
-				<filter type="system" value="linux" />
-			</filters>
-		</parameter>
-		<parameter name="csPin" type="integer" default="8">
-			<filters>
-				<filter type="system" value="arduino" />
-			</filters>
-		</parameter>
+		<parameter name="cePin" type="integer" default="22" />
+		<parameter name="csPin" type="integer" default="0" />
 	</parameters>
 </port>

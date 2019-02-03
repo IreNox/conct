@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{28EA4183-26EF-4A33-80A8-F0D49706C3F8}</ProjectGuid>
-    <ProjectName>raspberry_pi_nrf24l01_test</ProjectName>
+    <ProjectName>rpi_nrf24l01_client_test</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
@@ -44,7 +44,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/rf24;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_nrf24l01_client;/home/pi/code/conct/libraries/rf24;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -64,14 +64,59 @@
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libraries\conct_core\conct_ascii.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_functions.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_memory.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_reader.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_result.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_timer.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp" />
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp" />
     <ClCompile Include="..\..\libraries\rf24\RF24.cpp" />
     <ClCompile Include="..\..\libraries\rf24\utility\RPi\bcm2835.c" />
     <ClCompile Include="..\..\libraries\rf24\utility\RPi\spi.cpp" />
     <ClCompile Include="main.cpp" />
-    <None Include="raspberry_pi_nrf24l01_test-Debug.vgdbsettings" />
-    <None Include="raspberry_pi_nrf24l01_test-Release.vgdbsettings" />
+    <None Include="..\..\libraries\conct_core\conct_array.inl" />
+    <None Include="..\..\libraries\conct_core\conct_array_view.inl" />
+    <None Include="..\..\libraries\conct_core\conct_flags.inl" />
+    <None Include="..\..\libraries\conct_core\conct_memory.inl" />
+    <None Include="..\..\libraries\conct_core\conct_reader.inl" />
+    <None Include="..\..\libraries\conct_core\conct_relative_array.inl" />
+    <None Include="..\..\libraries\conct_core\conct_relative_pointer.inl" />
+    <None Include="..\..\libraries\conct_core\conct_static_array.inl" />
+    <None Include="..\..\libraries\conct_core\conct_string.inl" />
+    <None Include="..\..\libraries\conct_core\conct_writer.inl" />
+    <None Include="rpi_nrf24l01_client_test-Debug.vgdbsettings" />
+    <None Include="rpi_nrf24l01_client_test-Release.vgdbsettings" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\libraries\conct_core\conct_array.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_array_view.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_ascii.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_core.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_core_c.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_crc16.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_flags.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_functions.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_memory.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_number_limits.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_platform.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_port.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_reader.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_relative_array.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_relative_pointer.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_result.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_static_array.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_string.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_structs.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_timer.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h" />
+    <ClInclude Include="..\..\libraries\conct_core\conct_writer.h" />
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h" />
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h" />
     <ClInclude Include="..\..\libraries\rf24\nRF24L01.h" />
     <ClInclude Include="..\..\libraries\rf24\RF24.h" />
     <ClInclude Include="..\..\libraries\rf24\RF24_config.h" />

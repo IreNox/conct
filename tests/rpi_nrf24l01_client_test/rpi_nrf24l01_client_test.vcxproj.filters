@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="settings">
+      <UniqueIdentifier>{710ed453-f350-4f8c-aee6-d6ae1c467b59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project">
+      <UniqueIdentifier>{54f3a6c9-badc-4f9e-bec1-32e031baee9a}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="libraries">
+      <UniqueIdentifier>{8a299360-913c-4161-995d-58cd9f2a3860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\rf24">
+      <UniqueIdentifier>{9090cfc5-47c9-4b0c-bf81-90fbb1d636db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\rf24\utility">
+      <UniqueIdentifier>{1e02bf98-57e6-4620-a0cb-0639942ead26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\rf24\utility\RPi">
+      <UniqueIdentifier>{325d0f27-ee9e-4a88-b3a0-fc30f23af8be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_core">
+      <UniqueIdentifier>{c6807f8c-2567-43e3-9a2f-f31e0555f799}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_nrf24l01">
+      <UniqueIdentifier>{34c419fc-28db-4de0-a3e1-590a51adf375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_nrf24l01_client">
+      <UniqueIdentifier>{bf0e118d-8288-4db0-823b-6cae29affe73}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="rpi_nrf24l01_client_test-Debug.vgdbsettings">
+      <Filter>settings</Filter>
+    </None>
+    <None Include="rpi_nrf24l01_client_test-Release.vgdbsettings">
+      <Filter>settings</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_flags.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_memory.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_reader.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_relative_array.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_relative_pointer.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_static_array.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_string.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_writer.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_array.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core\conct_array_view.inl">
+      <Filter>libraries\conct_core</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\rf24\RF24.cpp">
+      <Filter>libraries\rf24</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\rf24\utility\RPi\spi.cpp">
+      <Filter>libraries\rf24\utility\RPi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\rf24\utility\RPi\bcm2835.c">
+      <Filter>libraries\rf24\utility\RPi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_ascii.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_functions.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_memory.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_reader.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_result.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_timer.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp">
+      <Filter>libraries\conct_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp">
+      <Filter>libraries\conct_nrf24l01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp">
+      <Filter>libraries\conct_nrf24l01_client</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libraries\rf24\RF24_config.h">
+      <Filter>libraries\rf24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\nRF24L01.h">
+      <Filter>libraries\rf24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\RF24.h">
+      <Filter>libraries\rf24</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\bcm2835.h">
+      <Filter>libraries\rf24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\includes.h">
+      <Filter>libraries\rf24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\RF24_arch_config.h">
+      <Filter>libraries\rf24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\rf24\utility\RPi\spi.h">
+      <Filter>libraries\rf24\utility\RPi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_ascii.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_core.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_core_c.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_crc16.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_flags.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_functions.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_memory.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_number_limits.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_platform.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_port.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_reader.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_relative_array.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_relative_pointer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_result.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_static_array.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_string.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_structs.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_timer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_writer.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_array.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core\conct_array_view.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h">
+      <Filter>libraries\conct_nrf24l01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h">
+      <Filter>libraries\conct_nrf24l01_client</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

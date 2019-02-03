@@ -43,7 +43,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_serial;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/rf24;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/rf24;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h" />
     <ClInclude Include="..\..\libraries\conct_port_nrf24l01_server\conct_port_nrf24l01_server.h" />
     <ClInclude Include="..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
@@ -138,6 +139,7 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp" />
     <ClCompile Include="..\..\libraries\conct_port_nrf24l01_server\conct_port_nrf24l01_server.cpp" />
     <ClCompile Include="..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />

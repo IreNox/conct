@@ -47,6 +47,9 @@
     <Filter Include="libraries\rft24\utility\RPi">
       <UniqueIdentifier>{761e9626-8c70-40a3-ba73-6846ec54f172}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01">
+      <UniqueIdentifier>{d663807a-1735-4bc3-a50e-1151d1856b54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="raspberry_pi_router-Debug.vgdbsettings">
@@ -312,6 +315,9 @@
     <ClInclude Include="..\..\libraries\rf24\utility\RPi\spi.h">
       <Filter>libraries\rft24\utility\RPi</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h">
+      <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\libraries\conct_core\conct_flags.inl">
@@ -402,6 +408,9 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\rf24\utility\RPi\bcm2835.c">
       <Filter>libraries\rft24\utility\RPi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp">
+      <Filter>libraries\conct_port_nrf24l01</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rpi_nrf24l01_test", "rpi_nrf24l01_test.vcxproj", "{28EA4183-26EF-4A33-80A8-F0D49706C3F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|VisualGDB = Debug|VisualGDB
+		Release|VisualGDB = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28EA4183-26EF-4A33-80A8-F0D49706C3F8}.Debug|VisualGDB.ActiveCfg = Debug|VisualGDB
+		{28EA4183-26EF-4A33-80A8-F0D49706C3F8}.Debug|VisualGDB.Build.0 = Debug|VisualGDB
+		{28EA4183-26EF-4A33-80A8-F0D49706C3F8}.Release|VisualGDB.ActiveCfg = Release|VisualGDB
+		{28EA4183-26EF-4A33-80A8-F0D49706C3F8}.Release|VisualGDB.Build.0 = Release|VisualGDB
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {165AF1A1-04ED-48AF-AE47-E3430C9C562F}
+	EndGlobalSection
+EndGlobal

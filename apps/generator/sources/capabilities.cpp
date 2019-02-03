@@ -15,17 +15,22 @@ namespace conct
 	};
 	CONCT_STATIC_ASSERT( CONCT_COUNT( s_aCapabilityNames ) == Capability_Count );
 
-	bool Capabilities::metRequirements( const Capabilities& requirements ) const
+	bool Capabilities::metRequirements( const Capabilities& requirements, UnsortedSet< Capability >* pMissingCapabilities /*= nullptr*/ ) const
 	{
+		bool result = true;
 		for( Capability c : requirements.getCapabilities() )
 		{
 			if( !hasCapability( c ) )
 			{
-				return false;
+				if( pMissingCapabilities != nullptr )
+				{
+					pMissingCapabilities->insert( c );
+				}
+				result = false;
 			}
 		}
 
-		return true;
+		return result;
 	}
 
 	Capabilities::Capabilities()
@@ -49,5 +54,10 @@ namespace conct
 		}
 
 		return true;
+	}
+
+	const char* getCapabilityName( Capability value )
+	{
+		return s_aCapabilityNames[ value ];
 	}
 }

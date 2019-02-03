@@ -75,11 +75,11 @@ namespace conct
 		{
 			if( m_pData[ i ] == value )
 			{
-				return false;
+				return true;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	template< class T >

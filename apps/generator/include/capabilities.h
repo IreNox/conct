@@ -31,7 +31,7 @@ namespace conct
 		bool								hasCapability( Capability capability ) const { return m_capabilities.contains( capability ); }
 		const UnsortedSet< Capability >&	getCapabilities() const { return m_capabilities; }
 
-		bool								metRequirements( const Capabilities& requirements ) const;
+		bool								metRequirements( const Capabilities& requirements, UnsortedSet< Capability >* pMissingCapabilities = nullptr ) const;
 
 	private: // friend
 
@@ -43,4 +43,6 @@ namespace conct
 
 		UnsortedSet< Capability >			m_capabilities;
 	};
+
+	const char*								getCapabilityName( Capability value );
 }

@@ -111,6 +111,76 @@ namespace conct
 		return DynamicString( buffer );
 	}
 
+	DynamicString string_tools::toHexString( sint8 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%02x", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( sint16 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%04x", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( sint32 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%08x", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( sint64 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%016llx", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( uint8 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%02x", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( uint16 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%04x", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( uint32 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%08x", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( uint64 value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%016llx", value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( float value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%08x", *(uint32*)&value );
+		return DynamicString( buffer );
+	}
+
+	DynamicString string_tools::toHexString( double value )
+	{
+		char buffer[ 64u ];
+		sprintf( buffer, "%016llx", *(uint64*)&value );
+		return DynamicString( buffer );
+	}
+
 	sint8 string_tools::parseSInt8( const char* pString )
 	{
 		return (sint8)atoi( pString );

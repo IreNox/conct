@@ -17,6 +17,17 @@ namespace conct
 		DynamicString	toString( float value );
 		DynamicString	toString( double value );
 
+		DynamicString	toHexString( sint8 value );
+		DynamicString	toHexString( sint16 value );
+		DynamicString	toHexString( sint32 value );
+		DynamicString	toHexString( sint64 value );
+		DynamicString	toHexString( uint8 value );
+		DynamicString	toHexString( uint16 value );
+		DynamicString	toHexString( uint32 value );
+		DynamicString	toHexString( uint64 value );
+		DynamicString	toHexString( float value );
+		DynamicString	toHexString( double value );
+
 		sint8			parseSInt8( const char* pString );
 		sint16			parseSInt16( const char* pString );
 		sint32			parseSInt32( const char* pString );

@@ -8,4 +8,6 @@
 /apps/tests/build
 *.user
 /devices/raspberry_pi_router/VisualGDB
-/tests/raspberry_pi_nrf24l01_test/VisualGDB
+/tests/rpi_nrf24l01_client_test/VisualGDB
+/tests/rpi_nrf24l01_server_test/VisualGDB
+/tests/rpi_nrf24l01_test/VisualGDB

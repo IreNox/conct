@@ -1,5 +1,6 @@
 #include "conct_port_nrf24l01_server.h"
 
+#include "conct_memory.h"
 #include "conct_reader.h"
 #include "conct_string_tools.h"
 #include "conct_trace.h"
@@ -7,8 +8,6 @@
 
 namespace conct
 {
-	static const uint32 s_resendTime = 100;
-
 	bool PortNRF24L01Server::setup( const PortNRF24L01ServerParameters& parameters )
 	{
 		if( !m_radio0.begin( parameters.cePin0, 0 ) )
@@ -61,16 +60,26 @@ namespace conct
 		readFromRadio( m_radio0, 0u );
 		readFromRadio( m_radio1, 1u );
 
+		const uint32 time = millis();
 		for( Connection& connection : m_connections )
 		{
-			if( !connection.flags.isSet( PortNRF24L01::ConnectionFlag_Connected ) ||
-				!connection.flags.isSet( PortNRF24L01::ConnectionFlag_AcknowledgedPacket ) ||
-				connection.receiveBuffer.isEmpty() )
+			if( !connection.flags.isSet( PortNRF24L01::ConnectionFlag_Connected ) )
 			{
 				continue;
 			}
 
-			sendDataPacket( connection );
+			if( !connection.flags.isSet( PortNRF24L01::ConnectionFlag_AcknowledgedPacket ) &&
+				connection.lastSendId > 0u )
+			{
+				if( time - connection.lastSendTime > PacketResendTime )
+				{
+					sendLastDataPacket( connection );
+				}
+			}
+			else if( !connection.sendBuffer.isEmpty() )
+			{
+				sendDataPacket( connection );
+			}
 		}
 	}
 
@@ -106,11 +115,6 @@ namespace conct
 	void PortNRF24L01Server::closeReceived( Reader& reader, uintreg endpointId )
 	{
 		Connection& connection = m_connections[ endpointId ];
-		if( reader.isEnd() )
-		{
-			connection.receiveBuffer.clear();
-			return;
-		}
 
 		const uintreg remainingOffset = connection.receiveBuffer.getLength() - reader.getRemainingSize();
 		for( uint i = 0u; i < reader.getRemainingSize(); ++i )
@@ -168,21 +172,21 @@ namespace conct
 
 		if( magic != 0xe670u )
 		{
-			trace::write( "Receive packet with invalid magic '"_s + string_tools::toHexString( magic ) + "' from pipe '"_s + string_tools::toString( connection.pipeIndex ) + "' on radio '" + string_tools::toString( connection.radioIndex ) + "'" );
+			trace::write( "Receive packet with invalid magic '"_s + string_tools::toHexString( magic ) + "'." );
 			return false;
 		}
-		else if( packetSize > 28 )
+		else if( packetSize > MaxPacketPayloadSize )
 		{
-			trace::write( "Receive packet with invalid size '"_s + string_tools::toString( packetSize ) + "' from pipe '"_s + string_tools::toString( connection.pipeIndex ) + "' on radio '" + string_tools::toString( connection.radioIndex ) + "'" );
+			trace::write( "Receive packet with invalid size '"_s + string_tools::toString( packetSize ) + "'." );
 			return false;
 		}
 
 		const uint8 fullPacketSize = sizeof( Header ) + packetSize;
-		const uint8 expectedChecksum = calculateChecksum( buffer, sizeof( Header ) + packetSize );
+		const uint8 expectedChecksum = calculateChecksum( buffer, packetSize );
 		const uint8 receivedChecksum = buffer[ fullPacketSize ];
 		if( receivedChecksum != expectedChecksum )
 		{
-			trace::write( "Receive packet with invalid checksum '"_s + string_tools::toHexString( receivedChecksum ) + "' but expected '" + string_tools::toHexString( expectedChecksum ) + "' from pipe '"_s + string_tools::toString( connection.pipeIndex ) + "' on radio '" + string_tools::toString( connection.radioIndex ) + "'" );
+			trace::write( "Receive packet with invalid checksum '"_s + string_tools::toHexString( receivedChecksum ) + "' but expected '" + string_tools::toHexString( expectedChecksum ) + "'." );
 			return false;
 		}
 
@@ -215,6 +219,7 @@ namespace conct
 		PacketType packetType;
 		if( !readPacketHeader( packetSize, packetId, packetType, buffer ) )
 		{
+			trace::write( "could not read packet header from pipe '"_s + string_tools::toString( connection.pipeIndex ) + "' on radio '" + string_tools::toString( connection.radioIndex ) + "'" );
 			return;
 		}
 
@@ -328,8 +333,9 @@ namespace conct
 		if( connection.flags.isSet( ConnectionFlag_Connected ) )
 		{
 			Buffer buffer;
-			uint8 packetSize;
-			writeProtocolHeader( buffer, packetSize, ProtocolMessageType_Reset, 0u );
+			uint8 payloadSize;
+			writeProtocolHeader( buffer, payloadSize, ProtocolMessageType_Reset, 0u );
+			const uint8 packetSize = finalizePacket( buffer, payloadSize );
 
 			RF24& radio = connection.radioIndex == 0u ? m_radio0 : m_radio1;
 			radio.openWritingPipe( connection.address.data );
@@ -353,10 +359,11 @@ namespace conct
 	{
 		Buffer buffer;
 
-		uint8 packetSize;
-		AddressProtocolMessageData* pAddressData = (AddressProtocolMessageData*)writeProtocolHeader( buffer, packetSize, ProtocolMessageType_Address, sizeof( AddressProtocolMessageData ) );
+		uint8 payloadSize;
+		AddressProtocolMessageData* pAddressData = (AddressProtocolMessageData*)writeProtocolHeader( buffer, payloadSize, ProtocolMessageType_Address, sizeof( AddressProtocolMessageData ) );
 		pAddressData->requestId	= requestId;
 		pAddressData->address	= address;
+		const uint8 packetSize = finalizePacket( buffer, payloadSize );
 
 		m_radio0.openWritingPipe( m_protocolAddress.data );
 		m_radio0.stopListening();
@@ -368,9 +375,10 @@ namespace conct
 	{
 		Buffer buffer;
 
-		uint8 packetSize;
-		DepletedProtocolMessageData* pDepletedData = (DepletedProtocolMessageData*)writeProtocolHeader( buffer, packetSize, ProtocolMessageType_Depleted, sizeof( DepletedProtocolMessageData ) );
+		uint8 payloadSize;
+		DepletedProtocolMessageData* pDepletedData = (DepletedProtocolMessageData*)writeProtocolHeader( buffer, payloadSize, ProtocolMessageType_Depleted, sizeof( DepletedProtocolMessageData ) );
 		pDepletedData->requestId = requestId;
+		const uint8 packetSize = finalizePacket( buffer, payloadSize );
 
 		m_radio0.openWritingPipe( m_protocolAddress.data );
 		m_radio0.stopListening();
@@ -381,9 +389,10 @@ namespace conct
 	void PortNRF24L01Server::sendAcknowledgeMessage( Connection& connection, uint8 packetId )
 	{
 		Buffer buffer;
-		uint8 packetSize;
-		AcknowledgeProtocolMessageData* pAcknowledgeData = (AcknowledgeProtocolMessageData*)writeProtocolHeader( buffer, packetSize, ProtocolMessageType_Ack, sizeof( AcknowledgeProtocolMessageData ) );
+		uint8 payloadSize;
+		AcknowledgeProtocolMessageData* pAcknowledgeData = (AcknowledgeProtocolMessageData*)writeProtocolHeader( buffer, payloadSize, ProtocolMessageType_Ack, sizeof( AcknowledgeProtocolMessageData ) );
 		pAcknowledgeData->packetId = packetId;
+		const uint8 packetSize = finalizePacket( buffer, payloadSize );
 
 		RF24& radio = connection.radioIndex == 0u ? m_radio0 : m_radio1;
 		radio.openWritingPipe( connection.address.data );
@@ -394,347 +403,42 @@ namespace conct
 
 	void PortNRF24L01Server::sendDataPacket( Connection& connection )
 	{
+		const uint8 payloadSize = CONCT_MIN( connection.sendBuffer.getLength(), MaxPacketPayloadSize );
 
+		do
+		{
+			connection.lastSendId = (connection.lastSendId + 1u) & 0x3f;
+		}
+		while( connection.lastSendId == 0u );
+
+		uint8* pData = writeHeader( connection.lastSendPacket, payloadSize, PacketType_Data, connection.lastSendId );
+		memory::copy( pData, connection.sendBuffer.getBegin(), payloadSize );
+		connection.lastSendPacketSize = finalizePacket( connection.lastSendPacket, payloadSize );
+
+		const uintreg remainingSize = connection.sendBuffer.getLength() - payloadSize;
+		const uintreg remainingOffset = connection.sendBuffer.getLength() - remainingSize;
+		for( uint i = 0u; i < remainingSize; ++i )
+		{
+			connection.sendBuffer[ i ] = connection.sendBuffer[ remainingOffset + i ];
+		}
+		connection.sendBuffer.setLength( remainingSize );
+
+		sendLastDataPacket( connection );
+	}
+
+	void PortNRF24L01Server::sendLastDataPacket( Connection& connection )
+	{
+		RF24& radio = connection.radioIndex == 0u ? m_radio0 : m_radio1;
+		radio.openWritingPipe( connection.address.data );
+		radio.stopListening();
+		radio.write( connection.lastSendPacket, connection.lastSendPacketSize );
+		radio.startListening();
+
+		connection.lastSendTime = millis();
 	}
 
 	uintreg PortNRF24L01Server::getEndpointIdForPipe( uintreg radioIndex, uintreg pipeIndex ) const
 	{
 		return ((radioIndex * PipesPerRadio) + pipeIndex) - 1u;
 	}
-
-//	bool PortNRF24L01Server::popConnectionReset( uintreg& endpointId )
-//	{
-//		if( !m_flags.isSet( Flag_ConnectionReset ) )
-//		{
-//			return false;
-//		}
-//
-//		endpointId = 0u;
-//
-//		m_counter	= 0u;
-//		m_state		= State_Idle;
-//		m_flags.unset( Flag_ConnectionReset );
-//
-//		return true;
-//	}
-//
-//	bool PortNRF24L01Server::setup( const PortNRF24L01ServerParameters& parameters )
-//	{
-//		m_state					= State_Idle;
-//		m_lastSendId			= 0u;
-//		m_lastLastReceivedId	= 0u;
-//		m_counter				= 0u;
-//		m_flags.clear();
-//
-//		m_radio.begin( parameters.cePin, 0 );
-//
-//		sendHello();
-//
-//		return true;
-//	}
-//
-//	void PortNRF24L01Server::loop()
-//	{
-//		bool running = true;
-//		while( running )
-//		{
-//			switch( m_state )
-//			{
-//			case State_Idle:
-//				if( m_flags.isSet( Flag_ReceivedPacket ) )
-//				{
-//					running = false;
-//				}
-//				else
-//				{
-//					running = updateReceiveHeader();
-//				}
-//				break;
-//
-//			case State_ReceivingData:
-//				running = updateReceiveData();
-//				break;
-//
-//			case State_Send:
-//				running = updateSend();
-//				break;
-//
-//			case State_WaitingForAck:
-//				running = updateWaitForAck();
-//				break;
-//			}
-//		}
-//	}
-//
-//	bool PortNRF24L01Server::openSend( Writer& writer, uintreg size, uintreg endpointId )
-//	{
-//		if( m_state != State_Idle )
-//		{
-//			return false;
-//		}
-//
-//		writer.set( m_buffer, sizeof( m_buffer ) - 1u );
-//		return true;
-//	}
-//
-//	void PortNRF24L01Server::closeSend( Writer& writer, uintreg endpointId )
-//	{
-//		m_counter = 0u;
-//		m_lastSendId = (m_lastSendId + 1u) % 32u;
-//
-//		const uint8 size = uint8( sizeof( m_buffer ) - writer.getRemainingSize() - 1u );
-//		writeSendHeader( size, Type_Data, m_lastSendId );
-//		m_buffer[ size ] = calculateChecksum( m_sendHeader );
-//
-//		m_state = State_Send;
-//	}
-//
-//	bool PortNRF24L01Server::openReceived( Reader& reader, uintreg& endpointId )
-//	{
-//		if( !m_flags.isSet( Flag_ReceivedPacket ) )
-//		{
-//			return false;
-//		}
-//
-//		endpointId = 0u;
-//		reader.set( m_buffer, getSizeFromHeader( m_receiveHeader ) );
-//		return true;
-//	}
-//
-//	void PortNRF24L01Server::closeReceived( Reader& reader, uintreg endpointId )
-//	{
-//		m_counter = 0u;
-//		m_state = State_Idle;
-//		m_flags.unset( Flag_ReceivedPacket );
-//	}
-//
-//	Flags8< PortFlag > PortNRF24L01Server::getFlags()
-//	{
-//		Flags8< PortFlag > flags;
-//		flags |= PortFlag_SingleEndpoint;
-//		flags |= PortFlag_Reliable;
-//		return flags;
-//	}
-//
-
-//
-//	bool PortNRF24L01Server::updateReceiveHeader()
-//	{
-//		while( Serial1.available() )
-//		{
-//			const uint8 byte = Serial1.read();
-//			m_receiveHeader[ m_counter++ ] = byte;
-//
-//			static const char s_aHexChars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-//#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-//			char hexBuffer[] = { s_aHexChars[ ( byte & 0xf0u ) >> 4u ], s_aHexChars[ byte & 0x0fu ], 0u };
-//			char charBuffer[] ={ ' ', byte, 0u };
-//			m_hexTrace += hexBuffer;
-//			m_charTrace += charBuffer;
-//#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
-//			Serial.write( s_aHexChars[ ( byte & 0xf0u ) >> 4u ] );
-//			Serial.write( s_aHexChars[ byte & 0x0fu ] );
-//#endif
-//
-//			if( m_counter == 2u )
-//			{
-//				if( getMagicFromHeader( m_receiveHeader ) != 0x42b0u )
-//				{
-//					m_receiveHeader[ 0u ] = m_receiveHeader[ 1u ];
-//					m_counter = 1u;
-//				}
-//			}
-//			else if( m_counter == 3u )
-//			{
-//#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-//				trace::write( m_hexTrace );
-//				trace::write( m_charTrace );
-//				m_hexTrace.clear();
-//				m_charTrace.clear();
-//#elif CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
-//				Serial.write( '\n' );
-//#endif
-//
-//				const Type packetType = getTypeFromHeader( m_receiveHeader );
-//				if( packetType == Type_Hello )
-//				{
-//					m_flags.set( Flag_ConnectionReset );
-//					sendAck( getIdFromHeader( m_receiveHeader ) );
-//					return true;
-//				}
-//				else if( packetType == Type_Data )
-//				{
-//					if( m_state == State_WaitingForAck )
-//					{
-//						m_counter = 0u;
-//						continue;
-//					}
-//
-//					m_counter = 0u;
-//					m_state = State_ReceivingData;
-//					return true;
-//				}
-//				else if( packetType == Type_Ack )
-//				{
-//					if( getIdFromHeader( m_receiveHeader ) == m_lastSendId )
-//					{
-//						m_counter = 0u;
-//						m_state = State_Idle;
-//					}
-//					else
-//					{
-//						m_flags.set( Flag_ConnectionReset );
-//						sendHello();
-//					}
-//					return true;
-//				}
-//			}
-//			CONCT_ASSERT( m_counter < 3u );
-//		}
-//
-//		return false;
-//	}
-//
-//	bool PortNRF24L01Server::updateReceiveData()
-//	{
-//		const uint8 dataSize = getSizeFromHeader( m_receiveHeader );
-//		while( Serial1.available() )
-//		{
-//			if( m_counter < dataSize )
-//			{
-//				m_buffer[ m_counter++ ] = Serial1.read();
-//			}
-//			else
-//			{
-//				const uint8 receivedChecksum = Serial1.read();
-//				const uint8 localChecksum = calculateChecksum( m_receiveHeader );
-//
-//				const uint8 id = getIdFromHeader( m_receiveHeader );
-//				if( receivedChecksum == localChecksum )
-//				{
-//					if( id != m_lastLastReceivedId )
-//					{
-//						m_flags.set( Flag_ReceivedPacket );
-//					}
-//					m_lastLastReceivedId = id;
-//					sendAck( getIdFromHeader( m_receiveHeader ) );
-//					return true;
-//				}
-//				else
-//				{
-//					m_counter = 0u;
-//					m_state = State_Idle;
-//					return true;
-//				}
-//			}
-//		}
-//
-//		return false;
-//	}
-//
-//	bool PortNRF24L01Server::updateSend()
-//	{
-//		for( uintreg i = 0u; i < sizeof( m_sendHeader ); ++i )
-//		{
-//			Serial1.write( m_sendHeader[ i ] );
-//		}
-//
-//		const uint8 dataSize = getSizeFromHeader( m_sendHeader );
-//		for( uintreg i = 0u; i <= dataSize; ++i )
-//		{
-//			Serial1.write( m_buffer[ i ] );
-//		}
-//
-//#if CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
-//		while( !( UCSR1A & ( 1 << UDRE1 ) ) )  // Wait for empty transmit buffer
-//		{
-//			UCSR1A |= 1 << TXC1;  // mark transmission not complete
-//		}
-//		while( !( UCSR1A & ( 1 << TXC1 ) ) );   // Wait for the transmission to complete
-//#endif
-//
-//		m_lastSendTime = millis();
-//
-//		if( getTypeFromHeader( m_sendHeader ) != Type_Ack )
-//		{
-//			m_counter = 0u;
-//			m_state = State_WaitingForAck;
-//			return false;
-//		}
-//
-//		m_counter = 0u;
-//		m_state = State_Idle;
-//		return false;
-//	}
-//
-//	bool PortNRF24L01Server::updateWaitForAck()
-//	{
-//		const uint32 currentTime = millis();
-//		if( currentTime < m_lastSendTime || m_lastSendTime + s_resendTime < currentTime ) // first condition is for overflow
-//		{
-//			m_counter = 0u;
-//			m_state = State_Send;
-//			return true;
-//		}
-//
-//		if( updateReceiveHeader() )
-//		{
-//			return true;
-//		}
-//
-//		return false;
-//	}
-//
-//	void PortNRF24L01Server::sendHello()
-//	{
-//		writeSendHeader( 0u, Type_Hello, 0u );
-//
-//		m_lastSendId	= 0u;
-//		m_counter		= 0u;
-//		m_state			= State_Send;
-//	}
-//
-//	void PortNRF24L01Server::sendAck( uint8 packetId )
-//	{
-//		writeSendHeader( 0u, Type_Ack, packetId );
-//
-//		m_counter		= 0u;
-//		m_state			= State_Send;
-//	}
-//
-//	uint8 PortNRF24L01Server::calculateChecksum( const Header& header ) const
-//	{
-//		// source: https://stackoverflow.com/questions/13491700/8-bit-fletcher-checksum-of-16-byte-data
-//		uint32 sum1 = 1;
-//		uint32 sum2 = 0;
-//
-//		const uint8* pData = header;
-//		const uint8* pDataEnd = pData + sizeof( header );
-//		while( pData < pDataEnd )
-//		{
-//			sum2 += sum1 += *pData++;
-//		}
-//
-//		pData = m_buffer;
-//		pDataEnd = pData + getSizeFromHeader( header );
-//		while( pData < pDataEnd )
-//		{
-//			sum2 += sum1 += *pData++;
-//		}
-//
-//		sum1 %= 15u;
-//		sum2 %= 15u;
-//
-//		// bit shift modulo 15
-//		//k = ( k >> 16 ) + ( k & 0xffff );
-//		//k = ( k >> 8 ) + ( k & 0xff );
-//		//k = ( k >> 4 ) + ( k & 0xf );
-//		//k = ( k >> 4 ) + ( k & 0xf );
-//		//if( k > 14 )
-//		//{
-//		//	k -= 15;
-//		//}
-//
-//		return ( sum2 << 4u ) + sum1;
-//	}
 }

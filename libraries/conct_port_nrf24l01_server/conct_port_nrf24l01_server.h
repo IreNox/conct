@@ -47,6 +47,7 @@ namespace conct
 			uint32						lastSendTime;
 			uint8						lastSendId;
 			Buffer						lastSendPacket;
+			uint8						lastSendPacketSize;
 
 			uint8						lastReceiveId;
 
@@ -74,6 +75,7 @@ namespace conct
 		void						sendDepletedMessage( uint32 requestId );
 		void						sendAcknowledgeMessage( Connection& connection, uint8 packetId );
 		void						sendDataPacket( Connection& connection );
+		void						sendLastDataPacket( Connection& connection );
 
 		uintreg						getEndpointIdForPipe( uintreg radioIndex, uintreg pipeIndex ) const;
 

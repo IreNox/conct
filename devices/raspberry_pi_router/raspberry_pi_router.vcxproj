@@ -43,7 +43,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/rf24;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_nrf24l01_server;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/rf24;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

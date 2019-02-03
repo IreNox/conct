@@ -43,25 +43,32 @@ namespace conct
 		return buffer + sizeof( Header );
 	}
 
-	uint8* PortNRF24L01::writeProtocolHeader( Buffer& buffer, uint8& packetSize, ProtocolMessageType type, uint8 size )
+	uint8* PortNRF24L01::writeProtocolHeader( Buffer& buffer, uint8& payloadSize, ProtocolMessageType type, uint8 size )
 	{
 		uint8* pData = writeHeader( buffer, sizeof( ProtocolMessageHeader ) + size, PacketType_Protocol, 0u );
 
 		ProtocolMessageHeader* pProtocolHeader = (ProtocolMessageHeader*)pData;
 		pProtocolHeader->messageType = type;
 
-		packetSize = sizeof( Header ) + sizeof( ProtocolMessageHeader ) + size;
+		payloadSize = sizeof( ProtocolMessageHeader ) + size;
 		return pData + sizeof( ProtocolMessageHeader );
 	}
 
-	uint8 PortNRF24L01::calculateChecksum( const Buffer& buffer, uint8 size ) const
+	uint8 PortNRF24L01::finalizePacket( Buffer& buffer, uint8 payloadSize )
+	{
+		const uint8 checksumIndex = sizeof( Header ) + payloadSize;
+		buffer[ checksumIndex ] = calculateChecksum( buffer, checksumIndex );
+		return checksumIndex + 1u;
+	}
+
+	uint8 PortNRF24L01::calculateChecksum( const Buffer& buffer, uint8 payloadSize ) const
 	{
 		// source: https://stackoverflow.com/questions/13491700/8-bit-fletcher-checksum-of-16-byte-data
 		uint32 sum1 = 1;
 		uint32 sum2 = 0;
 
 		const uint8* pData = buffer;
-		const uint8* pDataEnd = pData + size;
+		const uint8* pDataEnd = pData + sizeof( Header ) + payloadSize;
 		while( pData < pDataEnd )
 		{
 			sum2 += sum1 += *pData++;

@@ -14,9 +14,8 @@ namespace conct
 		port0Parameters.listenPort = 5489;
 		m_port0.setup( port0Parameters );
 		PortNRF24L01ServerParameters port1Parameters;
-		port1Parameters.address = "00001"_s;
-		port1Parameters.cePin = 22;
-		port1Parameters.speed = 4000000;
+		port1Parameters.cePin0 = 22;
+		port1Parameters.cePin1 = 0;
 		m_port1.setup( port1Parameters );
 
 		m_runtime.setup( this );

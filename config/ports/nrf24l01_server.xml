@@ -10,7 +10,6 @@
 		<reliable />
 	</connection>
 	<parameters>
-		<parameter name="base_address" type="string" default="00001" />
 		<parameter name="cePin0" type="integer" default="22">
 			<filters>
 				<filter type="system" value="linux" />

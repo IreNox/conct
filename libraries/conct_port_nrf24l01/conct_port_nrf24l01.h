@@ -2,26 +2,8 @@
 
 #include "conct_port.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-#	include <time.h>
-#endif
-
 namespace conct
 {
-//#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-//	CONCT_FORCE_INLINE uint32 millis()
-//	{
-//		timespec currentTime;
-//		currentTime.tv_sec = 0;
-//		currentTime.tv_nsec = 0;
-//		clock_gettime( CLOCK_MONOTONIC, &currentTime );
-//
-//		uint32 result = uint32( currentTime.tv_sec ) * 1000u;
-//		result += uint32( currentTime.tv_nsec ) / 1000000u;
-//		return result;
-//	}
-//#endif
-
 	class PortNRF24L01 : public Port
 	{
 	protected:
@@ -29,6 +11,7 @@ namespace conct
 		static constexpr uintreg PipesPerRadio		= 6u;
 		static constexpr uint8 MaxPacketPayloadSize	= 28u;
 		static constexpr uint32 PacketResendTime	= 100u;
+		static constexpr uint16 PacketMagic			= 0xe670u;
 
 		enum PacketType : uint8
 		{
@@ -45,13 +28,6 @@ namespace conct
 			ProtocolMessageType_Depleted,
 			ProtocolMessageType_Ack,
 			ProtocolMessageType_Reset
-		};
-
-		enum ConnectionFlag : uint8
-		{
-			ConnectionFlag_Connected			= 1u << 0u,
-			ConnectionFlag_ReceivedPacket		= 1u << 1u,
-			ConnectionFlag_AcknowledgedPacket	= 1u << 2u
 		};
 
 		typedef uint8 Header[ 5u ];

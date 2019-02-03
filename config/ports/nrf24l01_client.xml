@@ -14,5 +14,10 @@
 				<filter type="system" value="linux" />
 			</filters>
 		</parameter>
+		<parameter name="csPin" type="integer" default="8">
+			<filters>
+				<filter type="system" value="arduino" />
+			</filters>
+		</parameter>
 	</parameters>
 </port>

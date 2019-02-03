@@ -15,14 +15,18 @@ namespace conct
 			return false;
 		}
 
-		if( parameters.cePin1 != 0 &&
-			!m_radio1.begin( parameters.cePin1, 1 ) )
+		if( parameters.cePin1 != 0 )
 		{
-			return false;
+			if( !m_radio1.begin( parameters.cePin1, 1 ) )
+			{
+				return false;
+			}
+			m_radio1.startListening();
 		}
 
 		getAddressForPipe( m_protocolAddress, 0u, 0u );
 		m_radio0.openReadingPipe( 0u, m_protocolAddress.data );
+		m_radio0.startListening();
 
 		const uintreg radioCount = (parameters.cePin1 != 0 ? 2u : 1u);
 		const uintreg connectionCount = ((radioCount * PipesPerRadio) - 1u);
@@ -63,12 +67,12 @@ namespace conct
 		const uint32 time = millis();
 		for( Connection& connection : m_connections )
 		{
-			if( !connection.flags.isSet( PortNRF24L01::ConnectionFlag_Connected ) )
+			if( !connection.flags.isSet( ConnectionFlag_Connected ) )
 			{
 				continue;
 			}
 
-			if( !connection.flags.isSet( PortNRF24L01::ConnectionFlag_AcknowledgedPacket ) &&
+			if( !connection.flags.isSet( ConnectionFlag_AcknowledgedPacket ) &&
 				connection.lastSendId > 0u )
 			{
 				if( time - connection.lastSendTime > PacketResendTime )
@@ -278,7 +282,11 @@ namespace conct
 					connection.lastSendId		= 0u;
 					connection.lastReceiveId	= 0u;
 
+					RF24& radio = connection.radioIndex == 0u ? m_radio0 : m_radio1;
+					radio.openReadingPipe( connection.pipeIndex, connection.address.data );
+
 					sendAddressMessage( pRequestData->requestId, connection.address );
+					return;
 				}
 
 				sendDepletedMessage( pRequestData->requestId );
@@ -342,6 +350,8 @@ namespace conct
 			radio.stopListening();
 			radio.write( buffer, packetSize );
 			radio.startListening();
+
+			radio.closeReadingPipe( connection.pipeIndex );
 		}
 
 		connection.lastSendTime		= 0u;

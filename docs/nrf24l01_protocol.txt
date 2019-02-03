@@ -25,20 +25,24 @@ Reset		- 4 - Connection reset
 
 ProtocolMessageHeader
 Bits	Count	Name		Description
-0-2		3		Type		Message Type(see ProtocolMessageType)
-3-7		5		Padding		Padding to the full byte
+0-7		8		Type		Message Type(see ProtocolMessageType)
+
+Request Message Data
+Bits	Count	Name		Description
+0-31	32		Id			Id to indentify the request
 
 Address Message Data
 Bits	Count	Name		Description
-0-40	40		Address		Assigned client address
+0-31	32		Id			Id to indentify the request
+32-71	40		Address		Assigned client address
 
 Depleted Message Data
 Bits	Count	Name		Description
+0-31	32		Id			Id to indentify the request
 
 Ack Message Data
 Bits	Count	Name		Description
-0-5		6		Id			Acknowledged Packet Id
+0-7		8		Id			Acknowledged Packet Id(just 6 bits used)
 
 Reset Message Data
 Bits	Count	Name		Description
-0-5		6		Id			Acknowledged Packet Id

@@ -10,8 +10,9 @@ namespace conct
 
 		static constexpr uintreg PipesPerRadio		= 6u;
 		static constexpr uint8 MaxPacketPayloadSize	= 28u;
-		static constexpr uint32 PacketResendTime	= 100u;
+		static constexpr uint32 PacketResendTime	= 1000u;
 		static constexpr uint16 PacketMagic			= 0xe670u;
+		static constexpr uint8 PacketIdMask			= 0x3f;
 
 		enum PacketType : uint8
 		{
@@ -30,12 +31,12 @@ namespace conct
 			ProtocolMessageType_Reset
 		};
 
-		typedef uint8 Header[ 5u ];
+		typedef uint8 Header[ 3u ];
 		typedef uint8 Buffer[ 32u ];
 
 		union Address
 		{
-			uint8				data[ 5u ];
+			uint8				data[ 6u ];
 			struct
 			{
 				uint8			pipeIndex;
@@ -43,6 +44,7 @@ namespace conct
 				uint8			static1;
 				uint8			static2;
 				uint8			static3;
+				uint8			zero;
 			};
 		};
 
@@ -59,7 +61,8 @@ namespace conct
 		struct AddressProtocolMessageData
 		{
 			uint32				requestId;
-			Address				address;
+			uint8				radioIndex;
+			uint8				pipeIndex;
 		};
 
 		struct DepletedProtocolMessageData
@@ -72,7 +75,7 @@ namespace conct
 			uint8				packetId;
 		};
 
-		void					getAddressForPipe( Address& targetAddress, uintreg radioIndex, uintreg pipeIndex ) const;
+		void					getAddressForPipe( Address& targetAddress, uintreg radioIndex, uintreg pipeIndex, bool server ) const;
 
 		uint16					getMagicFromHeader( const Buffer& header ) const;
 		uint8					getSizeFromHeader( const Buffer& header ) const;

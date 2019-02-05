@@ -14,14 +14,14 @@
       <LocalDirForRelativePaths />
     </CustomSourceDirectories>
     <BuildHost>
-      <HostName>raspberrypi</HostName>
+      <HostName>rpi3</HostName>
       <Transport>SSH</Transport>
       <UserName>root</UserName>
     </BuildHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
-        <HostName>raspberrypi</HostName>
+        <HostName>rpi3</HostName>
         <Transport>SSH</Transport>
         <UserName>root</UserName>
       </RemoteHost>

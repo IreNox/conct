@@ -2,19 +2,20 @@
 
 namespace conct
 {
-	void PortNRF24L01::getAddressForPipe( Address& targetAddress, uintreg radioIndex, uintreg pipeIndex ) const
+	void PortNRF24L01::getAddressForPipe( Address& targetAddress, uintreg radioIndex, uintreg pipeIndex, bool server ) const
 	{
-		targetAddress.pipeIndex		= '0' + pipeIndex;
+		targetAddress.pipeIndex		= (server ? 'A' : 'a') + pipeIndex;
 		targetAddress.radioIndex	= '0' + radioIndex;
 		targetAddress.static1		= 'c';
 		targetAddress.static2		= 'o';
 		targetAddress.static3		= 'n';
+		targetAddress.zero			= '\0';
 	}
 
 	uint16 PortNRF24L01::getMagicFromHeader( const Buffer& buffer ) const
 	{
-		const uint16 magic = (buffer[ 0u ] << 4u) | ((buffer[ 1u ] & 0xf0u) >> 4u);
-		return (magic & 0xfff0u);
+		const uint16 magic = (uint16(buffer[ 0u ]) << 8u) | (buffer[ 1u ] & 0xf0u);
+		return magic;
 	}
 
 	uint8 PortNRF24L01::getSizeFromHeader( const Buffer& buffer ) const
@@ -57,7 +58,7 @@ namespace conct
 	uint8 PortNRF24L01::finalizePacket( Buffer& buffer, uint8 payloadSize )
 	{
 		const uint8 checksumIndex = sizeof( Header ) + payloadSize;
-		buffer[ checksumIndex ] = calculateChecksum( buffer, checksumIndex );
+		buffer[ checksumIndex ] = calculateChecksum( buffer, payloadSize );
 		return checksumIndex + 1u;
 	}
 

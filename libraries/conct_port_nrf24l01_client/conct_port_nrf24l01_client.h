@@ -18,6 +18,7 @@ namespace conct
 
 		bool						setup( const PortNRF24L01ClientParameters& parameters );
 
+		virtual void				getEndpoints( ArrayView< uintreg >& endpoints ) CONCT_OVERRIDE_FINAL;
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
@@ -41,7 +42,6 @@ namespace conct
 		};
 
 		RF24						m_radio;
-		Address						m_address;
 
 		Flags8< ConnectionFlag >	m_flags;
 
@@ -62,5 +62,6 @@ namespace conct
 		void						receivePacket();
 
 		void						handleProtocolMessage();
+		void						sendAcknowledgeMessage();
 	};
 }

@@ -22,6 +22,7 @@ namespace conct
 
 		bool							setup( const PortNRF24L01ServerParameters& parameters );
 
+		virtual void					getEndpoints( ArrayView< uintreg >& endpoints ) CONCT_OVERRIDE_FINAL;
 		virtual bool					popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
 		virtual void					loop() CONCT_OVERRIDE_FINAL;
@@ -46,7 +47,8 @@ namespace conct
 		{
 			uintreg						radioIndex;
 			uintreg						pipeIndex;
-			Address						address;
+			uint32						requestId;
+			Address						clientAddress;
 
 			Flags8< ConnectionFlag >	flags;
 
@@ -64,9 +66,11 @@ namespace conct
 		RF24							m_radio0;
 		RF24							m_radio1;
 
-		Address							m_protocolAddress;
+		Address							m_protocolServerAddress;
+		Address							m_protocolClientAddress;
 
 		Vector< Connection >			m_connections;
+		Vector< uintreg >				m_endpoints;;
 		Vector< uintreg >				m_brokenConnections;
 
 		void							readFromRadio( RF24& radio, uintreg radioIndex );
@@ -77,7 +81,7 @@ namespace conct
 
 		void							resetConnection( Connection& connection );
 
-		void							sendAddressMessage( uint32 requestId, const Address& address );
+		void							sendAddressMessage( uint32 requestId, const Connection& connection );
 		void							sendDepletedMessage( uint32 requestId );
 		void							sendAcknowledgeMessage( Connection& connection, uint8 packetId );
 		void							sendDataPacket( Connection& connection );

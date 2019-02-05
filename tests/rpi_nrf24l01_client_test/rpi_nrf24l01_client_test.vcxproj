@@ -32,7 +32,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <GNUConfigurationType>Debug</GNUConfigurationType>
-    <RemoteBuildHost>raspberrypi</RemoteBuildHost>
+    <RemoteBuildHost>rpi3</RemoteBuildHost>
     <ToolchainID>com.sysprogs.toolchain.default-llvm</ToolchainID>
     <ToolchainVersion />
   </PropertyGroup>
@@ -44,13 +44,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_nrf24l01_client;/home/pi/code/conct/libraries/rf24;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_nrf24l01_client;/home/pi/code/conct/libraries/rf24;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLinkerInputs>;%(Link.AdditionalLinkerInputs)</AdditionalLinkerInputs>
       <LibrarySearchDirectories>;%(Link.LibrarySearchDirectories)</LibrarySearchDirectories>
-      <AdditionalLibraryNames>;%(Link.AdditionalLibraryNames)</AdditionalLibraryNames>
+      <AdditionalLibraryNames>pthread;%(Link.AdditionalLibraryNames)</AdditionalLibraryNames>
       <LinkerScript />
     </Link>
   </ItemDefinitionGroup>
@@ -73,6 +73,15 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_atomic.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_mutex.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp" />
     <ClCompile Include="..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp" />
     <ClCompile Include="..\..\libraries\rf24\RF24.cpp" />
@@ -89,6 +98,11 @@
     <None Include="..\..\libraries\conct_core\conct_static_array.inl" />
     <None Include="..\..\libraries\conct_core\conct_string.inl" />
     <None Include="..\..\libraries\conct_core\conct_writer.inl" />
+    <None Include="..\..\libraries\conct_core_high\conct_atomic.inl" />
+    <None Include="..\..\libraries\conct_core_high\conct_map.inl" />
+    <None Include="..\..\libraries\conct_core_high\conct_queue.inl" />
+    <None Include="..\..\libraries\conct_core_high\conct_unsorted_set.inl" />
+    <None Include="..\..\libraries\conct_core_high\conct_vector.inl" />
     <None Include="rpi_nrf24l01_client_test-Debug.vgdbsettings" />
     <None Include="rpi_nrf24l01_client_test-Release.vgdbsettings" />
   </ItemGroup>
@@ -115,6 +129,21 @@
     <ClInclude Include="..\..\libraries\conct_core\conct_timer.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_writer.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_atomic.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_map.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_mutex.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_pair.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_thread_local_storage.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h" />
     <ClInclude Include="..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h" />
     <ClInclude Include="..\..\libraries\rf24\nRF24L01.h" />

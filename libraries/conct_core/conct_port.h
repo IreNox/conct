@@ -1,5 +1,6 @@
 #pragma once
 
+#include "conct_array_view.h"
 #include "conct_core.h"
 #include "conct_flags.h"
 
@@ -19,6 +20,7 @@ namespace conct
 	{
 	public:
 
+		virtual void				getEndpoints( ArrayView< uintreg >& endpoints ) = 0;
 		virtual bool				popConnectionReset( uintreg& endpointId ) = 0;
 
 		virtual void				loop() = 0;

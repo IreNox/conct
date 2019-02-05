@@ -416,7 +416,7 @@ void RF24::print_address_register(const char* name, uint8_t reg, uint8_t qty)
 /****************************************************************************/
 
 RF24::RF24()
-	: ce_pin( 0 ), csn_pin( 0 ), p_variant( false ), payload_size( 32 ), dynamic_payloads_enabled( false ), addr_width( 5 ), csDelay( 5 )
+	: ce_pin( 0xff ), csn_pin( 0xff ), p_variant( false ), payload_size( 32 ), dynamic_payloads_enabled( false ), addr_width( 5 ), csDelay( 5 )
 {
 	pipe0_reading_address[ 0 ]=0;
 }

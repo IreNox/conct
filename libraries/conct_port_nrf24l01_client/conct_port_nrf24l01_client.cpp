@@ -12,12 +12,25 @@ namespace conct
 			return false;
 		}
 
+		m_radio.setPALevel( RF24_PA_MIN );
+
 		resetConnection();
 		m_flags.clear();
 
-		m_radio.startListening();
-
 		return true;
+	}
+
+	void PortNRF24L01Client::getEndpoints( ArrayView< uintreg >& endpoints )
+	{
+		if( m_flags.isSet( ConnectionFlag_Connected ) )
+		{
+			static const uintreg s_endpointId = 0u;
+			endpoints.set( &s_endpointId, 1u );
+		}
+		else
+		{
+			endpoints.set( nullptr, 0u );
+		}
 	}
 
 	bool PortNRF24L01Client::popConnectionReset( uintreg& endpointId )
@@ -38,18 +51,19 @@ namespace conct
 			updateConnection();
 		}
 
-		if( m_lastSendId != 0u &&
-			!m_flags.isSet( ConnectionFlag_AcknowledgedPacket ) )
-		{
-			if( millis() - m_lastSendTime > PacketResendTime )
-			{
-				sendPacket();
-			}
-		}
-
 		if( !m_flags.isSet( ConnectionFlag_ReceivedPacket ) )
 		{
 			receivePacket();
+		}
+
+		if( m_lastSendId != 0u &&
+			!m_flags.isSet( ConnectionFlag_AcknowledgedPacket ) )
+		{
+			const uint32 elapsedTime = (millis() - m_lastSendTime);
+			if( elapsedTime > PacketResendTime )
+			{
+				sendPacket();
+			}
 		}
 	}
 
@@ -73,9 +87,11 @@ namespace conct
 
 		do
 		{
-			m_lastSendId = (m_lastSendId + 1u) & 0x3f;
+			m_lastSendId = (m_lastSendId + 1u) & PacketIdMask;
 		}
 		while( m_lastSendId == 0u );
+
+		m_flags.unset( ConnectionFlag_AcknowledgedPacket );
 
 		writeHeader( m_sendBuffer, m_lastSendSize, PacketType_Data, m_lastSendId );
 		finalizePacket( m_sendBuffer, m_lastSendSize );
@@ -109,7 +125,8 @@ namespace conct
 
 	void PortNRF24L01Client::updateConnection()
 	{
-		if( millis() - m_lastSendTime < MaxPacketPayloadSize )
+		const uint32 elapsedTime = (millis() - m_lastSendTime);
+		if( elapsedTime < MaxPacketPayloadSize )
 		{
 			return;
 		}
@@ -123,11 +140,15 @@ namespace conct
 
 	void PortNRF24L01Client::resetConnection()
 	{
-		Address protocolAddres;
-		getAddressForPipe( protocolAddres, 0u, 0u );
+		Address protocolServerAddress;
+		Address protocolClientAddress;
+		getAddressForPipe( protocolServerAddress, 0u, 0u, true );
+		getAddressForPipe( protocolClientAddress, 0u, 0u, false );
 
-		m_radio.openReadingPipe( 0u, protocolAddres.data );
-		m_radio.openWritingPipe( protocolAddres.data );
+		m_radio.stopListening();
+		m_radio.openWritingPipe( protocolServerAddress.data );
+		m_radio.openReadingPipe( 1u, protocolClientAddress.data );
+		m_radio.startListening();
 
 		m_lastSendTime		= 0u;
 		m_lastSendId		= 0u;
@@ -171,9 +192,28 @@ namespace conct
 		}
 
 		const uint8 packetId = getIdFromHeader( m_receiveBuffer );
-		if( packetId != m_lastReceiveId + 1u )
+		const PacketType packetType = getTypeFromHeader( m_receiveBuffer );
+		if( packetType != PacketType_Protocol )
 		{
-			return;
+			if( packetId == m_lastReceiveId )
+			{
+				sendAcknowledgeMessage();
+				return;
+			}
+
+			uint8 expectedPacketId = m_lastReceiveId;
+			do
+			{
+				expectedPacketId = (expectedPacketId + 1u) & PacketIdMask;
+			}
+			while( expectedPacketId == 0u );
+
+			if( packetId != expectedPacketId )
+			{
+				return;
+			}
+
+			m_lastReceiveId = packetId;
 		}
 
 		const uint8 fullPacketSize = sizeof( Header ) + packetSize;
@@ -187,13 +227,13 @@ namespace conct
 
 		m_lastReceiveSize = packetSize;
 
-		const PacketType packetType = getTypeFromHeader( m_receiveBuffer );
 		if( packetType == PacketType_Protocol )
 		{
 			handleProtocolMessage();
 		}
 		else if( m_flags.isSet( ConnectionFlag_Connected ) )
 		{
+			sendAcknowledgeMessage();
 			m_flags.set( ConnectionFlag_ReceivedPacket );
 		}
 	}
@@ -214,9 +254,16 @@ namespace conct
 					return;
 				}
 
-				m_address = pAddressData->address;
-				m_radio.openReadingPipe( 0u, m_address.data );
-				m_radio.openWritingPipe( m_address.data );
+				Address connectionServerAddress;
+				Address connectionClientAddress;
+				getAddressForPipe( connectionServerAddress, pAddressData->radioIndex, pAddressData->pipeIndex, true );
+				getAddressForPipe( connectionClientAddress, pAddressData->radioIndex, pAddressData->pipeIndex, false );
+
+				m_radio.stopListening();
+				m_radio.openWritingPipe( connectionServerAddress.data );
+				m_radio.openReadingPipe( 1u, connectionClientAddress.data );
+				m_radio.startListening();
+
 				m_flags.set( ConnectionFlag_Connected );
 			}
 			break;
@@ -251,5 +298,18 @@ namespace conct
 			}
 			break;
 		}
+	}
+
+	void PortNRF24L01Client::sendAcknowledgeMessage()
+	{
+		Buffer ackBuffer;
+		uint8 payloadSize;
+		AcknowledgeProtocolMessageData* pAcknowledgeData = (AcknowledgeProtocolMessageData*)writeProtocolHeader( ackBuffer, payloadSize, ProtocolMessageType_Ack, sizeof( AcknowledgeProtocolMessageData ) );
+		pAcknowledgeData->packetId = m_lastReceiveId;
+		const uint8 packetSize = finalizePacket( ackBuffer, payloadSize );
+
+		m_radio.stopListening();
+		m_radio.write( ackBuffer, packetSize );
+		m_radio.startListening();
 	}
 }

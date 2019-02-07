@@ -36,13 +36,6 @@ namespace conct
 
 	private:
 
-		enum EndpointMode
-		{
-			EndpointMode_Full,
-			EndpointMode_Receiving,
-			EndpointMode_Sending,
-		};
-
 		enum PackageState
 		{
 			PackageState_ReadBaseHeader,
@@ -89,7 +82,6 @@ namespace conct
 		struct EndpointData
 		{
 			uintreg			endpointId;
-			EndpointMode	mode;
 			DeviceId		deviceId;
 		};
 
@@ -130,7 +122,7 @@ namespace conct
 
 		CommandQueue		m_finishCommands;
 
-		DeviceId			addDevice( Port* pPort, DeviceId ownDeviceId, uintreg endpointId );
+		DeviceId			addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId );
 
 		void				readPort( Port* pPort, PortData& portData );
 		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );

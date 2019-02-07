@@ -39,7 +39,7 @@ namespace conct
 	{
 		buffer[ 0u ] = 0xe6u;
 		buffer[ 1u ] = 0x70u | ((size >> 1u) & 0x0fu);
-		buffer[ 2u ] = ((size & 0x01u) << 7u) | (type << 6u) | (id & 0x3fu);
+		buffer[ 2u ] = ((size & 0x01u) << 7u) | (type << 6u) | (id & PacketIdMask);
 
 		return buffer + sizeof( Header );
 	}

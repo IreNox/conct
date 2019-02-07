@@ -111,6 +111,7 @@ namespace conct
 			}
 			else
 			{
+				Console.WriteLine("Command failed");
 				// display error
 			}
 

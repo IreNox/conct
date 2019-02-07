@@ -20,24 +20,7 @@ namespace conct
 
 	void RuntimeHigh::registerPort( Port* pPort )
 	{
-		PortData& portData = m_ports[ pPort ];
-
-		const Flags8< PortFlag > flags = pPort->getFlags();
-		if( flags.isSet( PortFlag_SingleEndpoint ) )
-		{
-			const DeviceId deviceId = addDevice( pPort, InvalidDeviceId, 0u );
-
-			EndpointData endpointData;
-			endpointData.endpointId	= 0u;
-			endpointData.mode		= EndpointMode_Sending;
-			endpointData.deviceId	= deviceId;
-			portData.endpointToDevice[ 0u ] = endpointData;
-		}
-
-		if( !flags.isSet( PortFlag_Reliable ) )
-		{
-			// not supported
-		}
+		m_ports[ pPort ];
 	}
 
 	void RuntimeHigh::unregisterPort( Port* pPort )
@@ -69,6 +52,22 @@ namespace conct
 				m_finishCommands.pushBack( pair.value );
 				pair.value->setResponse( ResultId_ConnectionLost );
 			}
+
+			m_devices.erase( endpointData.deviceId );
+			portData.endpointToDevice.erase( endpointId );
+		}
+
+		ArrayView< uintreg > endpoints;
+		pPort->getEndpoints( endpoints );
+		for( uint i = 0u; i < endpoints.getLength(); ++i )
+		{
+			const EndpointData* pEndpointData;
+			if( portData.endpointToDevice.find( pEndpointData, endpoints[ i ] ) )
+			{
+				continue;
+			}
+
+			addDevice( pPort, portData, InvalidDeviceId, endpoints[ i ] );
 		}
 
 		readPort( pPort, portData );
@@ -132,13 +131,9 @@ namespace conct
 		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
 		if( result == ResultId_Success )
 		{
-			DeviceData* pDeviceData = nullptr;
-			if( !m_devices.find( pDeviceData, deviceAddress.address[ 0u ] ) )
-			{
-				return ResultId_NoSuchDevice;
-			}
-
-			pDeviceData->commands[ pCommand->getId() ] = pCommand;
+			DeviceData& deviceData = m_devices[ deviceAddress.address[ 0u ] ];
+			deviceData.commands[ pCommand->getId() ] = pCommand;
+			pCommand->setSent();
 		}
 
 		return result;
@@ -172,7 +167,7 @@ namespace conct
 		DeviceData* pTargetDeviceData = nullptr;
 		if( !m_devices.find( pTargetDeviceData, nextDeviceId ) )
 		{
-			// target not found. send error to source!
+			sendErrorResponse( sourcePackage, ResultId_NoSuchDevice );
 			return;
 		}
 
@@ -210,6 +205,7 @@ namespace conct
 		{
 			DeviceData& deviceData = m_devices[ package.deviceId ];
 			pCommand = deviceData.commands[ package.baseHeader.commandId ];
+			deviceData.commands.erase( package.baseHeader.commandId );
 
 			if( pCommand == nullptr )
 			{
@@ -338,7 +334,7 @@ namespace conct
 		}
 	}
 
-	DeviceId RuntimeHigh::addDevice( Port* pPort, DeviceId ownDeviceId, uintreg endpointId )
+	DeviceId RuntimeHigh::addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId )
 	{
 		if( m_nextDeviceId == InvalidDeviceId )
 		{
@@ -353,6 +349,12 @@ namespace conct
 		deviceData.endpointId		= endpointId;
 		deviceData.ownDeviceId		= ownDeviceId;
 		deviceData.pTargetPort		= pPort;
+
+		EndpointData endpointData;
+		endpointData.endpointId	= endpointId;
+		//endpointData.mode		= EndpointMode_Full;
+		endpointData.deviceId	= nextDeviceId;
+		portData.endpointToDevice[ endpointId ] = endpointData;
 
 		return nextDeviceId;
 	}
@@ -443,22 +445,10 @@ namespace conct
 			deviceData.ownDeviceId = ownDeviceId;
 
 			package.target.deviceId = deviceId;
-
-			if( pEndpointData->mode != EndpointMode_Full )
-			{
-				pEndpointData->mode = EndpointMode_Sending;
-			}
 		}
 		else
 		{
-			const DeviceId deviceId = addDevice( pPort, ownDeviceId, endpointId );
-
-			EndpointData endpointData;
-			endpointData.endpointId	= endpointId;
-			endpointData.mode		= EndpointMode_Full;
-			endpointData.deviceId	= deviceId;
-			portData.endpointToDevice[ endpointId ] = endpointData;
-
+			const DeviceId deviceId = addDevice( pPort, portData, ownDeviceId, endpointId );
 			package.target.deviceId = deviceId;
 		}
 
@@ -476,17 +466,6 @@ namespace conct
 
 		SendPackage& currentPackage = portData.sendPackages.getFront();
 
-		EndpointData& endpointData = portData.endpointToDevice[ currentPackage.targetEndpointId ];
-		if( endpointData.mode == EndpointMode_Receiving )
-		{
-			// HACK: to avoid reallocation during push, so getFront stays stable
-			portData.sendPackages.reserve( portData.sendPackages.getLength() + 1u );
-
-			portData.sendPackages.pushBack( portData.sendPackages.getFront() );
-			portData.sendPackages.popFront();
-			return;
-		}
-
 		Writer writer;
 		const uintreg remainingSize = currentPackage.data.getLength() - currentPackage.currentOffset;
 		if( !pPort->openSend( writer, remainingSize, currentPackage.targetEndpointId ) )
@@ -499,17 +478,12 @@ namespace conct
 			writer.writeByte( currentPackage.data[ currentPackage.currentOffset++ ] );
 		}
 
+		pPort->closeSend( writer, currentPackage.targetEndpointId );
+
 		if( currentPackage.currentOffset == currentPackage.data.getLength() )
 		{
 			portData.sendPackages.popFront();
-
-			if( endpointData.mode != EndpointMode_Full )
-			{
-				endpointData.mode = EndpointMode_Receiving;
-			}
 		}
-
-		pPort->closeSend( writer, currentPackage.targetEndpointId );
 	}
 
 	void RuntimeHigh::setState( PendingReceivedPackage& package, PackageState state )

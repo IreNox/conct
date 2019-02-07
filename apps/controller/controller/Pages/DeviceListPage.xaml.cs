@@ -11,6 +11,8 @@ namespace conct
 			InitializeComponent();
 
 			BindingContext = new DeviceListViewModel();
+
+			ToolbarItems.Add(new ToolbarItem("Refresh", null, Refresh));
 		}
 
 		private void Device_Selected(object sender, SelectedItemChangedEventArgs e)
@@ -24,6 +26,11 @@ namespace conct
 
 			Navigation.PushAsync(new DevicePage(device));
 			((ListView)sender).SelectedItem = null;
+		}
+
+		private void Refresh()
+		{
+			App.System.SyncDevices();
 		}
 	}
 }

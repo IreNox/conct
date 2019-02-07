@@ -1,8 +1,8 @@
 /* PWM Outputs */
 
-static const uint8_t Red = 9;
-static const uint8_t Green = 10;
-static const uint8_t Blue = 11;
+static const uint8_t Red = 3;
+static const uint8_t Green = 5;
+static const uint8_t Blue = 6;
 
 static const uint8_t Pins[] = { Red, Green, Blue };
 

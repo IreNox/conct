@@ -141,6 +141,11 @@ namespace conct
 		return true;
 	}
 
+	void PortTcpServer::getEndpoints( ArrayView< uintreg >& endpoints )
+	{
+		endpoints.set( m_connectedConnections.getBegin(), m_connectedConnections.getLength() );
+	}
+
 	bool PortTcpServer::popConnectionReset( uintreg& endpointId )
 	{
 		if( m_brokenConnections.isEmpty() )
@@ -156,6 +161,8 @@ namespace conct
 
 	void PortTcpServer::loop()
 	{
+		m_connectedConnections.clear();
+
 		sockaddr_in6 address;
 		socklen_t addressLength = sizeof( address );
 		SocketType clientSocket = accept( m_socket, (sockaddr*)&address, &addressLength );
@@ -182,6 +189,10 @@ namespace conct
 				connection.receiveData.clear();
 				connection.sendData.clear();
 				connection.socket = InvalidSocket;
+			}
+			else
+			{
+				m_connectedConnections.pushBack( i );
 			}
 		}
 	}

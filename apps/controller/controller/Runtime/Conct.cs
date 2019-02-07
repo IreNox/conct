@@ -148,7 +148,15 @@ namespace conct
 				SyncDevices();
 			}
 
-			m_servers.Remove(data);
+			try
+			{
+				m_servers.Remove(data);
+			}
+			catch
+			{
+
+			}
+
 			SaveConfig();
 		}
 
@@ -207,7 +215,7 @@ namespace conct
 			}
 		}
 
-		private void SyncDevices()
+		public void SyncDevices()
 		{
 			m_devices.Sync(m_device.ConnectedDevices, (s, t) => t.Address == s, s => new ConnectedDevice(s));
 		}

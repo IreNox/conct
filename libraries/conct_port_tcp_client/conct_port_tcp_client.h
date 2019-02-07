@@ -29,6 +29,7 @@ namespace conct
 
 		bool						setup( const PortTcpClientParameters& parameters );
 
+		virtual void				getEndpoints( ArrayView< uintreg >& endpoints ) CONCT_OVERRIDE_FINAL;
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
@@ -39,7 +40,7 @@ namespace conct
 		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 		virtual void				closeReceived( Reader& reader, uintreg endpointId ) CONCT_OVERRIDE_FINAL;
 
-		virtual Flags8< PortFlag >	getFlags() CONCT_OVERRIDE_FINAL;
+		virtual Flags8< PortFlag >	getFlags() const CONCT_OVERRIDE_FINAL;
 
 	private:
 

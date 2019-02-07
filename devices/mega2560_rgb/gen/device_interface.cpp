@@ -8,8 +8,9 @@ namespace conct
 
 	void DeviceInterface::setupDevice()
 	{
-		PortSerialParameters port0Parameters;
-		port0Parameters.speed = 115200;
+		PortNRF24L01ClientParameters port0Parameters;
+		port0Parameters.cePin = 7;
+		port0Parameters.csPin = 8;
 		m_port0.setup( port0Parameters );
 
 		m_runtime.setup( this );

@@ -20,7 +20,13 @@ namespace conct
 
 			foreach (TTarget target in targetsToRemove)
 			{
-				targets.Remove(target);
+				try
+				{
+					targets.Remove(target);
+				}
+				catch
+				{
+				}
 			}
 
 			foreach (TSource source in sources)

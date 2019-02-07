@@ -16,14 +16,14 @@
     <BuildHost>
       <HostName>raspberrypi</HostName>
       <Transport>SSH</Transport>
-      <UserName>pi</UserName>
+      <UserName>root</UserName>
     </BuildHost>
     <MainSourceTransferCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
       <RemoteHost>
         <HostName>raspberrypi</HostName>
         <Transport>SSH</Transport>
-        <UserName>pi</UserName>
+        <UserName>root</UserName>
       </RemoteHost>
       <LocalDirectory>E:\Development\conct</LocalDirectory>
       <RemoteDirectory>/home/pi/code/conct</RemoteDirectory>
@@ -42,7 +42,6 @@
       </FileMasks>
       <TransferNewFilesOnly>true</TransferNewFilesOnly>
       <IncludeSubdirectories>true</IncludeSubdirectories>
-      <SelectedDirectories />
       <DeleteDisappearedFiles>true</DeleteDisappearedFiles>
       <ApplyGlobalExclusionList>true</ApplyGlobalExclusionList>
     </MainSourceTransferCommand>
@@ -63,6 +62,7 @@
     <ProjectFile>raspberry_pi_router.vcxproj</ProjectFile>
     <RemoteBuildEnvironment>
       <Records />
+      <EnvironmentSetupFiles />
     </RemoteBuildEnvironment>
     <ParallelJobCount>1</ParallelJobCount>
     <SuppressDirectoryChangeMessages>true</SuppressDirectoryChangeMessages>

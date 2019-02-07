@@ -32,6 +32,7 @@ namespace conct
 
 		bool						setup( const PortTcpServerParameters& parameters );
 
+		virtual void				getEndpoints( ArrayView< uintreg >& endpoints ) CONCT_OVERRIDE_FINAL;
 		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
 
 		virtual void				loop() CONCT_OVERRIDE_FINAL;
@@ -59,6 +60,7 @@ namespace conct
 
 		Vector< Connection >		m_connections;
 		Vector< uintreg >			m_brokenConnections;
+		Vector< uintreg >			m_connectedConnections;
 
 		void						addConnection( uintreg socket, const sockaddr_in6& address );
 		bool						updateConnection( Connection& connection );

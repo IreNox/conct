@@ -1,5 +1,6 @@
 #include "conct_port_nrf24l01_client.h"
 
+#include "conct_memory.h"
 #include "conct_reader.h"
 #include "conct_writer.h"
 
@@ -51,10 +52,7 @@ namespace conct
 			updateConnection();
 		}
 
-		if( !m_flags.isSet( ConnectionFlag_ReceivedPacket ) )
-		{
-			receivePacket();
-		}
+		receivePacket();
 
 		if( m_lastSendId != 0u &&
 			!m_flags.isSet( ConnectionFlag_AcknowledgedPacket ) )
@@ -72,6 +70,8 @@ namespace conct
 		if( !m_flags.isSet( ConnectionFlag_Connected ) ||
 			(m_lastSendId != 0u && !m_flags.isSet( ConnectionFlag_AcknowledgedPacket )) )
 		{
+			Serial.print( "Send blocked: " );
+			Serial.println( size );
 			return false;
 		}
 
@@ -96,6 +96,8 @@ namespace conct
 		writeHeader( m_sendBuffer, m_lastSendSize, PacketType_Data, m_lastSendId );
 		finalizePacket( m_sendBuffer, m_lastSendSize );
 		sendPacket();
+
+		Serial.println( "Sent" );
 	}
 
 	bool PortNRF24L01Client::openReceived( Reader& reader, uintreg& endpointId )
@@ -106,7 +108,7 @@ namespace conct
 		}
 
 		endpointId = 0u;
-		reader.set( m_receiveBuffer + sizeof( Header ), m_lastReceiveSize );
+		reader.set( m_receiveBuffer, m_lastReceiveSize );
 		return true;
 	}
 
@@ -157,6 +159,8 @@ namespace conct
 		m_lastReceiveSize	= 0u;
 
 		m_flags = ConnectionFlag_ConnectionReset;
+
+		Serial.println( "Connection reset" );
 	}
 
 	void PortNRF24L01Client::sendPacket()
@@ -175,24 +179,25 @@ namespace conct
 			return;
 		}
 
-		m_radio.read( m_receiveBuffer, sizeof( m_receiveBuffer ) );
+		Buffer receiveBuffer;
+		m_radio.read( receiveBuffer, sizeof( receiveBuffer ) );
 
-		const uint16 magic = getMagicFromHeader( m_receiveBuffer );
+		const uint16 magic = getMagicFromHeader( receiveBuffer );
 		if( magic != PacketMagic )
 		{
-			//trace::write( "Receive packet with invalid magic '"_s + string_tools::toHexString( magic ) + "'." );
+			Serial.println( "Receive packet with invalid magic." );
 			return;
 		}
 
-		const uint8 packetSize = getSizeFromHeader( m_receiveBuffer );
+		const uint8 packetSize = getSizeFromHeader( receiveBuffer );
 		if( packetSize > MaxPacketPayloadSize )
 		{
-			//trace::write( "Receive packet with invalid size '"_s + string_tools::toString( packetSize ) + "'." );
+			Serial.println( "Receive packet with invalid size." );
 			return;
 		}
 
-		const uint8 packetId = getIdFromHeader( m_receiveBuffer );
-		const PacketType packetType = getTypeFromHeader( m_receiveBuffer );
+		const uint8 packetId = getIdFromHeader( receiveBuffer );
+		const PacketType packetType = getTypeFromHeader( receiveBuffer );
 		if( packetType != PacketType_Protocol )
 		{
 			if( packetId == m_lastReceiveId )
@@ -210,37 +215,40 @@ namespace conct
 
 			if( packetId != expectedPacketId )
 			{
+				Serial.println( "Received wrong packet id." );
 				return;
 			}
-
-			m_lastReceiveId = packetId;
 		}
 
 		const uint8 fullPacketSize = sizeof( Header ) + packetSize;
-		const uint8 expectedChecksum = calculateChecksum( m_receiveBuffer, packetSize );
-		const uint8 receivedChecksum = m_receiveBuffer[ fullPacketSize ];
+		const uint8 expectedChecksum = calculateChecksum( receiveBuffer, packetSize );
+		const uint8 receivedChecksum = receiveBuffer[ fullPacketSize ];
 		if( receivedChecksum != expectedChecksum )
 		{
-			//trace::write( "Receive packet with invalid checksum '"_s + string_tools::toHexString( receivedChecksum ) + "' but expected '" + string_tools::toHexString( expectedChecksum ) + "'." );
+			Serial.println( "Receive packet with invalid checksum." );
 			return;
 		}
 
-		m_lastReceiveSize = packetSize;
-
 		if( packetType == PacketType_Protocol )
 		{
-			handleProtocolMessage();
+			handleProtocolMessage( receiveBuffer );
 		}
-		else if( m_flags.isSet( ConnectionFlag_Connected ) )
+		else if( m_flags.isSet( ConnectionFlag_Connected ) &&
+				 !m_flags.isSet( ConnectionFlag_ReceivedPacket ) )
 		{
+			m_lastReceiveSize = packetSize;
+			m_lastReceiveId = packetId;
+			memory::copy( m_receiveBuffer, receiveBuffer + sizeof( Header ), packetSize );
+
 			sendAcknowledgeMessage();
 			m_flags.set( ConnectionFlag_ReceivedPacket );
+			Serial.println( "Received" );
 		}
 	}
 
-	void PortNRF24L01Client::handleProtocolMessage()
+	void PortNRF24L01Client::handleProtocolMessage( const Buffer& receiveBuffer )
 	{
-		const ProtocolMessageHeader* pProtocolHeader = (const ProtocolMessageHeader*)&m_receiveBuffer[ sizeof( Header ) ];
+		const ProtocolMessageHeader* pProtocolHeader = (const ProtocolMessageHeader*)&receiveBuffer[ sizeof( Header ) ];
 		switch( pProtocolHeader->messageType )
 		{
 		case ProtocolMessageType_Request:
@@ -265,6 +273,7 @@ namespace conct
 				m_radio.startListening();
 
 				m_flags.set( ConnectionFlag_Connected );
+				Serial.println( "Connected" );
 			}
 			break;
 
@@ -276,6 +285,7 @@ namespace conct
 					return;
 				}
 
+				Serial.println( "Depleted" );
 				resetConnection();
 			}
 			break;
@@ -285,10 +295,15 @@ namespace conct
 				const AcknowledgeProtocolMessageData* pAcknowledgeData = (const AcknowledgeProtocolMessageData*)&pProtocolHeader[ 1u ];
 				if( pAcknowledgeData->packetId != m_lastSendId )
 				{
+					Serial.print( "Received invalid ack: " );
+					Serial.print( pAcknowledgeData->packetId );
+					Serial.print( " != " );
+					Serial.println( m_lastSendId );
 					return;
 				}
 
 				m_flags.set( ConnectionFlag_AcknowledgedPacket );
+				Serial.println( "Ack" );
 			}
 			break;
 

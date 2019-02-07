@@ -2,15 +2,17 @@
 #include "gen/files.h"
 #include "conct_light_control.h"
 
-static const uint8_t Red = 2;
-static const uint8_t Green = 3;
-static const uint8_t Blue = 4;
+static const uint8_t Red = 3;
+static const uint8_t Green = 5;
+static const uint8_t Blue = 6;
 
 conct::Devicemega2560_rgb s_device;
 conct::LightControl s_light;
 
 void setup()
 {
+  Serial.begin(9600);
+  
 	s_device.setupDevice();
   
 	pinMode(Red, OUTPUT);

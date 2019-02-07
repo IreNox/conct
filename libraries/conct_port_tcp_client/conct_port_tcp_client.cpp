@@ -27,9 +27,11 @@ namespace conct
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 	static const int ErrorWouldBlock = WSAEWOULDBLOCK;
 	static const int ErrorAlreadyInProgress = WSAEALREADY;
+	static const int ErrorAlreadyConnected = WSAEISCONN;
 #else
 	static const int ErrorWouldBlock = EWOULDBLOCK;
 	static const int ErrorAlreadyInProgress = EALREADY;
+	static const int ErrorAlreadyConnected = EISCONN;
 #endif
 
 
@@ -41,6 +43,41 @@ namespace conct
 		return errno;
 #endif
 	}
+
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+	DynamicString getErrorString( int errorCode )
+	{
+		LPTSTR pString;
+		if( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, errorCode, 0, (LPTSTR)&pString, 0, NULL ) )
+		{
+			return DynamicString( strerror( errorCode ) ) + "(" + string_tools::toString( errorCode ) + ")";
+		}
+		else
+		{
+			//LPTSTR p = _tcschr( s, _T( '\r' ) );
+			//if( p != NULL )
+			//{ /* lose CRLF */
+			//	*p = _T( '\0' );
+			//} /* lose CRLF */
+
+			DynamicString test;
+			LPTSTR pCurrentChar = pString;
+			while( *pCurrentChar != 0 )
+			{
+				test.pushBack( char( *pCurrentChar ) );
+				pCurrentChar++;
+			}
+
+			LocalFree( pString );
+			return test;
+		}
+	}
+#else
+	DynamicString getErrorString( int errorCode )
+	{
+		return DynamicString( strerror( errorCode ) ) + "(" + string_tools::toString( errorCode ) + ")";
+	}
+#endif
 
 	PortTcpClient::PortTcpClient()
 	{
@@ -69,7 +106,7 @@ namespace conct
 		if( m_socket == -1 )
 		{
 			const int error = getLastError();
-			trace::write( "Failed to create Socket. Error: "_s + strerror( error ) );
+			trace::write( "Failed to create Socket. Error: "_s + getErrorString( error ) );
 			return false;
 		}
 
@@ -86,7 +123,7 @@ namespace conct
 		if( fcntl( m_socket, F_SETFL, flags | O_NONBLOCK ) == -1 )
 		{
 			const int error = getLastError();
-			trace::write( "Failed to set non blocking mode. Error: "_s + strerror( error ) );
+			trace::write( "Failed to set non blocking mode. Error: "_s + getErrorString( error ) );
 			return false;
 		}
 #endif
@@ -108,7 +145,7 @@ namespace conct
 			if( result == EAI_SYSTEM )
 			{
 				const int error = getLastError();
-				pErrorName = strerror( error );
+				pErrorName = getErrorString( error );
 			}
 			else
 			{
@@ -130,6 +167,15 @@ namespace conct
 		//inet_pton( AF_INET6, parameters.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
 	}
 
+	void PortTcpClient::getEndpoints( ArrayView< uintreg >& endpoints )
+	{
+		if( !m_connectionLost && !m_connectionReset )
+		{
+			static const uintreg endpointId = 0u;
+			endpoints.set( &endpointId, 1u );
+		}
+	}
+
 	bool PortTcpClient::popConnectionReset( uintreg& endpointId )
 	{
 		if( !m_connectionReset )
@@ -145,15 +191,14 @@ namespace conct
 	{
 		if( m_connectionLost )
 		{
-			m_connectionReset = true;
-
 			if( connect( m_socket, ( const sockaddr* )&m_serverAddress, sizeof( m_serverAddress ) ) != 0 )
 			{
 				const int error = getLastError();
-				if( error != ErrorWouldBlock && error != ErrorAlreadyInProgress )
+				if( error != ErrorWouldBlock && error != ErrorAlreadyInProgress && error != ErrorAlreadyConnected )
 				{
-					trace::write( "Couldn't connect to server. Error: "_s + strerror( error ) );
+					trace::write( "Couldn't connect to server. Error: "_s + getErrorString( error ) );
 					m_connectionLost = true;
+					m_connectionReset = true;
 					return;
 				}
 			}
@@ -166,14 +211,14 @@ namespace conct
 		int retval = getsockopt( m_socket, SOL_SOCKET, SO_ERROR, ( char* )&error, &len );
 		if( retval != 0 )
 		{
-			trace::write( "Couldn't get socket error code. Error: "_s + strerror( retval ) );
+			trace::write( "Couldn't get socket error code. Error: "_s + getErrorString( retval ) );
 			m_connectionLost = true;
 			return;
 		}
 
 		if( error != 0 )
 		{
-			trace::write( "Socket has an error. Error: "_s + strerror( error ) );
+			trace::write( "Socket has an error. Error: "_s + getErrorString( error ) );
 			m_connectionLost = true;
 			return;
 		}
@@ -188,7 +233,7 @@ namespace conct
 			else
 			{
 				const int error = getLastError();
-				trace::write( "Send failed with an error. Error: "_s + strerror( error ) );
+				trace::write( "Send failed with an error. Error: "_s + getErrorString( error ) );
 				m_connectionLost = true;
 				return;
 			}
@@ -207,7 +252,7 @@ namespace conct
 					break;
 				}
 
-				trace::write( "Receive failed with an error. Error: "_s + strerror( error ) );
+				trace::write( "Receive failed with an error. Error: "_s + getErrorString( error ) );
 				m_connectionLost = true;
 				return;
 			}
@@ -248,7 +293,7 @@ namespace conct
 		m_receiveData.clear();
 	}
 
-	Flags8< PortFlag > PortTcpClient::getFlags()
+	Flags8< PortFlag > PortTcpClient::getFlags() const
 	{
 		Flags8< PortFlag > flags;
 		flags |= PortFlag_SingleEndpoint;

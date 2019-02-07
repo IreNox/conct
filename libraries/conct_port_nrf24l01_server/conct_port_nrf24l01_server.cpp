@@ -329,10 +329,12 @@ namespace conct
 					radio.startListening();
 
 					sendAddressMessage( pRequestData->requestId, connection );
+					trace::write( "New connection '"_s + string_tools::toString( i ) + "' at pipe '" + string_tools::toString( connection.pipeIndex ) + "' on radio '" + string_tools::toString( connection.radioIndex ) + "'." );
 					return;
 				}
 
 				sendDepletedMessage( pRequestData->requestId );
+				trace::write( "No slot for connection." );
 			}
 			break;
 
@@ -406,6 +408,7 @@ namespace conct
 		connection.receiveBuffer.clear();
 
 		m_brokenConnections.pushBack( &connection - m_connections.getBegin() );
+		trace::write( "Reset connection at pipe '"_s + string_tools::toString( connection.pipeIndex ) + "' on radio '" + string_tools::toString( connection.radioIndex ) + "'." );
 	}
 
 	void PortNRF24L01Server::sendAddressMessage( uint32 requestId, const Connection& connection )

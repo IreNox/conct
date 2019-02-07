@@ -114,7 +114,19 @@ namespace conct
 
 	void PortNRF24L01Client::closeReceived( Reader& reader, uintreg endpointId )
 	{
-		m_flags.unset( ConnectionFlag_ReceivedPacket );
+		if( reader.isEnd() )
+		{
+			m_flags.unset( ConnectionFlag_ReceivedPacket );
+		}
+		else
+		{
+			const uintreg remainingOffset = m_lastReceiveSize - reader.getRemainingSize();
+			for( uint i = 0u; i < reader.getRemainingSize(); ++i )
+			{
+				m_receiveBuffer[ i ] = m_receiveBuffer[ remainingOffset + i ];
+			}
+			m_lastReceiveSize = reader.getRemainingSize();
+		}
 	}
 
 	Flags8< PortFlag > PortNRF24L01Client::getFlags() const

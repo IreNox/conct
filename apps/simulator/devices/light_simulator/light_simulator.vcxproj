@@ -223,6 +223,8 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_light\conct_light_control.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h" />
@@ -269,6 +271,8 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_light\conct_light_control.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />

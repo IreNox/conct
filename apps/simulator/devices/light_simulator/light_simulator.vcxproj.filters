@@ -39,6 +39,12 @@
     <Filter Include="libraries\conct_port_serial\simulator">
       <UniqueIdentifier>{0d08fab1-8b53-4413-9c37-b31767c4884a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01">
+      <UniqueIdentifier>{4859e3b1-cbe6-40f0-be38-394a52ee6eae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01_client">
+      <UniqueIdentifier>{cea15c53-be2e-4b9f-ad1c-a3dd2451a3bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -221,6 +227,12 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h">
       <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h">
+      <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h">
+      <Filter>libraries\conct_port_nrf24l01_client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -330,6 +342,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp">
       <Filter>libraries\conct_port_serial\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp">
+      <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp">
+      <Filter>libraries\conct_port_nrf24l01_client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

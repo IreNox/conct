@@ -64,6 +64,11 @@ namespace conct
 		return true;
 	}
 
+	void PortSerial::getEndpoints( ArrayView< uintreg >& endpoints )
+	{
+		endpoints.set( nullptr, 0u );
+	}
+
 	void PortSerial::loop()
 	{
 		bool running = true;
@@ -139,7 +144,7 @@ namespace conct
 		m_flags.unset( Flag_ReceivedPacket );
 	}
 
-	Flags8< PortFlag > PortSerial::getFlags()
+	Flags8< PortFlag > PortSerial::getFlags() const
 	{
 		Flags8< PortFlag > flags;
 		flags |= PortFlag_SingleEndpoint;

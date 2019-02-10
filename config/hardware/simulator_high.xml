@@ -8,5 +8,7 @@
 	<capabilities>
 		<allocation />
 		<sockets />
+		<gpio />
+		<spi />
 	</capabilities>
 </hardware>

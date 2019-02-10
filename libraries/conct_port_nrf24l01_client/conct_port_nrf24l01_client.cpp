@@ -77,13 +77,13 @@ namespace conct
 
 		size = CONCT_MIN( size, MaxPacketPayloadSize );
 		writer.set( m_sendBuffer + sizeof( Header ), size );
-		m_lastSendSize = size;
+		m_lastSendSize = uint8( size );
 		return true;
 	}
 
 	void PortNRF24L01Client::closeSend( Writer& writer, uintreg endpointId )
 	{
-		m_lastSendSize -= writer.getRemainingSize();
+		m_lastSendSize -= uint8( writer.getRemainingSize() );
 
 		do
 		{
@@ -125,7 +125,7 @@ namespace conct
 			{
 				m_receiveBuffer[ i ] = m_receiveBuffer[ remainingOffset + i ];
 			}
-			m_lastReceiveSize = reader.getRemainingSize();
+			m_lastReceiveSize = uint8( reader.getRemainingSize() );
 		}
 	}
 

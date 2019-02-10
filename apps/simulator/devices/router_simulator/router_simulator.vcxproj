@@ -67,6 +67,7 @@
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
+    <Import Project="..\..\..\..\config\include_port_nrf24l01_server.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -78,6 +79,7 @@
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
+    <Import Project="..\..\..\..\config\include_port_nrf24l01_server.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -89,6 +91,7 @@
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
+    <Import Project="..\..\..\..\config\include_port_nrf24l01_server.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -100,6 +103,7 @@
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
+    <Import Project="..\..\..\..\config\include_port_nrf24l01_server.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

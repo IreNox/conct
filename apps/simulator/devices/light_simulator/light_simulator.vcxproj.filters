@@ -45,6 +45,9 @@
     <Filter Include="libraries\conct_port_nrf24l01_client">
       <UniqueIdentifier>{cea15c53-be2e-4b9f-ad1c-a3dd2451a3bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01\simulator">
+      <UniqueIdentifier>{60967e71-5a38-4091-b973-787aab3e3eef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h">
       <Filter>libraries\conct_port_nrf24l01_client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\simulator\RF24.h">
+      <Filter>libraries\conct_port_nrf24l01\simulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

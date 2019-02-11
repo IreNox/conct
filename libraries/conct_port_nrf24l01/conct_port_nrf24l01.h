@@ -10,7 +10,7 @@ namespace conct
 
 		static constexpr uintreg PipesPerRadio		= 6u;
 		static constexpr uint8 MaxPacketPayloadSize	= 28u;
-		static constexpr uint32 PacketResendTime	= 1000u;
+		static constexpr uint32 PacketResendTime	= 100u;
 		static constexpr uint16 PacketMagic			= 0xe670u;
 		static constexpr uint8 PacketIdMask			= 0x3f;
 

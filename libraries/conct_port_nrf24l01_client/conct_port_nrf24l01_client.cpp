@@ -258,7 +258,7 @@ namespace conct
 		}
 	}
 
-	void PortNRF24L01Client::handleProtocolMessage( const Buffer& receiveBuffer )
+	void PortNRF24L01Client::handleProtocolMessage( const Buffer& receiveBuffer, uintreg payloadSize )
 	{
 		const ProtocolMessageHeader* pProtocolHeader = (const ProtocolMessageHeader*)&receiveBuffer[ sizeof( Header ) ];
 		switch( pProtocolHeader->messageType )
@@ -268,6 +268,11 @@ namespace conct
 
 		case ProtocolMessageType_Address:
 			{
+				if( payloadSize != sizeof( AddressProtocolMessageData ) )
+				{
+					return;
+				}
+
 				const AddressProtocolMessageData* pAddressData = (const AddressProtocolMessageData*)&pProtocolHeader[ 1u ];
 				if( pAddressData->requestId != m_requestId )
 				{
@@ -291,6 +296,11 @@ namespace conct
 
 		case ProtocolMessageType_Depleted:
 			{
+				if( payloadSize != sizeof( DepletedProtocolMessageData ) )
+				{
+					return;
+				}
+
 				const DepletedProtocolMessageData* pDepletedData = (const DepletedProtocolMessageData*)&pProtocolHeader[ 1u ];
 				if( pDepletedData->requestId != m_requestId )
 				{
@@ -304,6 +314,11 @@ namespace conct
 
 		case ProtocolMessageType_Ack:
 			{
+				if( payloadSize != sizeof( AcknowledgeProtocolMessageData ) )
+				{
+					return;
+				}
+
 				const AcknowledgeProtocolMessageData* pAcknowledgeData = (const AcknowledgeProtocolMessageData*)&pProtocolHeader[ 1u ];
 				if( pAcknowledgeData->packetId != m_lastSendId )
 				{

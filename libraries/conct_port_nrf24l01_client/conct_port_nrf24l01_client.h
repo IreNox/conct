@@ -61,7 +61,7 @@ namespace conct
 		void						sendPacket();
 		void						receivePacket();
 
-		void						handleProtocolMessage( const Buffer& receiveBuffer );
+		void						handleProtocolMessage( const Buffer& receiveBuffer, uintreg payloadSize );
 		void						sendAcknowledgeMessage();
 	};
 }

@@ -140,19 +140,19 @@ namespace conct
 		const int result = getaddrinfo( parameters.serverHost.toConstCharPointer(), nullptr, &addressHint, &pAddressResults );
 		if( result != 0 )
 		{
-			const char* pErrorName = "";
+			DynamicString errorName;
 #if CONCT_DISABLED( CONCT_PLATFORM_WINDOWS )
 			if( result == EAI_SYSTEM )
 			{
 				const int error = getLastError();
-				pErrorName = getErrorString( error );
+				errorName = getErrorString( error );
 			}
 			else
 			{
-				pErrorName = gai_strerror( result );
+				errorName = DynamicString( gai_strerror( result ) );
 			}
 #endif
-			trace::write( "Failed to get address. Error: "_s + pErrorName );
+			trace::write( "Failed to get address. Error: "_s + errorName );
 			return false;
 		}
 

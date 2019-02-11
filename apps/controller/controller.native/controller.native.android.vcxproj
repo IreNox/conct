@@ -220,6 +220,7 @@
     <ClCompile Include="device_c.cpp" />
     <ClCompile Include="device_controller.cpp" />
     <ClCompile Include="gen\core_device_proxy.cpp" />
+    <ClCompile Include="gen\core_router_proxy.cpp" />
     <ClCompile Include="gen\device_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +284,7 @@
     <ClInclude Include="device_c.h" />
     <ClInclude Include="device_controller.h" />
     <ClInclude Include="gen\core_device_proxy.h" />
+    <ClInclude Include="gen\core_router_proxy.h" />
     <ClInclude Include="gen\device_interface.h" />
   </ItemGroup>
   <ItemGroup>

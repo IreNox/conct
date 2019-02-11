@@ -129,6 +129,9 @@
     </ClCompile>
     <ClCompile Include="device_c.cpp" />
     <ClCompile Include="device_controller.cpp" />
+    <ClCompile Include="gen\core_router_proxy.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="device_c.h" />
     <ClInclude Include="device_controller.h" />
+    <ClInclude Include="gen\core_router_proxy.h">
+      <Filter>gen</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="libraries">

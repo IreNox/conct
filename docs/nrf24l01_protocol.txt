@@ -16,6 +16,17 @@ Bits	Count	Name		Description
 24-247	  224	Payload		Packet Data
 248-255	    8	Checksum	Fletcher-8 Checksum of Packet
 
+Optimization proposal:
+Max Packet Size = 256 Bit = 32 Byte
+Max Payload Size = 256 Bit - 16 Bit = 240 Bit = 30 Byte
+
+Header
+Bits	Count	Name		Description
+0-2		    3	Id			Packet Id(0 is Protocol)
+3-7		    5	Size		Data Size in bytes(<= Max Payload Size - 30 Bytes)
+8-247	  240	Payload		Packet Data
+248-255	    8	Checksum	Fletcher-8 Checksum of Packet
+
 ProtocolMessageType
 Request		- 0 - Request Address
 Address		- 1 - Address assigned

@@ -6,6 +6,8 @@
 #include "conct_value.h"
 #include "conct_result.h"
 
+#define CONCT_RUNTIME_USE_CRYPTO CONCT_ON
+
 namespace conct
 {
 	class Proxy;
@@ -111,6 +113,18 @@ namespace conct
 	{
 		Value					value;
 	};
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+	struct CryptoKey
+	{
+		uint8	data[ 32u ];
+	};
+
+	struct CryptoNonce
+	{
+		uint8	data[ 8u ];
+	};
+#endif
 
 	namespace runtime
 	{

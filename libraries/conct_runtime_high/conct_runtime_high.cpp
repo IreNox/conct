@@ -29,7 +29,7 @@ namespace conct
 
 		for( PortData::EndpointDeviceMap::PairType& kvp : portData.endpointToDevice )
 		{
-			m_devices.erase( kvp.value.deviceId );
+			m_devices.erase( kvp.value );
 		}
 
 		m_ports.erase( pPort );
@@ -44,8 +44,8 @@ namespace conct
 		{
 			setState( portData.pendingPackages[ endpointId ], PackageState_ReadBaseHeader );
 
-			const EndpointData& endpointData = portData.endpointToDevice[ endpointId ];
-			DeviceData& deviceData = m_devices[ endpointData.deviceId ];
+			const DeviceId& endpointDeviceId = portData.endpointToDevice[ endpointId ];
+			DeviceData& deviceData = m_devices[ endpointDeviceId ];
 
 			for( DeviceData::CommandMap::PairType& pair : deviceData.commands )
 			{
@@ -53,7 +53,7 @@ namespace conct
 				pair.value->setResponse( ResultId_ConnectionLost );
 			}
 
-			m_devices.erase( endpointData.deviceId );
+			m_devices.erase( endpointDeviceId );
 			portData.endpointToDevice.erase( endpointId );
 		}
 
@@ -61,8 +61,8 @@ namespace conct
 		pPort->getEndpoints( endpoints );
 		for( uint i = 0u; i < endpoints.getLength(); ++i )
 		{
-			const EndpointData* pEndpointData;
-			if( portData.endpointToDevice.find( pEndpointData, endpoints[ i ] ) )
+			const DeviceId* pEndpointDeviceId;
+			if( portData.endpointToDevice.find( pEndpointDeviceId, endpoints[ i ] ) )
 			{
 				continue;
 			}
@@ -350,11 +350,7 @@ namespace conct
 		deviceData.ownDeviceId		= ownDeviceId;
 		deviceData.pTargetPort		= pPort;
 
-		EndpointData endpointData;
-		endpointData.endpointId	= endpointId;
-		//endpointData.mode		= EndpointMode_Full;
-		endpointData.deviceId	= nextDeviceId;
-		portData.endpointToDevice[ endpointId ] = endpointData;
+		portData.endpointToDevice[ endpointId ] = nextDeviceId;
 
 		return nextDeviceId;
 	}
@@ -435,16 +431,15 @@ namespace conct
 	{
 		const DeviceId ownDeviceId = package.target.destinationAddress.getFront();
 
-		EndpointData* pEndpointData = nullptr;
-		if( portData.endpointToDevice.find( pEndpointData, endpointId ) )
+		const DeviceId* pEndpointDeviceId;
+		if( portData.endpointToDevice.find( pEndpointDeviceId, endpointId ) )
 		{
-			const DeviceId deviceId = pEndpointData->deviceId;
-			DeviceData& deviceData = m_devices[ deviceId ];
+			DeviceData& deviceData = m_devices[ *pEndpointDeviceId ];
 
 			CONCT_ASSERT( deviceData.ownDeviceId == InvalidDeviceId || deviceData.ownDeviceId == ownDeviceId );
 			deviceData.ownDeviceId = ownDeviceId;
 
-			package.target.deviceId = deviceId;
+			package.target.deviceId = *pEndpointDeviceId;
 		}
 		else
 		{

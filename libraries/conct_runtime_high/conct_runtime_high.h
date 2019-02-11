@@ -7,6 +7,10 @@
 #include "conct_runtime.h"
 #include "conct_vector.h"
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#	include <ChaCha.h>
+#endif
+
 namespace conct
 {
 	class Device;
@@ -79,18 +83,12 @@ namespace conct
 			uintreg							currentOffset;
 		};
 
-		struct EndpointData
-		{
-			uintreg			endpointId;
-			DeviceId		deviceId;
-		};
-
 		struct PortData
 		{
 			typedef Map< uintreg, PendingReceivedPackage > PendingPackageMap;
 			typedef Vector< ReceivedPackage > ReceivedPackageVector;
 			typedef Queue< SendPackage > SendPackageQueue;
-			typedef Map< uintreg, EndpointData > EndpointDeviceMap;
+			typedef Map< uintreg, DeviceId > EndpointDeviceMap;
 
 			PendingPackageMap		pendingPackages;
 			ReceivedPackageVector	receivedPackages;
@@ -103,11 +101,16 @@ namespace conct
 		{
 			typedef Map< CommandId, Command* > CommandMap;
 
-			Port*		pTargetPort;
-			uintreg		endpointId;
-			DeviceId	ownDeviceId;
-			CommandId	nextCommandId;
-			CommandMap	commands;
+			Port*			pTargetPort;
+			uintreg			endpointId;
+			DeviceId		ownDeviceId;
+			CommandId		nextCommandId;
+			CommandMap		commands;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			CryptoKey		receiveKey;
+			CryptoKey		sendKey;
+			CryptoNonce		lastSendNonce;
+#endif
 		};
 
 		typedef Map< Port*, PortData > PortMap;
@@ -121,6 +124,10 @@ namespace conct
 		DeviceId			m_nextDeviceId;
 
 		CommandQueue		m_finishCommands;
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		ChaCha				m_crypto;
+#endif
 
 		DeviceId			addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId );
 

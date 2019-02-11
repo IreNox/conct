@@ -48,6 +48,9 @@
     <Filter Include="libraries\conct_port_nrf24l01\simulator">
       <UniqueIdentifier>{60967e71-5a38-4091-b973-787aab3e3eef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\Crypto">
+      <UniqueIdentifier>{8fd9baa8-ec3b-4d7c-b828-767a7eaa06c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="home_light_impl.h">
@@ -239,6 +242,15 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\simulator\RF24.h">
       <Filter>libraries\conct_port_nrf24l01\simulator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Crypto.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="light_simulator.cpp">
@@ -354,6 +366,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp">
       <Filter>libraries\conct_port_nrf24l01_client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\ChaCha.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Cipher.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp">
+      <Filter>libraries\Crypto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

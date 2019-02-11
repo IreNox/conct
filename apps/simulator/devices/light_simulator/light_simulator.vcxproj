@@ -69,6 +69,7 @@
     <Import Project="..\..\..\..\config\include_runtime_high.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
+    <Import Project="..\..\..\..\config\include_crypto.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -82,6 +83,7 @@
     <Import Project="..\..\..\..\config\include_runtime_high.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
+    <Import Project="..\..\..\..\config\include_crypto.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -95,6 +97,7 @@
     <Import Project="..\..\..\..\config\include_runtime_high.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
+    <Import Project="..\..\..\..\config\include_crypto.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -108,6 +111,7 @@
     <Import Project="..\..\..\..\config\include_runtime_high.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
+    <Import Project="..\..\..\..\config\include_crypto.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -242,6 +246,9 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_value_triats.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Crypto.h" />
     <ClInclude Include="..\shared\i_simulator_context.h" />
     <ClInclude Include="..\shared\i_simulator_device.h" />
     <ClInclude Include="device_impl.h" />
@@ -288,6 +295,9 @@
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_value.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\Crypto\ChaCha.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Cipher.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp" />
     <ClCompile Include="device_impl.cpp" />
     <ClCompile Include="gen\core_device_proxy.cpp" />
     <ClCompile Include="gen\device_interface.cpp" />

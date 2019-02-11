@@ -39,6 +39,9 @@
     <Filter Include="libraries\conct_port_serial\simulator">
       <UniqueIdentifier>{94a6424e-ed18-4c50-83f5-00ee4f57deee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\Crypto">
+      <UniqueIdentifier>{3b6bf9f1-5c6e-417f-bc96-0e96b01eff10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gen\device_interface.h">
@@ -200,6 +203,15 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h">
       <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Crypto.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gen\device_interface.cpp">
@@ -294,6 +306,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp">
       <Filter>libraries\conct_port_serial\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\ChaCha.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Cipher.cpp">
+      <Filter>libraries\Crypto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

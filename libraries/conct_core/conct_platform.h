@@ -164,6 +164,7 @@
 #define CONCT_DEBUG						CONCT_ON
 #define CONCT_HAS_OVERRIDE				CONCT_ON
 #define CONCT_HAS_FINAL					CONCT_ON
+#define CONCT_USE_INLINE				CONCT_ON
 
 #if CONCT_ENABLED( CONCT_HAS_OVERRIDE )
 #	define CONCT_OVERRIDE override
@@ -226,8 +227,6 @@
 
 #define CONCT_MIN( a, b ) ( ( a ) < ( b ) ? ( a ) : ( b ) )
 #define CONCT_MAX( a, b ) ( ( a ) > ( b ) ? ( a ) : ( b ) )
-
-#define CONCT_USE_INLINE CONCT_ON
 
 #if CONCT_ENABLED( CONCT_USE_INLINE )
 

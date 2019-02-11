@@ -180,7 +180,7 @@ void ChaCha::encrypt(uint8_t *output, const uint8_t *input, size_t len)
         }
         uint8_t templen = 64 - posn;
         if (templen > len)
-            templen = len;
+            templen = uint8_t( len );
         len -= templen;
         while (templen > 0) {
             *output++ = *input++ ^ stream[posn++];

@@ -42,6 +42,7 @@
 
 // Rotation macros for 32-bit arguments.
 
+#if !defined(_MSC_VER)
 // Generic left rotate - best performance when "bits" is 1 or a multiple of 8.
 #define leftRotate(a, bits) \
     (__extension__ ({ \
@@ -55,6 +56,15 @@
         uint32_t _temp = (a); \
         (_temp >> (bits)) | (_temp << (32 - (bits))); \
     }))
+#else
+// Generic left rotate - best performance when "bits" is 1 or a multiple of 8.
+#define leftRotate(a, bits) \
+    ((uint32_t(a) << (bits)) | (uint32_t(a) >> (32 - (bits))))
+
+// Generic right rotate - best performance when "bits" is 1 or a multiple of 8.
+#define rightRotate(a, bits) \
+    ((uint32_t(a) >> (bits)) | (uint32_t(a) << (32 - (bits))))
+#endif
 
 // Left rotate by 1.
 #define leftRotate1(a)  (leftRotate((a), 1))
@@ -189,6 +199,7 @@
 
 // Rotation macros for 32-bit arguments.
 
+#if !defined(_MSC_VER)
 // Generic left rotate.
 #define leftRotate(a, bits) \
     (__extension__ ({ \
@@ -202,6 +213,15 @@
         uint32_t _temp = (a); \
         (_temp >> (bits)) | (_temp << (32 - (bits))); \
     }))
+#else
+// Generic left rotate.
+#define leftRotate(a, bits) \
+    ((uint32_t(a) << (bits)) | (uint32_t(a) >> (32 - (bits))))
+
+// Generic right rotate.
+#define rightRotate(a, bits) \
+    ((uint32_t(a) >> (bits)) | (uint32_t(a) << (32 - (bits))))
+#endif
 
 // Left rotate by a specific number of bits.
 #define leftRotate1(a)  (leftRotate((a), 1))
@@ -275,6 +295,7 @@
 
 // Rotation macros for 64-bit arguments.
 
+#if !defined(_MSC_VER)
 // Generic left rotate - best performance when "bits" is 1 or a multiple of 8.
 #define leftRotate_64(a, bits) \
     (__extension__ ({ \
@@ -288,6 +309,15 @@
         uint64_t _temp = (a); \
         (_temp >> (bits)) | (_temp << (64 - (bits))); \
     }))
+#else
+// Generic left rotate.
+#define leftRotate_64(a, bits) \
+    ((uint64_t(a) << (bits)) | (uint64_t(a) >> (64 - (bits))))
+
+// Generic right rotate.
+#define rightRotate_64(a, bits) \
+    ((uint64_t(a) >> (bits)) | (uint64_t(a) << (64 - (bits))))
+#endif
 
 // Left rotate by 1.
 #define leftRotate1_64(a)  (leftRotate_64((a), 1))
@@ -547,6 +577,7 @@
 
 // Rotation macros for 64-bit arguments.
 
+#if !defined(_MSC_VER)
 // Generic left rotate.
 #define leftRotate_64(a, bits) \
     (__extension__ ({ \
@@ -560,6 +591,15 @@
         uint64_t _temp = (a); \
         (_temp >> (bits)) | (_temp << (64 - (bits))); \
     }))
+#else
+// Generic left rotate.
+#define leftRotate_64(a, bits) \
+    ((uint64_t(a) << (bits)) | (uint64_t(a) >> (64 - (bits))))
+
+// Generic right rotate.
+#define rightRotate_64(a, bits) \
+    ((uint64_t(a) >> (bits)) | (uint64_t(a) << (64 - (bits))))
+#endif
 
 // Left rotate by a specific number of bits.
 #define leftRotate1_64(a)  (leftRotate_64((a), 1))

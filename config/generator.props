@@ -16,7 +16,7 @@
     <CustomBuildStep>
       <Message>Generating Device Code...</Message>
       <Outputs>$(ProjectDir)gen\device_interface.h;$(ProjectDir)gen\device_interface.cpp;%(Outputs)</Outputs>
-      <Inputs>$(ProjectDir)device.xml;%(Inputs)</Inputs>
+      <Inputs>$(ConctGenerator);$(ProjectDir)device.xml;%(Inputs)</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>

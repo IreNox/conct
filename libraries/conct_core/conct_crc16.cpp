@@ -1,5 +1,7 @@
 #include "conct_crc16.h"
 
+#include "conct_string.h"
+
 namespace conct
 {
 	// source: https://stackoverflow.com/questions/10564491/function-to-calculate-a-crc16-checksum
@@ -59,5 +61,11 @@ namespace conct
 		}
 
 		return crc;
+	}
+
+	uint16 calculateStringCrc16( const char* pString )
+	{
+		const uintreg stringLength = getStringLength( pString );
+		return calculateCrc16( pString, stringLength );
 	}
 }

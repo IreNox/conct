@@ -199,7 +199,7 @@ namespace conct
 						return;
 					}
 
-					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.name ) )
+					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.nameCrc ) )
 					{
 						sendErrorResponse( ResultId_NoSuchField );
 						return;
@@ -221,7 +221,7 @@ namespace conct
 					return;
 				}
 
-				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.name, request.value ) )
+				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.nameCrc, request.value ) )
 				{
 					sendErrorResponse( ResultId_NoSuchField );
 					return;
@@ -244,7 +244,7 @@ namespace conct
 						return;
 					}
 
-					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.name, request.arguments.toView() ) )
+					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
 					{
 						sendErrorResponse( ResultId_NoSuchField );
 						return;

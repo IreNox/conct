@@ -1,5 +1,6 @@
 #include "conct_controller.h"
 
+#include "conct_crc16.h"
 #include "conct_data_builder.h"
 #include "conct_runtime_high.h"
 #include "conct_string.h"
@@ -51,7 +52,7 @@ namespace conct
 		BufferedDataBuilder< 1024u > dataBuilder;
 		GetPropertyRequest* pRequest = dataBuilder.pushStruct< GetPropertyRequest >();
 		pRequest->instanceId	= instance.id;
-		pRequest->name			= dataBuilder.pushString( pName );
+		pRequest->nameCrc		= calculateStringCrc16( pName );
 
 		return beginCommand< ValueCommand >( instance.address, dataBuilder, MessageType_GetPropertyRequest );
 	}
@@ -61,7 +62,7 @@ namespace conct
 		BufferedDataBuilder< 1024u > dataBuilder;
 		SetPropertyRequest* pRequest = dataBuilder.pushStruct< SetPropertyRequest >();
 		pRequest->instanceId	= instance.id;
-		pRequest->name			= dataBuilder.pushString( pName );
+		pRequest->nameCrc		= calculateStringCrc16( pName );
 
 		dataBuilder.pushValueData( &pRequest->value, &value );
 
@@ -73,7 +74,7 @@ namespace conct
 		BufferedDataBuilder< 1024u > dataBuilder;
 		CallFunctionRequest* pRequest = dataBuilder.pushStruct< CallFunctionRequest >();
 		pRequest->instanceId	= instance.id;
-		pRequest->name			= dataBuilder.pushString( pName );
+		pRequest->nameCrc		= calculateStringCrc16( pName );
 
 		Array< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getLength() );
 		pRequest->arguments		= workingArguments;

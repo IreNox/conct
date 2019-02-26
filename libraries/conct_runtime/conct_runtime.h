@@ -87,7 +87,7 @@ namespace conct
 	struct GetPropertyRequest
 	{
 		InstanceId				instanceId;
-		RelativeStringPointer	name;
+		uint16					nameCrc;
 	};
 
 	struct GetPropertyResponse
@@ -99,13 +99,13 @@ namespace conct
 	{
 		InstanceId				instanceId;
 		Value					value;
-		RelativeStringPointer	name;
+		uint16					nameCrc;
 	};
 
 	struct CallFunctionRequest
 	{
 		InstanceId				instanceId;
-		RelativeStringPointer	name;
+		uint16					nameCrc;
 		RelativeValueArray		arguments;
 	};
 

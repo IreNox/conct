@@ -29,15 +29,12 @@ namespace conct
 
 	void ConsoleController::activate( ConsoleDevice& localDevice )
 	{
-		if( m_devices.empty() )
+		if( localDevice.data.pRouter != nullptr )
 		{
-			if( localDevice.data.pRouter != nullptr )
+			const ArrayView< DeviceId > devices = localDevice.data.pRouter->getConnectedDevices();
+			for( DeviceId deviceId : devices )
 			{
-				const ArrayView< DeviceId > devices = localDevice.data.pRouter->getConnectedDevices();
-				for( DeviceId deviceId : devices )
-				{
-					addDevice( deviceId, nullptr );
-				}
+				addDevice( deviceId, nullptr );
 			}
 		}
 

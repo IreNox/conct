@@ -66,7 +66,8 @@ namespace conct
 
 	void PortSerial::getEndpoints( ArrayView< uintreg >& endpoints )
 	{
-		endpoints.set( nullptr, 0u );
+		static const uintreg s_endPoint = 0u;
+		endpoints.set( &s_endPoint, 1u );
 	}
 
 	void PortSerial::loop()

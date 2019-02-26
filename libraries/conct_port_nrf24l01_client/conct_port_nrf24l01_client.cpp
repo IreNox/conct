@@ -243,7 +243,7 @@ namespace conct
 
 		if( packetType == PacketType_Protocol )
 		{
-			handleProtocolMessage( receiveBuffer );
+			handleProtocolMessage( receiveBuffer, packetSize );
 		}
 		else if( m_flags.isSet( ConnectionFlag_Connected ) &&
 				 !m_flags.isSet( ConnectionFlag_ReceivedPacket ) )

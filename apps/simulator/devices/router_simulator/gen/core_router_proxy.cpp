@@ -2,9 +2,8 @@
 
 #include "conct_router.h"
 #include "conct_array_view.h"
-#include "core_deviceconnection.h"
+#include "conct_runtime.h"
 #include "conct_core.h"
-#include "core_devicestatus.h"
 
 namespace conct
 {
@@ -37,7 +36,7 @@ namespace conct
 
 		if( nameCrc == 0xf7f5 )
 		{
-			targetValueBuilder.setVoid( pTypedInstance->changeDevice( parameters[ 0u ].getDeviceId(), parameters[ 1u ].getDeviceStatus() ) );
+			pTypedInstance->changeDevice( parameters[ 0u ].getDeviceId(), (DeviceStatus)(parameters[ 1u ].getInteger() ) ); targetValueBuilder.setVoid();
 			return true;
 		}
 

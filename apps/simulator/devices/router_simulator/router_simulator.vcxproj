@@ -242,6 +242,7 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_controller.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_router.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_runtime_high_types.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_value_high.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h" />

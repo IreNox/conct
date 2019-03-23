@@ -23,6 +23,7 @@ namespace conct
 	bool	loadBooleanValue( bool& target, const tinyxml2::XMLElement* pNode, const char* pName );
 	bool	loadStringValue( DynamicString& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing = false );
 	bool	loadMemSizeValue( uintreg& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing = false );
+	bool	loadIntegerValue( sint64& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing = false );
 	bool	loadTypeValue( const Type** ppType, const tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing = false );
 	bool	loadInterfaceValue( const InterfaceType** ppInterface, const tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing = false );
 

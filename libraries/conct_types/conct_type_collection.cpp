@@ -2,6 +2,7 @@
 
 #include "conct_array_type.h"
 #include "conct_directory_iterator.h"
+#include "conct_enum_type.h"
 #include "conct_filesystem.h"
 #include "conct_interface_type.h"
 #include "conct_path.h"
@@ -16,6 +17,7 @@ namespace conct
 {
 	TypeCollection::TypeCollection()
 	{
+		addValueType( ""_s, "Void"_s, "void"_s, ValueType_Void );
 		addValueType( ""_s, "Boolean"_s, "bool"_s, ValueType_Boolean );
 		addValueType( ""_s, "Integer"_s, "sint32"_s, ValueType_Integer );
 		addValueType( ""_s, "Unsigned"_s, "uin32"_s, ValueType_Unsigned );
@@ -57,6 +59,15 @@ namespace conct
 			if( !pStruct->load( *this ) )
 			{
 				trace::write( "Error: Failed to load struct from '"_s + pStruct->getFileName().getGenericPath() + "'." + "\n" );
+				return false;
+			}
+		}
+
+		for( EnumType* pEnum : m_enums )
+		{
+			if( !pEnum->load( *this ) )
+			{
+				trace::write( "Error: Failed to load enum from '"_s + pEnum->getFileName().getGenericPath() + "'." + "\n" );
 				return false;
 			}
 		}
@@ -153,6 +164,29 @@ namespace conct
 		return nullptr;
 	}
 
+	const EnumType* TypeCollection::findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace )
+	{
+		const Type* pType = findType( fullName, referenceNamespace );
+		if( pType != nullptr && pType->getDescription() == TypeDescription_Enum )
+		{
+			return static_cast<const EnumType*>(pType);
+		}
+
+		return nullptr;
+
+	}
+
+	const EnumType* TypeCollection::findEnumByCrc( TypeCrc typeCrc )
+	{
+		const Type* pType = findTypeByCrc( typeCrc );
+		if( pType != nullptr && pType->getDescription() == TypeDescription_Enum )
+		{
+			return static_cast<const EnumType*>(pType);
+		}
+
+		return nullptr;
+	}
+
 	const ArrayType* TypeCollection::makeArray( const Type* pBaseType )
 	{
 		for( const ArrayType* pArray : m_arrays )
@@ -202,18 +236,18 @@ namespace conct
 				return false;
 			}
 
+			DynamicString namespaceVar;
+			DynamicString name;
+			if( !loadStringValue( namespaceVar, pRootNode, "namespace" ) ||
+				!loadStringValue( name, pRootNode, "name" ) )
+			{
+				return false;
+			}
+
 			const DynamicString rootNodeName( pRootNode->Name() );
 			if( rootNodeName == "interface" )
 			{
 				InterfaceType* pInterface = new InterfaceType();
-
-				DynamicString namespaceVar;
-				DynamicString name;
-				if( !loadStringValue( namespaceVar, pRootNode, "namespace" ) ||
-					!loadStringValue( name, pRootNode, "name" ) )
-				{
-					return false;
-				}
 				pInterface->create( currentPath, namespaceVar, name );
 
 				m_types.pushBack( pInterface );
@@ -222,14 +256,6 @@ namespace conct
 			else if( rootNodeName == "struct" )
 			{
 				StructType* pStruct = new StructType();
-
-				DynamicString namespaceVar;
-				DynamicString name;
-				if( !loadStringValue( namespaceVar, pRootNode, "namespace" ) ||
-					!loadStringValue( name, pRootNode, "name" ) )
-				{
-					return false;
-				}
 				pStruct->create( currentPath, namespaceVar, name );
 
 				m_types.pushBack( pStruct );
@@ -237,7 +263,11 @@ namespace conct
 			}
 			else if( rootNodeName == "enum" )
 			{
-				trace::write( "Info: Enum in '"_s + currentPath.getGenericPath() + "' is currently not supported." + "\n" );
+				EnumType* pEnum = new EnumType();
+				pEnum->create( currentPath, namespaceVar, name );
+
+				m_types.pushBack( pEnum );
+				m_enums.pushBack( pEnum );
 			}
 			else
 			{

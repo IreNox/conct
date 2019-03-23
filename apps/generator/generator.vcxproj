@@ -49,6 +49,7 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_array_type.h" />
+    <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_interface_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_struct_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_type.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_array_type.cpp" />
+    <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_interface_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_struct_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp" />

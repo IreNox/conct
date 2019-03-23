@@ -7,6 +7,7 @@ namespace conct
 {
 	class ArrayType;
 	class DynamicString;
+	class EnumType;
 	class InterfaceType;
 	class Path;
 	class StructType;
@@ -29,6 +30,8 @@ namespace conct
 		const InterfaceType*					findInterfaceByCrc( TypeCrc typeCrc );
 		const StructType*						findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace );
 		const StructType*						findStructByCrc( TypeCrc typeCrc );
+		const EnumType*							findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const EnumType*							findEnumByCrc( TypeCrc typeCrc );
 
 		const ArrayType*						makeArray( const Type* pBaseType );
 
@@ -42,6 +45,7 @@ namespace conct
 		Vector< ArrayType* >					m_arrays;
 		Vector< InterfaceType* >				m_interfaces;
 		Vector< StructType* >					m_structs;
+		Vector< EnumType* >						m_enums;
 
 		bool									loadFiles( const Path& path );
 	};

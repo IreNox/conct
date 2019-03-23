@@ -224,6 +224,9 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_core_c.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_runtime_high_types.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gen\device_interface.cpp">

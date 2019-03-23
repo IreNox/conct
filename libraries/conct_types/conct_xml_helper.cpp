@@ -89,23 +89,35 @@ namespace conct
 
 	bool loadMemSizeValue( uintreg& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false*/ )
 	{
+		sint64 value = 0u;
+		if( !loadIntegerValue( value, pNode, pName, ignoreMissing ) )
+		{
+			return false;
+		}
+
+		target = (uintreg)value;
+		return true;
+	}
+
+	bool loadIntegerValue( sint64& target, const tinyxml2::XMLElement* pNode, const char* pName, bool ignoreMissing /*= false */ )
+	{
 		int64_t value = 0u;
 		if( pNode->QueryInt64Attribute( pName, &value ) == tinyxml2::XML_SUCCESS )
 		{
-			target = ( uintreg )value;
+			target = value;
 			return true;
 		}
 
 		const tinyxml2::XMLElement* pChildNode = pNode->FirstChildElement( pName );
 		if( pChildNode != nullptr && pChildNode->QueryInt64Text( &value ) == tinyxml2::XML_SUCCESS )
 		{
-			target = ( uintreg )value;
+			target = value;
 			return true;
 		}
 
 		if( !ignoreMissing )
 		{
-			traceNodeError( pNode, "Error: Failed to load uintreg value '"_s + pName + "'.\n" );
+			traceNodeError( pNode, "Error: Failed to load integer value '"_s + pName + "'.\n" );
 		}
 		return false;
 	}

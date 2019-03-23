@@ -161,6 +161,9 @@
     <ClInclude Include="include\capabilities.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\generator.cpp">
@@ -255,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="sources\capabilities.cpp">
       <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

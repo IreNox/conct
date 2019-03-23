@@ -57,19 +57,14 @@ namespace conct
 		return m_value.getPercentValue();
 	}
 
-	Guid ValueHigh::getGuid() const
-	{
-		return m_value.getGuid();
-	}
-
 	DeviceId ValueHigh::getDeviceId() const
 	{
 		return m_value.getDeviceId();
 	}
 
-	Instance ValueHigh::getInstance() const
+	InstanceId ValueHigh::getInstanceId() const
 	{
-		return m_value.getInstance();
+		return m_value.getInstanceId();
 	}
 
 	TypeCrc ValueHigh::getTypeCrc() const
@@ -151,19 +146,14 @@ namespace conct
 		m_value.setPercentValue( value );
 	}
 
-	void ValueHigh::setGuid( Guid value )
-	{
-		m_value.setGuid( value );
-	}
-
 	void ValueHigh::setDeviceId( DeviceId value )
 	{
 		m_value.setDeviceId( value );
 	}
 
-	void ValueHigh::setInstance( Instance value )
+	void ValueHigh::setInstanceId( InstanceId value )
 	{
-		m_value.setInstance( value );
+		m_value.setInstanceId( value );
 	}
 
 	void ValueHigh::setTypeCrc( TypeCrc value )

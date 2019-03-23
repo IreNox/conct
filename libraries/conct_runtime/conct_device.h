@@ -15,7 +15,7 @@ namespace conct
 		virtual					~Device() { }
 
 		virtual const char*		getName() const = 0;
-		Guid					getGuid() const;
+		uint32					getSerialNumber() const;
 		ArrayView< Instance >	getInstances() const;
 
 		ArrayView< Instance >	findInstances( TypeCrc typeCrc );

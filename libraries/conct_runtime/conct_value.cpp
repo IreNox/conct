@@ -31,9 +31,8 @@ namespace conct
 		sint32				integer;
 		uint32				unsignedInteger;
 		PercentValue		percent;
-		Guid				guid;
 		DeviceId			device;
-		Instance			instance;
+		InstanceId			instanceId;
 		TypeCrc				type;
 		StringValueData		string;
 		StructValueData		structure;
@@ -88,22 +87,16 @@ namespace conct
 		return getData( data ).percent;
 	}
 
-	Guid Value::getGuid() const
-	{
-		CONCT_ASSERT( type == ValueType_Guid );
-		return getData( data ).guid;
-	}
-
 	DeviceId Value::getDeviceId() const
 	{
 		CONCT_ASSERT( type == ValueType_DeviceId );
 		return getData( data ).device;
 	}
 
-	Instance Value::getInstance() const
+	InstanceId Value::getInstanceId() const
 	{
-		CONCT_ASSERT( type == ValueType_Instance );
-		return getData( data ).instance;
+		CONCT_ASSERT( type == ValueType_InstanceId );
+		return getData( data ).instanceId;
 	}
 
 	TypeCrc Value::getTypeCrc() const
@@ -203,14 +196,6 @@ namespace conct
 		setData( data, valueData );
 	}
 
-	void Value::setGuid( Guid value )
-	{
-		type = ValueType_Guid;
-		ValueData valueData;
-		valueData.guid = value;
-		setData( data, valueData );
-	}
-
 	void Value::setDeviceId( DeviceId value )
 	{
 		type = ValueType_DeviceId;
@@ -219,11 +204,11 @@ namespace conct
 		setData( data, valueData );
 	}
 
-	void Value::setInstance( Instance value )
+	void Value::setInstanceId( InstanceId value )
 	{
-		type = ValueType_Instance;
+		type = ValueType_InstanceId;
 		ValueData valueData;
-		valueData.instance = value;
+		valueData.instanceId = value;
 		setData( data, valueData );
 	}
 

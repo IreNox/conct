@@ -14,8 +14,7 @@ namespace conct
 		sint32			getInteger() const;
 		uint32			getUnsigned() const;
 		PercentValue	getPercentValue() const;
-		Guid			getGuid() const;
-		Instance		getInstance() const;
+		InstanceId		getInstanceId() const;
 		DeviceId		getDeviceId() const;
 		TypeCrc			getTypeCrc() const;
 
@@ -35,9 +34,8 @@ namespace conct
 		void			setInteger( sint32 value );
 		void			setUnsigned( uint32 value );
 		void			setPercentValue( PercentValue value );
-		void			setGuid( Guid value );
 		void			setDeviceId( DeviceId value );
-		void			setInstance( Instance value );
+		void			setInstanceId( InstanceId value );
 		void			setTypeCrc( TypeCrc value );
 
 		void			setString( uint16 offset );

@@ -5,9 +5,9 @@
 
 namespace conct
 {
-	Guid Device::getGuid() const
+	uint32 Device::getSerialNumber() const
 	{
-		return Guid( 42u );
+		return 7u;
 	}
 
 	ArrayView< Instance > Device::getInstances() const

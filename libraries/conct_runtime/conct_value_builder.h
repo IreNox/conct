@@ -24,9 +24,8 @@ namespace conct
 		ResultId			setUnsigned( uint32 value );
 		ResultId			setString( const char* pValue );
 		ResultId			setPercentValue( PercentValue value );
-		ResultId			setGuid( Guid value );
 		ResultId			setDeviceId( DeviceId value );
-		ResultId			setInstance( Instance value );
+		ResultId			setInstanceId( InstanceId value );
 		ResultId			setTypeCrc( TypeCrc value );
 
 		ResultId			setStruct( const void* pData, uintreg dataSize, TypeCrc type );

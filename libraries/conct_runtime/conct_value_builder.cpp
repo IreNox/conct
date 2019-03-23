@@ -65,21 +65,15 @@ namespace conct
 		return ResultId_Success;
 	}
 
-	ResultId ValueBuilder::setGuid( Guid value )
-	{
-		m_pValue->setGuid( value );
-		return ResultId_Success;
-	}
-
 	ResultId ValueBuilder::setDeviceId( DeviceId value )
 	{
 		m_pValue->setDeviceId( value );
 		return ResultId_Success;
 	}
 
-	ResultId ValueBuilder::setInstance( Instance value )
+	ResultId ValueBuilder::setInstanceId( InstanceId value )
 	{
-		m_pValue->setInstance( value );
+		m_pValue->setInstanceId( value );
 		return ResultId_Success;
 	}
 

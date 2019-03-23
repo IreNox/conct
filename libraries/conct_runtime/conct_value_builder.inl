@@ -40,14 +40,11 @@ namespace conct
 		case ValueType_PercentValue:
 			return setPercentValue( pValue->getPercentValue() );
 
-		case ValueType_Guid:
-			return setGuid( pValue->getGuid() );
-
 		case ValueType_DeviceId:
 			return setDeviceId( pValue->getDeviceId() );
 
-		case ValueType_Instance:
-			return setInstance( pValue->getInstance() );
+		case ValueType_InstanceId:
+			return setInstanceId( pValue->getInstanceId() );
 
 		case ValueType_TypeCrc:
 			return setTypeCrc( pValue->getTypeCrc() );

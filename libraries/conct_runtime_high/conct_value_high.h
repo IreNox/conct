@@ -21,9 +21,8 @@ namespace conct
 		uint32			getUnsigned() const;
 		const char*		getString() const;
 		PercentValue	getPercentValue() const;
-		Guid			getGuid() const;
 		DeviceId		getDeviceId() const;
-		Instance		getInstance() const;
+		InstanceId		getInstanceId() const;
 		TypeCrc			getTypeCrc() const;
 
 		template< class T >
@@ -45,9 +44,8 @@ namespace conct
 		void			setUnsigned( uint32 value );
 		void			setString( const char* pValue );
 		void			setPercentValue( PercentValue value );
-		void			setGuid( Guid value );
 		void			setDeviceId( DeviceId value );
-		void			setInstance( Instance value );
+		void			setInstanceId( InstanceId value );
 		void			setTypeCrc( TypeCrc value );
 		void			setStruct( const void* pData, uintreg size, TypeCrc type );
 		void			setArray( const void* pData, uintreg elementSize, uintreg length, TypeCrc type );

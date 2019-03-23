@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <struct namespace="Core" name="DeviceConnection">
+	<internal include="conct_runtime.h" />
 	<fields>
-		<field type="DeviceId" name="DeviceStatus" />
-		<field type="DeviceId" name="DeviceId" />
+		<field type="DeviceStatus" name="status" />
+		<field type="DeviceId" name="id" />
 	</fields>
 </struct>

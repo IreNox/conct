@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <interface namespace="Core" name="Device">
-	<internal include="conct_device.h" class="Device" />
+	<internal include="conct_device.h" />
 	<singleton />
 	<properties>
 		<property name="Name" type="String">
 			<get />
 		</property>
-		<property name="Guid" type="Guid">
+		<property name="SerialNumber" type="Unsigned">
 			<get />
 		</property>
 		<property name="Instances">

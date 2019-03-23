@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <enum namespace="Core" name="DeviceStatus">
+	<internal include="conct_runtime.h" />
 	<values>
 		<value name="Unknown" />
 		<value name="Blocked" />

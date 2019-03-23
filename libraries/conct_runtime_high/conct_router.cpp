@@ -4,16 +4,21 @@
 
 namespace conct
 {
-	Router::Router( const RuntimeHigh& runtime )
+	Router::Router( RuntimeHigh& runtime )
 		: m_runtime( runtime )
 	{
 	}
 
-	ArrayView< DeviceId > Router::getConnectedDevices() const
+	ArrayView< DeviceConnection > Router::getConnectedDevices() const
 	{
 		m_devices.clear();
 		m_runtime.getDevices( m_devices );
 
 		return m_devices.toArrayView();
+	}
+
+	void Router::changeDevice( DeviceId id, DeviceStatus status )
+	{
+		m_runtime.changeDevice( id, status );
 	}
 }

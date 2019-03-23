@@ -31,10 +31,10 @@ namespace conct
 	{
 		if( localDevice.data.pRouter != nullptr )
 		{
-			const ArrayView< DeviceId > devices = localDevice.data.pRouter->getConnectedDevices();
-			for( DeviceId deviceId : devices )
+			const ArrayView< DeviceConnection > devices = localDevice.data.pRouter->getConnectedDevices();
+			for( DeviceConnection deviceConnection : devices )
 			{
-				addDevice( deviceId, nullptr );
+				addDevice( deviceConnection.id, nullptr );
 			}
 		}
 
@@ -306,7 +306,7 @@ namespace conct
 
 				if( m_action == Action_SetProperty )
 				{
-					if( m_pProperty->pType->getDescription() == TypeDescription_Value )
+					if( m_pProperty->pType->getKind() == TypeKind_Value )
 					{
 						setValueState( m_pProperty->pType->getValueType() );
 					}
@@ -561,17 +561,6 @@ namespace conct
 			}
 			break;
 
-		case ValueType_Guid:
-			{
-				Guid intValue;
-				if( string_tools::tryParseUInt32( intValue, text.toConstCharPointer() ) )
-				{
-					value.setGuid( intValue );
-					return true;
-				}
-			}
-			break;
-
 		//case ValueType_Instance:
 		//	{
 		//		InstanceId intValue;
@@ -625,12 +614,8 @@ namespace conct
 			return string_tools::toString( float( value.getPercentValue() ) * ( 100.0f / 65535.0f ) ) + " %";
 			break;
 
-		case ValueType_Guid:
-			return string_tools::toString( value.getGuid() );
-			break;
-
-		case ValueType_Instance:
-			return string_tools::toString( value.getInstance().id ) + ":" + string_tools::toString( value.getInstance().type );
+		case ValueType_InstanceId:
+			return string_tools::toString( value.getInstanceId() );
 			break;
 
 		case ValueType_TypeCrc:
@@ -1010,9 +995,9 @@ namespace conct
 				{
 					m_pInstance->pDevice->name = DynamicString( value.getString() );
 				}
-				else if( value.getType() == ValueType_Instance )
+				else if( value.getType() == ValueType_Struct && value.getStructType() == ValueTypeTraits< Instance >::getTypeCrc() )
 				{
-					const Instance sourceInstance = value.getInstance();
+					const Instance sourceInstance = value.getStruct< Instance >();
 					text += addInstance( sourceInstance );
 				}
 				else if( value.getType() == ValueType_Array )

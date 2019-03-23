@@ -42,6 +42,45 @@ namespace conct
 		InstanceId		id;
 	};
 
+	enum DeviceStatus
+	{
+		DeviceStatus_Unknown,
+		DeviceStatus_Blocked,
+		DeviceStatus_Client,
+		DeviceStatus_Controller
+	};
+
+	struct DeviceConnection
+	{
+		static const TypeCrc s_typeCrc = 24671u;
+
+		DeviceStatus	status;
+		DeviceId		id;
+	};
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+	enum CryptoState
+	{
+		CryptoState_Unencrypted,
+		CryptoState_Encrypted
+	};
+
+	struct CryptoKey
+	{
+		uint8	data[ 48u ];
+	};
+
+	struct CryptoCounter
+	{
+		uint8	data[ 8u ];
+	};
+
+	struct CryptoIV
+	{
+		uint8	data[ 8u ];
+	};
+#endif
+
 	enum MessageType : uint8
 	{
 		MessageType_ErrorResponse,
@@ -57,6 +96,10 @@ namespace conct
 		//MessageType_UnregisterEvent,
 		//MessageType_CallEventHandler,
 		//MessageType_CheckEventHandler,
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		MessageType_CryptoHandshake,
+		MessageType_CryptoAssignKey,
+#endif
 	};
 
 	struct MessageBaseHeader
@@ -67,6 +110,9 @@ namespace conct
 		CommandId	commandId;
 		MessageType	messageType;
 		ResultId	messageResult;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		CryptoIV	cryptoIV;
+#endif
 	};
 
 	struct GetInstanceRequest
@@ -115,14 +161,21 @@ namespace conct
 	};
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-	struct CryptoKey
+	struct CryptoHandshakeRequest
 	{
-		uint8	data[ 32u ];
+		uint32					serialNumber;
 	};
 
-	struct CryptoNonce
+	struct CryptoHandshakeResponse
 	{
-		uint8	data[ 8u ];
+		uint32					serialNumber;
+		uint16					keyHash;
+	};
+
+	struct CryptoAssingKeyRequest
+	{
+		CryptoKey				key;
+		CryptoCounter			counter;
 	};
 #endif
 

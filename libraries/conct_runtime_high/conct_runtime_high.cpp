@@ -2,13 +2,21 @@
 
 #include "conct_buffered_value_builder.h"
 #include "conct_command.h"
+#include "conct_crc16.h"
 #include "conct_device.h"
+#include "conct_filesystem.h"
+#include "conct_path.h"
 #include "conct_port.h"
 #include "conct_proxy.h"
 #include "conct_reader.h"
 #include "conct_runtime.h"
+#include "conct_trace.h"
 #include "conct_value_high.h"
 #include "conct_writer.h"
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#	include "conct_crypto_random.h"
+#endif
 
 namespace conct
 {
@@ -81,12 +89,15 @@ namespace conct
 		return m_devices.getLength();
 	}
 
-	void RuntimeHigh::getDevices( Vector< DeviceId >& devices ) const
+	void RuntimeHigh::getDevices( Vector< DeviceConnection >& devices ) const
 	{
 		devices.reserve( m_devices.getLength() );
 		for( const DeviceMap::PairType& kvp : m_devices )
 		{
-			devices.pushBack( kvp.key );
+			DeviceConnection connection;
+			connection.id		= kvp.key;
+			connection.status	= kvp.value.status;
+			devices.pushBack( connection );
 		}
 	}
 
@@ -112,6 +123,11 @@ namespace conct
 		return pDeviceData->ownDeviceId == address.address[ 1u ];
 	}
 
+	void RuntimeHigh::changeDevice( DeviceId id, DeviceStatus status )
+	{
+		CONCT_BREAK;
+	}
+
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
 	{
 		DeviceData* pDeviceData = nullptr;
@@ -128,8 +144,8 @@ namespace conct
 
 	ResultId RuntimeHigh::sendPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
-		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
-		if( result == ResultId_Success )
+		const ResultId result = sendPackage( deviceAddress, payload, pCommand == nullptr ? 0u : pCommand->getId(), messageType, ResultId_Success );
+		if( result == ResultId_Success && pCommand != nullptr )
 		{
 			DeviceData& deviceData = m_devices[ deviceAddress.address[ 0u ] ];
 			deviceData.commands[ pCommand->getId() ] = pCommand;
@@ -329,10 +345,61 @@ namespace conct
 			}
 			break;
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		case MessageType_CryptoHandshake:
+			{
+				const CryptoHandshakeRequest& request = *(const CryptoHandshakeRequest*)package.payload.getData();
+
+				DeviceData* pDevice;
+				if( !m_devices.find( pDevice, package.deviceId ) )
+				{
+					trace::write( "Received 'CryptoHandshake' from unknown Device." );
+					return;
+				}
+
+				const RuntimeHighStoredDevice* pStoredDevice = nullptr;
+				if( m_storedDevices.find( pStoredDevice, request.serialNumber ) )
+				{
+					pDevice->cryptoState	= CryptoState_Encrypted;
+					pDevice->cryptoKey		= pStoredDevice->key;
+					pDevice->cryptoCounter	= pStoredDevice->counter;
+					return;
+				}
+
+
+			}
+			break;
+#endif
+
 		default:
 			break;
 		}
 	}
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+	void RuntimeHigh::loadDeviceDatabase()
+	{
+		const Result< Vector< uint8 > > databaseResult = filesystem::readBinaryFile( Path( "database.bin" ) );
+		if( databaseResult.isFailure() )
+		{
+			trace::write( "Failed to load device database." );
+			return;
+		}
+
+		const Vector< uint8 > databaseBlob = databaseResult.value;
+		const RuntimeHighDeviceDatabase& database = *(const RuntimeHighDeviceDatabase*)databaseBlob.getBegin();
+		for( uintreg i = 0u; i < database.deviceCount; ++i )
+		{
+			const RuntimeHighStoredDevice& device = database.devices[ i ];
+			m_storedDevices.insert( device.serialNumber, device );
+		}
+	}
+
+	void RuntimeHigh::generateAndSendNewKey( DeviceId deviceId, DeviceData* pDevice )
+	{
+
+	}
+#endif
 
 	DeviceId RuntimeHigh::addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId )
 	{
@@ -341,18 +408,36 @@ namespace conct
 			return InvalidDeviceId;
 		}
 
-		const DeviceId nextDeviceId = m_nextDeviceId;
+		const DeviceId deviceId = m_nextDeviceId;
 		m_nextDeviceId++;
 
-		DeviceData& deviceData = m_devices[ nextDeviceId ];
+		DeviceData& deviceData = m_devices[ deviceId ];
 		deviceData.nextCommandId	= FirstCommandId;
 		deviceData.endpointId		= endpointId;
 		deviceData.ownDeviceId		= ownDeviceId;
 		deviceData.pTargetPort		= pPort;
+		deviceData.status			= DeviceStatus_Unknown;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		deviceData.cryptoState		= CryptoState_Unencrypted;
+#endif
 
-		portData.endpointToDevice[ endpointId ] = nextDeviceId;
+		portData.endpointToDevice[ endpointId ] = deviceId;
 
-		return nextDeviceId;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		{
+			CryptoHandshakeRequest cryptoHandshakeRequest;
+			cryptoHandshakeRequest.serialNumber = m_pDevice->getSerialNumber();
+
+			DeviceAddress deviceAddress;
+			deviceAddress.address[ 0u ] = deviceId;
+			deviceAddress.address[ 1u ] = InvalidDeviceId;
+
+			const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeRequest, sizeof( cryptoHandshakeRequest ) );
+			sendPackage( nullptr, deviceAddress, payload, MessageType_CryptoHandshake );
+		}
+#endif
+
+		return deviceId;
 	}
 
 	void RuntimeHigh::readPort( Port* pPort, PortData& portData )

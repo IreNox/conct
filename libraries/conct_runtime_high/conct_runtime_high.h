@@ -5,6 +5,7 @@
 #include "conct_map.h"
 #include "conct_queue.h"
 #include "conct_runtime.h"
+#include "conct_runtime_high_types.h"
 #include "conct_vector.h"
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
@@ -30,8 +31,9 @@ namespace conct
 		void					processPort( Port* pPort );
 
 		uintreg					getDeviceCount() const;
-		void					getDevices( Vector< DeviceId >& devices ) const;
+		void					getDevices( Vector< DeviceConnection >& devices ) const;
 		bool					isThisDevice( const DeviceAddress& address ) const;
+		void					changeDevice( DeviceId id, DeviceStatus status );
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
@@ -104,18 +106,20 @@ namespace conct
 			Port*			pTargetPort;
 			uintreg			endpointId;
 			DeviceId		ownDeviceId;
+			DeviceStatus	status;
 			CommandId		nextCommandId;
 			CommandMap		commands;
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-			CryptoKey		receiveKey;
-			CryptoKey		sendKey;
-			CryptoNonce		lastSendNonce;
+			CryptoState		cryptoState;
+			CryptoKey		cryptoKey;
+			CryptoCounter	cryptoCounter;
 #endif
 		};
 
 		typedef Map< Port*, PortData > PortMap;
 		typedef Map< DeviceId, DeviceData > DeviceMap;
 		typedef Queue< Command* > CommandQueue;
+		typedef Map< uint32, RuntimeHighStoredDevice > StoredDeviceVector;
 
 		Device*				m_pDevice;
 
@@ -123,10 +127,15 @@ namespace conct
 		DeviceMap			m_devices;
 		DeviceId			m_nextDeviceId;
 
+		StoredDeviceVector	m_storedDevices;
+
 		CommandQueue		m_finishCommands;
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		ChaCha				m_crypto;
+
+		void				loadDeviceDatabase();
+		void				generateAndSendNewKey( DeviceId deviceId, DeviceData* pDevice );
 #endif
 
 		DeviceId			addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId );

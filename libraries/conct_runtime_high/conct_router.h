@@ -1,5 +1,6 @@
 #pragma once
 
+#include "conct_runtime.h"
 #include "conct_vector.h"
 
 namespace conct
@@ -10,14 +11,16 @@ namespace conct
 	{
 	public:
 
-									Router( const RuntimeHigh& runtime );
+											Router( RuntimeHigh& runtime );
 
-		ArrayView< DeviceId >		getConnectedDevices() const;
+		ArrayView< DeviceConnection >		getConnectedDevices() const;
+
+		void								changeDevice( DeviceId id, DeviceStatus status );
 
 	private:
 
-		const RuntimeHigh&			m_runtime;
+		RuntimeHigh&						m_runtime;
 
-		mutable Vector< DeviceId >	m_devices; // TODO: get rid of mutable
+		mutable Vector< DeviceConnection >	m_devices; // TODO: get rid of mutable
 	};
 }

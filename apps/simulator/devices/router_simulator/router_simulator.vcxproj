@@ -232,6 +232,7 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h" />
@@ -281,6 +282,7 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.cpp" />

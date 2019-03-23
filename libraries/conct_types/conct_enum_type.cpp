@@ -14,8 +14,7 @@ namespace conct
 
 	void EnumType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
-		Type::create( namespaceVar, name, name, TypeDescription_Enum, ValueType_Integer );
-		m_fileName = fileName;
+		Type::create( fileName, namespaceVar, name, name, TypeKind_Enum, ValueType_Integer, false );
 	}
 
 	bool EnumType::load( TypeCollection& typeCollection )
@@ -30,6 +29,11 @@ namespace conct
 		if( pRootNode == nullptr )
 		{
 			trace::write( "Error: Failed to find root node in '"_s + m_fileName.getGenericPath() + "'." + "\n" );
+			return false;
+		}
+
+		if( !loadInternal( pRootNode ) )
+		{
 			return false;
 		}
 

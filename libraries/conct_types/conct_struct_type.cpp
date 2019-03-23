@@ -14,8 +14,7 @@ namespace conct
 
 	void StructType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
-		Type::create( namespaceVar, name, name, TypeDescription_Struct, ValueType_Struct );
-		m_fileName = fileName;
+		Type::create( fileName, namespaceVar, name, name, TypeKind_Struct, ValueType_Struct, false );
 	}
 
 	bool StructType::load( TypeCollection& typeCollection )
@@ -33,17 +32,29 @@ namespace conct
 			return false;
 		}
 
-		tinyxml2::XMLElement* pPropertiesNode = pRootNode->FirstChildElement( "fields" );
-		if( pPropertiesNode != nullptr )
+		if( !loadInternal( pRootNode ) )
 		{
-			tinyxml2::XMLElement* pPropertyNode = pPropertiesNode->FirstChildElement( "field" );
-			while( pPropertyNode != nullptr )
+			return false;
+		}
+
+		tinyxml2::XMLElement* pFieldsNode = pRootNode->FirstChildElement( "fields" );
+		if( pFieldsNode != nullptr )
+		{
+			tinyxml2::XMLElement* pFieldNode = pFieldsNode->FirstChildElement( "field" );
+			while( pFieldNode != nullptr )
 			{
 				DynamicString propertyName;
 				const Type* pType = nullptr;
-				if( !loadStringValue( propertyName, pPropertyNode, "name" ) ||
-					!loadTypeValue( &pType, pPropertyNode, "type", getNamespace(), typeCollection ) )
+				if( !loadStringValue( propertyName, pFieldNode, "name" ) ||
+					!loadTypeValue( &pType, pFieldNode, "type", getNamespace(), typeCollection ) )
 				{
+					return false;
+				}
+
+				if( pType->getKind() == TypeKind_Array ||
+					pType->getKind() == TypeKind_Interface )
+				{
+					trace::fileError( m_fileName.getGenericPath(), pFieldNode->GetLineNum(), "Error: It is not allowed to use arrays or interfaces in structs.\n"_s );
 					return false;
 				}
 
@@ -53,7 +64,7 @@ namespace conct
 				m_fields.pushBack( field );
 				pushDependingType( pType );
 
-				pPropertyNode = pPropertyNode->NextSiblingElement( "field" );
+				pFieldNode = pFieldNode->NextSiblingElement( "field" );
 			}
 		}
 

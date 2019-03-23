@@ -9,7 +9,7 @@ namespace conct
 
 	void ArrayType::create( const Type* pBaseType )
 	{
-		Type::create( ""_s, pBaseType->getName() + "[]", "Array< "_s + pBaseType->getCppName() + " >", TypeDescription_Array, ValueType_Array );
+		Type::create( Path(), ""_s, pBaseType->getName() + "[]", "Array< "_s + pBaseType->getCppName() + " >", TypeKind_Array, ValueType_Array, false );
 		m_pBaseType = pBaseType;
 	}
 }

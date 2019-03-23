@@ -20,8 +20,6 @@ namespace conct
 
 		typedef Vector< StructField > FieldVector;
 
-		const Path&				getFileName() const { return m_fileName; }
-
 		const FieldVector&		getFields() const { return m_fields; }
 
 	private: // friend
@@ -31,8 +29,6 @@ namespace conct
 		bool					load( TypeCollection& typeCollection );
 
 	private:
-
-		Path					m_fileName;
 
 		FieldVector				m_fields;
 	};

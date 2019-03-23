@@ -20,8 +20,6 @@ namespace conct
 
 		typedef Vector< EnumValue > ValueVector;
 
-		const Path&				getFileName() const { return m_fileName; }
-
 		const ValueVector&		getValues() const { return m_values; }
 
 	private: // friend
@@ -31,8 +29,6 @@ namespace conct
 		bool					load( TypeCollection& typeCollection );
 
 	private:
-
-		Path					m_fileName;
 
 		ValueVector				m_values;
 	};

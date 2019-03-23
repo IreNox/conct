@@ -17,8 +17,7 @@ namespace conct
 
 	void InterfaceType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
-		Type::create( namespaceVar, name, name, TypeDescription_Interface, ValueType_Instance );
-		m_fileName = fileName;
+		Type::create( fileName, namespaceVar, name, name, TypeKind_Interface, ValueType_InstanceId, false );
 	}
 
 	bool InterfaceType::load( TypeCollection& typeCollection )
@@ -29,17 +28,22 @@ namespace conct
 			return false;
 		}
 
-		tinyxml2::XMLElement* pRootNode = document.FirstChildElement( "interface" );
+		const tinyxml2::XMLElement* pRootNode = document.FirstChildElement( "interface" );
 		if( pRootNode == nullptr )
 		{
 			trace::write( "Error: Failed to find root node in '"_s + m_fileName.getGenericPath() + "'." + "\n" );
 			return false;
 		}
 
-		const Type* pBaseType = nullptr;
-		if( loadTypeValue( &pBaseType, pRootNode, "baseType", getNamespace(), typeCollection, true ) )
+		if( !loadInternal( pRootNode ) )
 		{
-			if( pBaseType->getDescription() != TypeDescription_Interface )
+			return false;
+		}
+
+		const Type* pBaseType = nullptr;
+		if( loadTypeValue( &pBaseType, pRootNode, "base", getNamespace(), typeCollection, true ) )
+		{
+			if( pBaseType->getKind() != TypeKind_Interface )
 			{
 				trace::write( "Error: Base type of '"_s + getFullName() + "' is not an interface in '" + m_fileName.getGenericPath() + "'." + "\n" );
 				return false;
@@ -49,26 +53,12 @@ namespace conct
 			pushDependingType( pBaseType );
 		}
 
-		tinyxml2::XMLElement* pInternalNode = pRootNode->FirstChildElement( "internal" );
-		if( pInternalNode != nullptr )
-		{
-			if( !loadStringValue( m_headerFilename, pInternalNode, "include" ) ||
-				!loadStringValue( m_cppName, pInternalNode, "class" ) )
-			{
-				trace::write( "Error: Internal type data not complete type of '"_s + getFullName() + "' in '" + m_fileName.getGenericPath() + "'." + "\n" );
-				return false;
-			}
-
-			m_internal = true;
-		}
-
 		loadBooleanValue( m_singleton, pRootNode, "singleton" );
 
-		tinyxml2::XMLElement* pPropertiesNode = pRootNode->FirstChildElement( "properties" );
+		const tinyxml2::XMLElement* pPropertiesNode = pRootNode->FirstChildElement( "properties" );
 		if( pPropertiesNode != nullptr )
 		{
-			tinyxml2::XMLElement* pPropertyNode = pPropertiesNode->FirstChildElement( "property" );
-			while( pPropertyNode != nullptr )
+			for( const tinyxml2::XMLElement* pPropertyNode = pPropertiesNode->FirstChildElement( "property" ); pPropertyNode != nullptr; pPropertyNode = pPropertyNode->NextSiblingElement( "property" ) )
 			{
 				DynamicString propertyName;
 				const Type* pType = nullptr;
@@ -92,16 +82,13 @@ namespace conct
 
 				m_properties.pushBack( property );
 				pushDependingType( pType );
-
-				pPropertyNode = pPropertyNode->NextSiblingElement( "property" );
 			}
 		}
 
-		tinyxml2::XMLElement* pFunctionsNode = pRootNode->FirstChildElement( "functions" );
+		const tinyxml2::XMLElement* pFunctionsNode = pRootNode->FirstChildElement( "functions" );
 		if( pFunctionsNode != nullptr )
 		{
-			tinyxml2::XMLElement* pFunctionNode = pFunctionsNode->FirstChildElement( "function" );
-			while( pFunctionNode != nullptr )
+			for( const tinyxml2::XMLElement* pFunctionNode = pFunctionsNode->FirstChildElement( "function" ); pFunctionNode != nullptr; pFunctionNode = pFunctionNode->NextSiblingElement( "function" ) )
 			{
 				DynamicString functionName;
 				const Type* pReturnType = nullptr;
@@ -115,11 +102,10 @@ namespace conct
 				function.name			= functionName;
 				function.pReturnType	= pReturnType;
 
-				tinyxml2::XMLElement* pParametersNode = pFunctionNode->FirstChildElement( "parameters" );
+				const tinyxml2::XMLElement* pParametersNode = pFunctionNode->FirstChildElement( "parameters" );
 				if( pParametersNode != nullptr )
 				{
-					tinyxml2::XMLElement* pParameterNode = pParametersNode->FirstChildElement( "parameter" );
-					while( pParameterNode != nullptr )
+					for( const tinyxml2::XMLElement* pParameterNode = pParametersNode->FirstChildElement( "parameter" ); pParameterNode != nullptr; pParameterNode = pParameterNode->NextSiblingElement( "parameter" ) )
 					{
 						DynamicString parameterName;
 						const Type* pParameterType = nullptr;
@@ -135,15 +121,11 @@ namespace conct
 
 						function.parameters.pushBack( parameter );
 						pushDependingType( pParameterType );
-
-						pParameterNode = pParameterNode->NextSiblingElement( "parameter" );
 					}
 				}
 
 				m_functions.pushBack( function );
 				pushDependingType( pReturnType );
-
-				pFunctionNode = pFunctionNode->NextSiblingElement( "function" );
 			}
 		}
 

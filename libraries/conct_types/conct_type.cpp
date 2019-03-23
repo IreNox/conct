@@ -3,21 +3,28 @@
 #include "conct_array_type.h"
 #include "conct_ascii.h"
 #include "conct_crc16.h"
+#include "conct_trace.h"
+#include "conct_xml_helper.h"
 
 namespace conct
 {
 	Type::Type()
 	{
-		m_description = TypeDescription_Value;
+		m_kind		= TypeKind_Value;
+		m_valueType	= ValueType_Void;
+		m_typeCrc	= 0u;
+		m_internal	= false;
 	}
 
-	void Type::create( const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, TypeDescription description, ValueType valueType )
+	void Type::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, TypeKind kind, ValueType valueType, bool internal )
 	{
-		m_namespace		= namespaceVar;
-		m_name			= name;
-		m_cppName		= cppName;
-		m_description	= description;
-		m_valueType		= valueType;
+		m_fileName	= fileName;
+		m_namespace	= namespaceVar;
+		m_name		= name;
+		m_cppName	= cppName;
+		m_kind		= kind;
+		m_valueType	= valueType;
+		m_internal	= internal;
 
 		if( !m_namespace.isEmpty() )
 		{
@@ -25,13 +32,13 @@ namespace conct
 		}
 		m_fullName += m_name;
 
-		switch( description )
+		switch( kind )
 		{
-		case TypeDescription_Array:
+		case TypeKind_Array:
 			m_headerFilename = "conct_array_view.h"_s;
 			break;
 
-		case TypeDescription_Value:
+		case TypeKind_Value:
 			m_headerFilename = "conct_core.h"_s;
 			break;
 
@@ -43,6 +50,23 @@ namespace conct
 		m_typeCrc = calculateCrc16( m_fullName.toConstCharPointer(), m_fullName.getLength() );
 	}
 
+	bool Type::loadInternal( const tinyxml2::XMLElement* pRootNode )
+	{
+		const tinyxml2::XMLElement* pInternalNode = pRootNode->FirstChildElement( "internal" );
+		if( pInternalNode != nullptr )
+		{
+			if( !loadStringValue( m_headerFilename, pInternalNode, "include" ) )
+			{
+				trace::write( "Error: Internal type data not complete type of '"_s + getFullName() + "' in '" + m_fileName.getGenericPath() + "'." + "\n" );
+				return false;
+			}
+
+			m_internal = true;
+		}
+
+		return true;
+	}
+
 	TypeCrc Type::getCrc() const
 	{
 		return m_typeCrc;
@@ -52,7 +76,7 @@ namespace conct
 	{
 		m_dependingTypes.insert( pType );
 
-		if( pType->getDescription() == TypeDescription_Array )
+		if( pType->getKind() == TypeKind_Array )
 		{
 			const ArrayType* pArrayType = static_cast< const ArrayType* >( pType );
 			m_dependingTypes.insert( pArrayType->getBaseType() );

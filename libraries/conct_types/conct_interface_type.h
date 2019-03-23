@@ -1,7 +1,7 @@
 #pragma once
 
-#include "conct_path.h"
 #include "conct_type.h"
+
 #include "conct_vector.h"
 
 namespace conct
@@ -47,11 +47,8 @@ namespace conct
 		typedef Vector< InterfaceFunction > FunctionVector;
 		typedef Vector< InterfaceEvent > EventVector;
 
-		const Path&				getFileName() const { return m_fileName; }
-
 		const InterfaceType*	getBaseType() const { return m_pBaseType; }
 
-		bool					getInternal() const { return m_internal; }
 		bool					getSingleton() const { return m_singleton; }
 
 		const PropertyVector&	getProperties() const { return m_properties; }
@@ -66,11 +63,8 @@ namespace conct
 
 	private:
 
-		Path					m_fileName;
-
 		const InterfaceType*	m_pBaseType;
 
-		bool					m_internal;
 		bool					m_singleton;
 
 		PropertyVector			m_properties;

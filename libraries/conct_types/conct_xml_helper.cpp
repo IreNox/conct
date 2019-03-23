@@ -182,7 +182,7 @@ namespace conct
 			return false;
 		}
 
-		if( pType->getDescription() != TypeDescription_Interface )
+		if( pType->getKind() != TypeKind_Interface )
 		{
 			traceNodeError( pNode, "Error: '"_s + pType->getFullName() + "' is not an interface. loaded type value '" + pName + "'.\n" );
 			return false;

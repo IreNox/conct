@@ -2,7 +2,9 @@
 
 #include "conct_router.h"
 #include "conct_array_view.h"
+#include "core_deviceconnection.h"
 #include "conct_core.h"
+#include "core_devicestatus.h"
 
 namespace conct
 {
@@ -31,6 +33,14 @@ namespace conct
 
 	bool RouterProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
 	{
+		Router* pTypedInstance = static_cast< Router* >( pInstance );
+
+		if( nameCrc == 0xf7f5 )
+		{
+			targetValueBuilder.setVoid( pTypedInstance->changeDevice( parameters[ 0u ].getDeviceId(), parameters[ 1u ].getDeviceStatus() ) );
+			return true;
+		}
+
 		return false;
 	}
 }

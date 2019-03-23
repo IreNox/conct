@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<enum namespace="Core" name="DeviceStatus">
+	<values>
+		<value name="Unknown" />
+		<value name="Blocked" />
+		<value name="Client" />
+		<value name="Controller" />
+	</values>
+</enum>

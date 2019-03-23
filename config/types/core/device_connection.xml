@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<struct namespace="Core" name="DeviceConnection">
+	<fields>
+		<field type="DeviceId" name="DeviceStatus" />
+		<field type="DeviceId" name="DeviceId" />
+	</fields>
+</struct>

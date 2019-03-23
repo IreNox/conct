@@ -5,9 +5,17 @@
 	<properties>
 		<property name="ConnectedDevices">
 			<type>
-				<array type="DeviceId" />
+				<array type="DeviceConnection" />
 			</type>
 			<get />
 		</property>
 	</properties>
+	<functions>
+		<function name="changeDevice" return="Void">
+			<parameters>
+				<parameter name="deviceId" type="DeviceId" />
+				<parameter name="deviceStatus" type="DeviceStatus" />
+			</parameters>
+		</function>
+	</functions>
 </interface>

@@ -176,6 +176,9 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_crc16.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\simulator.h">
@@ -381,6 +384,9 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core\conct_core_c.h">
       <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

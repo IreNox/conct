@@ -37,6 +37,7 @@
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
+    <ClCompile Include="..\..\libraries\conct_crypto_high\conct_crypto_random.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_data_builder.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime\conct_device.cpp" />
@@ -56,6 +57,9 @@
     <ClCompile Include="..\..\libraries\conct_types\conct_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\ChaCha.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\Cipher.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\Crypto.cpp" />
     <ClCompile Include="..\..\third_party\tinyxml2\tinyxml2.cpp" />
     <ClCompile Include="sources\console.cpp" />
     <ClCompile Include="sources\console_controller.cpp" />
@@ -104,6 +108,7 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
+    <ClInclude Include="..\..\libraries\conct_crypto_high\conct_crypto_random.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_data_builder.h" />
     <ClInclude Include="..\..\libraries\conct_runtime\conct_device.h" />
@@ -124,6 +129,9 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
+    <ClInclude Include="..\..\libraries\Crypto\ChaCha.h" />
+    <ClInclude Include="..\..\libraries\Crypto\Cipher.h" />
+    <ClInclude Include="..\..\libraries\Crypto\Crypto.h" />
     <ClInclude Include="..\..\third_party\tinyxml2\tinyxml2.h" />
     <ClInclude Include="devices\shared\i_simulator_context.h" />
     <ClInclude Include="devices\shared\i_simulator_device.h" />
@@ -211,6 +219,7 @@
     <Import Project="..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
+    <Import Project="..\..\config\include_crypto_high.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -222,6 +231,7 @@
     <Import Project="..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
+    <Import Project="..\..\config\include_crypto_high.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -233,6 +243,7 @@
     <Import Project="..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
+    <Import Project="..\..\config\include_crypto_high.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -244,6 +255,7 @@
     <Import Project="..\..\config\disable_secure_warning.props" />
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
+    <Import Project="..\..\config\include_crypto_high.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

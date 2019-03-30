@@ -65,7 +65,7 @@ namespace conct
 		void						executeCommand();
 
 		void						sendPingResponse();
-		void						sendErrorResponse( ResultId result );
+		void						sendErrorResponse( MessageType responseType, ResultId result );
 		void						sendResponse( MessageType responseType, const void* pData, uintreg dataLength );
 
 		void						sendData( Port* pPort );

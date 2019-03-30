@@ -37,7 +37,7 @@ namespace conct
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
-		ResultId				sendPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
+		ResultId				sendCommandPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
 		bool					popFinishCommand( Command*& pCommand );
 
 	private:
@@ -119,7 +119,7 @@ namespace conct
 		typedef Map< Port*, PortData > PortMap;
 		typedef Map< DeviceId, DeviceData > DeviceMap;
 		typedef Queue< Command* > CommandQueue;
-		typedef Map< uint32, RuntimeHighStoredDevice > StoredDeviceVector;
+		typedef Map< uint32, RuntimeHighStoredDevice > StoredDeviceMap;
 
 		Device*				m_pDevice;
 
@@ -127,7 +127,7 @@ namespace conct
 		DeviceMap			m_devices;
 		DeviceId			m_nextDeviceId;
 
-		StoredDeviceVector	m_storedDevices;
+		StoredDeviceMap		m_storedDevices;
 
 		CommandQueue		m_finishCommands;
 
@@ -150,7 +150,7 @@ namespace conct
 
 		void				processPackages( PortData& portData );
 		void				processRoute( PortData& portData, const ReceivedPackage& package );
-		void				processPackage( PortData& portData, const ReceivedPackage& package );
+		void				processPackage( PortData& portData, ReceivedPackage& package );
 
 		void				setState( PendingReceivedPackage& package, PackageState state );
 
@@ -158,6 +158,6 @@ namespace conct
 
 		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result );
 		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType );
-		ResultId			sendErrorResponse( const ReceivedPackage& package, ResultId result );
+		ResultId			sendErrorResponse( const ReceivedPackage& package, MessageType messageType, ResultId result );
 	};
 }

@@ -121,13 +121,13 @@ namespace conct
 
 		if( baseHeader.destinationHops > 1u )
 		{
-			sendErrorResponse( ResultId_Unsupported );
+			sendErrorResponse( MessageType_ErrorResponse, ResultId_Unsupported );
 			return ReadResult_Error;
 		}
 
 		if( baseHeader.sourceHops + 1u > sizeof( m_workingData ) )
 		{
-			sendErrorResponse( ResultId_OutOfMemory );
+			sendErrorResponse( MessageType_ErrorResponse, ResultId_OutOfMemory );
 			return ReadResult_Error;
 		}
 
@@ -154,7 +154,7 @@ namespace conct
 
 		if( m_playloadSize > getRemainingWorkingData() )
 		{
-			sendErrorResponse( ResultId_OutOfMemory );
+			sendErrorResponse( MessageType_ErrorResponse, ResultId_OutOfMemory );
 			return ReadResult_Error;
 		}
 
@@ -195,13 +195,13 @@ namespace conct
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
-						sendErrorResponse( ResultId_NoSuchInstance );
+						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.nameCrc ) )
 					{
-						sendErrorResponse( ResultId_NoSuchField );
+						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchField );
 						return;
 					}
 				}
@@ -217,13 +217,13 @@ namespace conct
 				const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 				if( pInstance == nullptr )
 				{
-					sendErrorResponse( ResultId_NoSuchInstance );
+					sendErrorResponse( MessageType_SetPropertyResponse, ResultId_NoSuchInstance );
 					return;
 				}
 
 				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.nameCrc, request.value ) )
 				{
-					sendErrorResponse( ResultId_NoSuchField );
+					sendErrorResponse( MessageType_SetPropertyResponse, ResultId_NoSuchField );
 					return;
 				}
 
@@ -240,13 +240,13 @@ namespace conct
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
-						sendErrorResponse( ResultId_NoSuchInstance );
+						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
 					{
-						sendErrorResponse( ResultId_NoSuchField );
+						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchField );
 						return;
 					}
 				}
@@ -256,25 +256,21 @@ namespace conct
 			break;
 
 		default:
-			sendErrorResponse( ResultId_Unsupported );
+			sendErrorResponse( MessageType_ErrorResponse, ResultId_Unsupported );
 			break;
 		}
 	}
 
 	void RuntimeLow::sendPingResponse()
 	{
-		m_messageType	= MessageType_PingResponse;
-		m_result		= ResultId_Success;
-
-		sendResponse( MessageType_ErrorResponse, nullptr, 0u );
+		m_result = ResultId_Success;
+		sendResponse( MessageType_PingResponse, nullptr, 0u );
 	}
 
-	void RuntimeLow::sendErrorResponse( ResultId result )
+	void RuntimeLow::sendErrorResponse( MessageType responseType, ResultId result )
 	{
-		m_messageType	= MessageType_ErrorResponse;
-		m_result		= result;
-
-		sendResponse( MessageType_ErrorResponse, nullptr, 0u );
+		m_result = result;
+		sendResponse( responseType, nullptr, 0u );
 	}
 
 	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uintreg dataLength )
@@ -282,7 +278,7 @@ namespace conct
 		const uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
 		if( sizeof( m_workingData ) < packetSize )
 		{
-			sendErrorResponse( ResultId_OutOfMemory );
+			sendErrorResponse( MessageType_ErrorResponse, ResultId_OutOfMemory );
 			return;
 		}
 

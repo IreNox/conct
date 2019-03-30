@@ -108,19 +108,19 @@ namespace conct
 			return false;
 		}
 
-		const DeviceData* pDeviceData = nullptr;
-		if( !m_devices.find( pDeviceData, address.address[ 0u ] ) )
+		const DeviceData* pDevice = nullptr;
+		if( !m_devices.find( pDevice, address.address[ 0u ] ) )
 		{
 			return false;
 		}
 
-		if( pDeviceData->ownDeviceId == InvalidDeviceId ||
+		if( pDevice->ownDeviceId == InvalidDeviceId ||
 			address.address[ 1u ] == InvalidDeviceId )
 		{
 			return false;
 		}
 
-		return pDeviceData->ownDeviceId == address.address[ 1u ];
+		return pDevice->ownDeviceId == address.address[ 1u ];
 	}
 
 	void RuntimeHigh::changeDevice( DeviceId id, DeviceStatus status )
@@ -130,22 +130,22 @@ namespace conct
 
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
 	{
-		DeviceData* pDeviceData = nullptr;
-		if( !m_devices.find( pDeviceData, deviceId ) )
+		DeviceData* pDevice = nullptr;
+		if( !m_devices.find( pDevice, deviceId ) )
 		{
 			return InvalidCommandId;
 		}
 
-		const CommandId commandId = pDeviceData->nextCommandId;
-		while( ++pDeviceData->nextCommandId == InvalidCommandId );
+		const CommandId commandId = pDevice->nextCommandId;
+		while( ++pDevice->nextCommandId == InvalidCommandId );
 
 		return commandId;
 	}
 
-	ResultId RuntimeHigh::sendPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
+	ResultId RuntimeHigh::sendCommandPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
-		const ResultId result = sendPackage( deviceAddress, payload, pCommand == nullptr ? 0u : pCommand->getId(), messageType, ResultId_Success );
-		if( result == ResultId_Success && pCommand != nullptr )
+		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
+		if( result == ResultId_Success )
 		{
 			DeviceData& deviceData = m_devices[ deviceAddress.address[ 0u ] ];
 			deviceData.commands[ pCommand->getId() ] = pCommand;
@@ -162,7 +162,7 @@ namespace conct
 
 	void RuntimeHigh::processPackages( PortData& portData )
 	{
-		for( const ReceivedPackage& package : portData.receivedPackages )
+		for( ReceivedPackage& package : portData.receivedPackages )
 		{
 			if( package.destinationAddress.getLength() > 1u )
 			{
@@ -183,7 +183,7 @@ namespace conct
 		DeviceData* pTargetDeviceData = nullptr;
 		if( !m_devices.find( pTargetDeviceData, nextDeviceId ) )
 		{
-			sendErrorResponse( sourcePackage, ResultId_NoSuchDevice );
+			sendErrorResponse( sourcePackage, MessageType_ErrorResponse, ResultId_NoSuchDevice );
 			return;
 		}
 
@@ -211,8 +211,26 @@ namespace conct
 		targetPortData.sendPackages.pushBack( package );
 	}
 
-	void RuntimeHigh::processPackage( PortData& portData, const ReceivedPackage& package )
+	void RuntimeHigh::processPackage( PortData& portData, ReceivedPackage& package )
 	{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		DeviceData* pDevice;
+		if( !m_devices.find( pDevice, package.deviceId ) )
+		{
+			trace::write( "Received 'CryptoHandshake' from unknown Device." );
+			return;
+		}
+
+		if( pDevice->cryptoState == CryptoState_Encrypted )
+		{
+			m_crypto.setKey( pDevice->cryptoKey.data, sizeof( pDevice->cryptoKey.data ) );
+			m_crypto.setCounter( pDevice->cryptoCounter.data, sizeof( pDevice->cryptoCounter.data ) );
+			m_crypto.setIV( package.baseHeader.cryptoIV.data, sizeof( package.baseHeader.cryptoIV.data ) );
+
+			m_crypto.decrypt( package.payload.getData(), package.payload.getData(), package.payload.getLength() );
+		}
+#endif
+
 		Command* pCommand = nullptr;
 		if( package.baseHeader.commandId != InvalidCommandId &&
 			( package.baseHeader.messageType == MessageType_GetPropertyResponse ||
@@ -232,17 +250,17 @@ namespace conct
 			m_finishCommands.pushBack( pCommand );
 		}
 
+		if( package.baseHeader.messageResult != ResultId_Success )
+		{
+			if( pCommand != nullptr )
+			{
+				pCommand->setResponse( package.baseHeader.messageResult );
+			}
+			return;
+		}
+
 		switch( package.baseHeader.messageType )
 		{
-		case MessageType_ErrorResponse:
-			{
-				if( pCommand != nullptr )
-				{
-					pCommand->setResponse( package.baseHeader.messageResult );
-				}
-			}
-			break;
-
 		case MessageType_PingRequest:
 			{
 				sendResponse( package, ArrayView< uint8 >(), MessageType_PingResponse );
@@ -261,13 +279,13 @@ namespace conct
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
-						sendErrorResponse( package, ResultId_NoSuchInstance );
+						sendErrorResponse( package, MessageType_GetPropertyResponse, ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.nameCrc ) )
 					{
-						sendErrorResponse( package, ResultId_NoSuchField );
+						sendErrorResponse( package, MessageType_GetPropertyResponse, ResultId_NoSuchField );
 						return;
 					}
 				}
@@ -292,13 +310,13 @@ namespace conct
 				const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 				if( pInstance == nullptr )
 				{
-					sendErrorResponse( package, ResultId_NoSuchInstance );
+					sendErrorResponse( package, MessageType_SetPropertyResponse, ResultId_NoSuchInstance );
 					return;
 				}
 
 				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.nameCrc, request.value ) )
 				{
-					sendErrorResponse( package, ResultId_NoSuchField );
+					sendErrorResponse( package, MessageType_SetPropertyResponse, ResultId_NoSuchField );
 					return;
 				}
 
@@ -321,13 +339,13 @@ namespace conct
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
-						sendErrorResponse( package, ResultId_NoSuchInstance );
+						sendErrorResponse( package, MessageType_CallFunctionRequest, ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
 					{
-						sendErrorResponse( package, ResultId_NoSuchField );
+						sendErrorResponse( package, MessageType_CallFunctionRequest, ResultId_NoSuchField );
 						return;
 					}
 				}
@@ -346,19 +364,39 @@ namespace conct
 			break;
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		case MessageType_CryptoHandshake:
+		case MessageType_CryptoHandshakeRequest:
 			{
 				const CryptoHandshakeRequest& request = *(const CryptoHandshakeRequest*)package.payload.getData();
 
-				DeviceData* pDevice;
-				if( !m_devices.find( pDevice, package.deviceId ) )
-				{
-					trace::write( "Received 'CryptoHandshake' from unknown Device." );
-					return;
-				}
+				CryptoHandshakeResponse cryptoHandshakeResponse;
+				cryptoHandshakeResponse.serialNumber	= m_pDevice->getSerialNumber();
+				cryptoHandshakeResponse.keyHash			= 0u;
 
 				const RuntimeHighStoredDevice* pStoredDevice = nullptr;
 				if( m_storedDevices.find( pStoredDevice, request.serialNumber ) )
+				{
+					cryptoHandshakeResponse.keyHash = pStoredDevice->hash;
+				}
+
+				const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeResponse, sizeof( cryptoHandshakeResponse ) );
+				sendResponse( package, payload, MessageType_CryptoHandshakeResponse );
+
+				if( pStoredDevice != nullptr )
+				{
+					pDevice->cryptoState	= CryptoState_Encrypted;
+					pDevice->cryptoKey		= pStoredDevice->key;
+					pDevice->cryptoCounter	= pStoredDevice->counter;
+				}
+			}
+			break;
+
+		case MessageType_CryptoHandshakeResponse:
+			{
+				const CryptoHandshakeResponse& response = *(const CryptoHandshakeResponse*)package.payload.getData();
+
+				const RuntimeHighStoredDevice* pStoredDevice = nullptr;
+				if( m_storedDevices.find( pStoredDevice, response.serialNumber ) &&
+					pStoredDevice->hash == response.keyHash )
 				{
 					pDevice->cryptoState	= CryptoState_Encrypted;
 					pDevice->cryptoKey		= pStoredDevice->key;
@@ -366,7 +404,42 @@ namespace conct
 					return;
 				}
 
+				RuntimeHighStoredDevice storedDevice;
+				storedDevice.serialNumber = response.serialNumber;
+				crypto::calculateRandomBytes( storedDevice.key.data, sizeof( storedDevice.key.data ) );
+				crypto::calculateRandomBytes( storedDevice.counter.data, sizeof( storedDevice.counter.data ) );
+				storedDevice.hash = calculateCrc16( storedDevice.key.data, sizeof( storedDevice.key ) + sizeof( storedDevice.counter ) );
+				m_storedDevices.insert( storedDevice.serialNumber, storedDevice );
 
+				CryptoAssingKeyRequest cryptoAssingKeyRequest;
+				cryptoAssingKeyRequest.key		= storedDevice.key;
+				cryptoAssingKeyRequest.counter	= storedDevice.counter;
+
+				const ArrayView< uint8 > payload( (const uint8*)&cryptoAssingKeyRequest, sizeof( cryptoAssingKeyRequest ) );
+				sendResponse( package, payload, MessageType_CryptoAssignKeyRequest );
+			}
+			break;
+
+		case MessageType_CryptoAssignKeyRequest:
+			{
+				const CryptoAssingKeyRequest& request = *(const CryptoAssingKeyRequest*)package.payload.getData();
+
+				if( pDevice->cryptoState == CryptoState_Encrypted )
+				{
+					sendErrorResponse( package, MessageType_CryptoHandshakeResponse, ResultId_PermissionDenied );
+					return;
+				}
+
+				CryptoHandshakeResponse cryptoHandshakeResponse;
+				cryptoHandshakeResponse.serialNumber	= m_pDevice->getSerialNumber();
+				cryptoHandshakeResponse.keyHash			= calculateCrc16( request.key.data, sizeof( request.key ) + sizeof( request.counter ) );
+
+				const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeResponse, sizeof( cryptoHandshakeResponse ) );
+				sendResponse( package, payload, MessageType_CryptoHandshakeResponse );
+
+				pDevice->cryptoState	= CryptoState_Encrypted;
+				pDevice->cryptoKey		= request.key;
+				pDevice->cryptoCounter	= request.counter;
 			}
 			break;
 #endif
@@ -433,7 +506,7 @@ namespace conct
 			deviceAddress.address[ 1u ] = InvalidDeviceId;
 
 			const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeRequest, sizeof( cryptoHandshakeRequest ) );
-			sendPackage( nullptr, deviceAddress, payload, MessageType_CryptoHandshake );
+			sendPackage( deviceAddress, payload, InvalidCommandId, MessageType_CryptoHandshakeRequest, ResultId_Success );
 		}
 #endif
 
@@ -616,8 +689,8 @@ namespace conct
 			return ResultId_NoDestination;
 		}
 
-		DeviceData* pDeviceData = nullptr;
-		if( !m_devices.find( pDeviceData, deviceAddress.address[ 0u ] ) )
+		DeviceData* pDevice = nullptr;
+		if( !m_devices.find( pDevice, deviceAddress.address[ 0u ] ) )
 		{
 			return ResultId_NoSuchDevice;
 		}
@@ -628,17 +701,29 @@ namespace conct
 		baseHeader.messageType		= messageType;
 		baseHeader.messageResult	= result;
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( pDevice->cryptoState == CryptoState_Encrypted )
+		{
+			crypto::calculateRandomBytes( baseHeader.cryptoIV.data, sizeof( baseHeader.cryptoIV.data ) );
+
+			m_crypto.setKey( pDevice->cryptoKey.data, sizeof( pDevice->cryptoKey.data ) );
+			m_crypto.setCounter( pDevice->cryptoCounter.data, sizeof( pDevice->cryptoCounter.data ) );
+			m_crypto.setIV( baseHeader.cryptoIV.data, sizeof( baseHeader.cryptoIV.data ) );
+		}
+#endif
+
 		SendPackage package;
-		package.targetEndpointId	= pDeviceData->endpointId;
+		package.targetEndpointId	= pDevice->endpointId;
 		package.currentOffset		= 0u;
 
-		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + payload.getLength();
+		const uintreg headerSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops;
+		const uintreg packageSize = headerSize + payload.getLength();
 		package.data.reserve( packageSize );
 
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
 		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
 
-		package.data.pushBack( pDeviceData->ownDeviceId );
+		package.data.pushBack( pDevice->ownDeviceId );
 
 		for( uintreg i = 0u; i < baseHeader.destinationHops; ++i )
 		{
@@ -647,7 +732,15 @@ namespace conct
 
 		package.data.pushRange( payload );
 
-		PortData& portData = m_ports[ pDeviceData->pTargetPort ];
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( pDevice->cryptoState == CryptoState_Encrypted )
+		{
+			uint8* pPayload = package.data.getData() + headerSize;
+			m_crypto.encrypt( pPayload, pPayload, payload.getLength() );
+		}
+#endif
+
+		PortData& portData = m_ports[ pDevice->pTargetPort ];
 		portData.sendPackages.pushBack( package );
 
 		return ResultId_Success;
@@ -661,11 +754,11 @@ namespace conct
 		return sendPackage( address, payload, package.baseHeader.commandId, messageType, ResultId_Success );
 	}
 
-	ResultId RuntimeHigh::sendErrorResponse( const ReceivedPackage& package, ResultId result )
+	ResultId RuntimeHigh::sendErrorResponse( const ReceivedPackage& package, MessageType messageType, ResultId result )
 	{
 		DeviceAddress address;
 		getDeviceAddress( address, package.deviceId, package.sourceAddress );
 
-		return sendPackage( address, ArrayView< uint8 >(), package.baseHeader.commandId, MessageType_ErrorResponse, result );
+		return sendPackage( address, ArrayView< uint8 >(), package.baseHeader.commandId, messageType, result );
 	}
 }

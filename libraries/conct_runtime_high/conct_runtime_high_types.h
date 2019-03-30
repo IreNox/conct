@@ -9,6 +9,7 @@ namespace conct
 		uint32					serialNumber;
 		CryptoKey				key;
 		CryptoCounter			counter;
+		uint16					hash;
 	};
 
 	struct RuntimeHighDeviceDatabase

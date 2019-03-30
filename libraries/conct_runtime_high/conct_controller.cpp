@@ -127,7 +127,7 @@ namespace conct
 		}
 
 		TCommand* pCommand = new TCommand( commandId );
-		if( m_pRuntime->sendPackage( pCommand, deviceAddress, payload.toArrayView(), messageType ) != ResultId_Success )
+		if( m_pRuntime->sendCommandPackage( pCommand, deviceAddress, payload.toArrayView(), messageType ) != ResultId_Success )
 		{
 			delete pCommand;
 			pCommand = nullptr;

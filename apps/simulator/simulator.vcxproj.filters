@@ -36,6 +36,12 @@
     <Filter Include="libraries\conct_types">
       <UniqueIdentifier>{041ae26e-b684-4e9e-a871-f7e62f2f499b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_crypto_high">
+      <UniqueIdentifier>{33fbd651-40d3-4fcb-b36e-1207fd3245fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\Crypto">
+      <UniqueIdentifier>{a4a2cd9e-fcdb-4ed9-b8d6-67835b5a6250}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\main.cpp">
@@ -178,6 +184,18 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp">
       <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_crypto_high\conct_crypto_random.cpp">
+      <Filter>libraries\conct_crypto_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\Crypto\Crypto.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\Crypto\ChaCha.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\Crypto\Cipher.cpp">
+      <Filter>libraries\Crypto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,6 +405,18 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h">
       <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_crypto_high\conct_crypto_random.h">
+      <Filter>libraries\conct_crypto_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\Crypto\Cipher.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\Crypto\Crypto.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\Crypto\ChaCha.h">
+      <Filter>libraries\Crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

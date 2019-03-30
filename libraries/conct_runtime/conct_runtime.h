@@ -97,8 +97,9 @@ namespace conct
 		//MessageType_CallEventHandler,
 		//MessageType_CheckEventHandler,
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		MessageType_CryptoHandshake,
-		MessageType_CryptoAssignKey,
+		MessageType_CryptoHandshakeRequest,
+		MessageType_CryptoHandshakeResponse,
+		MessageType_CryptoAssignKeyRequest,
 #endif
 	};
 

@@ -4,8 +4,8 @@ namespace conct
 {
 	void PortNRF24L01::getAddressForPipe( Address& targetAddress, uintreg radioIndex, uintreg pipeIndex, bool server ) const
 	{
-		targetAddress.pipeIndex		= (server ? 'A' : 'a') + pipeIndex;
-		targetAddress.radioIndex	= '0' + radioIndex;
+		targetAddress.pipeIndex		= uint8( (server ? 'A' : 'a') + pipeIndex );
+		targetAddress.radioIndex	= uint8( '0' + radioIndex );
 		targetAddress.static1		= 'c';
 		targetAddress.static2		= 'o';
 		targetAddress.static3		= 'n';

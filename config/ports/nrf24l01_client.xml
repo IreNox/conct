@@ -7,9 +7,17 @@
 	<connection mtu="32">
 		<single_device />
 		<reliable />
-	</connection>	
+	</connection>
 	<parameters>
-		<parameter name="cePin" type="integer" default="22" />
-		<parameter name="csPin" type="integer" default="0" />
+		<parameter name="cePin" type="integer" default="22">
+			<filters>
+				<filter type="system" value="arduino" />
+			</filters>
+		</parameter>
+		<parameter name="csPin" type="integer" default="0">
+			<filters>
+				<filter type="system" value="arduino" />
+			</filters>
+		</parameter>
 	</parameters>
 </port>

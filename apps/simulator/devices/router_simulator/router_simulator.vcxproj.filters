@@ -33,17 +33,23 @@
     <Filter Include="libraries\conct_port_tcp_server">
       <UniqueIdentifier>{fe3335ad-9074-4d30-b62e-26ada7f5e0af}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_port_serial">
-      <UniqueIdentifier>{ccd95ae6-272f-4f05-8a7a-0fdae1b13bde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="libraries\conct_port_serial\simulator">
-      <UniqueIdentifier>{94a6424e-ed18-4c50-83f5-00ee4f57deee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libraries\Crypto">
       <UniqueIdentifier>{3b6bf9f1-5c6e-417f-bc96-0e96b01eff10}</UniqueIdentifier>
     </Filter>
     <Filter Include="libraries\conct_crypto_high">
       <UniqueIdentifier>{123735fd-a2f9-4b66-90b1-f60c31dc3772}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01">
+      <UniqueIdentifier>{955fdfa6-d10b-48b3-ae97-780f19d5003d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01_server">
+      <UniqueIdentifier>{8aed0f2e-9352-412b-bb80-d1bec555d110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_port_nrf24l01\simulator">
+      <UniqueIdentifier>{59e702c9-c92c-496c-bc37-6f3b7f79f592}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_simulator">
+      <UniqueIdentifier>{4a7dd8a2-b4c8-4d0a-8160-59f00fbffbc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -55,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="router_simulator.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\i_simulator_context.h">
-      <Filter>shared</Filter>
     </ClInclude>
     <ClInclude Include="gen\core_router_proxy.h">
       <Filter>gen</Filter>
@@ -110,20 +113,8 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_server\conct_port_tcp_server.h">
       <Filter>libraries\conct_port_tcp_server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClInclude>
     <ClInclude Include="..\shared\i_simulator_device.h">
       <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\shared\i_simulator_device_context.h">
-      <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h">
-      <Filter>libraries\conct_port_serial\simulator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h">
-      <Filter>libraries\conct_port_serial\simulator</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h">
       <Filter>libraries\Crypto</Filter>
@@ -200,6 +191,39 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_core_c.h">
       <Filter>libraries\conct_core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.h">
+      <Filter>libraries\conct_crypto_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h">
+      <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01_server\conct_port_nrf24l01_server.h">
+      <Filter>libraries\conct_port_nrf24l01_server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\simulator\RF24.h">
+      <Filter>libraries\conct_port_nrf24l01\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_core_high.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
@@ -238,15 +262,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_atomic.h">
       <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_core_high.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.h">
-      <Filter>libraries\conct_crypto_high</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -304,12 +319,6 @@
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_runtime.cpp">
       <Filter>libraries\conct_runtime</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp">
-      <Filter>libraries\conct_port_serial</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp">
-      <Filter>libraries\conct_port_serial\simulator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp">
       <Filter>libraries\Crypto</Filter>
     </ClCompile>
@@ -346,6 +355,30 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_ascii.cpp">
       <Filter>libraries\conct_core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.cpp">
+      <Filter>libraries\conct_crypto_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp">
+      <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01_server\conct_port_nrf24l01_server.cpp">
+      <Filter>libraries\conct_port_nrf24l01_server</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01\simulator\RF24.cpp">
+      <Filter>libraries\conct_port_nrf24l01\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
@@ -369,12 +402,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_atomic.cpp">
       <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.cpp">
-      <Filter>libraries\conct_crypto_high</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +453,9 @@
     <None Include="..\..\..\..\libraries\conct_core\conct_array_view.inl">
       <Filter>libraries\conct_core</Filter>
     </None>
+    <None Include="..\..\..\..\libraries\conct_core_high\conct_atomic.inl">
+      <Filter>libraries\conct_core_high</Filter>
+    </None>
     <None Include="..\..\..\..\libraries\conct_core_high\conct_map.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
@@ -436,9 +466,6 @@
       <Filter>libraries\conct_core_high</Filter>
     </None>
     <None Include="..\..\..\..\libraries\conct_core_high\conct_vector.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
-    <None Include="..\..\..\..\libraries\conct_core_high\conct_atomic.inl">
       <Filter>libraries\conct_core_high</Filter>
     </None>
   </ItemGroup>

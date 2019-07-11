@@ -1,6 +1,6 @@
-#include "simulator_context.h"
+#include "conct_simulator_context.h"
 
-#include "simulator_device_context.h"
+#include "conct_simulator_device_context.h"
 
 namespace conct
 {
@@ -19,7 +19,7 @@ namespace conct
 		thread_local_storage::destroy( m_threadDevices );
 	}
 
-	ISimulatorDeviceContext* SimulatorContext::registerDevice( uintreg deviceId )
+	SimulatorDeviceContext* SimulatorContext::registerDevice( uintreg deviceId )
 	{
 		SimulatorDeviceContext* pDevice = new SimulatorDeviceContext( deviceId );
 
@@ -32,20 +32,14 @@ namespace conct
 		return pDevice;
 	}
 
-	ISimulatorDeviceContext* SimulatorContext::getDevice( uintreg deviceId )
+	SimulatorDeviceContext* SimulatorContext::getDevice( uintreg deviceId )
 	{
 		MutexLock lock( m_mutex );
 		return m_devices[ deviceId ];
 	}
 
-	ISimulatorDeviceContext* SimulatorContext::getCurrentDevice()
+	SimulatorDeviceContext* SimulatorContext::getCurrentDevice()
 	{
-		return ( ISimulatorDeviceContext* )thread_local_storage::getValue( m_threadDevices );
-	}
-
-	SIMULATOR_DLL ISimulatorContext& getSimulatorContext()
-	{
-		static SimulatorContext s_context;
-		return s_context;
+		return ( SimulatorDeviceContext* )thread_local_storage::getValue( m_threadDevices );
 	}
 }

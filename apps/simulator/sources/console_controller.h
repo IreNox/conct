@@ -8,8 +8,8 @@
 #include "conct_structs.h"
 #include "conct_timer.h"
 #include "conct_value_high.h"
+#include "conct_vector.h"
 
-#include <vector>
 #include <forward_list>
 
 namespace conct
@@ -94,8 +94,8 @@ namespace conct
 			const InterfaceType*	pType;
 		};
 
-		typedef std::vector< DynamicString > StringVector;
-		typedef std::vector< State > StateVector;
+		typedef Vector< DynamicString > StringVector;
+		typedef Vector< State > StateVector;
 		typedef std::forward_list< ControllerDevice > DeviceList;
 		typedef std::forward_list< ControllerInstance > InstanceList;
 		//typedef Vector< ControllerDeviceCommand > DeviceCommandVector;
@@ -118,7 +118,7 @@ namespace conct
 		const InterfaceType*		m_pInterface;
 		const InterfaceProperty*	m_pProperty;
 		const InterfaceFunction*	m_pFunction;
-		std::vector< ValueHigh >	m_values;
+		Vector< ValueHigh >			m_values;
 
 		DeviceList					m_devices;
 		InstanceList				m_instances;

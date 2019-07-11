@@ -6,6 +6,8 @@
 #define CONCT_ENABLED( value )	( ( 0 + value ) == 2 )
 #define CONCT_DISABLED( value )	( ( 0 + value ) != 2 )
 
+#define CONCT_IF( expr )		( ( expr ) ? CONCT_ON : CONCT_OFF )
+
 #if defined( _WIN32 ) // Windows
 #	define CONCT_PLATFORM_WINDOWS		CONCT_ON
 #	if defined( _WIN64 )

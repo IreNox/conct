@@ -39,7 +39,7 @@ namespace conct
 
 		for( uintreg i = 0u; i < m_connections.getLength(); ++i )
 		{
-			const uintreg pipeId = i + 1u;
+			const uint8 pipeId = uint8( i + 1u );
 			Connection& connection = m_connections[ i ];
 
 			connection.radioIndex	= pipeId / PipesPerRadio;
@@ -152,7 +152,7 @@ namespace conct
 	Flags8< PortFlag > PortNRF24L01Server::getFlags() const
 	{
 		Flags8< PortFlag > flags;
-		flags |= PortFlag_MultiEndpoint;
+		flags |= PortFlag_Server;
 		flags |= PortFlag_Reliable;
 		return flags;
 	}
@@ -460,7 +460,7 @@ namespace conct
 
 	void PortNRF24L01Server::sendDataPacket( Connection& connection )
 	{
-		const uint8 payloadSize = CONCT_MIN( connection.sendBuffer.getLength(), MaxPacketPayloadSize );
+		const uint8 payloadSize = uint8(CONCT_MIN( connection.sendBuffer.getLength(), MaxPacketPayloadSize ) );
 
 		do
 		{

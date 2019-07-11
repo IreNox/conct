@@ -70,29 +70,27 @@ namespace conct
 	}
 
 	template< class TKey, class TValue >
-	bool Map<TKey, TValue>::find( TValue*& target, const TKey& key )
+	TValue* Map<TKey, TValue>::find( const TKey& key )
 	{
 		const uintreg index = findIndex( key );
 		if( index == (uintreg)-1 )
 		{
-			return false;
+			return nullptr;
 		}
 
-		target = &m_pData[ index ].value;
-		return true;
+		return &m_pData[ index ].value;
 	}
 
 	template< class TKey, class TValue >
-	bool Map<TKey, TValue>::find( const TValue*& target, const TKey& key ) const
+	const TValue* Map<TKey, TValue>::find( const TKey& key ) const
 	{
 		const uintreg index = findIndex( key );
 		if( index == (uintreg)-1 )
 		{
-			return false;
+			return nullptr;
 		}
 
-		target = &m_pData[ index ].value;
-		return true;
+		return &m_pData[ index ].value;
 	}
 
 	template< class TKey, class TValue >
@@ -108,17 +106,47 @@ namespace conct
 		return true;
 	}
 
-	template< class TKey, class TValue >
-	bool Map<TKey, TValue>::insert( const TKey& key, const TValue& value )
+	template< typename TKey, typename TValue >
+	typename Map< TKey, TValue >::InsertResult Map< TKey, TValue >::insertKey( const TKey& key )
 	{
-		PairType* pPair = nullptr;
-		const bool result = findOrInsertPair( &pPair, key );
-		pPair->value = value;
+		const uintreg pos = findPositionIndex( key );
+
+		PairType& pair1 = m_pData[ pos ];
+		if( pos < m_length && pair1.key == key )
+		{
+			InsertResult result;
+			result.isNew	= false;
+			result.pValue	= &pair1.value;
+			return result;
+		}
+
+		checkCapacity( m_length + 1 );
+
+		for( uintreg i = m_length; i > pos; --i )
+		{
+			m_pData[ i ] = m_pData[ i - 1 ];
+		}
+
+		PairType& pair2 = m_pData[ pos ];
+		pair2.key	= key;
+		pair2.value	= TValue();
+		m_length++;
+
+		InsertResult result;
+		result.isNew	= true;
+		result.pValue	= &pair2.value;
 		return result;
 	}
 
 	template< class TKey, class TValue >
-	bool Map<TKey, TValue>::erase( const TKey& key )
+	void Map<TKey, TValue>::insert( const TKey& key, const TValue& value )
+	{
+		const InsertResult result = insertKey( key );
+		*result.pValue = value;
+	}
+
+	template< class TKey, class TValue >
+	bool Map<TKey, TValue>::remove( const TKey& key )
 	{
 		const uintreg index = findIndex( key );
 		if( index == ( uintreg )-1 )
@@ -193,17 +221,8 @@ namespace conct
 	template< class TKey, class TValue >
 	TValue& Map< TKey, TValue >::operator[]( const TKey& key )
 	{
-		const uintreg index = findIndex( key );
-		if( index == ( uintreg )-1 )
-		{
-			PairType* pPair = nullptr;
-			findOrInsertPair( &pPair, key );
-			pPair->value = TValue();
-
-			return pPair->value;
-		}
-
-		return m_pData[ index ].value;
+		const InsertResult result = insertKey( key );
+		return *result.pValue;
 	}
 
 	template< class TKey, class TValue >
@@ -219,29 +238,7 @@ namespace conct
 		return m_pData[ index ].value;
 	}
 
-	template< class TKey, class TValue >
-	void Map< TKey, TValue >::checkCapacity( uintreg capacity )
-	{
-		const uintreg nextCapacity = getNextPowerOfTwo( capacity );
-		if( nextCapacity <= m_capacity )
-		{
-			return;
-		}
-
-		PairType* pNewData = new PairType[ nextCapacity ];
-		CONCT_ASSERT( pNewData != nullptr );
-
-		for( uintreg i = 0u; i < m_length; ++i )
-		{
-			pNewData[ i ] = m_pData[ i ];
-		}
-
-		delete[] m_pData;
-		m_pData = pNewData;
-		m_capacity = nextCapacity;
-	}
-
-	template< class TKey, class TValue >
+	template<typename TKey, typename TValue>
 	uintreg Map< TKey, TValue >::findIndex( const TKey& key ) const
 	{
 		if( m_length == 0u )
@@ -253,10 +250,10 @@ namespace conct
 		int imax = int( m_length );
 		while( imax >= imin )
 		{
-			const int imid =  ( imax + imin ) / 2u;
-			if( imid < 0 || imid >= ( int )m_length )
+			const int imid =  (imax + imin) / 2u;
+			if( imid < 0 || imid >= (int)m_length )
 			{
-				return ( uintreg )-1;
+				return (uintreg)-1;
 			}
 
 			if( m_pData[ imid ].key == key )
@@ -273,40 +270,75 @@ namespace conct
 			}
 		}
 
-		return ( uintreg )-1;
+		return (uintreg)-1;
 	}
 
-	template< class TKey, class TValue >
-	bool Map< TKey, TValue >::findOrInsertPair( PairType** ppPair, const TKey& key )
+	template<typename TKey, typename TValue>
+	uintreg Map< TKey, TValue >::findPositionIndex( const TKey& key ) const
 	{
-		uintreg pos = 0u;
-		for( ; pos < m_length; ++pos )
+		if( m_length == 0u )
 		{
-			PairType& pair = m_pData[ pos ];
+			return m_length;
+		}
 
-			if( pair.key == key )
+		int rangeStart = 0;
+		int rangeEnd = int( m_length );
+		while( rangeEnd >= rangeStart && rangeStart < int( m_length ) )
+		{
+			const int rangeMid =  rangeStart + ((rangeEnd - rangeStart) / 2);
+			const PairType& kvp = m_pData[ rangeMid ];
+
+			if( kvp.key == key )
 			{
-				*ppPair = &pair;
-				return false;
+				return rangeMid;
 			}
-			else if( pair.key > key )
+			else if( key < kvp.key )
 			{
-				break;
+				rangeEnd = rangeMid - 1;
+			}
+			else
+			{
+				rangeStart = rangeMid + 1;
 			}
 		}
 
-		checkCapacity( m_length + 1 );
+		return uintreg( rangeStart );
+	}
 
-		for( uintreg i = m_length; i > pos; --i )
+	template<typename TKey, typename TValue>
+	uintreg Map< TKey, TValue >::getNextCapacity( uintreg neededCapacity )
+	{
+		uintreg capacity = CONCT_MAX( 2u, m_capacity );
+		while( capacity <= neededCapacity )
 		{
-			m_pData[ i ] = m_pData[ i - 1 ];
+			capacity *= 2;
 		}
 
-		PairType& pair = m_pData[ pos ];
-		pair.key = key;
-		m_length++;
+		return capacity;
+	}
 
-		*ppPair = &pair;
-		return true;
+	template<typename TKey, typename TValue>
+	void Map< TKey, TValue >::checkCapacity( uintreg neededCapacity )
+	{
+		if( m_capacity >= neededCapacity )
+		{
+			return;
+		}
+
+		const uintreg capacity = getNextCapacity( neededCapacity );
+		PairType* pNewData = new PairType[ capacity ];
+
+		for( uintreg i = 0u; i < m_length; ++i )
+		{
+			pNewData[ i ] = m_pData[ i ];
+		}
+
+		if( m_pData != nullptr )
+		{
+			delete[] m_pData;
+		}
+
+		m_pData		= pNewData;
+		m_capacity	= capacity;
 	}
 }

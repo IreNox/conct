@@ -1,13 +1,13 @@
 ﻿#include "console.h"
 
+#include "conct_path.h"
+#include "conct_trace.h"
+
 #include "console_controller.h"
 #include "console_input.h"
 #include "console_instances.h"
 #include "console_plugin.h"
 #include "console_render.h"
-#include "conct_path.h"
-
-#include <iostream>
 
 namespace conct
 {
@@ -27,7 +27,7 @@ namespace conct
 
 		if( !m_types.load( typesPath ) )
 		{
-			std::cout << "could not load types" << std::endl;
+			trace::write( "could not load types" );
 			exit( 0u );
 		}
 	}

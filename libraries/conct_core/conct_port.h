@@ -11,8 +11,8 @@ namespace conct
 
 	enum PortFlag
 	{
-		PortFlag_SingleEndpoint	= 1u << 0u,
-		PortFlag_MultiEndpoint	= 1u << 1u,
+		PortFlag_Client			= 1u << 0u,
+		PortFlag_Server			= 1u << 1u,
 		PortFlag_Reliable		= 1u << 2u
 	};
 

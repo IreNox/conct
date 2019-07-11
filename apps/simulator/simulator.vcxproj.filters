@@ -42,6 +42,9 @@
     <Filter Include="libraries\Crypto">
       <UniqueIdentifier>{a4a2cd9e-fcdb-4ed9-b8d6-67835b5a6250}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_simulator">
+      <UniqueIdentifier>{0578fc96-ec37-47cf-8de2-c697b5b48d56}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\main.cpp">
@@ -63,9 +66,6 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="sources\console_input.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\simulator_context.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_runtime\conct_proxy.cpp">
@@ -124,9 +124,6 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_runtime\conct_runtime.cpp">
       <Filter>libraries\conct_runtime</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\simulator_device_context.cpp">
-      <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
@@ -196,6 +193,15 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\Crypto\Cipher.cpp">
       <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_simulator\conct_simulator_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_simulator\conct_simulator_device_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -417,6 +423,21 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\Crypto\ChaCha.h">
       <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_device_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_rf24_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h">
+      <Filter>libraries\conct_simulator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

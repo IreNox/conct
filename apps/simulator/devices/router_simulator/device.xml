@@ -2,7 +2,7 @@
 <device name="RouterSimulator" hardware="SimulatorHigh">
 	<ports>
 		<port index="0" type="TCP-Server" />
-		<port index="1" type="Serial" />
+		<port index="1" type="NRF24L01-Server" />
 	</ports>
 	<!--instances>
 		<instance type="Home.Light" />

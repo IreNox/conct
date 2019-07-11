@@ -1,6 +1,7 @@
 #pragma once
 
 #include "conct_core.h"
+#include "conct_array_view.h"
 
 namespace conct
 {

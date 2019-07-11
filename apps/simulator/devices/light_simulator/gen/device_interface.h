@@ -3,7 +3,7 @@
 #include "conct_device.h"
 #include "conct_runtime_low.h"
 
-#include "conct_port_serial.h"
+#include "conct_port_nrf24l01_client.h"
 
 #include "core_device_proxy.h"
 #include "home_light_proxy.h"
@@ -31,7 +31,7 @@ namespace conct
 
 		RuntimeLow m_runtime;
 
-		PortSerial m_port0;
+		PortNRF24L01Client m_port0;
 
 		DeviceProxy m_proxyDevice;
 		LightProxy m_proxyLight;

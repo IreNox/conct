@@ -15,6 +15,12 @@ namespace conct
 
 		typedef Pair< TKey, TValue > PairType;
 
+		struct InsertResult
+		{
+			bool				isNew;
+			TValue*				pValue;
+		};
+
 								Map();
 								Map( const Map& rhs );
 								Map( const std::initializer_list< PairType >& initList );
@@ -29,12 +35,13 @@ namespace conct
 
 		bool					hasKey( const TKey& key ) const;
 
-		bool					find( TValue*& target, const TKey& key );
-		bool					find( const TValue*& target, const TKey& key ) const;
+		TValue*					find( const TKey& key );
+		const TValue*			find( const TKey& key ) const;
 		bool					findAndCopy( TValue& target, const TKey& key ) const;
 
-		bool					insert( const TKey& key, const TValue& value );
-		bool					erase( const TKey& key );
+		InsertResult			insertKey( const TKey& key );
+		void					insert( const TKey& key, const TValue& value );
+		bool					remove( const TKey& key );
 
 		PairType*				getData();
 		const PairType*			getData() const;
@@ -62,10 +69,11 @@ namespace conct
 		uintreg					m_length;
 		uintreg					m_capacity;
 
-		void					checkCapacity( uintreg capacity );
-
 		uintreg					findIndex( const TKey& key ) const;
-		bool					findOrInsertPair( PairType** ppPair, const TKey& key );
+		uintreg					findPositionIndex( const TKey& key ) const;
+
+		uintreg					getNextCapacity( uintreg neededCapacity );
+		void					checkCapacity( uintreg neededCapacity );
 	};
 }
 

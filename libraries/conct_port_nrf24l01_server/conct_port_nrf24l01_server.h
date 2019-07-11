@@ -10,7 +10,7 @@ namespace conct
 {
 	struct PortNRF24L01ServerParameters
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#if CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
 		int								cePin0;
 		int								cePin1;
 #endif
@@ -45,8 +45,8 @@ namespace conct
 
 		struct Connection
 		{
-			uintreg						radioIndex;
-			uintreg						pipeIndex;
+			uint8						radioIndex;
+			uint8						pipeIndex;
 			uint32						requestId;
 			Address						clientAddress;
 

@@ -61,7 +61,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\base_path.props" />
     <Import Project="..\..\..\..\config\include_runtime_low.props" />
-    <Import Project="..\..\..\..\config\include_port_serial.props" />
     <Import Project="..\..\..\..\config\include_light.props" />
     <Import Project="..\..\include_simulator.props" />
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
@@ -70,12 +69,12 @@
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
+    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\base_path.props" />
     <Import Project="..\..\..\..\config\include_runtime_low.props" />
-    <Import Project="..\..\..\..\config\include_port_serial.props" />
     <Import Project="..\..\..\..\config\include_light.props" />
     <Import Project="..\..\include_simulator.props" />
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
@@ -84,12 +83,12 @@
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
+    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\base_path.props" />
     <Import Project="..\..\..\..\config\include_runtime_low.props" />
-    <Import Project="..\..\..\..\config\include_port_serial.props" />
     <Import Project="..\..\..\..\config\include_light.props" />
     <Import Project="..\..\include_simulator.props" />
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
@@ -98,12 +97,12 @@
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
+    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\base_path.props" />
     <Import Project="..\..\..\..\config\include_runtime_low.props" />
-    <Import Project="..\..\..\..\config\include_port_serial.props" />
     <Import Project="..\..\..\..\config\include_light.props" />
     <Import Project="..\..\include_simulator.props" />
     <Import Project="..\..\..\..\config\disable_secure_warning.props" />
@@ -112,6 +111,7 @@
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_port_nrf24l01_client.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
+    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -223,6 +223,8 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_filesystem.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_map.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_mutex.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_pair.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.h" />
@@ -234,9 +236,6 @@
     <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01\simulator\RF24.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_arduino_interface_sim.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_device.h" />
@@ -246,6 +245,11 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_value_triats.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Crypto.h" />
@@ -278,15 +282,15 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_filesystem.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_mutex.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_light\conct_light_control.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01\simulator\RF24.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_nrf24l01_client\conct_port_nrf24l01_client.cpp" />
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\conct_port_serial.cpp" />
-    <ClCompile Include="..\..\..\..\libraries\conct_port_serial\simulator\conct_port_serial_sim.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_device.cpp" />
@@ -295,6 +299,9 @@
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_value.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_low\conct_runtime_low.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\ChaCha.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\Cipher.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp" />

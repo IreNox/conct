@@ -50,6 +50,9 @@
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_router.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_value_high.cpp" />
+    <ClCompile Include="..\..\libraries\conct_simulator\conct_simulator_context.cpp" />
+    <ClCompile Include="..\..\libraries\conct_simulator\conct_simulator_device_context.cpp" />
+    <ClCompile Include="..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_array_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_interface_type.cpp" />
@@ -68,8 +71,6 @@
     <ClCompile Include="sources\console_render.cpp" />
     <ClCompile Include="sources\main.cpp" />
     <ClCompile Include="sources\simulator.cpp" />
-    <ClCompile Include="sources\simulator_context.cpp" />
-    <ClCompile Include="sources\simulator_device_context.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libraries\conct_core\conct_array.h" />
@@ -122,6 +123,11 @@
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_router.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_value_high.h" />
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator.h" />
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h" />
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_context.h" />
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_device_context.h" />
+    <ClInclude Include="..\..\libraries\conct_simulator\conct_simulator_rf24_context.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_array_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_interface_type.h" />
@@ -220,6 +226,7 @@
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
     <Import Project="..\..\config\include_crypto_high.props" />
+    <Import Project="..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -232,6 +239,7 @@
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
     <Import Project="..\..\config\include_crypto_high.props" />
+    <Import Project="..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -244,6 +252,7 @@
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
     <Import Project="..\..\config\include_crypto_high.props" />
+    <Import Project="..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -256,6 +265,7 @@
     <Import Project="..\..\config\target_pathes.props" />
     <Import Project="..\..\config\include_crypto.props" />
     <Import Project="..\..\config\include_crypto_high.props" />
+    <Import Project="..\..\config\include_simulator.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

@@ -3,7 +3,7 @@
 namespace conct
 {
 	template< class T, uintreg TSize >
-	StaticArray< T >::StaticArray()
+	StaticArray< T, TSize >::StaticArray()
 	{
 		CONCT_STATIC_ASSERT( TSize > 0u );
 	}
@@ -77,20 +77,20 @@ namespace conct
 	template< class T, uintreg TSize >
 	ArrayView< T > StaticArray<T, TSize>::toArrayView() const
 	{
-		return ArrayView( m_aData, TSize );
+		return ArrayView< T >( m_aData, TSize );
 	}
 
 	template< class T, uintreg TSize >
-	T& StaticArray< T >::operator[]( uintreg index )
+	T& StaticArray< T, TSize >::operator[]( uintreg index )
 	{
 		CONCT_ASSERT( index < TSize);
-		return m_pData[ index ];
+		return m_aData[ index ];
 	}
 
 	template< class T, uintreg TSize >
-	const T& StaticArray< T >::operator[]( uintreg index ) const
+	const T& StaticArray< T, TSize >::operator[]( uintreg index ) const
 	{
 		CONCT_ASSERT( index < TSize);
-		return m_pData[ index ];
+		return m_aData[ index ];
 	}
 }

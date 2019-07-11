@@ -7,9 +7,11 @@ namespace conct
 	struct RuntimeHighStoredDevice
 	{
 		uint32					serialNumber;
+		uint16					hash;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		CryptoKey				key;
 		CryptoCounter			counter;
-		uint16					hash;
+#endif
 	};
 
 	struct RuntimeHighDeviceDatabase

@@ -37,10 +37,10 @@ namespace conct
 
 		for( PortData::EndpointDeviceMap::PairType& kvp : portData.endpointToDevice )
 		{
-			m_devices.erase( kvp.value );
+			m_devices.remove( kvp.value );
 		}
 
-		m_ports.erase( pPort );
+		m_ports.remove( pPort );
 	}
 
 	void RuntimeHigh::processPort( Port* pPort )
@@ -61,16 +61,16 @@ namespace conct
 				pair.value->setResponse( ResultId_ConnectionLost );
 			}
 
-			m_devices.erase( endpointDeviceId );
-			portData.endpointToDevice.erase( endpointId );
+			m_devices.remove( endpointDeviceId );
+			portData.endpointToDevice.remove( endpointId );
 		}
 
 		ArrayView< uintreg > endpoints;
 		pPort->getEndpoints( endpoints );
-		for( uint i = 0u; i < endpoints.getLength(); ++i )
+		for( uintreg i = 0u; i < endpoints.getLength(); ++i )
 		{
-			const DeviceId* pEndpointDeviceId;
-			if( portData.endpointToDevice.find( pEndpointDeviceId, endpoints[ i ] ) )
+			const DeviceId* pEndpointDeviceId = portData.endpointToDevice.find( endpoints[ i ] );
+			if( pEndpointDeviceId != nullptr )
 			{
 				continue;
 			}
@@ -108,8 +108,8 @@ namespace conct
 			return false;
 		}
 
-		const DeviceData* pDevice = nullptr;
-		if( !m_devices.find( pDevice, address.address[ 0u ] ) )
+		const DeviceData* pDevice = m_devices.find( address.address[ 0u ] );
+		if( pDevice == nullptr )
 		{
 			return false;
 		}
@@ -130,8 +130,8 @@ namespace conct
 
 	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
 	{
-		DeviceData* pDevice = nullptr;
-		if( !m_devices.find( pDevice, deviceId ) )
+		DeviceData* pDevice = m_devices.find( deviceId );
+		if( pDevice == nullptr )
 		{
 			return InvalidCommandId;
 		}
@@ -180,8 +180,8 @@ namespace conct
 	{
 		const DeviceId nextDeviceId = sourcePackage.destinationAddress[ 1u ];
 
-		DeviceData* pTargetDeviceData = nullptr;
-		if( !m_devices.find( pTargetDeviceData, nextDeviceId ) )
+		DeviceData* pTargetDeviceData = m_devices.find( nextDeviceId );
+		if( pTargetDeviceData == nullptr )
 		{
 			sendErrorResponse( sourcePackage, MessageType_ErrorResponse, ResultId_NoSuchDevice );
 			return;
@@ -214,8 +214,8 @@ namespace conct
 	void RuntimeHigh::processPackage( PortData& portData, ReceivedPackage& package )
 	{
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		DeviceData* pDevice;
-		if( !m_devices.find( pDevice, package.deviceId ) )
+		DeviceData* pDevice = m_devices.find( package.deviceId );
+		if( pDevice == nullptr )
 		{
 			trace::write( "Received 'CryptoHandshake' from unknown Device." );
 			return;
@@ -239,7 +239,7 @@ namespace conct
 		{
 			DeviceData& deviceData = m_devices[ package.deviceId ];
 			pCommand = deviceData.commands[ package.baseHeader.commandId ];
-			deviceData.commands.erase( package.baseHeader.commandId );
+			deviceData.commands.remove( package.baseHeader.commandId );
 
 			if( pCommand == nullptr )
 			{
@@ -372,8 +372,8 @@ namespace conct
 				cryptoHandshakeResponse.serialNumber	= m_pDevice->getSerialNumber();
 				cryptoHandshakeResponse.keyHash			= 0u;
 
-				const RuntimeHighStoredDevice* pStoredDevice = nullptr;
-				if( m_storedDevices.find( pStoredDevice, request.serialNumber ) )
+				const RuntimeHighStoredDevice* pStoredDevice = m_storedDevices.find( request.serialNumber );
+				if( pStoredDevice == nullptr )
 				{
 					cryptoHandshakeResponse.keyHash = pStoredDevice->hash;
 				}
@@ -394,8 +394,8 @@ namespace conct
 			{
 				const CryptoHandshakeResponse& response = *(const CryptoHandshakeResponse*)package.payload.getData();
 
-				const RuntimeHighStoredDevice* pStoredDevice = nullptr;
-				if( m_storedDevices.find( pStoredDevice, response.serialNumber ) &&
+				const RuntimeHighStoredDevice* pStoredDevice = m_storedDevices.find( response.serialNumber );
+				if( pStoredDevice != nullptr &&
 					pStoredDevice->hash == response.keyHash )
 				{
 					pDevice->cryptoState	= CryptoState_Encrypted;
@@ -589,8 +589,8 @@ namespace conct
 	{
 		const DeviceId ownDeviceId = package.target.destinationAddress.getFront();
 
-		const DeviceId* pEndpointDeviceId;
-		if( portData.endpointToDevice.find( pEndpointDeviceId, endpointId ) )
+		const DeviceId* pEndpointDeviceId = portData.endpointToDevice.find( endpointId );
+		if( pEndpointDeviceId != nullptr )
 		{
 			DeviceData& deviceData = m_devices[ *pEndpointDeviceId ];
 
@@ -689,8 +689,8 @@ namespace conct
 			return ResultId_NoDestination;
 		}
 
-		DeviceData* pDevice = nullptr;
-		if( !m_devices.find( pDevice, deviceAddress.address[ 0u ] ) )
+		DeviceData* pDevice = m_devices.find( deviceAddress.address[ 0u ] );
+		if( pDevice == nullptr )
 		{
 			return ResultId_NoSuchDevice;
 		}

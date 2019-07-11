@@ -4,6 +4,16 @@
 #include "conct_reader.h"
 #include "conct_writer.h"
 
+#define CONCT_NRF24L01_TRACES CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
+
+#if CONCT_ENABLED( CONCT_NRF24L01_TRACES )
+#	define CONCT_NRF24L01_PRINT			Serial.print
+#	define CONCT_NRF24L01_PRINTLINE		Serial.println
+#else
+#	define CONCT_NRF24L01_PRINT( ... )
+#	define CONCT_NRF24L01_PRINTLINE( ... )
+#endif
+
 namespace conct
 {
 	bool PortNRF24L01Client::setup( const PortNRF24L01ClientParameters& parameters )
@@ -70,8 +80,8 @@ namespace conct
 		if( !m_flags.isSet( ConnectionFlag_Connected ) ||
 			(m_lastSendId != 0u && !m_flags.isSet( ConnectionFlag_AcknowledgedPacket )) )
 		{
-			Serial.print( "Send blocked: " );
-			Serial.println( size );
+			CONCT_NRF24L01_PRINT( "Send blocked: " );
+			CONCT_NRF24L01_PRINTLINE( size );
 			return false;
 		}
 
@@ -97,7 +107,7 @@ namespace conct
 		finalizePacket( m_sendBuffer, m_lastSendSize );
 		sendPacket();
 
-		Serial.println( "Sent" );
+		CONCT_NRF24L01_PRINTLINE( "Sent" );
 	}
 
 	bool PortNRF24L01Client::openReceived( Reader& reader, uintreg& endpointId )
@@ -132,7 +142,7 @@ namespace conct
 	Flags8< PortFlag > PortNRF24L01Client::getFlags() const
 	{
 		Flags8< PortFlag > flags;
-		flags |= PortFlag_SingleEndpoint;
+		flags |= PortFlag_Client;
 		flags |= PortFlag_Reliable;
 		return flags;
 	}
@@ -172,7 +182,7 @@ namespace conct
 
 		m_flags = ConnectionFlag_ConnectionReset;
 
-		Serial.println( "Connection reset" );
+		CONCT_NRF24L01_PRINTLINE( "Connection reset" );
 	}
 
 	void PortNRF24L01Client::sendPacket()
@@ -197,14 +207,14 @@ namespace conct
 		const uint16 magic = getMagicFromHeader( receiveBuffer );
 		if( magic != PacketMagic )
 		{
-			Serial.println( "Receive packet with invalid magic." );
+			CONCT_NRF24L01_PRINTLINE( "Receive packet with invalid magic." );
 			return;
 		}
 
 		const uint8 packetSize = getSizeFromHeader( receiveBuffer );
 		if( packetSize > MaxPacketPayloadSize )
 		{
-			Serial.println( "Receive packet with invalid size." );
+			CONCT_NRF24L01_PRINTLINE( "Receive packet with invalid size." );
 			return;
 		}
 
@@ -227,7 +237,7 @@ namespace conct
 
 			if( packetId != expectedPacketId )
 			{
-				Serial.println( "Received wrong packet id." );
+				CONCT_NRF24L01_PRINTLINE( "Received wrong packet id." );
 				return;
 			}
 		}
@@ -237,7 +247,7 @@ namespace conct
 		const uint8 receivedChecksum = receiveBuffer[ fullPacketSize ];
 		if( receivedChecksum != expectedChecksum )
 		{
-			Serial.println( "Receive packet with invalid checksum." );
+			CONCT_NRF24L01_PRINTLINE( "Receive packet with invalid checksum." );
 			return;
 		}
 
@@ -254,13 +264,15 @@ namespace conct
 
 			sendAcknowledgeMessage();
 			m_flags.set( ConnectionFlag_ReceivedPacket );
-			Serial.println( "Received" );
+			CONCT_NRF24L01_PRINTLINE( "Received" );
 		}
 	}
 
 	void PortNRF24L01Client::handleProtocolMessage( const Buffer& receiveBuffer, uintreg payloadSize )
 	{
 		const ProtocolMessageHeader* pProtocolHeader = (const ProtocolMessageHeader*)&receiveBuffer[ sizeof( Header ) ];
+		payloadSize -= sizeof( ProtocolMessageHeader );
+
 		switch( pProtocolHeader->messageType )
 		{
 		case ProtocolMessageType_Request:
@@ -290,7 +302,7 @@ namespace conct
 				m_radio.startListening();
 
 				m_flags.set( ConnectionFlag_Connected );
-				Serial.println( "Connected" );
+				CONCT_NRF24L01_PRINTLINE( "Connected" );
 			}
 			break;
 
@@ -307,7 +319,7 @@ namespace conct
 					return;
 				}
 
-				Serial.println( "Depleted" );
+				CONCT_NRF24L01_PRINTLINE( "Depleted" );
 				resetConnection();
 			}
 			break;
@@ -322,15 +334,15 @@ namespace conct
 				const AcknowledgeProtocolMessageData* pAcknowledgeData = (const AcknowledgeProtocolMessageData*)&pProtocolHeader[ 1u ];
 				if( pAcknowledgeData->packetId != m_lastSendId )
 				{
-					Serial.print( "Received invalid ack: " );
-					Serial.print( pAcknowledgeData->packetId );
-					Serial.print( " != " );
-					Serial.println( m_lastSendId );
+					CONCT_NRF24L01_PRINT( "Received invalid ack: " );
+					CONCT_NRF24L01_PRINT( pAcknowledgeData->packetId );
+					CONCT_NRF24L01_PRINT( " != " );
+					CONCT_NRF24L01_PRINTLINE( m_lastSendId );
 					return;
 				}
 
 				m_flags.set( ConnectionFlag_AcknowledgedPacket );
-				Serial.println( "Ack" );
+				CONCT_NRF24L01_PRINTLINE( "Ack" );
 			}
 			break;
 

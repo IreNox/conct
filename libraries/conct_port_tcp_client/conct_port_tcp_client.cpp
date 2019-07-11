@@ -296,7 +296,7 @@ namespace conct
 	Flags8< PortFlag > PortTcpClient::getFlags() const
 	{
 		Flags8< PortFlag > flags;
-		flags |= PortFlag_SingleEndpoint;
+		flags |= PortFlag_Client;
 		flags |= PortFlag_Reliable;
 		return flags;
 	}

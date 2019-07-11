@@ -71,6 +71,11 @@
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_router.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime_high\conct_value_high.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Crypto.h" />
@@ -113,6 +118,9 @@
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_high\conct_router.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime_high\conct_value_high.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\ChaCha.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\Cipher.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp" />

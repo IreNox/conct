@@ -245,7 +245,7 @@ namespace conct
 	Flags8< PortFlag > PortTcpServer::getFlags() const
 	{
 		Flags8< PortFlag > flags;
-		flags |= PortFlag_MultiEndpoint;
+		flags |= PortFlag_Server;
 		flags |= PortFlag_Reliable;
 		return flags;
 	}

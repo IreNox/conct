@@ -181,6 +181,21 @@
     <ClInclude Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.h">
       <Filter>libraries\conct_crypto_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gen\core_router_proxy.cpp">
@@ -303,6 +318,15 @@
     <ClCompile Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.cpp">
       <Filter>libraries\conct_crypto_high</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.cpp">
+      <Filter>libraries\conct_simulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -340,6 +364,9 @@
     </Filter>
     <Filter Include="libraries\conct_crypto_high">
       <UniqueIdentifier>{8ca7a3ec-2814-4d81-b92d-2b92a6bbfa2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\conct_simulator">
+      <UniqueIdentifier>{88409d0c-6870-44dd-b849-ba3d94f11930}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

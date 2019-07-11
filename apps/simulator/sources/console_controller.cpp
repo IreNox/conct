@@ -9,8 +9,6 @@
 #include "console_input.h"
 #include "console_render.h"
 
-#include <sstream>
-
 namespace conct
 {
 	ConsoleController::ConsoleController( TypeCollection* pTypes )
@@ -105,7 +103,7 @@ namespace conct
 				break;
 
 			case ConsoleKey_Right:
-				if( m_index < m_list.size() - 1u )
+				if( m_index < m_list.getLength() - 1u )
 				{
 					m_index++;
 					drawList();
@@ -196,20 +194,20 @@ namespace conct
 
 	void ConsoleController::previousState()
 	{
-		if( !m_stateHistory.empty() )
+		if( !m_stateHistory.isEmpty() )
 		{
-			setState( m_stateHistory.back() );
-			m_stateHistory.pop_back();
-			if( !m_stateHistory.empty() )
+			setState( m_stateHistory.getBack() );
+			m_stateHistory.popBack();
+			if( !m_stateHistory.isEmpty() )
 			{
-				m_stateHistory.pop_back();
+				m_stateHistory.popBack();
 			}
 		}
 	}
 
 	void ConsoleController::nextState( ConsoleDevice& localDevice )
 	{
-		if( m_list.empty() && m_state != State_Popup && m_state != State_Value )
+		if( m_list.isEmpty() && m_state != State_Popup && m_state != State_Value )
 		{
 			return;
 		}
@@ -346,7 +344,7 @@ namespace conct
 					return;
 				}
 
-				m_values.push_back( value );
+				m_values.pushBack( value );
 
 				if( m_action == Action_SetProperty )
 				{
@@ -354,9 +352,9 @@ namespace conct
 				}
 				else if( m_action == Action_CallFunction )
 				{
-					if( m_values.size() < m_pFunction->parameters.getLength() )
+					if( m_values.getLength() < m_pFunction->parameters.getLength() )
 					{
-						const ValueType nextType = m_pFunction->parameters[ m_values.size() ].pType->getValueType();
+						const ValueType nextType = m_pFunction->parameters[ m_values.getLength() ].pType->getValueType();
 						setValueState( nextType );
 					}
 					else
@@ -371,7 +369,7 @@ namespace conct
 			break;
 
 		case State_Popup:
-			if( m_stateHistory.back() != State_Value )
+			if( m_stateHistory.getBack() != State_Value )
 			{
 				setState( State_Action );
 			}
@@ -398,7 +396,7 @@ namespace conct
 		}
 		else if( m_state == State_Value && state == State_Value )
 		{
-			m_list.push_back( m_valueText );
+			m_list.pushBack( m_valueText );
 		}
 		else
 		{
@@ -407,7 +405,7 @@ namespace conct
 
 		if( m_state != State_Invalid )
 		{
-			m_stateHistory.push_back( m_state );
+			m_stateHistory.pushBack( m_state );
 		}
 
 		m_state = state;
@@ -460,7 +458,7 @@ namespace conct
 			break;
 		}
 
-		if( m_index >= m_list.size() )
+		if( m_index >= m_list.getLength() )
 		{
 			m_index = 0u;
 			m_lastIndices[ state ] = 0u;
@@ -839,7 +837,7 @@ namespace conct
 	//{
 	//	for( const ControllerDevice& localDevice : m_devices )
 	//	{
-	//		m_list.push_back( localDevice.name );
+	//		m_list.pushBack( localDevice.name );
 	//	}
 	//}
 
@@ -847,7 +845,7 @@ namespace conct
 	{
 		for( const ControllerInstance& instance : m_instances )
 		{
-			m_list.push_back( getInstanceName( instance ) );
+			m_list.pushBack( getInstanceName( instance ) );
 		}
 	}
 
@@ -855,7 +853,7 @@ namespace conct
 	{
 		for( const InterfaceType* pInterface : m_pTypes->getInterfaces() )
 		{
-			m_list.push_back( pInterface->getFullName() );
+			m_list.pushBack( pInterface->getFullName() );
 		}
 	}
 
@@ -863,7 +861,7 @@ namespace conct
 	{
 		for( const InterfaceProperty& property : m_pInstance->pType->getProperties() )
 		{
-			m_list.push_back( property.name );
+			m_list.pushBack( property.name );
 		}
 	}
 
@@ -871,7 +869,7 @@ namespace conct
 	{
 		for( const InterfaceFunction& function : m_pInstance->pType->getFunctions() )
 		{
-			m_list.push_back( function.name );
+			m_list.pushBack( function.name );
 		}
 	}
 
@@ -920,7 +918,7 @@ namespace conct
 
 	void ConsoleController::executeSetPropertyAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance )
 	{
-		Command* pCommand = localDevice.data.pController->setProperty( remoteInstance, m_pProperty->name.toConstCharPointer(), m_values.front() );
+		Command* pCommand = localDevice.data.pController->setProperty( remoteInstance, m_pProperty->name.toConstCharPointer(), m_values.getFront() );
 		if( pCommand == nullptr )
 		{
 			setPopupState( "Failed to start 'setProperty' command."_s );
@@ -933,7 +931,7 @@ namespace conct
 	void ConsoleController::executeCallFunctionAction( ConsoleDevice& localDevice, const RemoteInstance& remoteInstance )
 	{
 		ArrayView< ValueHigh > arguments;
-		arguments.set( m_values.data(), m_values.size() );
+		arguments.set( m_values.getData(), m_values.getLength() );
 		Command* pCommand = localDevice.data.pController->callFunction( remoteInstance, m_pFunction->name.toConstCharPointer(), arguments );
 		if( pCommand == nullptr )
 		{
@@ -970,7 +968,7 @@ namespace conct
 		//		instance.name		= DynamicString( m_pInterface->getFullName().c_str() ) + " @ " + m_pDevice->name;
 		//		instance.pType		= m_pInterface;
 
-		//		m_instances.push_back( instance );
+		//		m_instances.pushBack( instance );
 		//	}
 		//	break;
 
@@ -1010,12 +1008,12 @@ namespace conct
 							text += addInstance( instances[ i ] );
 						}
 					}
-					else if( value.getArrayType() == ValueTypeTraits< DeviceId >::getTypeCrc() )
+					else if( value.getArrayType() == ValueTypeTraits< DeviceConnection >::getTypeCrc() )
 					{
-						const ArrayView< DeviceId > devices = value.getArray< DeviceId >();
+						const ArrayView< DeviceConnection > devices = value.getArray< DeviceConnection >();
 						for( uintreg i = 0u; i < devices.getLength(); ++i )
 						{
-							text += addDevice( devices[ i ], &m_pInstance->pDevice->address );
+							text += addDevice( devices[ i ].id, &m_pInstance->pDevice->address );
 						}
 					}
 				}

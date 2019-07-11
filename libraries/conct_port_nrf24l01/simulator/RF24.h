@@ -1,36 +1,54 @@
 #pragma once
 
-typedef enum { RF24_PA_MIN = 0, RF24_PA_LOW, RF24_PA_HIGH, RF24_PA_MAX, RF24_PA_ERROR } rf24_pa_dbm_e;
+#include "conct_core.h"
+#include "conct_static_array.h"
 
-int millis() { return 0; }
+#include "conct_simulator_arduino_interface.h"
 
-class RF24
+namespace conct
 {
-public:
+	typedef enum { RF24_PA_MIN = 0, RF24_PA_LOW, RF24_PA_HIGH, RF24_PA_MAX, RF24_PA_ERROR } rf24_pa_dbm_e;
 
-	bool begin( int a, int b ) { return true; }
-	void setPALevel( int a ) { }
+	class RF24
+	{
+	public:
 
-	void openWritingPipe( const void* ) { }
-	void openReadingPipe( int, const void* ) { }
+		bool begin( int cePin, int csPin );
 
-	void startListening() {}
-	void stopListening() { }
+		void startListening();
+		void stopListening();
 
-	bool available() { return false; }
+		bool available();
 
-	void read( const void*, int ) { }
-	void write( const void*, int ) { }
-};
+		void read( void* pBuffer, uint8 bufferLength );
+		void write( const void* pData, uint8 dataLength );
 
-class SerialInterface
-{
-public:
+		void openWritingPipe( const uint8_t* pAddress );
 
-	void print( const char* ) { }
-	void print( conct::uintreg ) { }
-	void println( const char* ) { }
-	void println( conct::uintreg ) { }
-};
+		void openReadingPipe( uint8 pipeIndex, const uint8* pAddress );
+		void closeReadingPipe( uint8 pipeIndex );
 
-static SerialInterface Serial;
+		bool available( uint8* pPipeIndex );
+
+		bool isValid() const { return true; }
+
+		void setPALevel( uint8 level ) { }
+
+	private:
+
+		enum Mode
+		{
+			Mode_Read,
+			Mode_Write
+		};
+
+		using ReadAddressArray = StaticArray< uint64, 6u >;
+
+		Mode				m_mode;
+
+		uint64				m_writeAddress;
+		ReadAddressArray	m_readAddresses;
+
+		uint64				getIntAddress( const uint8* pAddress );
+	};
+}

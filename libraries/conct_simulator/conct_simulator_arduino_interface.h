@@ -5,8 +5,9 @@
 
 #if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR )
 
-#include "i_simulator_context.h"
-#include "i_simulator_device_context.h"
+#include "conct_simulator.h"
+#include "conct_simulator_context.h"
+#include "conct_simulator_device_context.h"
 
 namespace conct
 {
@@ -28,7 +29,7 @@ namespace conct
 
 	CONCT_FORCE_INLINE PinValue digitalRead( uintreg pin )
 	{
-		ISimulatorDeviceContext* pContext = getSimulatorContext().getCurrentDevice();
+		SimulatorDeviceContext* pContext = getSimulatorContext().getCurrentDevice();
 		if( pContext != nullptr )
 		{
 			return pContext->getGpio( pin ) ? HIGH : LOW;
@@ -39,7 +40,7 @@ namespace conct
 
 	CONCT_FORCE_INLINE void digitalWrite( uintreg pin, PinValue value )
 	{
-		ISimulatorDeviceContext* pContext = getSimulatorContext().getCurrentDevice();
+		SimulatorDeviceContext* pContext = getSimulatorContext().getCurrentDevice();
 		if( pContext != nullptr )
 		{
 			pContext->setGpio( pin, value == HIGH );

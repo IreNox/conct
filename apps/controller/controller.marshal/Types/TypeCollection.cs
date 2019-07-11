@@ -102,7 +102,7 @@ namespace conct
 				return type;
 			}
 
-			TypeDescription description = TypeNative.GetDescription(typeHandle);
+			TypeKind kind = TypeNative.GetKind(typeHandle);
 			switch (description)
 			{
 				case TypeDescription.Value:

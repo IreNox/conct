@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace conct
 {
-	public enum TypeDescription
+	public enum TypeKind
 	{
 		Value,
 		Interface,
@@ -30,9 +30,9 @@ namespace conct
 		[return: MarshalAs(UnmanagedType.LPStr)]
 		public static extern string GetHeaderFilename(IntPtr handle);
 
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_type_get_description")]
+		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_type_get_kind")]
 		[return: MarshalAs(UnmanagedType.I4)]
-		public static extern TypeDescription GetDescription(IntPtr handle);
+		public static extern TypeKind GetKind(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_type_get_value_type")]
 		[return: MarshalAs(UnmanagedType.I4)]
 		public static extern ValueType GetValueType(IntPtr handle);

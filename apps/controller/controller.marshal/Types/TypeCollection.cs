@@ -103,9 +103,9 @@ namespace conct
 			}
 
 			TypeKind kind = TypeNative.GetKind(typeHandle);
-			switch (description)
+			switch (kind)
 			{
-				case TypeDescription.Value:
+				case TypeKind.Value:
 					type = new Type(typeHandle);
 
 					switch (type.ValueType)
@@ -126,16 +126,8 @@ namespace conct
 							type.ManagedType = typeof(UInt16);
 							break;
 
-						case ValueType.Guid:
-							type.ManagedType = typeof(UInt32);
-							break;
-
 						case ValueType.DeviceId:
 							type.ManagedType = typeof(Byte);
-							break;
-
-						case ValueType.Instance:
-							type.ManagedType = typeof(Instance);
 							break;
 
 						case ValueType.TypeCrc:
@@ -151,22 +143,31 @@ namespace conct
 					}
 					break;
 
-				case TypeDescription.Interface:
+				case TypeKind.Interface:
 					InterfaceType interfaceType = new InterfaceType(typeHandle, this);
 					m_interfaces.Add(interfaceType);
 					type = interfaceType;
 					break;
 
-				case TypeDescription.Struct:
+				case TypeKind.Struct:
 					StructType structType = new StructType(typeHandle, this);
+					switch (structType.FullName)
+					{
+						case "Core.Instance":
+							structType.ManagedType = typeof(Instance);
+							break;
+						case "Core.DeviceConnection":
+							structType.ManagedType = typeof(DeviceConnection);
+							break;
+					}
 					m_structs.Add(structType);
 					type = structType;
 					break;
 
-				case TypeDescription.Enum:
+				case TypeKind.Enum:
 					throw new NotImplementedException();
 
-				case TypeDescription.Array:
+				case TypeKind.Array:
 					ArrayType arrayType = new ArrayType(typeHandle, this);
 					m_arrays.Add(arrayType);
 					type = arrayType;

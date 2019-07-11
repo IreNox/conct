@@ -26,13 +26,8 @@ namespace conct
 		public static extern string GetString(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_percent_value")]
 		public static extern UInt16 GetPercentValue(IntPtr handle);
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_guid")]
-		public static extern UInt32 GetGuid(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_device_id")]
 		public static extern Byte GetDeviecId(IntPtr handle);
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_instance")]
-		[return: MarshalAs(UnmanagedType.Struct)]
-		public static extern Instance GetInstance(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_type_crc")]
 		public static extern UInt16 GetTypeCrc(IntPtr handle);
 
@@ -64,12 +59,8 @@ namespace conct
 		public static extern void SetString(IntPtr handle, [param: MarshalAs(UnmanagedType.LPStr)] string value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_percent_value")]
 		public static extern void SetPercentValue(IntPtr handle, UInt16 value);
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_guid")]
-		public static extern void SetGuid(IntPtr handle, UInt32 value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_device_id")]
 		public static extern void SetDeviecId(IntPtr handle, Byte value);
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_instance")]
-		public static extern void SetInstance(IntPtr handle, [param: MarshalAs(UnmanagedType.Struct)] Instance value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_type_crc")]
 		public static extern void SetTypeCrc(IntPtr handle, UInt16 value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_struct")]

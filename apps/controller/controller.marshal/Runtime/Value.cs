@@ -66,22 +66,10 @@ namespace conct
 			set { ValueNative.SetPercentValue(m_nativeInstance, value); }
 		}
 
-		public UInt32 Guid
-		{
-			get { return ValueNative.GetGuid(m_nativeInstance); }
-			set { ValueNative.SetGuid(m_nativeInstance, value); }
-		}
-
 		public Byte DeviceId
 		{
 			get { return ValueNative.GetDeviecId(m_nativeInstance); }
 			set { ValueNative.SetDeviecId(m_nativeInstance, value); }
-		}
-
-		public Instance Instance
-		{
-			get { return ValueNative.GetInstance(m_nativeInstance); }
-			set { ValueNative.SetInstance(m_nativeInstance, value); }
 		}
 
 		public UInt16 TypeCrc

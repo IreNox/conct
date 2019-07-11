@@ -17,7 +17,7 @@ namespace conct
 	template<>
 	CONCT_FORCE_INLINE TypeCrc ValueTypeTraits< Instance >::getTypeCrc()
 	{
-		return 28262u;
+		return 36718u;
 	}
 
 	template< class T >

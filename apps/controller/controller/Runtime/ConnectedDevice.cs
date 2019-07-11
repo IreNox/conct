@@ -91,12 +91,12 @@ namespace conct
 				else if (command == m_devicesCommand)
 				{
 					Value value = command.ResultValue;
-					object[] instances = value.GetArray(App.System.Types);
+					object[] devices = value.GetArray(App.System.Types);
 
-					foreach (byte deviceId in instances.Cast<byte>())
+					foreach (DeviceConnection device in devices.Cast<DeviceConnection>())
 					{
 						DeviceAddress address = new DeviceAddress(m_address);
-						address.Push(deviceId);
+						address.Push(device.DeviceId);
 
 						if(App.System.Device.IsThisDevice(address))
 						{

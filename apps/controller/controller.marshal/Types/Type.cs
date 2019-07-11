@@ -42,9 +42,9 @@ namespace conct
 			get { return TypeNative.GetHeaderFilename(m_nativeInstance); }
 		}
 
-		public TypeDescription Description
+		public TypeKind Kind
 		{
-			get { return TypeNative.GetDescription(m_nativeInstance); }
+			get { return TypeNative.GetKind(m_nativeInstance); }
 		}
 
 		public ValueType ValueType

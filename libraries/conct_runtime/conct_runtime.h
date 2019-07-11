@@ -42,7 +42,7 @@ namespace conct
 		InstanceId		id;
 	};
 
-	enum DeviceStatus
+	enum DeviceStatus : uint8
 	{
 		DeviceStatus_Unknown,
 		DeviceStatus_Blocked,

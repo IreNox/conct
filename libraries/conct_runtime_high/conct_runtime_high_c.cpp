@@ -253,20 +253,9 @@ CONCT_DLL conct_percent_value CONCT_CDECL conct_value_get_percent_value( conct_v
 	return fromHandle( handle )->getPercentValue();
 }
 
-CONCT_DLL conct_guid CONCT_CDECL conct_value_get_guid( conct_value_handle handle )
-{
-	return fromHandle( handle )->getGuid();
-}
-
 CONCT_DLL conct_device_id CONCT_CDECL conct_value_get_device_id( conct_value_handle handle )
 {
 	return fromHandle( handle )->getDeviceId();
-}
-
-CONCT_DLL struct conct_instance CONCT_CDECL conct_value_get_instance( conct_value_handle handle )
-{
-	const Instance instance = fromHandle( handle )->getInstance();
-	return *( conct_instance* )&instance;
 }
 
 CONCT_DLL conct_type_crc CONCT_CDECL conct_value_get_type_crc( conct_value_handle handle )
@@ -339,19 +328,9 @@ CONCT_DLL void CONCT_CDECL conct_value_set_percent_value( conct_value_handle han
 	fromHandle( handle )->setPercentValue( value );
 }
 
-CONCT_DLL void CONCT_CDECL conct_value_set_guid( conct_value_handle handle, conct_guid value )
-{
-	fromHandle( handle )->setGuid( value );
-}
-
 CONCT_DLL void CONCT_CDECL conct_value_set_device_id( conct_value_handle handle, conct_device_id value )
 {
 	fromHandle( handle )->setDeviceId( value );
-}
-
-CONCT_DLL void CONCT_CDECL conct_value_set_instance( conct_value_handle handle, struct conct_instance value )
-{
-	fromHandle( handle )->setInstance( *(Instance*)&value );
 }
 
 CONCT_DLL void CONCT_CDECL conct_value_set_type_crc( conct_value_handle handle, conct_type_crc value )

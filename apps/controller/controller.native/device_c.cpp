@@ -69,10 +69,10 @@ CONCT_DLL int CONCT_CDECL conct_device_get_connected_device_count( conct_device_
 
 CONCT_DLL conct_device_address_handle CONCT_CDECL conct_device_get_connected_device( conct_device_handle handle, int index )
 {
-	Vector< DeviceId > devices;
-	fromHandle( handle )->getRuntime().getDevices( devices );
+	Vector< DeviceConnection > connections;
+	fromHandle( handle )->getRuntime().getDevices( connections );
 
-	const DeviceId deviceId = devices[ index ];
+	const DeviceId deviceId = connections[ index ].id;
 	conct_device_address_handle addressHandle = conct_device_address_create();
 	conct_device_address_push_device( addressHandle, deviceId );
 	return addressHandle;

@@ -21,9 +21,9 @@ namespace conct
 			return true;
 		}
 
-		if( nameCrc == 0xd52a )
+		if( nameCrc == 0x7ab5 )
 		{
-			targetValueBuilder.setGuid( pTypedInstance->getGuid() );
+			targetValueBuilder.setUnsigned( pTypedInstance->getSerialNumber() );
 			return true;
 		}
 
@@ -53,7 +53,7 @@ namespace conct
 
 		if( nameCrc == 0xe2a7 )
 		{
-			targetValueBuilder.setInstance( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
+			targetValueBuilder.setStruct( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 

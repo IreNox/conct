@@ -8,13 +8,13 @@ extern "C" {
 
 // Types
 
-enum conct_type_description
+enum conct_type_kind
 {
-	conct_type_description_value,
-	conct_type_description_interface,
-	conct_type_description_struct,
-	conct_type_description_enum,
-	conct_type_description_array
+	conct_type_kind_value,
+	conct_type_kind_interface,
+	conct_type_kind_struct,
+	conct_type_kind_enum,
+	conct_type_kind_array
 };
 
 struct conct_type;
@@ -71,7 +71,7 @@ CONCT_DLL const char*						CONCT_CDECL conct_type_get_cpp_name( conct_type_handl
 CONCT_DLL const char*						CONCT_CDECL conct_type_get_full_name( conct_type_handle handle );
 CONCT_DLL const char*						CONCT_CDECL conct_type_get_header_filename( conct_type_handle handle );
 
-CONCT_DLL conct_type_description			CONCT_CDECL conct_type_get_description( conct_type_handle handle );
+CONCT_DLL conct_type_kind					CONCT_CDECL conct_type_get_kind( conct_type_handle handle );
 CONCT_DLL conct_value_type					CONCT_CDECL conct_type_get_value_type( conct_type_handle handle );
 CONCT_DLL conct_type_crc					CONCT_CDECL conct_type_get_crc( conct_type_handle handle );
 

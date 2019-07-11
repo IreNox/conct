@@ -151,7 +151,7 @@ CONCT_DLL conct_struct_type_handle CONCT_CDECL conct_type_collection_find_struct
 
 CONCT_DLL conct_interface_type_handle CONCT_CDECL conct_type_cast_interface( conct_type_handle handle )
 {
-	if( fromHandle( handle )->getDescription() != TypeDescription_Interface )
+	if( fromHandle( handle )->getKind() != TypeKind_Interface )
 	{
 		return nullptr;
 	}
@@ -160,7 +160,7 @@ CONCT_DLL conct_interface_type_handle CONCT_CDECL conct_type_cast_interface( con
 
 CONCT_DLL conct_struct_type_handle CONCT_CDECL conct_type_cast_struct( conct_type_handle handle )
 {
-	if( fromHandle( handle )->getDescription() != TypeDescription_Struct )
+	if( fromHandle( handle )->getKind() != TypeKind_Struct )
 	{
 		return nullptr;
 	}
@@ -169,7 +169,7 @@ CONCT_DLL conct_struct_type_handle CONCT_CDECL conct_type_cast_struct( conct_typ
 
 CONCT_DLL conct_array_type_handle CONCT_CDECL conct_type_cast_array( conct_type_handle handle )
 {
-	if( fromHandle( handle )->getDescription() != TypeDescription_Array )
+	if( fromHandle( handle )->getKind() != TypeKind_Array )
 	{
 		return nullptr;
 	}
@@ -201,9 +201,9 @@ CONCT_DLL const char* CONCT_CDECL conct_type_get_header_filename( conct_type_han
 	return fromHandle( handle )->getHeaderFilename().toConstCharPointer();
 }
 
-CONCT_DLL conct_type_description CONCT_CDECL conct_type_get_description( conct_type_handle handle )
+CONCT_DLL conct_type_kind CONCT_CDECL conct_type_get_kind( conct_type_handle handle )
 {
-	return ( conct_type_description )fromHandle( handle )->getDescription();
+	return ( conct_type_kind )fromHandle( handle )->getKind();
 }
 
 CONCT_DLL conct_value_type CONCT_CDECL conct_type_get_value_type( conct_type_handle handle )

@@ -82,9 +82,7 @@ CONCT_DLL int							CONCT_CDECL conct_value_get_integer( conct_value_handle hand
 CONCT_DLL unsigned						CONCT_CDECL conct_value_get_unsigned( conct_value_handle handle );
 CONCT_DLL const char*					CONCT_CDECL conct_value_get_string( conct_value_handle handle );
 CONCT_DLL conct_percent_value			CONCT_CDECL conct_value_get_percent_value( conct_value_handle handle );
-CONCT_DLL conct_guid					CONCT_CDECL conct_value_get_guid( conct_value_handle handle );
 CONCT_DLL conct_device_id				CONCT_CDECL conct_value_get_device_id( conct_value_handle handle );
-CONCT_DLL struct conct_instance			CONCT_CDECL conct_value_get_instance( conct_value_handle handle );
 CONCT_DLL conct_type_crc				CONCT_CDECL conct_value_get_type_crc( conct_value_handle handle );
 
 CONCT_DLL const void*					CONCT_CDECL conct_value_get_struct_data( conct_value_handle handle );
@@ -102,9 +100,7 @@ CONCT_DLL void							CONCT_CDECL conct_value_set_integer( conct_value_handle han
 CONCT_DLL void							CONCT_CDECL conct_value_set_unsigned( conct_value_handle handle, unsigned value );
 CONCT_DLL void							CONCT_CDECL conct_value_set_string( conct_value_handle handle, const char* pValue );
 CONCT_DLL void							CONCT_CDECL conct_value_set_percent_value( conct_value_handle handle, conct_percent_value value );
-CONCT_DLL void							CONCT_CDECL conct_value_set_guid( conct_value_handle handle, conct_guid value );
 CONCT_DLL void							CONCT_CDECL conct_value_set_device_id( conct_value_handle handle, conct_device_id value );
-CONCT_DLL void							CONCT_CDECL conct_value_set_instance( conct_value_handle handle, struct conct_instance value );
 CONCT_DLL void							CONCT_CDECL conct_value_set_type_crc( conct_value_handle handle, conct_type_crc value );
 CONCT_DLL void							CONCT_CDECL conct_value_set_struct( conct_value_handle handle, const void* pData, int size, conct_type_crc type );
 CONCT_DLL void							CONCT_CDECL conct_value_set_array( conct_value_handle handle, const void* pData, int elementSize, int length, conct_type_crc type );

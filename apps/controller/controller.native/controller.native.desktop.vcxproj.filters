@@ -140,6 +140,9 @@
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
+    <ClCompile Include="gen\core_router_proxy.cpp">
+      <Filter>gen</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_types\conct_type.cpp">
       <Filter>libraries\conct_types</Filter>
     </ClCompile>
@@ -155,14 +158,14 @@
     <ClCompile Include="..\..\..\libraries\conct_types\conct_array_type.cpp">
       <Filter>libraries\conct_types</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_enum_type.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_types\conct_interface_type.cpp">
       <Filter>libraries\conct_types</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_types\conct_struct_type.cpp">
       <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="gen\core_router_proxy.cpp">
-      <Filter>gen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,6 +327,12 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_core\conct_platform.h">
+      <Filter>libraries\conct_core</Filter>
+    </ClInclude>
+    <ClInclude Include="gen\core_router_proxy.h">
+      <Filter>gen</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_types\conct_struct_type.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
@@ -342,14 +351,11 @@
     <ClInclude Include="..\..\..\libraries\conct_types\conct_array_type.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h">
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_enum_type.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_core\conct_platform.h">
-      <Filter>libraries\conct_core</Filter>
-    </ClInclude>
-    <ClInclude Include="gen\core_router_proxy.h">
-      <Filter>gen</Filter>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -409,6 +415,9 @@
     </None>
     <None Include="..\..\..\libraries\conct_runtime_high\conct_value_high.inl">
       <Filter>libraries\conct_runtime_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_types\conct_xml_helper.inl">
+      <Filter>libraries\conct_types</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

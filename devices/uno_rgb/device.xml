@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<device name="uno_rgb" hardware="ATMega328P">
+	<ports>
+		<port index="0" type="NRF24L01-Client">
+			<parameters>
+				<parameter name="cePin" value="7" />
+				<parameter name="csPin" value="8" />
+			</parameters>
+		</port>
+	</ports>
+	<instances>
+		<instance type="Home.Light" />
+		<instance type="Home.Dimmer" />
+		<instance type="Home.RGB" />
+	</instances>
+</device>

@@ -4,11 +4,11 @@
 
 namespace conct
 {
-	class RouterProxy : public Proxy
+	class RGBProxy : public Proxy
 	{
 	public:
 
-		RouterProxy();
+		RGBProxy();
 
 		virtual bool getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const CONCT_OVERRIDE_FINAL;
 		virtual bool setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const CONCT_OVERRIDE_FINAL;

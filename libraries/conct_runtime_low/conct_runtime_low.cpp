@@ -10,6 +10,18 @@
 #include "conct_runtime.h"
 #include "conct_writer.h"
 
+#include <arduino.h>
+
+#define CONCT_RUNTIME_TRACES CONCT_ON
+
+#if CONCT_ENABLED( CONCT_RUNTIME_TRACES )
+#	define CONCT_RUNTIME_PRINT			Serial.print
+#	define CONCT_RUNTIME_PRINTLINE		Serial.println
+#else
+#	define CONCT_RUNTIME_PRINT( ... )
+#	define CONCT_RUNTIME_PRINTLINE( ... )
+#endif
+
 namespace conct
 {
 	void RuntimeLow::setup( Device* pDevice )
@@ -100,7 +112,7 @@ namespace conct
 
 			if( result == ReadResult_Error )
 			{
-				// ...
+				CONCT_RUNTIME_PRINTLINE( "Receive error" );
 			}
 			else if( result == ReadResult_WaitingData )
 			{
@@ -121,12 +133,14 @@ namespace conct
 
 		if( baseHeader.destinationHops > 1u )
 		{
+			CONCT_RUNTIME_PRINTLINE( "Received routing package" );
 			sendErrorResponse( MessageType_ErrorResponse, ResultId_Unsupported );
 			return ReadResult_Error;
 		}
 
 		if( baseHeader.sourceHops + 1u > sizeof( m_workingData ) )
 		{
+			CONCT_RUNTIME_PRINTLINE( "Received package too large" );
 			sendErrorResponse( MessageType_ErrorResponse, ResultId_OutOfMemory );
 			return ReadResult_Error;
 		}
@@ -154,6 +168,7 @@ namespace conct
 
 		if( m_playloadSize > getRemainingWorkingData() )
 		{
+			CONCT_RUNTIME_PRINTLINE( "Received package too large" );
 			sendErrorResponse( MessageType_ErrorResponse, ResultId_OutOfMemory );
 			return ReadResult_Error;
 		}
@@ -195,12 +210,14 @@ namespace conct
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
+						CONCT_RUNTIME_PRINTLINE( "GetPropery: No such instance" );
 						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.nameCrc ) )
 					{
+						CONCT_RUNTIME_PRINTLINE( "GetPropery: No such field" );
 						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchField );
 						return;
 					}
@@ -217,12 +234,14 @@ namespace conct
 				const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 				if( pInstance == nullptr )
 				{
+					CONCT_RUNTIME_PRINTLINE( "SetPropery: No such instance" );
 					sendErrorResponse( MessageType_SetPropertyResponse, ResultId_NoSuchInstance );
 					return;
 				}
 
 				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.nameCrc, request.value ) )
 				{
+					CONCT_RUNTIME_PRINTLINE( "SetPropery: No such field" );
 					sendErrorResponse( MessageType_SetPropertyResponse, ResultId_NoSuchField );
 					return;
 				}
@@ -240,12 +259,14 @@ namespace conct
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
 					{
+						CONCT_RUNTIME_PRINTLINE( "CallFunction: No such instance" );
 						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchInstance );
 						return;
 					}
 
 					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
 					{
+						CONCT_RUNTIME_PRINTLINE( "CallFunction: No such function" );
 						sendErrorResponse( MessageType_GetPropertyResponse, ResultId_NoSuchField );
 						return;
 					}
@@ -256,6 +277,7 @@ namespace conct
 			break;
 
 		default:
+			CONCT_RUNTIME_PRINTLINE( "Received unsupported message type." );
 			sendErrorResponse( MessageType_ErrorResponse, ResultId_Unsupported );
 			break;
 		}
@@ -278,6 +300,7 @@ namespace conct
 		const uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
 		if( sizeof( m_workingData ) < packetSize )
 		{
+			CONCT_RUNTIME_PRINTLINE( "Respose too large." );
 			sendErrorResponse( MessageType_ErrorResponse, ResultId_OutOfMemory );
 			return;
 		}

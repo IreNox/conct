@@ -145,8 +145,8 @@ namespace conct
 	struct SetPropertyRequest
 	{
 		InstanceId				instanceId;
-		Value					value;
 		uint16					nameCrc;
+		Value					value;
 	};
 
 	struct CallFunctionRequest

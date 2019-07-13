@@ -3,5 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="conct.DevicePage"
              Title="Device">
-	<StackLayout x:Name="BaseLayout" />
+	<ScrollView>
+		<StackLayout x:Name="BaseLayout" />
+	</ScrollView>
 </ContentPage>

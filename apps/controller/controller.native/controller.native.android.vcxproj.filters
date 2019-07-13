@@ -97,32 +97,11 @@
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_router.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_struct_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_type_collection.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_xml_helper.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_array_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_interface_type.cpp">
-      <Filter>libraries\conct_types</Filter>
-    </ClCompile>
     <ClCompile Include="gen\core_device_proxy.cpp">
       <Filter>gen</Filter>
     </ClCompile>
     <ClCompile Include="gen\device_interface.cpp">
       <Filter>gen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libraries\conct_types\conct_types_c.cpp">
-      <Filter>libraries\conct_types</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
@@ -131,6 +110,30 @@
     <ClCompile Include="device_controller.cpp" />
     <ClCompile Include="gen\core_router_proxy.cpp">
       <Filter>gen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_type.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_type_collection.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_types_c.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_xml_helper.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_array_type.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_enum_type.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_interface_type.cpp">
+      <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_struct_type.cpp">
+      <Filter>libraries\conct_types</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,32 +281,11 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_router.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_struct_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_type_collection.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_xml_helper.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_array_type.h">
-      <Filter>libraries\conct_types</Filter>
-    </ClInclude>
     <ClInclude Include="gen\core_device_proxy.h">
       <Filter>gen</Filter>
     </ClInclude>
     <ClInclude Include="gen\device_interface.h">
       <Filter>gen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\libraries\conct_types\conct_types_c.h">
-      <Filter>libraries\conct_types</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.h">
       <Filter>libraries\conct_runtime_high</Filter>
@@ -315,6 +297,30 @@
     <ClInclude Include="device_controller.h" />
     <ClInclude Include="gen\core_router_proxy.h">
       <Filter>gen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_struct_type.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_type.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_type_collection.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_types_c.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_xml_helper.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_array_type.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_enum_type.h">
+      <Filter>libraries\conct_types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h">
+      <Filter>libraries\conct_types</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +412,9 @@
     </None>
     <None Include="..\..\..\libraries\conct_runtime_high\conct_value_high.inl">
       <Filter>libraries\conct_runtime_high</Filter>
+    </None>
+    <None Include="..\..\..\libraries\conct_types\conct_xml_helper.inl">
+      <Filter>libraries\conct_types</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -210,6 +210,7 @@
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_runtime_high\conct_value_high.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_array_type.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_types\conct_enum_type.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_interface_type.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_struct_type.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_type.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_runtime_high_c.h" />
     <ClInclude Include="..\..\..\libraries\conct_runtime_high\conct_value_high.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_array_type.h" />
+    <ClInclude Include="..\..\..\libraries\conct_types\conct_enum_type.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_interface_type.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_struct_type.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_type.h" />
@@ -307,6 +309,7 @@
     <None Include="..\..\..\libraries\conct_runtime\conct_value_builder.inl" />
     <None Include="..\..\..\libraries\conct_runtime\conct_value_triats.inl" />
     <None Include="..\..\..\libraries\conct_runtime_high\conct_value_high.inl" />
+    <None Include="..\..\..\libraries\conct_types\conct_xml_helper.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

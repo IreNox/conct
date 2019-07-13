@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hardware name="ATMega328P" runtime="low">
+	<system>arduino</system>
+	<environment>production</environment>
+	<memory>
+		<program>262144</program>
+		<ram>8192</ram>
+		<flash>8192</flash>
+	</memory>
+	<capabilities>
+		<gpio />
+		<spi />
+	</capabilities>
+</hardware>

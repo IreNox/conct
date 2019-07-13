@@ -17,6 +17,7 @@ namespace conct
 		private Command m_command;
 
 		private Value m_value;
+		private Value m_lastValue;
 		private bool m_hasValueChanged;
 
 		public DeviceInstanceProperty(DeviceInstance instance, InterfaceProperty property)
@@ -46,11 +47,12 @@ namespace conct
 					throw new Exception("Value type doesn't match.");
 				}
 
-				if (m_value != null && m_value != value)
+				if (m_lastValue != null && m_lastValue != m_value)
 				{
-					m_value.Dispose();
+					m_lastValue.Dispose();
 				}
 
+				m_lastValue = m_value;
 				m_value = value;
 				startSetCommand();
 			}
@@ -79,7 +81,16 @@ namespace conct
 			}
 			else
 			{
-				// display error
+				if (m_value != null && m_value != m_lastValue)
+				{
+					m_value.Dispose();
+				}
+
+				m_value = m_lastValue;
+				m_lastValue = null;
+				m_hasValueChanged = false;
+
+				// TODO: display error
 			}
 
 			command.Dispose();

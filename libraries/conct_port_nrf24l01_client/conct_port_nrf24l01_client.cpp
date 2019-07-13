@@ -4,7 +4,7 @@
 #include "conct_reader.h"
 #include "conct_writer.h"
 
-#define CONCT_NRF24L01_TRACES CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
+#define CONCT_NRF24L01_TRACES CONCT_ON //CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
 
 #if CONCT_ENABLED( CONCT_NRF24L01_TRACES )
 #	define CONCT_NRF24L01_PRINT			Serial.print
@@ -282,12 +282,16 @@ namespace conct
 			{
 				if( payloadSize != sizeof( AddressProtocolMessageData ) )
 				{
+					CONCT_NRF24L01_PRINTLINE( payloadSize );
+					CONCT_NRF24L01_PRINTLINE( sizeof( AddressProtocolMessageData ) );
+					CONCT_NRF24L01_PRINTLINE( "Receive invalid address message." );
 					return;
 				}
 
 				const AddressProtocolMessageData* pAddressData = (const AddressProtocolMessageData*)&pProtocolHeader[ 1u ];
 				if( pAddressData->requestId != m_requestId )
 				{
+					CONCT_NRF24L01_PRINTLINE( "Receive address message with invalid request id." );
 					return;
 				}
 
@@ -310,6 +314,7 @@ namespace conct
 			{
 				if( payloadSize != sizeof( DepletedProtocolMessageData ) )
 				{
+					CONCT_NRF24L01_PRINTLINE( "Receive invalid depleted message." );
 					return;
 				}
 
@@ -328,6 +333,7 @@ namespace conct
 			{
 				if( payloadSize != sizeof( AcknowledgeProtocolMessageData ) )
 				{
+					CONCT_NRF24L01_PRINTLINE( "Receive invalid ack message." );
 					return;
 				}
 
@@ -348,6 +354,7 @@ namespace conct
 
 		case ProtocolMessageType_Reset:
 			{
+				CONCT_NRF24L01_PRINTLINE( "Receive reset message." );
 				resetConnection();
 			}
 			break;

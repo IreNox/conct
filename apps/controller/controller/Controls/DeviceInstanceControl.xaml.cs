@@ -175,10 +175,12 @@ namespace conct
 				}
 
 				control.IsEnabled = false;
+				control.Margin = new Thickness(0.0, 0.0, 5.0, 0.0 );
 
 				Label nameLabel = new Label()
 				{
-					Text = property.Property.Name
+					Text = property.Property.Name,
+					Margin = new Thickness(5.0, 0.0, 0.0, 0.0)
 				};
 
 				gridLayout.Children.Add(nameLabel, 0, row);

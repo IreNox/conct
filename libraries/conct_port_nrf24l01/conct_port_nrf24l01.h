@@ -63,6 +63,7 @@ namespace conct
 			uint32				requestId;
 			uint8				radioIndex;
 			uint8				pipeIndex;
+			uint16				_pad;
 		};
 
 		struct DepletedProtocolMessageData

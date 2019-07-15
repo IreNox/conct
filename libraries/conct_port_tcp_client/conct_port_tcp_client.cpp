@@ -26,10 +26,12 @@ namespace conct
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 	static const int ErrorWouldBlock = WSAEWOULDBLOCK;
+	static const int ErrorAgain = WSAEWOULDBLOCK;
 	static const int ErrorAlreadyInProgress = WSAEALREADY;
 	static const int ErrorAlreadyConnected = WSAEISCONN;
 #else
 	static const int ErrorWouldBlock = EWOULDBLOCK;
+	static const int ErrorAgain = EAGAIN;
 	static const int ErrorAlreadyInProgress = EALREADY;
 	static const int ErrorAlreadyConnected = EISCONN;
 #endif
@@ -247,7 +249,8 @@ namespace conct
 			if( receivedBytes < 0 )
 			{
 				const int error = getLastError();
-				if( error != EWOULDBLOCK )
+				if( error == ErrorWouldBlock ||
+					error == ErrorAgain )
 				{
 					break;
 				}

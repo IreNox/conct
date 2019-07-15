@@ -49,6 +49,7 @@
     <Compile Include="Runtime\Device.cs" />
     <Compile Include="Runtime\DeviceAddress.cs" />
     <Compile Include="Runtime\DeviceAddressNative.cs" />
+    <Compile Include="Runtime\DeviceConnection.cs" />
     <Compile Include="Runtime\DeviceNative.cs" />
     <Compile Include="Runtime\Instance.cs" />
     <Compile Include="Runtime\Value.cs" />

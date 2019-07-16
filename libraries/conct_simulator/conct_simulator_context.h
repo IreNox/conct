@@ -7,6 +7,7 @@
 
 namespace conct
 {
+	class DynamicMemory;
 	class SimulatorDeviceContext;
 
 	class SimulatorContext
@@ -15,6 +16,8 @@ namespace conct
 
 								SimulatorContext();
 								~SimulatorContext();
+
+		DynamicMemory*			getDynamicMemory();
 
 		SimulatorDeviceContext*	registerDevice( uintreg deviceId );
 		SimulatorDeviceContext*	getDevice( uintreg deviceId );
@@ -27,6 +30,8 @@ namespace conct
 		typedef Map< uintreg, SimulatorDeviceContext* > DeviceMap;
 
 		ThreadLocalStorageHandle	m_threadDevices;
+
+		DynamicMemory*				m_pMemory;
 
 		Mutex						m_mutex;
 		DeviceMap					m_devices;

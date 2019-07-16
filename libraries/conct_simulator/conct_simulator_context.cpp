@@ -1,12 +1,14 @@
 #include "conct_simulator_context.h"
 
+#include "conct_dynamic_memory.h"
 #include "conct_simulator_device_context.h"
 
 namespace conct
 {
 	SimulatorContext::SimulatorContext()
 	{
-		m_threadDevices = thread_local_storage::create();
+		m_threadDevices	= thread_local_storage::create();
+		m_pMemory		= memory::getDynamicMemory();
 	}
 
 	SimulatorContext::~SimulatorContext()
@@ -17,6 +19,11 @@ namespace conct
 		}
 
 		thread_local_storage::destroy( m_threadDevices );
+	}
+
+	DynamicMemory* SimulatorContext::getDynamicMemory()
+	{
+		return m_pMemory;
 	}
 
 	SimulatorDeviceContext* SimulatorContext::registerDevice( uintreg deviceId )

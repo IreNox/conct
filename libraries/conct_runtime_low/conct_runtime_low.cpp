@@ -10,11 +10,11 @@
 #include "conct_runtime.h"
 #include "conct_writer.h"
 
-#include <arduino.h>
-
-#define CONCT_RUNTIME_TRACES CONCT_ON
+#define CONCT_RUNTIME_TRACES CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
 
 #if CONCT_ENABLED( CONCT_RUNTIME_TRACES )
+#	include <arduino.h>
+
 #	define CONCT_RUNTIME_PRINT			Serial.print
 #	define CONCT_RUNTIME_PRINTLINE		Serial.println
 #else

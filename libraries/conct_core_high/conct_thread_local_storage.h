@@ -6,8 +6,10 @@ namespace conct
 {
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 	typedef uint32 ThreadLocalStorageHandle;
+	static const ThreadLocalStorageHandle InvalidThreadLocalStorageHandle = 0xffffffffu;
 #elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
-	typedef sint32 ThreadLocalStorageHandle;
+	typedef unsigned int ThreadLocalStorageHandle;
+	static const ThreadLocalStorageHandle InvalidThreadLocalStorageHandle = 0u;
 #endif
 
 	namespace thread_local_storage

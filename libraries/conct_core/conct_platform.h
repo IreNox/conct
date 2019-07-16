@@ -17,6 +17,9 @@
 #		define CONCT_POINTER_32			CONCT_ON
 #		define CONCT_REGISTER_32		CONCT_ON
 #	endif
+#	if defined( _WINDLL )
+#		define CONCT_TARGET_DLL			CONCT_ON
+#	endif
 #	define CONCT_HAS_BREAK				CONCT_ON
 #else
 #	define CONCT_PLATFORM_WINDOWS		CONCT_OFF
@@ -161,6 +164,10 @@
 
 #if !defined( CONCT_HAS_BREAK )
 #	define CONCT_HAS_BREAK				CONCT_OFF
+#endif
+
+#if !defined( CONCT_TARGET_DLL )
+#	define CONCT_TARGET_DLL				CONCT_OFF
 #endif
 
 #define CONCT_DEBUG						CONCT_ON

@@ -51,6 +51,12 @@
     <Filter Include="libraries\conct_simulator">
       <UniqueIdentifier>{4a7dd8a2-b4c8-4d0a-8160-59f00fbffbc5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{99afc215-5a67-4b7b-b276-38e4747096a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\tlsf">
+      <UniqueIdentifier>{57ce13cb-d78e-420e-876f-2f2c39eee1f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gen\device_interface.h">
@@ -263,6 +269,12 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_atomic.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\third_party\tlsf\tlsf.h">
+      <Filter>third_party\tlsf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gen\device_interface.cpp">
@@ -402,6 +414,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_atomic.cpp">
       <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\third_party\tlsf\tlsf.c">
+      <Filter>third_party\tlsf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

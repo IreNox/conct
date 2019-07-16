@@ -196,6 +196,12 @@
     <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_arduino_interface.h">
       <Filter>libraries\conct_simulator</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\third_party\tlsf\tlsf.h">
+      <Filter>third_party\tlsf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gen\core_router_proxy.cpp">
@@ -327,6 +333,12 @@
     <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.cpp">
       <Filter>libraries\conct_simulator</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\third_party\tlsf\tlsf.c">
+      <Filter>third_party\tlsf</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="device.xml" />
@@ -367,6 +379,12 @@
     </Filter>
     <Filter Include="libraries\conct_simulator">
       <UniqueIdentifier>{88409d0c-6870-44dd-b849-ba3d94f11930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party">
+      <UniqueIdentifier>{ff775ced-4b05-486c-b103-7c73763883fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\tlsf">
+      <UniqueIdentifier>{64b6386b-0090-4772-9736-eef9c6887518}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

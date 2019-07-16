@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_atomic.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_memory.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_mutex.cpp" />
@@ -64,6 +65,7 @@
     <ClCompile Include="..\..\libraries\Crypto\Cipher.cpp" />
     <ClCompile Include="..\..\libraries\Crypto\Crypto.cpp" />
     <ClCompile Include="..\..\third_party\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\..\third_party\tlsf\tlsf.c" />
     <ClCompile Include="sources\console.cpp" />
     <ClCompile Include="sources\console_controller.cpp" />
     <ClCompile Include="sources\console_input.cpp" />
@@ -98,10 +100,12 @@
     <ClInclude Include="..\..\libraries\conct_core_high\conct_atomic.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_memory.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_map.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_mutex.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_pair.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h" />
@@ -139,6 +143,7 @@
     <ClInclude Include="..\..\libraries\Crypto\Cipher.h" />
     <ClInclude Include="..\..\libraries\Crypto\Crypto.h" />
     <ClInclude Include="..\..\third_party\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\..\third_party\tlsf\tlsf.h" />
     <ClInclude Include="devices\shared\i_simulator_context.h" />
     <ClInclude Include="devices\shared\i_simulator_device.h" />
     <ClInclude Include="devices\shared\i_simulator_device_context.h" />

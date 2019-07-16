@@ -50,6 +50,9 @@
     <Filter Include="libraries\conct_port_nrf24l01">
       <UniqueIdentifier>{d663807a-1735-4bc3-a50e-1151d1856b54}</UniqueIdentifier>
     </Filter>
+    <Filter Include="third_party\tlsf">
+      <UniqueIdentifier>{780ffdb5-0181-4633-9326-b6997600c757}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="raspberry_pi_router-Debug.vgdbsettings">
@@ -124,21 +127,21 @@
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_value_high.cpp">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
+    <None Include="..\..\libraries\conct_core_high\conct_map.inl">
       <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
+    </None>
+    <None Include="..\..\libraries\conct_core_high\conct_queue.inl">
       <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp">
+    </None>
+    <None Include="..\..\libraries\conct_core_high\conct_unsorted_set.inl">
       <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp">
+    </None>
+    <None Include="..\..\libraries\conct_core_high\conct_vector.inl">
       <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp">
+    </None>
+    <None Include="..\..\libraries\conct_core_high\conct_atomic.inl">
       <Filter>libraries\conct_core_high</Filter>
-    </ClCompile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libraries\conct_core\conct_ascii.h">
@@ -240,33 +243,6 @@
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_value_high.h">
       <Filter>libraries\conct_runtime_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
     <ClInclude Include="gen\core_device_proxy.h">
       <Filter>gen</Filter>
     </ClInclude>
@@ -275,9 +251,6 @@
     </ClInclude>
     <ClInclude Include="gen\device_interface.h">
       <Filter>gen</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h">
-      <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
     <ClInclude Include="device_raspi_router.h">
       <Filter>project</Filter>
@@ -317,6 +290,57 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.h">
       <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_memory.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_map.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_mutex.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_pair.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_thread_local_storage.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_atomic.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\tlsf\tlsf.h">
+      <Filter>third_party\tlsf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -365,15 +389,6 @@
     <None Include="..\..\libraries\conct_runtime_high\conct_value_high.inl">
       <Filter>libraries\conct_runtime_high</Filter>
     </None>
-    <None Include="..\..\libraries\conct_core_high\conct_queue.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
-    <None Include="..\..\libraries\conct_core_high\conct_unsorted_set.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
-    <None Include="..\..\libraries\conct_core_high\conct_vector.inl">
-      <Filter>libraries\conct_core_high</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -387,9 +402,6 @@
     </ClCompile>
     <ClCompile Include="gen\device_interface.cpp">
       <Filter>gen</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp">
-      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
     <ClCompile Include="device_raspi_router.cpp">
       <Filter>project</Filter>
@@ -411,6 +423,39 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_port_nrf24l01\conct_port_nrf24l01.cpp">
       <Filter>libraries\conct_port_nrf24l01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_mutex.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_thread_local_storage.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_atomic.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_memory.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\tlsf\tlsf.c">
+      <Filter>third_party\tlsf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

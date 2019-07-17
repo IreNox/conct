@@ -10,7 +10,7 @@
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
 #	include <stdlib.h>
 #	include <sys/mman.h>
 #	include <unistd.h>
@@ -82,7 +82,7 @@ namespace conct
 		SYSTEM_INFO systemInfo;
 		GetSystemInfo( &systemInfo );
 		m_pageSize = systemInfo.dwPageSize;
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
 		m_pageSize = sysconf( _SC_PAGE_SIZE );
 #else
 #	error "Platform not supported"
@@ -271,12 +271,12 @@ namespace conct
 	}
 }
 
-void* operator new(size_t size)
+void* operator new( size_t size )
 {
 	return conct::memory::allocateMemory( size );
 }
 
-void operator delete(void* pAddress)
+void operator delete( void* pAddress ) throw()
 {
 	conct::memory::freeMemory( pAddress );
 }
@@ -286,7 +286,7 @@ void* operator new[]( size_t size )
 	return conct::memory::allocateMemory( size );
 }
 
-void operator delete[]( void* pAddress )
+void operator delete[]( void* pAddress ) throw()
 {
 	conct::memory::freeMemory( pAddress );
 }

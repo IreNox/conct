@@ -16,7 +16,7 @@
 #	include <unistd.h>
 #endif
 
-#if CONCT_ENABLED( CONCT_TARGET_DLL )
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) && CONCT_ENABLED( CONCT_TARGET_DLL )
 #	include "conct_simulator.h"
 #	include "conct_simulator_context.h"
 #endif
@@ -68,13 +68,13 @@ namespace conct
 	};
 
 	static const uintptr s_defaultPoolSize = 100u * 1024u; // 100 kib
-#if CONCT_ENABLED( CONCT_TARGET_DLL )
+
+#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) && CONCT_ENABLED( CONCT_TARGET_DLL )
 	static DynamicMemory* s_pDynamicMemory = getSimulatorContext().getDynamicMemory();
 #else
 	static DynamicMemory s_dynamicMemory;
 	static DynamicMemory* s_pDynamicMemory = &s_dynamicMemory;
 #endif
-
 
 	DynamicMemory::DynamicMemory()
 	{

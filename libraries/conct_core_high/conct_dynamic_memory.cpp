@@ -33,6 +33,11 @@ namespace conct
 		void*	allocateMemory( uintptr size, uintptr alignment /*= 0u */ );
 		void	freeMemory( void* pAddress );
 
+		void	beginThreadAllocator( uintptr size );
+		void	protectThreadAllocator();
+		void	unprotectThreadAllocator();
+		void	endThreadAllocator();
+
 	private:
 
 		struct Pool
@@ -45,6 +50,8 @@ namespace conct
 
 		struct Allocator
 		{
+			Allocator*					pNext;
+
 			tlsf_t						tlsf;
 			Pool*						pCurrentPool;
 
@@ -61,8 +68,11 @@ namespace conct
 
 		Mutex						m_mutex;
 		Allocator*					m_pDefaultAllocator;
+		Allocator*					m_pFirstPreviousAllocator;
 
 		Allocator*					createAllocator( uintptr size );
+		void						destroyAllocator( Allocator* pAllocator );
+
 		void*						allocateFromAllocator( Allocator* pAllocator, uintptr size, uintptr alignment );
 		void						freeFromAllocator( Allocator* pAllocator, void* pAddress );
 	};
@@ -94,11 +104,22 @@ namespace conct
 
 	DynamicMemory::~DynamicMemory()
 	{
+		destroyAllocator( m_pDefaultAllocator );
+
+		Allocator* pNextAllocator = nullptr;
+		for( Allocator* pAllocator = nullptr; pAllocator != nullptr; pAllocator = pNextAllocator )
+		{
+			pNextAllocator = pAllocator->pNext;
+			destroyAllocator( pAllocator );
+		}
+
 		thread_local_storage::destroy( m_allocatorTls );
 	}
 
 	void* DynamicMemory::allocateMemory( uintptr size, uintptr alignment /*= 0u */ )
 	{
+		CONCT_ASSERT( alignment <= m_pageSize );
+
 		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
 		if( pAllocator != nullptr )
 		{
@@ -130,6 +151,57 @@ namespace conct
 		}
 	}
 
+	void DynamicMemory::beginThreadAllocator( uintptr size )
+	{
+		Allocator* pAllocator = createAllocator( size );
+		thread_local_storage::setValue( m_allocatorTls, (uintptr)pAllocator );
+	}
+
+	void DynamicMemory::protectThreadAllocator()
+	{
+		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
+		CONCT_ASSERT( pAllocator != nullptr );
+
+		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
+		{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+			VirtualProtect( pPool, pPool->size, PAGE_READONLY, nullptr );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+			mprotect( pPool, pPool->size, PROT_READ );
+#else
+#	error "Platform not supported"
+#endif
+		}
+	}
+
+	void DynamicMemory::unprotectThreadAllocator()
+	{
+		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
+		CONCT_ASSERT( pAllocator != nullptr );
+
+		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
+		{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+			VirtualProtect( pPool, pPool->size, PAGE_READWRITE, nullptr );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+			mprotect( pPool, pPool->size, PROT_READ | PROT_WRITE );
+#else
+#	error "Platform not supported"
+#endif
+		}
+	}
+
+	void DynamicMemory::endThreadAllocator()
+	{
+		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
+		CONCT_ASSERT( pAllocator != nullptr );
+
+		pAllocator->pNext = m_pFirstPreviousAllocator;
+		m_pFirstPreviousAllocator = pAllocator;
+
+		thread_local_storage::setValue( m_allocatorTls, 0u );
+	}
+
 	DynamicMemory::Allocator* DynamicMemory::createAllocator( uintptr size )
 	{
 		const uintptr allocatorSize	= alignValue( sizeof( Allocator ) + tlsf_size() + sizeof( Pool ) + tlsf_pool_overhead() + size, m_pageSize );
@@ -157,6 +229,18 @@ namespace conct
 		pPool->pool					= tlsf_add_pool( pAllocator->tlsf, pPoolData, poolSize );
 
 		return pAllocator;
+	}
+
+	void DynamicMemory::destroyAllocator( Allocator* pAllocator )
+	{
+		Pool* pNextPool = nullptr;
+		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pNextPool )
+		{
+			pNextPool = pPool->pPrevious;
+
+			tlsf_remove_pool( pAllocator->tlsf, pPool->pool );
+			memory::freeSystemMemory( pPool );
+		}
 	}
 
 	void* DynamicMemory::allocateFromAllocator( Allocator* pAllocator, uintptr size, uintptr alignment )
@@ -216,7 +300,7 @@ namespace conct
 	void* memory::allocateSystemMemory( uintptr size, uintptr alignment )
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		return _aligned_malloc( size, alignment );
+		return VirtualAlloc( nullptr, size, MEM_COMMIT, PAGE_READWRITE );
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		void* pAddress;
 		if( posix_memalign( &pAddress, alignment, size ) != 0 )
@@ -232,7 +316,7 @@ namespace conct
 	void memory::freeSystemMemory( void* pAddress )
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		_aligned_free( pAddress );
+		VirtualFree( pAddress, 0u, MEM_RELEASE );
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		free( pAddress );
 #else
@@ -242,27 +326,27 @@ namespace conct
 
 	void memory::beginThreadAllocator( uintptr size )
 	{
-
+		s_pDynamicMemory->beginThreadAllocator( size );
 	}
 
 	void memory::protectThreadAllocator()
 	{
-		//mprotect( m_name.getBegin(), int( m_name.getLength() ), PROT_READ );
+		s_pDynamicMemory->protectThreadAllocator();
 	}
 
 	void memory::unprotectThreadAllocator()
 	{
-
+		s_pDynamicMemory->unprotectThreadAllocator();
 	}
 
 	void memory::endThreadAllocator()
 	{
-
+		s_pDynamicMemory->endThreadAllocator();
 	}
 
-	void* memory::allocateMemory( uintptr size, uintptr allignment /*= 0u */ )
+	void* memory::allocateMemory( uintptr size, uintptr alignment /*= 0u */ )
 	{
-		return s_pDynamicMemory->allocateMemory( size, allignment );
+		return s_pDynamicMemory->allocateMemory( size, alignment );
 	}
 
 	void memory::freeMemory( void* pAddress )

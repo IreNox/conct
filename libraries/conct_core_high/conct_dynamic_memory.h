@@ -14,9 +14,8 @@ namespace conct
 		void			freeSystemMemory( void* pAddress );
 
 		void			beginThreadAllocator( uintptr size );
-		void			protectThreadAllocator();
-		void			unprotectThreadAllocator();
 		void			endThreadAllocator();
+		void			endAndProtectThreadAllocator();
 
 		void*			allocateMemory( uintptr size, uintptr alignment = 0u );
 		void			freeMemory( void* pAddress );

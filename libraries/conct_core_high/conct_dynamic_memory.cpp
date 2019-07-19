@@ -34,9 +34,8 @@ namespace conct
 		void	freeMemory( void* pAddress );
 
 		void	beginThreadAllocator( uintptr size );
-		void	protectThreadAllocator();
-		void	unprotectThreadAllocator();
 		void	endThreadAllocator();
+		void	endAndProtectThreadAllocator();
 
 	private:
 
@@ -107,7 +106,7 @@ namespace conct
 		destroyAllocator( m_pDefaultAllocator );
 
 		Allocator* pNextAllocator = nullptr;
-		for( Allocator* pAllocator = nullptr; pAllocator != nullptr; pAllocator = pNextAllocator )
+		for( Allocator* pAllocator = m_pFirstPreviousAllocator; pAllocator != nullptr; pAllocator = pNextAllocator )
 		{
 			pNextAllocator = pAllocator->pNext;
 			destroyAllocator( pAllocator );
@@ -157,10 +156,24 @@ namespace conct
 		thread_local_storage::setValue( m_allocatorTls, (uintptr)pAllocator );
 	}
 
-	void DynamicMemory::protectThreadAllocator()
+	void DynamicMemory::endThreadAllocator()
 	{
 		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
 		CONCT_ASSERT( pAllocator != nullptr );
+
+		pAllocator->pNext = m_pFirstPreviousAllocator;
+		m_pFirstPreviousAllocator = pAllocator;
+
+		thread_local_storage::setValue( m_allocatorTls, 0u );
+	}
+
+	void DynamicMemory::endAndProtectThreadAllocator()
+	{
+		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
+		CONCT_ASSERT( pAllocator != nullptr );
+
+		pAllocator->pNext = m_pFirstPreviousAllocator;
+		m_pFirstPreviousAllocator = pAllocator;
 
 		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
 		{
@@ -172,32 +185,6 @@ namespace conct
 #	error "Platform not supported"
 #endif
 		}
-	}
-
-	void DynamicMemory::unprotectThreadAllocator()
-	{
-		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
-		CONCT_ASSERT( pAllocator != nullptr );
-
-		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
-		{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-			VirtualProtect( pPool, pPool->size, PAGE_READWRITE, nullptr );
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
-			mprotect( pPool, pPool->size, PROT_READ | PROT_WRITE );
-#else
-#	error "Platform not supported"
-#endif
-		}
-	}
-
-	void DynamicMemory::endThreadAllocator()
-	{
-		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
-		CONCT_ASSERT( pAllocator != nullptr );
-
-		pAllocator->pNext = m_pFirstPreviousAllocator;
-		m_pFirstPreviousAllocator = pAllocator;
 
 		thread_local_storage::setValue( m_allocatorTls, 0u );
 	}
@@ -329,19 +316,14 @@ namespace conct
 		s_pDynamicMemory->beginThreadAllocator( size );
 	}
 
-	void memory::protectThreadAllocator()
-	{
-		s_pDynamicMemory->protectThreadAllocator();
-	}
-
-	void memory::unprotectThreadAllocator()
-	{
-		s_pDynamicMemory->unprotectThreadAllocator();
-	}
-
 	void memory::endThreadAllocator()
 	{
 		s_pDynamicMemory->endThreadAllocator();
+	}
+
+	void memory::endAndProtectThreadAllocator()
+	{
+		s_pDynamicMemory->endAndProtectThreadAllocator();
 	}
 
 	void* memory::allocateMemory( uintptr size, uintptr alignment /*= 0u */ )

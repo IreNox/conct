@@ -188,6 +188,7 @@
     <ClCompile Include="..\..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core_high\conct_atomic.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
+    <ClCompile Include="..\..\..\libraries\conct_core_high\conct_dynamic_memory.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core_high\conct_filesystem.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_core_high\conct_mutex.cpp" />
@@ -218,6 +219,7 @@
     <ClCompile Include="..\..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\..\libraries\conct_types\conct_xml_helper.cpp" />
     <ClCompile Include="..\..\..\third_party\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\..\..\third_party\tlsf\tlsf.c" />
     <ClCompile Include="device_c.cpp" />
     <ClCompile Include="device_controller.cpp" />
     <ClCompile Include="gen\core_device_proxy.cpp" />
@@ -248,10 +250,12 @@
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_atomic.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_core_high.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_directory_iterator.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_dynamic_memory.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_dynamic_string.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_filesystem.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_map.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_mutex.h" />
+    <ClInclude Include="..\..\..\libraries\conct_core_high\conct_pair.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\..\libraries\conct_core_high\conct_string_tools.h" />
@@ -283,6 +287,7 @@
     <ClInclude Include="..\..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\..\libraries\conct_types\conct_xml_helper.h" />
     <ClInclude Include="..\..\..\third_party\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\..\..\third_party\tlsf\tlsf.h" />
     <ClInclude Include="device_c.h" />
     <ClInclude Include="device_controller.h" />
     <ClInclude Include="gen\core_device_proxy.h" />

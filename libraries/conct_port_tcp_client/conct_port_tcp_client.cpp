@@ -56,22 +56,19 @@ namespace conct
 		}
 		else
 		{
-			//LPTSTR p = _tcschr( s, _T( '\r' ) );
-			//if( p != NULL )
-			//{ /* lose CRLF */
-			//	*p = _T( '\0' );
-			//} /* lose CRLF */
+			const uintreg length = wcslen( pString );
 
-			DynamicString test;
-			LPTSTR pCurrentChar = pString;
-			while( *pCurrentChar != 0 )
+			DynamicString errorName;
+			errorName.reserve( length );
+			errorName.terminate( length );
+
+			for( uintreg i = 0u; i < length; ++i )
 			{
-				test.pushBack( char( *pCurrentChar ) );
-				pCurrentChar++;
+				errorName[ i ] = char( pString[ i ] );
 			}
 
 			LocalFree( pString );
-			return test;
+			return errorName;
 		}
 	}
 #else

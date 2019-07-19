@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <device name="ControllerSimulator" hardware="SimulatorHigh">
 	<ports>
-		<port index="0" type="TCP-Client" />
+		<port index="0" type="TCP-Client">
+			<parameters>
+				<!--parameter name="serverHost" value="2a02:810b:4c0:53b8:b0cc:1e20:aace:3da7" /-->
+				<parameter name="serverHost" value="::1" />
+			</parameters>
+		</port>
 	</ports>
 </device>

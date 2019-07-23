@@ -216,7 +216,6 @@
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
-    <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -229,7 +228,6 @@
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
-    <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -242,7 +240,6 @@
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
-    <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -255,7 +252,6 @@
     <Import Project="..\..\..\..\config\target_pathes.props" />
     <Import Project="..\..\..\..\config\generator.props" />
     <Import Project="..\..\..\..\config\include_crypto.props" />
-    <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />

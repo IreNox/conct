@@ -16,6 +16,8 @@
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 #	include "conct_crypto_random.h"
+
+#	include <Curve25519.h>
 #endif
 
 namespace conct
@@ -213,24 +215,6 @@ namespace conct
 
 	void RuntimeHigh::processPackage( PortData& portData, ReceivedPackage& package )
 	{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		DeviceData* pDevice = m_devices.find( package.deviceId );
-		if( pDevice == nullptr )
-		{
-			trace::write( "Received 'CryptoHandshake' from unknown Device." );
-			return;
-		}
-
-		if( pDevice->cryptoState == CryptoState_Encrypted )
-		{
-			m_crypto.setKey( pDevice->cryptoKey.data, sizeof( pDevice->cryptoKey.data ) );
-			m_crypto.setCounter( pDevice->cryptoCounter.data, sizeof( pDevice->cryptoCounter.data ) );
-			m_crypto.setIV( package.baseHeader.cryptoIV.data, sizeof( package.baseHeader.cryptoIV.data ) );
-
-			m_crypto.decrypt( package.payload.getData(), package.payload.getData(), package.payload.getLength() );
-		}
-#endif
-
 		Command* pCommand = nullptr;
 		if( package.baseHeader.commandId != InvalidCommandId &&
 			( package.baseHeader.messageType == MessageType_GetPropertyResponse ||
@@ -364,82 +348,29 @@ namespace conct
 			break;
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		case MessageType_CryptoHandshakeRequest:
+		case MessageType_CryptoHandshake:
 			{
-				const CryptoHandshakeRequest& request = *(const CryptoHandshakeRequest*)package.payload.getData();
-
-				CryptoHandshakeResponse cryptoHandshakeResponse;
-				cryptoHandshakeResponse.serialNumber	= m_pDevice->getSerialNumber();
-				cryptoHandshakeResponse.keyHash			= 0u;
-
-				const RuntimeHighStoredDevice* pStoredDevice = m_storedDevices.find( request.serialNumber );
-				if( pStoredDevice == nullptr )
+				DeviceData* pDevice = m_devices.find( package.deviceId );
+				if( pDevice == nullptr )
 				{
-					cryptoHandshakeResponse.keyHash = pStoredDevice->hash;
-				}
-
-				const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeResponse, sizeof( cryptoHandshakeResponse ) );
-				sendResponse( package, payload, MessageType_CryptoHandshakeResponse );
-
-				if( pStoredDevice != nullptr )
-				{
-					pDevice->cryptoState	= CryptoState_Encrypted;
-					pDevice->cryptoKey		= pStoredDevice->key;
-					pDevice->cryptoCounter	= pStoredDevice->counter;
-				}
-			}
-			break;
-
-		case MessageType_CryptoHandshakeResponse:
-			{
-				const CryptoHandshakeResponse& response = *(const CryptoHandshakeResponse*)package.payload.getData();
-
-				const RuntimeHighStoredDevice* pStoredDevice = m_storedDevices.find( response.serialNumber );
-				if( pStoredDevice != nullptr &&
-					pStoredDevice->hash == response.keyHash )
-				{
-					pDevice->cryptoState	= CryptoState_Encrypted;
-					pDevice->cryptoKey		= pStoredDevice->key;
-					pDevice->cryptoCounter	= pStoredDevice->counter;
+					trace::write( "Received package from unknown Device." );
 					return;
 				}
 
-				RuntimeHighStoredDevice storedDevice;
-				storedDevice.serialNumber = response.serialNumber;
-				crypto::calculateRandomBytes( storedDevice.key.data, sizeof( storedDevice.key.data ) );
-				crypto::calculateRandomBytes( storedDevice.counter.data, sizeof( storedDevice.counter.data ) );
-				storedDevice.hash = calculateCrc16( storedDevice.key.data, sizeof( storedDevice.key ) + sizeof( storedDevice.counter ) );
-				m_storedDevices.insert( storedDevice.serialNumber, storedDevice );
-
-				CryptoAssingKeyRequest cryptoAssingKeyRequest;
-				cryptoAssingKeyRequest.key		= storedDevice.key;
-				cryptoAssingKeyRequest.counter	= storedDevice.counter;
-
-				const ArrayView< uint8 > payload( (const uint8*)&cryptoAssingKeyRequest, sizeof( cryptoAssingKeyRequest ) );
-				sendResponse( package, payload, MessageType_CryptoAssignKeyRequest );
-			}
-			break;
-
-		case MessageType_CryptoAssignKeyRequest:
-			{
-				const CryptoAssingKeyRequest& request = *(const CryptoAssingKeyRequest*)package.payload.getData();
-
-				if( pDevice->cryptoState == CryptoState_Encrypted )
+				if( pDevice->status != DeviceStatus_AwaitCryptoKey )
 				{
-					sendErrorResponse( package, MessageType_CryptoHandshakeResponse, ResultId_PermissionDenied );
+					trace::write( "Receive duplicate 'CryptoHandshake'" );
 					return;
 				}
 
-				CryptoHandshakeResponse cryptoHandshakeResponse;
-				cryptoHandshakeResponse.serialNumber	= m_pDevice->getSerialNumber();
-				cryptoHandshakeResponse.keyHash			= calculateCrc16( request.key.data, sizeof( request.key ) + sizeof( request.counter ) );
+				CryptoHandshake cryptoHandshake = *(const CryptoHandshake*)package.payload.getData();
+				if( !Curve25519::dh2( cryptoHandshake.publicKey.data, pDevice->cryptoKey.data ) )
+				{
+					trace::write( "Crypto handshake failed!" );
+				}
 
-				const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeResponse, sizeof( cryptoHandshakeResponse ) );
-				sendResponse( package, payload, MessageType_CryptoHandshakeResponse );
-
-				pDevice->cryptoState	= CryptoState_Encrypted;
-				pDevice->cryptoKey		= request.key;
-				pDevice->cryptoCounter	= request.counter;
+				pDevice->cryptoKey	= cryptoHandshake.publicKey;
+				pDevice->status		= DeviceStatus_Unknown;
 			}
 			break;
 #endif
@@ -448,31 +379,6 @@ namespace conct
 			break;
 		}
 	}
-
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-	void RuntimeHigh::loadDeviceDatabase()
-	{
-		const Result< Vector< uint8 > > databaseResult = filesystem::readBinaryFile( Path( "database.bin" ) );
-		if( databaseResult.isFailure() )
-		{
-			trace::write( "Failed to load device database." );
-			return;
-		}
-
-		const Vector< uint8 > databaseBlob = databaseResult.value;
-		const RuntimeHighDeviceDatabase& database = *(const RuntimeHighDeviceDatabase*)databaseBlob.getBegin();
-		for( uintreg i = 0u; i < database.deviceCount; ++i )
-		{
-			const RuntimeHighStoredDevice& device = database.devices[ i ];
-			m_storedDevices.insert( device.serialNumber, device );
-		}
-	}
-
-	void RuntimeHigh::generateAndSendNewKey( DeviceId deviceId, DeviceData* pDevice )
-	{
-
-	}
-#endif
 
 	DeviceId RuntimeHigh::addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId )
 	{
@@ -490,27 +396,37 @@ namespace conct
 		deviceData.ownDeviceId		= ownDeviceId;
 		deviceData.pTargetPort		= pPort;
 		deviceData.status			= DeviceStatus_Unknown;
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		deviceData.cryptoState		= CryptoState_Unencrypted;
-#endif
 
 		portData.endpointToDevice[ endpointId ] = deviceId;
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		{
-			CryptoHandshakeRequest cryptoHandshakeRequest;
-			cryptoHandshakeRequest.serialNumber = m_pDevice->getSerialNumber();
+			deviceData.status = DeviceStatus_AwaitCryptoKey;
+
+			CryptoHandshake cryptoHandshake;
+			Curve25519::dh1( cryptoHandshake.publicKey.data, deviceData.cryptoKey.data );
 
 			DeviceAddress deviceAddress;
 			deviceAddress.address[ 0u ] = deviceId;
 			deviceAddress.address[ 1u ] = InvalidDeviceId;
 
-			const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshakeRequest, sizeof( cryptoHandshakeRequest ) );
-			sendPackage( deviceAddress, payload, InvalidCommandId, MessageType_CryptoHandshakeRequest, ResultId_Success );
+			const ArrayView< uint8 > payload( (const uint8*)&cryptoHandshake, sizeof( cryptoHandshake ) );
+			sendPackage( deviceAddress, payload, InvalidCommandId, MessageType_CryptoHandshake, ResultId_Success );
 		}
 #endif
 
 		return deviceId;
+	}
+
+	RuntimeHigh::DeviceData* RuntimeHigh::findDevice( PortData& portData, uintreg endpointId )
+	{
+		const DeviceId* pDeviceId = portData.endpointToDevice.find( endpointId );
+		if( pDeviceId == nullptr )
+		{
+			return nullptr;
+		}
+
+		return m_devices.find( *pDeviceId );
 	}
 
 	void RuntimeHigh::readPort( Port* pPort, PortData& portData )
@@ -526,27 +442,41 @@ namespace conct
 
 	void RuntimeHigh::readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId )
 	{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		const DeviceData* pDevice = findDevice( portData, endpointId );
+		const bool encrypted = (pDevice != nullptr && pDevice->status != DeviceStatus_AwaitCryptoKey);
+#else
+		const bool encrypted = false;
+#endif
+
 		PendingReceivedPackage& package = portData.pendingPackages[ endpointId ];
 		while( !reader.isEnd() )
 		{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			if( package.state == PackageState_ReadCryptoHeader )
+			{
+				readCryptoHeader( package, reader, pDevice );
+			}
+#endif
+
 			if( package.state == PackageState_ReadBaseHeader )
 			{
-				readBaseHeader( package, reader );
+				readBaseHeader( package, reader, encrypted );
 			}
 
 			if( package.state == PackageState_ReadSourceAddress )
 			{
-				readBytes( package.target.sourceAddress, package, reader, PackageState_ReadDestinationAddress );
+				readBytes( package.target.sourceAddress, package, reader, PackageState_ReadDestinationAddress, encrypted );
 			}
 
 			if( package.state == PackageState_ReadDestinationAddress )
 			{
-				readBytes( package.target.destinationAddress, package, reader, PackageState_ReadPayload );
+				readBytes( package.target.destinationAddress, package, reader, PackageState_ReadPayload, encrypted );
 			}
 
 			if( package.state == PackageState_ReadPayload )
 			{
-				readBytes( package.target.payload, package, reader, PackageState_PushToQueue );
+				readBytes( package.target.payload, package, reader, PackageState_PushToQueue, encrypted );
 			}
 
 			if( package.state == PackageState_PushToQueue )
@@ -556,7 +486,27 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::readBaseHeader( PendingReceivedPackage& package, Reader& reader )
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+	void RuntimeHigh::readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice )
+	{
+		if( pDevice != nullptr && pDevice->status != DeviceStatus_AwaitCryptoKey )
+		{
+			package.data.readBytes.alreadyRead += reader.readStruct( package.target.cryptoHeader, package.data.readBytes.alreadyRead );
+			if( package.data.readBytes.alreadyRead < sizeof( package.target.cryptoHeader ) )
+			{
+				return;
+			}
+
+			m_crypto.setKey( pDevice->cryptoKey.data, sizeof( pDevice->cryptoKey ) );
+			m_crypto.setIV( package.target.cryptoHeader.cryptoIV.data, sizeof( package.target.cryptoHeader.cryptoIV ) );
+			m_crypto.setCounter( package.target.cryptoHeader.cryptoCounter.data, sizeof( package.target.cryptoHeader.cryptoCounter ) );
+		}
+
+		setState( package, PackageState_ReadBaseHeader );
+	}
+#endif
+
+	void RuntimeHigh::readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted )
 	{
 		package.data.readBytes.alreadyRead += reader.readStruct( package.target.baseHeader, package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead < sizeof( package.target.baseHeader ) )
@@ -569,6 +519,14 @@ namespace conct
 			// no answer id
 		}
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( encrypted )
+		{
+			uint8* pBaseHeader = (uint8*)&package.target.baseHeader;
+			m_crypto.decrypt( pBaseHeader, pBaseHeader, sizeof( package.target.baseHeader ) );
+		}
+#endif
+
 		package.target.sourceAddress.setLength( package.target.baseHeader.sourceHops );
 		package.target.destinationAddress.setLength( package.target.baseHeader.destinationHops );
 		package.target.payload.setLength( package.target.baseHeader.payloadSize );
@@ -576,12 +534,19 @@ namespace conct
 		setState( package, PackageState_ReadSourceAddress );
 	}
 
-	void RuntimeHigh::readBytes( Vector<uint8>& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState )
+	void RuntimeHigh::readBytes( Vector<uint8>& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted )
 	{
 		package.data.readBytes.alreadyRead += reader.readData( target.getData(), target.getLength(), package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead == target.getLength() )
 		{
 			setState( package, nextState );
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			if( encrypted )
+			{
+				m_crypto.decrypt( target.getData(), target.getData(), target.getLength() );
+			}
+#endif
 		}
 	}
 
@@ -607,7 +572,7 @@ namespace conct
 
 		portData.receivedPackages.pushBack( package.target );
 
-		setState( package, PackageState_ReadBaseHeader );
+		setState( package, PackageState_First );
 	}
 
 	void RuntimeHigh::writePort( Port* pPort, PortData& portData )
@@ -645,6 +610,9 @@ namespace conct
 
 		switch( state )
 		{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		case PackageState_ReadCryptoHeader:
+#endif
 		case PackageState_ReadBaseHeader:
 		case PackageState_ReadSourceAddress:
 		case PackageState_ReadDestinationAddress:
@@ -701,14 +669,21 @@ namespace conct
 		baseHeader.messageType		= messageType;
 		baseHeader.messageResult	= result;
 
+		const uintreg headerSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops;
+		uintreg packageSize = headerSize + payload.getLength();
+
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		if( pDevice->cryptoState == CryptoState_Encrypted )
+		MessageCryptoHeader cryptoHeader;
+		if( pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
-			crypto::calculateRandomBytes( baseHeader.cryptoIV.data, sizeof( baseHeader.cryptoIV.data ) );
+			crypto::calculateRandomBytes( cryptoHeader.cryptoCounter.data, sizeof( cryptoHeader.cryptoCounter.data ) );
+			crypto::calculateRandomBytes( cryptoHeader.cryptoIV.data, sizeof( cryptoHeader.cryptoIV.data ) );
 
 			m_crypto.setKey( pDevice->cryptoKey.data, sizeof( pDevice->cryptoKey.data ) );
-			m_crypto.setCounter( pDevice->cryptoCounter.data, sizeof( pDevice->cryptoCounter.data ) );
-			m_crypto.setIV( baseHeader.cryptoIV.data, sizeof( baseHeader.cryptoIV.data ) );
+			m_crypto.setIV( cryptoHeader.cryptoIV.data, sizeof( cryptoHeader.cryptoIV.data ) );
+			m_crypto.setCounter( cryptoHeader.cryptoCounter.data, sizeof( cryptoHeader.cryptoCounter.data ) );
+
+			packageSize += sizeof( cryptoHeader );
 		}
 #endif
 
@@ -716,12 +691,18 @@ namespace conct
 		package.targetEndpointId	= pDevice->endpointId;
 		package.currentOffset		= 0u;
 
-		const uintreg headerSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops;
-		const uintreg packageSize = headerSize + payload.getLength();
 		package.data.reserve( packageSize );
 
-		const uint8* pHeaderData = ( const uint8* )&baseHeader;
-		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( pDevice->status != DeviceStatus_AwaitCryptoKey )
+		{
+			const uint8* pCryptoHeaderData = (const uint8*)&cryptoHeader;
+			package.data.pushRange( pCryptoHeaderData, sizeof( cryptoHeader ) );
+		}
+#endif
+
+		const uint8* pBaseHeaderData = ( const uint8* )&baseHeader;
+		package.data.pushRange( pBaseHeaderData, sizeof( baseHeader ) );
 
 		package.data.pushBack( pDevice->ownDeviceId );
 
@@ -733,10 +714,11 @@ namespace conct
 		package.data.pushRange( payload );
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		if( pDevice->cryptoState == CryptoState_Encrypted )
+		if( pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
-			uint8* pPayload = package.data.getData() + headerSize;
-			m_crypto.encrypt( pPayload, pPayload, payload.getLength() );
+			uint8* pPayload = package.data.getData() + sizeof( cryptoHeader );
+			const uintreg payloadSize = packageSize - sizeof( cryptoHeader );
+			m_crypto.encrypt( pPayload, pPayload, payloadSize );
 		}
 #endif
 

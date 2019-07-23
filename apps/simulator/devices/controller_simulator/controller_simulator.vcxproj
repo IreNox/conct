@@ -43,6 +43,7 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_atomic.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_core_high.h" />
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_crypto_random.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h" />
@@ -57,7 +58,6 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_vector.h" />
-    <ClInclude Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_port_tcp_client\conct_port_tcp_client.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.h" />
@@ -77,9 +77,13 @@
     <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.h" />
     <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\BigNumberUtil.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\ChaCha.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Cipher.h" />
     <ClInclude Include="..\..\..\..\libraries\Crypto\Crypto.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Curve25519.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\simulator\RNG.h" />
+    <ClInclude Include="..\..\..\..\libraries\Crypto\utility\LimbUtil.h" />
     <ClInclude Include="..\..\..\..\third_party\tlsf\tlsf.h" />
     <ClInclude Include="controller_simulator.h" />
     <ClInclude Include="device_impl.h" />
@@ -98,6 +102,7 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_atomic.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_crypto_random.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
@@ -107,7 +112,6 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_thread_local_storage.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_trace.cpp" />
-    <ClCompile Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_port_tcp_client\conct_port_tcp_client.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_buffered_value_builder.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_runtime\conct_data_builder.cpp" />
@@ -124,9 +128,12 @@
     <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.cpp" />
     <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_rf24_context.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\Crypto\BigNumberUtil.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\ChaCha.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\Cipher.cpp" />
     <ClCompile Include="..\..\..\..\libraries\Crypto\Crypto.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Curve25519.cpp" />
+    <ClCompile Include="..\..\..\..\libraries\Crypto\simulator\RNG.cpp" />
     <ClCompile Include="..\..\..\..\third_party\tlsf\tlsf.c" />
     <ClCompile Include="controller_simulator.cpp" />
     <ClCompile Include="device_impl.cpp" />
@@ -211,7 +218,6 @@
     <Import Project="..\..\..\..\config\include_crypto.props" />
     <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
-    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -225,7 +231,6 @@
     <Import Project="..\..\..\..\config\include_crypto.props" />
     <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
-    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -239,7 +244,6 @@
     <Import Project="..\..\..\..\config\include_crypto.props" />
     <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
-    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -253,7 +257,6 @@
     <Import Project="..\..\..\..\config\include_crypto.props" />
     <Import Project="..\..\..\..\config\include_crypto_high.props" />
     <Import Project="..\..\..\..\config\include_third_party.props" />
-    <Import Project="..\..\..\..\config\include_simulator.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

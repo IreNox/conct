@@ -178,9 +178,6 @@
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.h">
-      <Filter>libraries\conct_crypto_high</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_simulator\conct_simulator_context.h">
       <Filter>libraries\conct_simulator</Filter>
     </ClInclude>
@@ -200,6 +197,21 @@
       <Filter>third_party\tlsf</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.h">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\BigNumberUtil.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\utility\LimbUtil.h">
+      <Filter>libraries\Crypto\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\simulator\RNG.h">
+      <Filter>libraries\Crypto\simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\Crypto\Curve25519.h">
+      <Filter>libraries\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\libraries\conct_core_high\conct_crypto_random.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
   </ItemGroup>
@@ -321,9 +333,6 @@
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\libraries\conct_crypto_high\conct_crypto_random.cpp">
-      <Filter>libraries\conct_crypto_high</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_simulator\conct_simulator_device_context.cpp">
       <Filter>libraries\conct_simulator</Filter>
     </ClCompile>
@@ -337,6 +346,18 @@
       <Filter>third_party\tlsf</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_dynamic_memory.cpp">
+      <Filter>libraries\conct_core_high</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\BigNumberUtil.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\simulator\RNG.cpp">
+      <Filter>libraries\Crypto\simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\Crypto\Curve25519.cpp">
+      <Filter>libraries\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\libraries\conct_core_high\conct_crypto_random.cpp">
       <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
   </ItemGroup>
@@ -374,9 +395,6 @@
     <Filter Include="libraries\Crypto">
       <UniqueIdentifier>{9b0cf6cb-fd8e-4685-a8f1-8d2e21a07dfe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libraries\conct_crypto_high">
-      <UniqueIdentifier>{8ca7a3ec-2814-4d81-b92d-2b92a6bbfa2a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libraries\conct_simulator">
       <UniqueIdentifier>{88409d0c-6870-44dd-b849-ba3d94f11930}</UniqueIdentifier>
     </Filter>
@@ -385,6 +403,12 @@
     </Filter>
     <Filter Include="third_party\tlsf">
       <UniqueIdentifier>{64b6386b-0090-4772-9736-eef9c6887518}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\Crypto\utility">
+      <UniqueIdentifier>{49e36012-5f98-4362-bce7-056d6989a481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libraries\Crypto\simulator">
+      <UniqueIdentifier>{39bcb1d8-67d5-408e-baae-26afe872c208}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

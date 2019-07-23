@@ -44,11 +44,20 @@ namespace conct
 
 		enum PackageState
 		{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			PackageState_ReadCryptoHeader,
+#endif
 			PackageState_ReadBaseHeader,
 			PackageState_ReadSourceAddress,
 			PackageState_ReadDestinationAddress,
 			PackageState_ReadPayload,
-			PackageState_PushToQueue
+			PackageState_PushToQueue,
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			PackageState_First					= PackageState_ReadCryptoHeader
+#else
+			PackageState_First					= PackageState_ReadBaseHeader
+#endif
 		};
 
 		struct ReceivedPackageReadBytesData
@@ -65,6 +74,9 @@ namespace conct
 		{
 			DeviceId						deviceId;
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			MessageCryptoHeader				cryptoHeader;
+#endif
 			MessageBaseHeader				baseHeader;
 			Vector< DeviceId >				sourceAddress;
 			Vector< DeviceId >				destinationAddress;
@@ -110,9 +122,7 @@ namespace conct
 			CommandId		nextCommandId;
 			CommandMap		commands;
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-			CryptoState		cryptoState;
 			CryptoKey		cryptoKey;
-			CryptoCounter	cryptoCounter;
 #endif
 		};
 
@@ -127,23 +137,22 @@ namespace conct
 		DeviceMap			m_devices;
 		DeviceId			m_nextDeviceId;
 
-		StoredDeviceMap		m_storedDevices;
-
 		CommandQueue		m_finishCommands;
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		ChaCha				m_crypto;
-
-		void				loadDeviceDatabase();
-		void				generateAndSendNewKey( DeviceId deviceId, DeviceData* pDevice );
 #endif
 
 		DeviceId			addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId );
+		DeviceData*			findDevice( PortData& portData, uintreg endpointId );
 
 		void				readPort( Port* pPort, PortData& portData );
 		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );
-		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader );
-		void				readBytes( Vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState );
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		void				readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice );
+#endif
+		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted );
+		void				readBytes( Vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted );
 		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId );
 
 		void				writePort( Port* pPort, PortData& portData );

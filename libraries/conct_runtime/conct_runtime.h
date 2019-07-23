@@ -6,7 +6,7 @@
 #include "conct_value.h"
 #include "conct_result.h"
 
-#define CONCT_RUNTIME_USE_CRYPTO CONCT_OFF
+#define CONCT_RUNTIME_USE_CRYPTO CONCT_ON
 
 namespace conct
 {
@@ -44,6 +44,9 @@ namespace conct
 
 	enum DeviceStatus : uint8
 	{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		DeviceStatus_AwaitCryptoKey,
+#endif
 		DeviceStatus_Unknown,
 		DeviceStatus_Blocked,
 		DeviceStatus_Client,
@@ -59,25 +62,25 @@ namespace conct
 	};
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-	enum CryptoState
-	{
-		CryptoState_Unencrypted,
-		CryptoState_Encrypted
-	};
-
 	struct CryptoKey
 	{
-		uint8	data[ 48u ];
+		uint8					data[ 32u ];
 	};
 
 	struct CryptoCounter
 	{
-		uint8	data[ 8u ];
+		uint8					data[ 8u ];
 	};
 
 	struct CryptoIV
 	{
-		uint8	data[ 8u ];
+		uint8					data[ 8u ];
+	};
+
+	struct MessageCryptoHeader
+	{
+		CryptoIV				cryptoIV;
+		CryptoCounter			cryptoCounter;
 	};
 #endif
 
@@ -97,23 +100,18 @@ namespace conct
 		//MessageType_CallEventHandler,
 		//MessageType_CheckEventHandler,
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		MessageType_CryptoHandshakeRequest,
-		MessageType_CryptoHandshakeResponse,
-		MessageType_CryptoAssignKeyRequest,
+		MessageType_CryptoHandshake
 #endif
 	};
 
 	struct MessageBaseHeader
 	{
-		uint8		sourceHops;
-		uint8		destinationHops;
-		uint16		payloadSize;
-		CommandId	commandId;
-		MessageType	messageType;
-		ResultId	messageResult;
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		CryptoIV	cryptoIV;
-#endif
+		uint8					sourceHops;
+		uint8					destinationHops;
+		uint16					payloadSize;
+		CommandId				commandId;
+		MessageType				messageType;
+		ResultId				messageResult;
 	};
 
 	struct GetInstanceRequest
@@ -162,21 +160,9 @@ namespace conct
 	};
 
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-	struct CryptoHandshakeRequest
+	struct CryptoHandshake
 	{
-		uint32					serialNumber;
-	};
-
-	struct CryptoHandshakeResponse
-	{
-		uint32					serialNumber;
-		uint16					keyHash;
-	};
-
-	struct CryptoAssingKeyRequest
-	{
-		CryptoKey				key;
-		CryptoCounter			counter;
+		CryptoKey				publicKey;
 	};
 #endif
 

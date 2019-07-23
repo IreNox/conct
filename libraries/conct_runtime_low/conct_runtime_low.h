@@ -23,6 +23,9 @@ namespace conct
 
 		enum State : uint8
 		{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			State_ReadCryptoHeader,
+#endif
 			State_ReadBaseHeader,
 			State_ReadAddresses,
 			State_ReadPayload,
@@ -58,6 +61,10 @@ namespace conct
 
 		void						readData( Port* pPort );
 		void						readData( Reader& reader );
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		ReadResult					readCryptoHeader( Reader& reader );
+#endif
 		ReadResult					readBaseHeader( Reader& reader );
 		ReadResult					readAddresses( Reader& reader );
 		ReadResult					readPayload( Reader& reader );

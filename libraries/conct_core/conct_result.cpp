@@ -20,6 +20,7 @@ namespace conct
 			"NoSuchField",
 			"NoSource",
 			"NoDestination",
+			"KeyExchangeFailed",
 		};
 		CONCT_STATIC_ASSERT( CONCT_COUNT( s_aResultIdStrings ) == ResultId_Count );
 

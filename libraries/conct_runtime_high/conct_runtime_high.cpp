@@ -197,8 +197,33 @@ namespace conct
 		package.targetEndpointId	= pTargetDeviceData->endpointId;
 		package.currentOffset		= 0u;
 
-		const uintreg packageSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops + sourcePackage.payload.getLength();
+		const uintreg headerSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops;
+		uintreg packageSize = headerSize + sourcePackage.payload.getLength();
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		MessageCryptoHeader cryptoHeader;
+		if( pTargetDeviceData->status != DeviceStatus_AwaitCryptoKey )
+		{
+			crypto::calculateRandomBytes( cryptoHeader.cryptoCounter.data, sizeof( cryptoHeader.cryptoCounter.data ) );
+			crypto::calculateRandomBytes( cryptoHeader.cryptoIV.data, sizeof( cryptoHeader.cryptoIV.data ) );
+
+			m_crypto.setKey( pTargetDeviceData->cryptoKey.data, sizeof( pTargetDeviceData->cryptoKey.data ) );
+			m_crypto.setIV( cryptoHeader.cryptoIV.data, sizeof( cryptoHeader.cryptoIV.data ) );
+			m_crypto.setCounter( cryptoHeader.cryptoCounter.data, sizeof( cryptoHeader.cryptoCounter.data ) );
+
+			packageSize += sizeof( cryptoHeader );
+		}
+#endif
+
 		package.data.reserve( packageSize );
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( pTargetDeviceData->status != DeviceStatus_AwaitCryptoKey )
+		{
+			const uint8* pCryptoHeaderData = (const uint8*)&cryptoHeader;
+			package.data.pushRange( pCryptoHeaderData, sizeof( cryptoHeader ) );
+		}
+#endif
 
 		const uint8* pHeaderData = ( const uint8* )&baseHeader;
 		package.data.pushRange( pHeaderData, sizeof( baseHeader ) );
@@ -208,6 +233,15 @@ namespace conct
 		package.data.pushRange( sourcePackage.sourceAddress.getData() + 1u, sourcePackage.sourceAddress.getLength() - 1u );
 		package.data.pushRange( sourcePackage.destinationAddress.getData() + 1u, sourcePackage.destinationAddress.getLength() - 1u );
 		package.data.pushRange( sourcePackage.payload );
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( pTargetDeviceData->status != DeviceStatus_AwaitCryptoKey )
+		{
+			uint8* pPayload = package.data.getData() + sizeof( cryptoHeader );
+			const uintreg payloadSize = packageSize - sizeof( cryptoHeader );
+			m_crypto.encrypt( pPayload, pPayload, payloadSize );
+		}
+#endif
 
 		PortData& targetPortData = m_ports[ pTargetDeviceData->pTargetPort ];
 		targetPortData.sendPackages.pushBack( package );
@@ -367,6 +401,7 @@ namespace conct
 				if( !Curve25519::dh2( cryptoHandshake.publicKey.data, pDevice->cryptoKey.data ) )
 				{
 					trace::write( "Crypto handshake failed!" );
+					sendErrorResponse( package, MessageType_CryptoHandshake, ResultId_KeyExchangeFailed );
 				}
 
 				pDevice->cryptoKey	= cryptoHandshake.publicKey;
@@ -539,14 +574,14 @@ namespace conct
 		package.data.readBytes.alreadyRead += reader.readData( target.getData(), target.getLength(), package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead == target.getLength() )
 		{
-			setState( package, nextState );
-
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			if( encrypted )
 			{
 				m_crypto.decrypt( target.getData(), target.getData(), target.getLength() );
 			}
 #endif
+
+			setState( package, nextState );
 		}
 	}
 

@@ -18,4 +18,9 @@ namespace conct
 	{
 		memcpy( pTargetData, pSourceData, sizeInBytes );
 	}
+
+	void memory::copyOverlapping( void* pTargetData, const void* pSourceData, uintreg sizeInBytes )
+	{
+		memmove( pTargetData, pSourceData, sizeInBytes );
+	}
 }

@@ -4,6 +4,10 @@
 #include "conct_core.h"
 #include "conct_runtime.h"
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#	include <ChaCha.h>
+#endif
+
 namespace conct
 {
 	class Device;
@@ -31,6 +35,12 @@ namespace conct
 			State_ReadPayload,
 			State_ExecuteCommand,
 			State_Send,
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			State_First				= State_ReadCryptoHeader
+#else
+			State_First				= State_ReadBaseHeader
+#endif
 		};
 
 		enum ReadResult : uint8
@@ -45,7 +55,7 @@ namespace conct
 		State						m_state;
 		uintreg						m_stateValue;
 
-		uint8						m_workingData[ 64u ];
+		uint8						m_workingData[ 96u ];
 		uintreg						m_workingDataOffset;
 
 		uint16						m_playloadSize;
@@ -53,6 +63,12 @@ namespace conct
 		MessageType					m_messageType;
 		CommandId					m_commandId;
 		ResultId					m_result;
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		bool						m_encrypted;
+		CryptoKey					m_cryptoKey;
+		ChaCha						m_crypto;
+#endif
 
 		void*						getWorkingData();
 		uintreg						getRemainingWorkingData() const;

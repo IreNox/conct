@@ -10,6 +10,11 @@
 #include "conct_runtime.h"
 #include "conct_writer.h"
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#	include <Curve25519.h>
+#	include <RNG.h>
+#endif
+
 #define CONCT_RUNTIME_TRACES CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
 
 #if CONCT_ENABLED( CONCT_RUNTIME_TRACES )
@@ -27,18 +32,23 @@ namespace conct
 	void RuntimeLow::setup( Device* pDevice )
 	{
 		m_pDevice				= pDevice;
-		m_state					= State_ReadBaseHeader;
+		m_state					= State_First;
 		m_stateValue			= 0u;
 		m_workingDataOffset		= 0u;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		m_encrypted				= false;
+#endif
 	}
 
 	void RuntimeLow::processPort( Port* pPort )
 	{
-		uintreg endpointId;
-		while( pPort->popConnectionReset( endpointId ) )
 		{
-			m_workingDataOffset = 0u;
-			setState( State_ReadBaseHeader );
+			uintreg endpointId;
+			while( pPort->popConnectionReset( endpointId ) )
+			{
+				m_workingDataOffset = 0u;
+				setState( State_First );
+			}
 		}
 
 		if( m_state == State_ExecuteCommand )
@@ -93,6 +103,12 @@ namespace conct
 		{
 			switch( m_state )
 			{
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+			case State_ReadCryptoHeader:
+				result = readCryptoHeader( reader );
+				break;
+#endif
+
 			case State_ReadBaseHeader:
 				result = readBaseHeader( reader );
 				break;
@@ -122,14 +138,44 @@ namespace conct
 		}
 	}
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+	RuntimeLow::ReadResult RuntimeLow::readCryptoHeader( Reader& reader )
+	{
+		if( m_encrypted )
+		{
+			MessageCryptoHeader& cryptoHeader = *static_cast< MessageCryptoHeader* >( getWorkingData() );
+			m_stateValue += reader.readStruct< MessageCryptoHeader >( cryptoHeader, m_stateValue );
+			if( m_stateValue < sizeof( cryptoHeader ) )
+			{
+				return ReadResult_WaitingData;
+			}
+
+			m_crypto.setKey( m_cryptoKey.data, sizeof( m_cryptoKey ) );
+			m_crypto.setIV( cryptoHeader.cryptoIV.data, sizeof( cryptoHeader.cryptoIV ) );
+			m_crypto.setCounter( cryptoHeader.cryptoCounter.data, sizeof( cryptoHeader.cryptoCounter ) );
+		}
+
+		setState( State_ReadBaseHeader );
+		return ReadResult_Ok;
+	}
+#endif
+
 	RuntimeLow::ReadResult RuntimeLow::readBaseHeader( Reader& reader )
 	{
 		MessageBaseHeader& baseHeader = *static_cast< MessageBaseHeader* >( getWorkingData() );
-		m_stateValue += reader.readStruct< MessageBaseHeader >( baseHeader, ( uintreg )m_stateValue );
+		m_stateValue += reader.readStruct< MessageBaseHeader >( baseHeader, m_stateValue );
 		if( m_stateValue < sizeof( baseHeader ) )
 		{
 			return ReadResult_WaitingData;
 		}
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( m_encrypted )
+		{
+			uint8* pBaseHeader = (uint8*)&baseHeader;
+			m_crypto.decrypt( pBaseHeader, pBaseHeader, sizeof( baseHeader ) );
+		}
+#endif
 
 		if( baseHeader.destinationHops > 1u )
 		{
@@ -150,7 +196,7 @@ namespace conct
 		m_destinationAddressSize	= baseHeader.sourceHops;
 		m_messageType				= baseHeader.messageType;
 		m_commandId					= baseHeader.commandId;
-		m_result					= ResultId_Success;
+		m_result					= baseHeader.messageResult;
 
 		setState( State_ReadAddresses );
 		return ReadResult_Ok;
@@ -158,11 +204,19 @@ namespace conct
 
 	RuntimeLow::ReadResult RuntimeLow::readAddresses( Reader& reader )
 	{
-		m_stateValue += reader.readData( getWorkingData(), m_destinationAddressSize + 1u, ( uintreg )m_stateValue );
+		uint8* pAddress = (uint8*)getWorkingData();
+		m_stateValue += reader.readData( pAddress, m_destinationAddressSize + 1u, m_stateValue );
 		if( m_stateValue < m_destinationAddressSize + 1u )
 		{
 			return ReadResult_WaitingData;
 		}
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( m_encrypted )
+		{
+			m_crypto.decrypt( pAddress, pAddress, m_destinationAddressSize + 1u );
+		}
+#endif
 
 		m_workingDataOffset += m_destinationAddressSize;
 
@@ -179,11 +233,19 @@ namespace conct
 
 	RuntimeLow::ReadResult RuntimeLow::readPayload( Reader& reader )
 	{
-		m_stateValue += reader.readData( getWorkingData(), ( uintreg )m_playloadSize, ( uintreg )m_stateValue );
+		uint8* pPayload = (uint8*)getWorkingData();
+		m_stateValue += reader.readData( pPayload, (uintreg)m_playloadSize, m_stateValue );;
 		if( m_stateValue < m_playloadSize )
 		{
 			return ReadResult_WaitingData;
 		}
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( m_encrypted )
+		{
+			m_crypto.decrypt( pPayload, pPayload, m_playloadSize );
+		}
+#endif
 
 		m_workingDataOffset += m_playloadSize;
 
@@ -194,6 +256,12 @@ namespace conct
 	void RuntimeLow::executeCommand()
 	{
 		m_workingDataOffset = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( m_encrypted )
+		{
+			m_workingDataOffset += sizeof( MessageCryptoHeader );
+		}
+#endif
 
 		switch( m_messageType )
 		{
@@ -276,6 +344,39 @@ namespace conct
 			}
 			break;
 
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		case MessageType_CryptoHandshake:
+			{
+				if( m_result != ResultId_Success )
+				{
+					CONCT_RUNTIME_PRINTLINE( "Received key exchange failed" );
+					m_encrypted = false;
+					return;
+				}
+
+
+				CryptoHandshake* pCryptoHandshake		= (CryptoHandshake*)(m_workingData + m_destinationAddressSize);
+				CryptoHandshake* pNewCryptoHandshake	= &pCryptoHandshake[ 1u ];
+				CONCT_ASSERT( (uintreg)&pNewCryptoHandshake[ 1u ] < (uintreg)&m_workingData[ sizeof( m_workingData ) ] );
+
+				Curve25519::dh1( pNewCryptoHandshake->publicKey.data, m_cryptoKey.data );
+
+				if( !Curve25519::dh2( pCryptoHandshake->publicKey.data, m_cryptoKey.data ) )
+				{
+					CONCT_RUNTIME_PRINTLINE( "Key exchange failed" );
+					sendErrorResponse( MessageType_CryptoHandshake, ResultId_KeyExchangeFailed );
+					return;
+				}
+
+				m_cryptoKey = pCryptoHandshake->publicKey;
+
+				sendResponse( MessageType_CryptoHandshake, pNewCryptoHandshake, sizeof( *pNewCryptoHandshake ) );
+
+				m_encrypted = true;
+			}
+			break;
+#endif
+
 		default:
 			CONCT_RUNTIME_PRINTLINE( "Received unsupported message type." );
 			sendErrorResponse( MessageType_ErrorResponse, ResultId_Unsupported );
@@ -297,7 +398,14 @@ namespace conct
 
 	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uintreg dataLength )
 	{
-		const uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
+		uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( m_encrypted )
+		{
+			packetSize += sizeof( MessageCryptoHeader );
+		}
+#endif
+
 		if( sizeof( m_workingData ) < packetSize )
 		{
 			CONCT_RUNTIME_PRINTLINE( "Respose too large." );
@@ -305,13 +413,26 @@ namespace conct
 			return;
 		}
 
-		MessageBaseHeader* pBaseHeader = ( MessageBaseHeader* )m_workingData;
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		MessageCryptoHeader* pCryptoHeader = (MessageCryptoHeader*)m_workingData;
+		if( m_encrypted )
+		{
+			m_workingDataOffset = sizeof( *pCryptoHeader );
+		}
+		else
+#endif
+		{
+			m_workingDataOffset = 0u;
+		}
+
+		MessageBaseHeader* pBaseHeader = (MessageBaseHeader*)getWorkingData();
 		DeviceId* pSourceAddress = (DeviceId*)&pBaseHeader[ 1u ];
 		DeviceId* pDestinationAddress = &pSourceAddress[ 1u ];
 		uint8* pPayload = &pDestinationAddress[ m_destinationAddressSize ];
 
-		memory::copy( pDestinationAddress, m_workingData, m_destinationAddressSize );
-		memory::copy( pPayload, pData, dataLength );
+		CONCT_ASSERT( (uintreg)pPayload <= (uintreg)pData );
+		memory::copyOverlapping( pPayload, pData, dataLength );
+		memory::copyOverlapping( pDestinationAddress, m_workingData, m_destinationAddressSize );
 
 		pSourceAddress[ 0u ] = 1u;
 
@@ -321,6 +442,21 @@ namespace conct
 		pBaseHeader->commandId			= m_commandId;
 		pBaseHeader->messageType		= responseType;
 		pBaseHeader->messageResult		= m_result;
+
+#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+		if( m_encrypted )
+		{
+			RNG.rand( (uint8*)pCryptoHeader, sizeof( *pCryptoHeader ) );
+
+			m_crypto.setKey( m_cryptoKey.data, sizeof( m_cryptoKey ) );
+			m_crypto.setIV( pCryptoHeader->cryptoIV.data, sizeof( pCryptoHeader->cryptoIV ) );
+			m_crypto.setCounter( pCryptoHeader->cryptoCounter.data, sizeof( pCryptoHeader->cryptoCounter ) );
+
+			uint8* pPayload = m_workingData + sizeof( MessageCryptoHeader );
+			uintreg payloadSize = packetSize - sizeof( MessageCryptoHeader );
+			m_crypto.encrypt( pPayload, pPayload, payloadSize );
+		}
+#endif
 
 		m_workingDataOffset = 0u;
 		setState( State_Send, packetSize );
@@ -345,7 +481,8 @@ namespace conct
 
 		if( m_stateValue == 0u )
 		{
-			setState( State_ReadBaseHeader );
+			m_workingDataOffset = 0u;
+			setState( State_First );
 		}
 	}
 }

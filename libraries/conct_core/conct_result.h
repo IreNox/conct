@@ -22,6 +22,7 @@ namespace conct
 		ResultId_NoSuchField,
 		ResultId_NoSource,
 		ResultId_NoDestination,
+		ResultId_KeyExchangeFailed,
 
 		ResultId_Count
 	};

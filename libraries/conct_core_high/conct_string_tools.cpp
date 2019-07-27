@@ -33,7 +33,11 @@ namespace conct
 	DynamicString string_tools::toString( sint64 value )
 	{
 		char buffer[ 64u ];
+#	if CONCT_ENABLED( CONCT_POINTER_64 )
+		sprintf( buffer, "%li", value );
+#	elif CONCT_ENABLED( CONCT_POINTER_32 )
 		sprintf( buffer, "%lli", value );
+#	endif
 		return DynamicString( buffer );
 	}
 
@@ -61,7 +65,11 @@ namespace conct
 	DynamicString string_tools::toString( uint64 value )
 	{
 		char buffer[ 64u ];
+#	if CONCT_ENABLED( CONCT_POINTER_64 )
+		sprintf( buffer, "%lu", value );
+#	elif CONCT_ENABLED( CONCT_POINTER_32 )
 		sprintf( buffer, "%llu", value );
+#	endif
 		return DynamicString( buffer );
 	}
 
@@ -135,7 +143,11 @@ namespace conct
 	DynamicString string_tools::toHexString( sint64 value )
 	{
 		char buffer[ 64u ];
+#	if CONCT_ENABLED( CONCT_POINTER_64 )
+		sprintf( buffer, "%016lx", value );
+#	elif CONCT_ENABLED( CONCT_POINTER_32 )
 		sprintf( buffer, "%016llx", value );
+#	endif
 		return DynamicString( buffer );
 	}
 
@@ -163,7 +175,11 @@ namespace conct
 	DynamicString string_tools::toHexString( uint64 value )
 	{
 		char buffer[ 64u ];
+#	if CONCT_ENABLED( CONCT_POINTER_64 )
+		sprintf( buffer, "%016lx", value );
+#	elif CONCT_ENABLED( CONCT_POINTER_32 )
 		sprintf( buffer, "%016llx", value );
+#	endif
 		return DynamicString( buffer );
 	}
 
@@ -177,7 +193,11 @@ namespace conct
 	DynamicString string_tools::toHexString( double value )
 	{
 		char buffer[ 64u ];
+#	if CONCT_ENABLED( CONCT_POINTER_64 )
+		sprintf( buffer, "%016lx", *(uint64*)&value );
+#	elif CONCT_ENABLED( CONCT_POINTER_32 )
 		sprintf( buffer, "%016llx", *(uint64*)&value );
+#	endif
 		return DynamicString( buffer );
 	}
 

@@ -13,9 +13,13 @@
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 #	include <Curve25519.h>
 #	include <RNG.h>
+
+#	if CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+#		include "Entropy.h"
+#	endif
 #endif
 
-#define CONCT_RUNTIME_TRACES CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
+#define CONCT_RUNTIME_TRACES CONCT_OFF // CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
 
 #if CONCT_ENABLED( CONCT_RUNTIME_TRACES )
 #	include <arduino.h>
@@ -37,7 +41,11 @@ namespace conct
 		m_workingDataOffset		= 0u;
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		m_encrypted				= false;
+#	if CONCT_ENABLED( CONCT_PLATFORM_ARDUINO )
+		Entropy.initialize();
+#	endif
 #endif
+
 	}
 
 	void RuntimeLow::processPort( Port* pPort )
@@ -353,7 +361,6 @@ namespace conct
 					m_encrypted = false;
 					return;
 				}
-
 
 				CryptoHandshake* pCryptoHandshake		= (CryptoHandshake*)(m_workingData + m_destinationAddressSize);
 				CryptoHandshake* pNewCryptoHandshake	= &pCryptoHandshake[ 1u ];

@@ -43,7 +43,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|VisualGDB'">
     <ClCompile>
       <CPPLanguageStandard>CPP11</CPPLanguageStandard>
-      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_nrf24l01_server;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/rf24;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>/home/pi/code/conct/libraries/conct_core;/home/pi/code/conct/libraries/conct_core_high;/home/pi/code/conct/libraries/conct_runtime;/home/pi/code/conct/libraries/conct_runtime_high;/home/pi/code/conct/libraries/conct_port_nrf24l01;/home/pi/code/conct/libraries/conct_port_nrf24l01_server;/home/pi/code/conct/libraries/conct_port_tcp_server;/home/pi/code/conct/libraries/Crypto/simulator;/home/pi/code/conct/libraries/Crypto;/home/pi/code/conct/libraries/rf24;/home/pi/code/conct/third_party;%(ClCompile.AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>DEBUG=1;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -81,6 +81,7 @@
     <ClInclude Include="..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_atomic.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h" />
+    <ClInclude Include="..\..\libraries\conct_core_high\conct_crypto_random.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_memory.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h" />
@@ -111,6 +112,12 @@
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_router.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_runtime_high.h" />
     <ClInclude Include="..\..\libraries\conct_runtime_high\conct_value_high.h" />
+    <ClInclude Include="..\..\libraries\Crypto\BigNumberUtil.h" />
+    <ClInclude Include="..\..\libraries\Crypto\ChaCha.h" />
+    <ClInclude Include="..\..\libraries\Crypto\Cipher.h" />
+    <ClInclude Include="..\..\libraries\Crypto\Crypto.h" />
+    <ClInclude Include="..\..\libraries\Crypto\Curve25519.h" />
+    <ClInclude Include="..\..\libraries\Crypto\simulator\RNG.h" />
     <ClInclude Include="..\..\libraries\rf24\nRF24L01.h" />
     <ClInclude Include="..\..\libraries\rf24\printf.h" />
     <ClInclude Include="..\..\libraries\rf24\RF24.h" />
@@ -141,6 +148,7 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_atomic.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_high\conct_crypto_random.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_memory.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
@@ -165,6 +173,12 @@
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_router.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_runtime_high.cpp" />
     <ClCompile Include="..\..\libraries\conct_runtime_high\conct_value_high.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\BigNumberUtil.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\ChaCha.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\Cipher.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\Crypto.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\Curve25519.cpp" />
+    <ClCompile Include="..\..\libraries\Crypto\simulator\RNG.cpp" />
     <ClCompile Include="..\..\libraries\rf24\RF24.cpp" />
     <ClCompile Include="..\..\libraries\rf24\utility\RPi\bcm2835.c" />
     <ClCompile Include="..\..\libraries\rf24\utility\RPi\spi.cpp" />

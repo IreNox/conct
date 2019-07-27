@@ -23,7 +23,7 @@ namespace conct
 		public static extern uint GetUnsigned(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_string")]
 		[return: MarshalAs(UnmanagedType.LPStr)]
-		public static extern string GetString(IntPtr handle);
+		public static extern IntPtr GetString(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_percent_value")]
 		public static extern UInt16 GetPercentValue(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_device_id")]

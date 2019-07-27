@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace conct
 {
@@ -41,7 +42,7 @@ namespace conct
 			for (int i = 0; i < count; i++)
 			{
 				StructField field;
-				field.Name = StructTypeNative.GetFieldName(m_nativeInstance, i);
+				field.Name = Marshal.PtrToStringAnsi(StructTypeNative.GetFieldName(m_nativeInstance, i));
 				field.Type = m_collection.GetTypeFromHandle(StructTypeNative.GetFieldType(m_nativeInstance, i));
 
 				m_fields[i] = field;

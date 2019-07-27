@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace conct
 {
@@ -19,27 +20,27 @@ namespace conct
 
 		public string Namespace
 		{
-			get { return TypeNative.GetNamespace(m_nativeInstance); }
+			get { return Marshal.PtrToStringAnsi(TypeNative.GetNamespace(m_nativeInstance)); }
 		}
 
 		public string Name
 		{
-			get { return TypeNative.GetName(m_nativeInstance); }
+			get { return Marshal.PtrToStringAnsi(TypeNative.GetName(m_nativeInstance)); }
 		}
 
 		public string CppName
 		{
-			get { return TypeNative.GetCppName(m_nativeInstance); }
+			get { return Marshal.PtrToStringAnsi(TypeNative.GetCppName(m_nativeInstance)); }
 		}
 
 		public string FullName
 		{
-			get { return TypeNative.GetFullName(m_nativeInstance); }
+			get { return Marshal.PtrToStringAnsi(TypeNative.GetFullName(m_nativeInstance)); }
 		}
 
 		public string HeaderFilename
 		{
-			get { return TypeNative.GetHeaderFilename(m_nativeInstance); }
+			get { return Marshal.PtrToStringAnsi(TypeNative.GetHeaderFilename(m_nativeInstance)); }
 		}
 
 		public TypeKind Kind

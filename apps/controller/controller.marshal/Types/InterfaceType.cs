@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace conct
 {
@@ -81,7 +82,7 @@ namespace conct
 			for (int i = 0; i < count; i++)
 			{
 				InterfaceProperty prop;
-				prop.Name = InterfaceTypeNative.GetPropertyName(m_nativeInstance, i);
+				prop.Name = Marshal.PtrToStringAnsi(InterfaceTypeNative.GetPropertyName(m_nativeInstance, i));
 				prop.Type = m_collection.GetTypeFromHandle(InterfaceTypeNative.GetPropertyType(m_nativeInstance, i));
 				prop.HasGetter = InterfaceTypeNative.GetPropertyHasGetter(m_nativeInstance, i);
 				prop.HasSetter = InterfaceTypeNative.GetPropertyHasSetter(m_nativeInstance, i);
@@ -102,7 +103,7 @@ namespace conct
 			for (int functionIndex = 0; functionIndex < count; functionIndex++)
 			{
 				InterfaceFunction func;
-				func.Name = InterfaceTypeNative.GetFunctionName(m_nativeInstance, functionIndex);
+				func.Name = Marshal.PtrToStringAnsi(InterfaceTypeNative.GetFunctionName(m_nativeInstance, functionIndex));
 				func.ReturnType = m_collection.GetTypeFromHandle(InterfaceTypeNative.GetFunctionReturnType(m_nativeInstance, functionIndex));
 
 				int parameterCount = InterfaceTypeNative.GetFunctionParameterCount(m_nativeInstance, functionIndex);
@@ -110,7 +111,7 @@ namespace conct
 				for(int parameterIndex = 0; parameterIndex < parameterCount; parameterIndex++)
 				{
 					InterfaceFunctionParameter param;
-					param.Name = InterfaceTypeNative.GetFunctionParameterName(m_nativeInstance, functionIndex, parameterIndex);
+					param.Name = Marshal.PtrToStringAnsi(InterfaceTypeNative.GetFunctionParameterName(m_nativeInstance, functionIndex, parameterIndex));
 					param.Type = m_collection.GetTypeFromHandle(InterfaceTypeNative.GetFunctionParameterType(m_nativeInstance, functionIndex, parameterIndex));
 
 					func.Parameters[parameterIndex] = param;

@@ -56,7 +56,7 @@ namespace conct
 
 		public string String
 		{
-			get { return ValueNative.GetString(m_nativeInstance); }
+			get { return Marshal.PtrToStringAnsi(ValueNative.GetString(m_nativeInstance)); }
 			set { ValueNative.SetString(m_nativeInstance, value); }
 		}
 

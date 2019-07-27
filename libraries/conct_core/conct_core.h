@@ -15,6 +15,15 @@ namespace conct
 	typedef uint64_t	uint64;
 	typedef int64_t		sint64;
 
+	CONCT_STATIC_ASSERT( sizeof( uint8 ) == 1u );
+	CONCT_STATIC_ASSERT( sizeof( sint8 ) == 1u );
+	CONCT_STATIC_ASSERT( sizeof( uint16 ) == 2u );
+	CONCT_STATIC_ASSERT( sizeof( sint16 ) == 2u );
+	CONCT_STATIC_ASSERT( sizeof( uint32 ) == 4u );
+	CONCT_STATIC_ASSERT( sizeof( sint32 ) == 4u );
+	CONCT_STATIC_ASSERT( sizeof( uint64 ) == 8u );
+	CONCT_STATIC_ASSERT( sizeof( sint64 ) == 8u );
+
 	typedef int			sint;
 	typedef unsigned	uint;
 

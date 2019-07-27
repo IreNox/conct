@@ -28,6 +28,7 @@
 #if defined( __ANDROID__ )
 #	define CONCT_PLATFORM_ANDROID		CONCT_ON
 #	define CONCT_PLATFORM_POSIX			CONCT_ON
+#	define CONCT_HAS_BREAK				CONCT_ON
 #else
 #	define CONCT_PLATFORM_ANDROID		CONCT_OFF
 #endif

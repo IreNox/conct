@@ -174,15 +174,7 @@ CONCT_DLL conct_device_id CONCT_CDECL conct_device_address_get_device_id( conct_
 CONCT_DLL void CONCT_CDECL conct_device_address_push_device( conct_device_address_handle handle, conct_device_id deviceId )
 {
 	DeviceAddress* pAdress = fromHandle( handle );
-	for( uintreg i = 0u; i < DeviceAddress::Size - 1u; ++i )
-	{
-		if( pAdress->address[ i ] == InvalidDeviceId )
-		{
-			pAdress->address[ i ] = deviceId;
-			pAdress->address[ i + 1u ] = InvalidDeviceId;
-			return;
-		}
-	}
+	runtime::pushToDeviceAddress( *pAdress, deviceId );
 }
 
 CONCT_DLL conct_device_id CONCT_CDECL conct_device_address_pop_device( conct_device_address_handle handle )

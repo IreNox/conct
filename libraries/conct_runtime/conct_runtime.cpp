@@ -38,4 +38,18 @@ namespace conct
 			}
 		}
 	}
+
+	void runtime::pushToDeviceAddress( DeviceAddress& target, DeviceId deviceId )
+	{
+		for( uintreg i = 0u; i < DeviceAddress::Size - 1u; ++i )
+		{
+			if( target.address[ i ] == InvalidDeviceId )
+			{
+				target.address[ i ] = deviceId;
+				target.address[ i + 1u ] = InvalidDeviceId;
+				return;
+			}
+		}
+	}
+
 }

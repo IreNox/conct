@@ -33,6 +33,9 @@ namespace conct
 		void*	allocateMemory( uintptr size, uintptr alignment /*= 0u */ );
 		void	freeMemory( void* pAddress );
 
+		void	protectDynamicMemory();
+		void	unprotectDynamicMemory();
+
 		void	beginThreadAllocator( uintptr size );
 		void	endThreadAllocator();
 		void	endAndProtectThreadAllocator();
@@ -61,13 +64,13 @@ namespace conct
 			uintptr						maxAllocated;
 		};
 
-		ThreadLocalStorageHandle	m_allocatorTls;
-
 		uintptr						m_pageSize;
+		uintreg						m_protectionCounter;
 
 		Mutex						m_mutex;
 		Allocator*					m_pDefaultAllocator;
 		Allocator*					m_pFirstPreviousAllocator;
+		ThreadLocalStorageHandle	m_allocatorTls;
 
 		Allocator*					createAllocator( uintptr size );
 		void						destroyAllocator( Allocator* pAllocator );
@@ -99,6 +102,11 @@ namespace conct
 
 		m_allocatorTls		= thread_local_storage::create();
 		m_pDefaultAllocator	= createAllocator( s_defaultPoolSize );
+		m_protectionCounter	= 1u;
+
+#if CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		protectDynamicMemory();
+#endif
 	}
 
 	DynamicMemory::~DynamicMemory()
@@ -150,6 +158,56 @@ namespace conct
 		}
 	}
 
+	void DynamicMemory::protectDynamicMemory()
+	{
+		if( --m_protectionCounter > 0 )
+		{
+			return;
+		}
+
+		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
+		if( pAllocator == nullptr )
+		{
+			pAllocator = m_pDefaultAllocator;
+		}
+
+		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
+		{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+			VirtualProtect( pPool, pPool->size, PAGE_READONLY, nullptr );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+			mprotect( pPool, pPool->size, PROT_READ );
+#else
+#	error "Platform not supported"
+#endif
+		}
+	}
+
+	void DynamicMemory::unprotectDynamicMemory()
+	{
+		if( m_protectionCounter++ > 0 )
+		{
+			return;
+		}
+
+		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
+		if( pAllocator == nullptr )
+		{
+			pAllocator = m_pDefaultAllocator;
+		}
+
+		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
+		{
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+			VirtualProtect( pPool, pPool->size, PAGE_READWRITE, nullptr );
+#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+			mprotect( pPool, pPool->size, PROT_READ | PROT_WRITE );
+#else
+#	error "Platform not supported"
+#endif
+		}
+	}
+
 	void DynamicMemory::beginThreadAllocator( uintptr size )
 	{
 		Allocator* pAllocator = createAllocator( size );
@@ -175,16 +233,7 @@ namespace conct
 		pAllocator->pNext = m_pFirstPreviousAllocator;
 		m_pFirstPreviousAllocator = pAllocator;
 
-		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
-		{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-			VirtualProtect( pPool, pPool->size, PAGE_READONLY, nullptr );
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
-			mprotect( pPool, pPool->size, PROT_READ );
-#else
-#	error "Platform not supported"
-#endif
-		}
+		protectDynamicMemory();
 
 		thread_local_storage::setValue( m_allocatorTls, 0u );
 	}
@@ -309,6 +358,16 @@ namespace conct
 #else
 #	error "Platform not supported"
 #endif
+	}
+
+	void memory::protectDynamicMemory()
+	{
+		s_pDynamicMemory->protectDynamicMemory();
+	}
+
+	void memory::unprotectDynamicMemory()
+	{
+		s_pDynamicMemory->unprotectDynamicMemory();
 	}
 
 	void memory::beginThreadAllocator( uintptr size )

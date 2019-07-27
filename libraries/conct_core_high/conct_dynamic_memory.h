@@ -13,6 +13,9 @@ namespace conct
 		void*			allocateSystemMemory( uintptr size, uintptr alignment );
 		void			freeSystemMemory( void* pAddress );
 
+		void			protectDynamicMemory();
+		void			unprotectDynamicMemory();
+
 		void			beginThreadAllocator( uintptr size );
 		void			endThreadAllocator();
 		void			endAndProtectThreadAllocator();
@@ -20,5 +23,20 @@ namespace conct
 		void*			allocateMemory( uintptr size, uintptr alignment = 0u );
 		void			freeMemory( void* pAddress );
 	}
+
+	class DynamicMemoryUnprotectionScope
+	{
+	public:
+
+		DynamicMemoryUnprotectionScope()
+		{
+			memory::unprotectDynamicMemory();
+		}
+
+		~DynamicMemoryUnprotectionScope()
+		{
+			memory::protectDynamicMemory();
+		}
+	};
 }
 

@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DynamicLibrary.Desktop.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="Core\ValueType.cs" />
     <Compile Include="Runtime\Command.cs" />

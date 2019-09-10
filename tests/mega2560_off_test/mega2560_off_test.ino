@@ -1,8 +1,8 @@
 /* PWM Outputs */
 
-static const uint8_t Red = 6;
-static const uint8_t Green = 9;
-static const uint8_t Blue = 5;
+static const uint8_t Red = 3;
+static const uint8_t Green = 5;
+static const uint8_t Blue = 6;
 
 static const uint8_t Pins[] = { Red, Green, Blue };
 
@@ -12,7 +12,7 @@ void setup()
 	pinMode(Green, OUTPUT);
 	pinMode(Blue, OUTPUT);
 
-	analogWrite( Red, 0 );
+	analogWrite( Red, 255 );
 	analogWrite( Green, 0 );
 	analogWrite( Blue, 0 );
 }
@@ -34,7 +34,7 @@ void loop()
   //TCCR1B |= 0x04;
   //TCCR1B &= 0xfc;
 
-  for (int colour=0; colour < 3; colour++)
+  /*for (int colour=0; colour < 3; colour++)
   {
     for (int i=0; i <= 255; i++)
     {
@@ -42,5 +42,5 @@ void loop()
       SetColour((colour + 1) % 3, i );
       delay(10);
     }
-  }
+  }*/
 }

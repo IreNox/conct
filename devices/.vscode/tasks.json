@@ -4,15 +4,22 @@
     "version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Build Assets",
+			"label": "Build uno_rgb",
 			"type": "shell",
-			"command": "${workspaceFolder}\\..\\..\\bin\\asset_builder.exe ${workspaceFolder}\\..\\..\\assets\\tetris ${workspaceFolder}",
-			"problemMatcher": []
+			"windows": {
+				"command": "${workspaceFolder}\\uno_rgb\\build.cmd"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build"
 		},
 		{
-			"label": "Build Code",
+			"label": "Upload uno_rgb",
 			"type": "shell",
-			"command": "arduino_debug.exe --pref sketchbook.path=${workspaceFolder}\\..\\.. --pref build.path=${workspaceFolder}\\build --board arduino:avr:mega --verify ${workspaceFolder}\\${workspaceFolderBasename}.ino",
+			"windows": {
+				"command": "${workspaceFolder}\\uno_rgb\\build_upload.cmd"
+			},
 			"problemMatcher": [
 				"$gcc"
 			],

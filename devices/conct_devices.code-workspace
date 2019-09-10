@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../libraries"
+		},
+		{
+			"path": "../third_party"
 		}
 	],
 	"settings": {

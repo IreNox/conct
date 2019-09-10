@@ -3,21 +3,29 @@
         {
             "name": "Arduino",
             "includePath": [
-                "tests/attiny85_rgb",
+                "uno_rgb",
                 "../libraries/conct_core",
-                "../libraries/conct_com",
+                "../libraries/conct_light",
                 "../libraries/conct_runtime",
-                "../libraries/conct_system_attiny85",
-                "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino",
-                "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\avr\\include",
-                "E:\\Misc\\arduino-1.8.5\\hardware\\tools\\avr\\lib\\gcc\\avr\\4.9.2\\include",
-                "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\variants\\mega",
-                "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\libraries\\SPI\\src"
+                "../libraries/conct_runtime_low",
+                "../libraries/conct_port_nrf24l01",
+                "../libraries/conct_port_nrf24l01_client",
+                "../libraries/Crypto",
+                "../libraries/rf24",
+                "E:\\Misc\\arduino-1.8.9\\hardware\\arduino\\avr\\cores\\arduino",
+                "E:\\Misc\\arduino-1.8.9\\hardware\\tools\\avr\\avr\\include",
+                "E:\\Misc\\arduino-1.8.9\\hardware\\tools\\avr\\lib\\gcc\\avr\\5.4.0\\include",
+                "E:\\Misc\\arduino-1.8.9\\hardware\\arduino\\avr\\variants\\mega",
+                "E:\\Misc\\arduino-1.8.9\\hardware\\arduino\\avr\\libraries\\SPI\\src"
+            ],
+            "defines": [
+                "__AVR__",
+                "ARDUINO"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": false,
                 "path": [
-                    "E:\\Misc\\arduino-1.8.5\\hardware\\arduino\\avr\\cores\\arduino"
+                    "E:\\Misc\\arduino-1.8.9\\hardware\\arduino\\avr\\cores\\arduino"
                 ]
             },
             "intelliSenseMode": "clang-x64"

@@ -1,11 +1,13 @@
 #include "RNG.h"
 
+#include <Arduino.h>
 #include "Entropy.h"
 
 void RNGClass::rand(uint8_t *data, size_t len)
 {
-	for( uint8_t i = 0u; i < len; ++len)
+	while( len-- )
 	{
-		data[ i ] = Entropy.randomByte();
+		*data = Entropy.randomByte();
+		data++;
 	}
 }

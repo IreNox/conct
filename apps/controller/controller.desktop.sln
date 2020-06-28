@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "controller", "controller\controller.shproj", "{5E2BB86F-E8CC-4B0F-9246-E077AA9C0C57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "controller.marshal.desktop", "controller.marshal\controller.marshal.desktop.csproj", "{605629BF-EEFB-45DF-8CCC-A083A1D470CB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EECC9AB6-8DE0-4326-B5E3-A16AE9E84D42} = {EECC9AB6-8DE0-4326-B5E3-A16AE9E84D42}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "controller.desktop", "controller.desktop\controller.desktop.csproj", "{A06C05CD-6DD5-4DA3-B507-4CE4EB5FAA8C}"
 EndProject

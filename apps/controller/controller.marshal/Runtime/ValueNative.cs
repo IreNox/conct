@@ -22,7 +22,6 @@ namespace conct
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_unsigned")]
 		public static extern uint GetUnsigned(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_string")]
-		[return: MarshalAs(UnmanagedType.LPStr)]
 		public static extern IntPtr GetString(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_get_percent_value")]
 		public static extern UInt16 GetPercentValue(IntPtr handle);
@@ -55,7 +54,7 @@ namespace conct
 		public static extern void SetInteger(IntPtr handle, int value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_unsigned")]
 		public static extern void SetUnsigned(IntPtr handle, uint value);
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_string")]
+		[DllImport(DynamicLibrary.Name, CharSet = CharSet.Ansi, EntryPoint = "conct_value_set_string")]
 		public static extern void SetString(IntPtr handle, [param: MarshalAs(UnmanagedType.LPStr)] string value);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_value_set_percent_value")]
 		public static extern void SetPercentValue(IntPtr handle, UInt16 value);

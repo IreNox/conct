@@ -13,7 +13,7 @@ namespace conct
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_loop")]
 		public static extern void Loop(IntPtr handle);
 
-		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_add_port")]
+		[DllImport(DynamicLibrary.Name, CharSet = CharSet.Ansi, EntryPoint = "conct_device_add_port")]
 		public static extern IntPtr AddPort(IntPtr handle, [param: MarshalAs(UnmanagedType.LPStr)] string hostname, UInt16 hostPort);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_device_remove_port")]
 		public static extern void RemovePort(IntPtr handle, IntPtr portHandle);

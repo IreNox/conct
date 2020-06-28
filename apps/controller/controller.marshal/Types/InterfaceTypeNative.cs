@@ -18,7 +18,6 @@ namespace conct
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_count")]
 		public static extern int GetPropertyCount(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_name")]
-		[return: MarshalAs(UnmanagedType.LPStr)]
 		public static extern IntPtr GetPropertyName(IntPtr handle, int index);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_property_type")]
 		public static extern IntPtr GetPropertyType(IntPtr handle, int index);
@@ -32,7 +31,6 @@ namespace conct
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_function_count")]
 		public static extern int GetFunctionCount(IntPtr handle);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_function_name")]
-		[return: MarshalAs(UnmanagedType.LPStr)]
 		public static extern IntPtr GetFunctionName(IntPtr handle, int functionIndex);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_function_return_type")]
 		public static extern IntPtr GetFunctionReturnType(IntPtr handle, int functionIndex);
@@ -40,7 +38,6 @@ namespace conct
 		public static extern int GetFunctionParameterCount(IntPtr handle, int functionIndex);
 
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_function_parameter_name")]
-		[return: MarshalAs(UnmanagedType.LPStr)]
 		public static extern IntPtr GetFunctionParameterName(IntPtr handle, int functionIndex, int parameterIndex);
 		[DllImport(DynamicLibrary.Name, EntryPoint = "conct_interface_type_get_function_parameter_type")]
 		public static extern IntPtr GetFunctionParameterType(IntPtr handle, int functionIndex, int parameterIndex);

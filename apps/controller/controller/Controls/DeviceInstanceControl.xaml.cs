@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 using Xamarin.Forms;
 
@@ -201,6 +197,7 @@ namespace conct
 			{
 				return;
 			}
+			System.Diagnostics.Debug.Assert(value.Type == property.Property.Type.ValueType);
 
 			m_disableApplyValue = true;
 			switch (property.Property.Type.ValueType)

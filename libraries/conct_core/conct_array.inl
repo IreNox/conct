@@ -4,27 +4,50 @@ namespace conct
 {
 	template< class T >
 	Array< T >::Array()
+		: m_pData( nullptr )
+		, m_length( 0u )
 	{
-		clear();
 	}
 
 	template< class T >
 	Array< T >::Array( T* pData, uintreg length )
+		: m_pData( pData )
+		, m_length( length )
 	{
-		set( pData, length );
 	}
 
 	template< class T >
-	void Array< T >::set( T* pData, uintreg length )
+	T& Array< T >::getFront()
 	{
-		m_pData		= pData;
-		m_length	= length;
+		CONCT_ASSERT( m_length > 0u );
+		return m_pData[ 0u ];
 	}
 
 	template< class T >
-	void Array< T >::clear()
+	const T& Array< T >::getFront() const
 	{
-		set( nullptr, 0u );
+		CONCT_ASSERT( m_length > 0u );
+		return m_pData[ 0u ];
+	}
+
+	template< class T >
+	T& Array< T >::getBack()
+	{
+		CONCT_ASSERT( m_length > 0u );
+		return m_pData[ m_length - 1u ];
+	}
+
+	template< class T >
+	const T& Array< T >::getBack() const
+	{
+		CONCT_ASSERT( m_length > 0u );
+		return m_pData[ m_length - 1u ];
+	}
+
+	template< class T >
+	ArrayView< T > Array< T >::toView() const
+	{
+		return ArrayView< T >( m_pData, m_length );
 	}
 
 	template< class T >

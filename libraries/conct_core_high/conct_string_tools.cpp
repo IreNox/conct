@@ -65,11 +65,11 @@ namespace conct
 	DynamicString string_tools::toString( uint64 value )
 	{
 		char buffer[ 64u ];
-#	if CONCT_ENABLED( CONCT_POINTER_64 ) && CONCT_ENABLED( CONCT_PLATFORM_POSIX )
-		sprintf( buffer, "%lu", value );
-#	elif CONCT_ENABLED( CONCT_POINTER_32 )
+#if CONCT_ENABLED( CONCT_POINTER_32 ) || CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
 		sprintf( buffer, "%llu", value );
-#	endif
+#elif CONCT_ENABLED( CONCT_POINTER_64 )
+		sprintf( buffer, "%lu", value );
+#endif
 		return DynamicString( buffer );
 	}
 

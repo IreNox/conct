@@ -42,7 +42,7 @@ namespace conct
 	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )
 	{
 		static Instance s_instances[ 2u ];
-		instances.set( s_instances, CONCT_COUNT( s_instances ) );
+		instances = Array< Instance >( s_instances, CONCT_COUNT( s_instances ) );
 	}
 
 	void DeviceInterface::getPublicInstances( ArrayView< Instance >& instances ) const

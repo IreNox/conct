@@ -14,7 +14,7 @@ namespace conct
 		m_devices.clear();
 		m_runtime.getDevices( m_devices );
 
-		return m_devices.toArrayView();
+		return m_devices.toView();
 	}
 
 	void Router::changeDevice( DeviceId id, DeviceStatus status )

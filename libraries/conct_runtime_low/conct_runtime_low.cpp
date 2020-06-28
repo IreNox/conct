@@ -22,7 +22,7 @@
 #define CONCT_RUNTIME_TRACES CONCT_OFF // CONCT_IF( CONCT_DISABLED( CONCT_ENVIRONMENT_SIMULATOR ) )
 
 #if CONCT_ENABLED( CONCT_RUNTIME_TRACES )
-#	include <arduino.h>
+#	include <Arduino.h>
 
 #	define CONCT_RUNTIME_PRINT			Serial.print
 #	define CONCT_RUNTIME_PRINTLINE		Serial.println
@@ -405,6 +405,8 @@ namespace conct
 
 	void RuntimeLow::sendResponse( MessageType responseType, const void* pData, uintreg dataLength )
 	{
+		CONCT_ASSERT( pData != nullptr || dataLength == 0u );
+
 		uintreg packetSize = sizeof( MessageBaseHeader ) + 1u + m_destinationAddressSize + dataLength;
 #if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		if( m_encrypted )
@@ -437,7 +439,7 @@ namespace conct
 		DeviceId* pDestinationAddress = &pSourceAddress[ 1u ];
 		uint8* pPayload = &pDestinationAddress[ m_destinationAddressSize ];
 
-		CONCT_ASSERT( (uintreg)pPayload <= (uintreg)pData );
+		CONCT_ASSERT( pData == nullptr || (uintreg)pPayload <= (uintreg)pData );
 		memory::copyOverlapping( pPayload, pData, dataLength );
 		memory::copyOverlapping( pDestinationAddress, m_workingData, m_destinationAddressSize );
 

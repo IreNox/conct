@@ -1,14 +1,14 @@
 #pragma once
 
-#include "conct_array_view.h"
-#include "conct_core.h"
+#include "conct_array.h"
+#include "conct_functions.h"
 
 #include <initializer_list>
 
 namespace conct
 {
 	template< class T >
-	class Vector
+	class Vector : public Array< T >
 	{
 	public:
 
@@ -17,13 +17,14 @@ namespace conct
 						Vector( const std::initializer_list< T >& initList );
 						~Vector();
 
-		bool			isEmpty() const;
-		uintreg			getLength() const;
 		uintreg			getCapacity() const;
 
 		void			clear();
 		void			reserve( uintreg size );
 		void			setLength( uintreg size );
+
+		T&				insert( uintreg index );
+		void			insert( const T& value, uintreg index );
 
 		T&				pushBack();
 		void			pushBack( const T& value );
@@ -40,35 +41,10 @@ namespace conct
 		void			eraseUnsorted( const T* pValue );
 		void			eraseUnsortedByIndex( uintreg index );
 
-		T*				getData();
-		const T*		getData() const;
-
-		T*				getBegin();
-		const T*		getBegin() const;
-		T*				getEnd();
-		const T*		getEnd() const;
-
-		T&				getFront();
-		const T&		getFront() const;
-		T&				getBack();
-		const T&		getBack() const;
-
-		ArrayView< T >	toArrayView() const;
-
 		Vector&			operator=( const Vector& rhs );
-
-		T&				operator[]( uintreg index );
-		const T&		operator[]( uintreg index ) const;
-
-		T*				begin() { return getBegin(); }
-		const T*		begin() const { return getBegin(); }
-		T*				end() { return getEnd(); }
-		const T*		end() const { return getEnd(); }
 
 	private:
 
-		T*				m_pData;
-		uintreg			m_length;
 		uintreg			m_capacity;
 
 		void			checkCapacity( uintreg capacity );

@@ -29,6 +29,16 @@
                 ]
             },
             "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "E:\\Misc\\arduino-1.8.9\\tools\\**",
+                "E:\\Misc\\arduino-1.8.9\\hardware\\arduino\\avr\\**"
+            ],
+            "forcedInclude": [
+                "E:\\Misc\\arduino-1.8.9\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+            ]
         }
     ],
     "version": 4

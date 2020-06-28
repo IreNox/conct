@@ -17,7 +17,6 @@ namespace conct
 		bool				isSet() const { return m_pData != nullptr; }
 		uintreg				getLength() const { return m_length; }
 
-
 		const T*			getData() const { return m_pData; }
 
 		const T*			getBegin() const;

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<interface namespace="Home" name="Light">
-	<properties>
-		<property name="On" type="Boolean">
-			<get />
-			<set />
-		</property>
-	</properties>
-</interface>

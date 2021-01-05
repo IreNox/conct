@@ -6,7 +6,7 @@
 #include "conct_value.h"
 #include "conct_result.h"
 
-#define CONCT_RUNTIME_USE_CRYPTO CONCT_ON
+#define CONCT_RUNTIME_USE_CRYPTO CONCT_OFF
 
 namespace conct
 {

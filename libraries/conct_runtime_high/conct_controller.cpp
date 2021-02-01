@@ -14,7 +14,6 @@ namespace conct
 
 	Controller::~Controller()
 	{
-
 	}
 
 	void Controller::setup( RuntimeHigh* pRuntime )

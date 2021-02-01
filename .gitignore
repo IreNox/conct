@@ -3,3 +3,4 @@
 /**/obj/
 /**/VisualGDB/
 *.user
+/premake_tb.exe

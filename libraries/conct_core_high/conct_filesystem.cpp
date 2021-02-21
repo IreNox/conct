@@ -130,26 +130,26 @@ namespace conct
 
 		fseek( pFile, 0, SEEK_END );
 #if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		fpos_t pos2;
-		fgetpos( pFile, &pos2 );
-		const size_t pos = pos2.__pos;
-#else
 		fpos_t pos;
 		fgetpos( pFile, &pos );
+		const size_t fileSize = pos.__pos;
+#else
+		fpos_t fileSize;
+		fgetpos( pFile, &fileSize );
 #endif
 		fseek( pFile, 0, SEEK_SET );
 
 		DynamicString result;
-		result.reserve( uintreg( pos ) );
+		result.reserve( uintreg( fileSize ) );
 
-		if( fread( result.toCharPointer(), 1u, size_t( pos ), pFile ) != pos )
+		if( fread( result.beginWrite(), 1u, size_t( fileSize ), pFile ) != fileSize )
 		{
 			fclose( pFile );
 			return createFailureResult< DynamicString >( getResultFromErrno() );
 		}
 		fclose( pFile );
 
-		result.terminate( uintreg( pos ) );
+		result.endWrite( uintreg( fileSize ) );
 
 		return createSuccessResult( result );
 	}

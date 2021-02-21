@@ -42,6 +42,21 @@ namespace conct
 		delete[] m_pString;
 	}
 
+	void DynamicString::assign( const char* pString )
+	{
+		const uintptr length = getStringLength( pString );
+		checkCapacity( length );
+		memory::copy( m_pString, pString, length );
+		terminate( length );
+	}
+
+	void DynamicString::assign( const DynamicString& string )
+	{
+		checkCapacity( string.m_length );
+		memory::copy( m_pString, string.m_pString, string.m_length );
+		terminate( string.m_length );
+	}
+
 	void DynamicString::clear()
 	{
 		if( m_capacity > 0u )
@@ -400,9 +415,19 @@ namespace conct
 		return result;
 	}
 
-	char* DynamicString::toCharPointer()
+	char* DynamicString::beginWrite()
 	{
 		return m_pString;
+	}
+
+	void DynamicString::endWrite( uintreg newLength /*= (uintreg)-1 */ )
+	{
+		if( newLength == (uintreg)-1 )
+		{
+			newLength = getStringLength( m_pString );
+		}
+
+		m_length = newLength;
 	}
 
 	const char* DynamicString::toConstCharPointer() const
@@ -444,10 +469,7 @@ namespace conct
 
 	DynamicString& DynamicString::operator=( const DynamicString& rhs )
 	{
-		checkCapacity( rhs.m_length );
-		memory::copy( m_pString, rhs.m_pString, rhs.m_length );
-		terminate( rhs.m_length );
-
+		assign( rhs );
 		return *this;
 	}
 

@@ -19,6 +19,9 @@ namespace conct
 		uintreg				getLength() const { return m_length; }
 		uintreg				getCapacity() const { return m_capacity; }
 
+		void				assign( const char* pString );
+		void				assign( const DynamicString& string );
+
 		void				clear();
 		void				reserve( uintreg size );
 		void				terminate( uintreg newLength );
@@ -56,7 +59,9 @@ namespace conct
 		DynamicString		popBack() const;
 		DynamicString		pushBack( char c ) const;
 
-		char*				toCharPointer();
+		char*				beginWrite();
+		void				endWrite( uintreg newLength = (uintreg)-1 );
+
 		const char*			toConstCharPointer() const;
 
 		char*				getBegin();

@@ -7,6 +7,9 @@
 
 #include "device_controller.h"
 
+#include "controller_config.h"
+#include "controller_ui.h"
+
 struct ImAppContext;
 
 namespace conct
@@ -32,5 +35,8 @@ namespace conct
 		Controller			m_controller;
 
 		PortVector			m_ports;
+
+		ControllerConfig	m_config;
+		ControllerUI		m_ui;
 	};
 }

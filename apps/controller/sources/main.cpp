@@ -1,22 +1,29 @@
 #include <stdio.h>
 
-#include <imapp/imapp.h>
+#include "controller_app.h"
 
-struct TestContext
-{
-};
+#include <imapp/imapp.h>
 
 void* __cdecl ImAppProgramInitialize( ImAppParameters* pParameters )
 {
-	return new TestContext();
+	pParameters->windowTitle		= "Controller App";
+	pParameters->defaultFullWindow	= false;
+	pParameters->tickIntervalMs		= 100u;
+
+	conct::ControllerApp* pApp = new conct::ControllerApp();
+	pApp->setup();
+
+	return pApp;
 }
 
 void __cdecl ImAppProgramDoUi( ImAppContext* pImAppContext, void* pProgramContext )
 {
+	conct::ControllerApp* pApp = (conct::ControllerApp*)pProgramContext;
+	pApp->doUI( pImAppContext );
 }
 
 void __cdecl ImAppProgramShutdown( ImAppContext* pImAppContext, void* pProgramContext )
 {
-	TestContext* pTestContext = (TestContext*)pProgramContext;
-	delete pTestContext;
+	conct::ControllerApp* pApp = (conct::ControllerApp*)pProgramContext;
+	delete pApp;
 }

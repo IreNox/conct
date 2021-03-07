@@ -13,7 +13,7 @@ namespace conct
 	void RouterSimulator::setup()
 	{
 		m_device.setupDevice();
-		m_controller.setup( &m_device.getRuntime() );
+		m_controller.setup( m_device.getRuntime() );
 	}
 
 	void RouterSimulator::loop()

@@ -35,7 +35,7 @@ namespace conct
 
 		const uintreg radioCount = (parameters.cePin1 != 0 ? 2u : 1u);
 		const uintreg connectionCount = ((radioCount * PipesPerRadio) - 1u);
-		m_connections.setLength( connectionCount );
+		m_connections.setLengthUninitialized( connectionCount );
 
 		for( uintreg i = 0u; i < m_connections.getLength(); ++i )
 		{
@@ -107,7 +107,7 @@ namespace conct
 		Connection& connection = m_connections[ endpointId ];
 
 		const uintreg sendBufferLength = connection.sendBuffer.getLength();
-		connection.sendBuffer.setLength( sendBufferLength + size );
+		connection.sendBuffer.setLengthUninitialized( sendBufferLength + size );
 
 		writer.set( &connection.sendBuffer[ sendBufferLength ], size );
 		return true;
@@ -116,7 +116,7 @@ namespace conct
 	void PortNRF24L01Server::closeSend( Writer& writer, uintreg endpointId )
 	{
 		Connection& connection = m_connections[ endpointId ];
-		connection.sendBuffer.setLength( connection.sendBuffer.getLength() - writer.getRemainingSize() );
+		connection.sendBuffer.setLengthUninitialized( connection.sendBuffer.getLength() - writer.getRemainingSize() );
 	}
 
 	bool PortNRF24L01Server::openReceived( Reader& reader, uintreg& endpointId )
@@ -146,7 +146,7 @@ namespace conct
 		{
 			connection.receiveBuffer[ i ] = connection.receiveBuffer[ remainingOffset + i ];
 		}
-		connection.receiveBuffer.setLength( reader.getRemainingSize() );
+		connection.receiveBuffer.setLengthUninitialized( reader.getRemainingSize() );
 	}
 
 	Flags8< PortFlag > PortNRF24L01Server::getFlags() const
@@ -478,7 +478,7 @@ namespace conct
 		{
 			connection.sendBuffer[ i ] = connection.sendBuffer[ remainingOffset + i ];
 		}
-		connection.sendBuffer.setLength( remainingSize );
+		connection.sendBuffer.setLengthUninitialized( remainingSize );
 
 		connection.flags.unset( ConnectionFlag_AcknowledgedPacket );
 		sendLastDataPacket( connection );

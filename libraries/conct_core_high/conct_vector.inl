@@ -51,7 +51,7 @@ namespace conct
 	{
 		checkCapacity( size );
 
-		for( size_t i = m_length; i < size; ++i )
+		for( size_t i = this->m_length; i < size; ++i )
 		{
 			this->m_pData[ i ] = value;
 		}

@@ -206,7 +206,7 @@ namespace conct
 
 		Connection& connection = m_connections[ endpointId ];
 
-		connection.sendData.setLength( connection.sendData.getLength() + size );
+		connection.sendData.setLengthUninitialized( connection.sendData.getLength() + size );
 		writer.set( connection.sendData.getEnd() - size, size );
 		return true;
 	}
@@ -334,7 +334,7 @@ namespace conct
 				return false;
 			}
 
-			connection.receiveData.setLength( connection.receiveData.getLength() + receiveResult );
+			connection.receiveData.setLengthUninitialized( connection.receiveData.getLength() + receiveResult );
 		}
 		while( receiveResult == 2048 );
 

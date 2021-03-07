@@ -1,13 +1,12 @@
 #pragma once
 
-#include "conct_controller.h"
 #include "conct_device.h"
 #include "conct_runtime_high.h"
-#include "conct_vector.h"
 
 #include "device_controller.h"
 
 #include "controller_config.h"
+#include "controller_state.h"
 #include "controller_ui.h"
 
 struct ImAppContext;
@@ -25,18 +24,14 @@ namespace conct
 
 		void				setup();
 
-		void				doUI( const ImAppContext* pConext );
+		void				doUI( ImAppContext* pConext );
 
 	private:
 
-		using PortVector = Vector< PortTcpClient* >;
-
 		DeviceController	m_device;
-		Controller			m_controller;
-
-		PortVector			m_ports;
 
 		ControllerConfig	m_config;
+		ControllerState		m_state;
 		ControllerUI		m_ui;
 	};
 }

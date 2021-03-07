@@ -174,7 +174,7 @@ namespace conct
 		fseek( pFile, 0, SEEK_SET );
 
 		Vector< uint8 > result;
-		result.setLength( uintreg( pos ) );
+		result.setLengthUninitialized( uintreg( pos ) );
 
 		if( fread( result.getData(), 1u, size_t( pos ), pFile ) != pos )
 		{

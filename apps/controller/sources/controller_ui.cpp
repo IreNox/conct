@@ -15,7 +15,7 @@ namespace conct
 		m_editPort.reserve( 32u );
 	}
 
-	void ControllerUI::doUI( const ImAppContext* pContext )
+	void ControllerUI::doUI( ImAppContext* pContext )
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
@@ -32,15 +32,27 @@ namespace conct
 			return;
 		}
 
-		nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 2 );
+		nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, showMenuAlways? 2 : 3 );
 
-		nk_layout_row_push( pNkContext, 50.0f );
-		if( !showMenuAlways &&
-			nk_button_label( pNkContext, "Menu" ) )
+		if( !showMenuAlways )
 		{
-			m_isMenuOpen = !m_isMenuOpen;
+			nk_layout_row_push( pNkContext, 24.0f + pNkContext->style.button.padding.x * 2.0f );
+
+			const struct nk_image image	= ImAppImageGetBlocking( pContext, "icons/menu.png" );
+			if( nk_button_image( pNkContext, image ) )
+			{
+				m_isMenuOpen = !m_isMenuOpen;
+			}
 		}
 
+		nk_layout_row_push( pNkContext, 28.0f );
+		{
+			const char* pIcon			= getStateIcon( m_state );
+			const struct nk_image image	= ImAppImageGetBlocking( pContext, pIcon );
+			const struct nk_color color	= { 0xff, 0xff, 0xff, 0xff };
+			nk_image_color( pNkContext, image, color );
+		}
+		
 		nk_layout_row_push( pNkContext, 500.0f );
 		{
 			const char* pTitle = getStateTitle( m_state );
@@ -79,11 +91,12 @@ namespace conct
 		nk_end( pNkContext );
 	}
 
-	void ControllerUI::doMenuUI( const ImAppContext* pContext )
+	void ControllerUI::doMenuUI( ImAppContext* pContext )
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
-		if( !nk_begin( pNkContext, "Menu", nk_recti( pContext->x, pContext->y, pContext->width / 5, pContext->height ), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
+		const int menuWidth = max( 200, pContext->width / 5 );
+		if( !nk_begin( pNkContext, "Menu", nk_recti( pContext->x, pContext->y, menuWidth, pContext->height ), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
 		{
 			m_isMenuOpen = false;
 			return;
@@ -92,6 +105,13 @@ namespace conct
 		if( !nk_window_has_focus( pNkContext ) )
 		{
 			m_isMenuOpen = false;
+		}
+
+		nk_layout_row_dynamic( pNkContext, menuWidth * (723.0f / 1080.0f), 1 );
+		{
+			const struct nk_image image	= ImAppImageGetBlocking( pContext, "bg/menu_header.png" );
+			const struct nk_color color	= { 0xff, 0xff, 0xff, 0xff };
+			nk_image_color( pNkContext, image, color );
 		}
 
 		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
@@ -108,7 +128,11 @@ namespace conct
 		{
 			const State state = s_menuStates[ i ];
 
-			if( nk_button_label( pNkContext, getStateTitle( state ) ) )
+			const char* pTitle	= getStateTitle( state );
+			const char* pIcon	= getStateIcon( state );
+
+			const struct nk_image image = ImAppImageGetBlocking( pContext, pIcon );
+			if( nk_button_image_label( pNkContext, image, pTitle, NK_TEXT_RIGHT ) )
 			{
 				changeState( state );
 				m_isMenuOpen = false;
@@ -118,7 +142,7 @@ namespace conct
 		nk_end( pNkContext );
 	}
 
-	void ControllerUI::doHomeUI( const ImAppContext* pContext )
+	void ControllerUI::doHomeUI( ImAppContext* pContext )
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
@@ -127,17 +151,17 @@ namespace conct
 		nk_label( pNkContext, "TODO", NK_TEXT_LEFT );
 	}
 
-	void ControllerUI::doDevicesUI( const ImAppContext* pContext )
+	void ControllerUI::doDevicesUI( ImAppContext* pContext )
 	{
 
 	}
 
-	void ControllerUI::doDeviceInstancesUI( const ImAppContext* pContext )
+	void ControllerUI::doDeviceInstancesUI( ImAppContext* pContext )
 	{
 
 	}
 
-	void ControllerUI::doConnectionsUI( const ImAppContext* pContext )
+	void ControllerUI::doConnectionsUI( ImAppContext* pContext )
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
@@ -146,20 +170,23 @@ namespace conct
 		nk_layout_row_dynamic( pNkContext, pContext->height - 100.0f, 1 );
 
 		nk_list_view listView;
-		if( nk_list_view_begin( pNkContext, &listView, "connections", NK_WINDOW_BORDER, 50, (int)connections.getLength() ) )
+		if( nk_list_view_begin( pNkContext, &listView, "connections", 0, 100, (int)connections.getLength() ) )
 		{
-			nk_layout_row_dynamic( pNkContext, 25, 1 );
-			uintreg index = 0u;
+			nk_layout_row_dynamic( pNkContext, 100.0f, 1 );
 			for( const ControllerConfig::Connection& connection : connections )
 			{
-				bool selected = index == m_selectedConnection;
-				nk_selectable_label( pNkContext, connection.title.toConstCharPointer(), NK_TEXT_LEFT, &selected );
-				if( selected )
-				{
-					m_selectedConnection = index;
-				}
+				nk_group_begin( pNkContext, connection.title.toConstCharPointer(), NK_WINDOW_TITLE | NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR );
 
-				index++;
+				nk_layout_row_dynamic( pNkContext, 25.0f, 1 );
+
+				nk_label( pNkContext, connection.hostname.toConstCharPointer(), NK_TEXT_LEFT );
+
+				nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
+
+				nk_button_label( pNkContext, "Edit" );
+				nk_button_label( pNkContext, "Remove" );
+
+				nk_group_end( pNkContext );
 			}
 			nk_list_view_end( &listView );
 		}
@@ -176,7 +203,7 @@ namespace conct
 		}
 	}
 
-	void ControllerUI::doConnectionEditUI( const ImAppContext* pContext )
+	void ControllerUI::doConnectionEditUI( ImAppContext* pContext )
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
@@ -215,14 +242,19 @@ namespace conct
 		}
 	}
 
-	void ControllerUI::doCreditsUI( const ImAppContext* pContext )
+	void ControllerUI::doCreditsUI( ImAppContext* pContext )
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
 		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
 
 		nk_label( pNkContext, "Programming:", NK_TEXT_LEFT );
-		nk_label( pNkContext, "Tim Boden", NK_TEXT_LEFT );
+		nk_label( pNkContext, "Tim Boden - https://github.com/IreNox", NK_TEXT_LEFT );
+
+		nk_spacing( pNkContext, 1 );
+
+		nk_label( pNkContext, "Special Thanks:", NK_TEXT_LEFT );
+		nk_label( pNkContext, "Remix Icon - https://remixicon.com/", NK_TEXT_LEFT );
 
 		nk_spacing( pNkContext, 1 );
 	}
@@ -263,6 +295,21 @@ namespace conct
 		case State::Connections:		return "Connections";
 		case State::ConnectionEdit:		return "Edit Connection";
 		case State::Credits:			return "Credits";
+		}
+
+		return "???";
+	}
+
+	const char* ControllerUI::getStateIcon( State value )
+	{
+		switch( value )
+		{
+		case State::Home:				return "icons/home.png";
+		case State::Devices:			return "icons/devices.png";
+		case State::DeviceInstances:	return "icons/instances.png";
+		case State::Connections:		return "icons/connections.png";
+		case State::ConnectionEdit:		return "icons/edit-connection.png";
+		case State::Credits:			return "icons/credits.png";
 		}
 
 		return "???";

@@ -17,6 +17,8 @@ project:add_files( 'sources/*.cpp' )
 
 project:add_external( "https://github.com/irenox/imapp.git" )
 
+project:add_post_build_step( "copy_files", { pattern = "assets/**" } )
+
 project:generate_device()
 
 add_module_include_path( "../../libraries" )

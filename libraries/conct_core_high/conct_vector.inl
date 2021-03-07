@@ -41,13 +41,26 @@ namespace conct
 	}
 
 	template< class T >
-	void Vector< T >::reserve( uintreg size )
+	void Vector< T >::reserve( uintreg capacity )
 	{
-		checkCapacity( size );
+		checkCapacity( capacity );
 	}
 
 	template< class T >
-	void Vector< T >::setLength( uintreg size )
+	void Vector< T >::setLengthValue( uintreg size, T value )
+	{
+		checkCapacity( size );
+
+		for( size_t i = m_length; i < size; ++i )
+		{
+			this->m_pData[ i ] = value;
+		}
+
+		this->m_length = size;
+	}
+
+	template< class T >
+	void conct::Vector<T>::setLengthUninitialized( uintreg size )
 	{
 		checkCapacity( size );
 		this->m_length = size;

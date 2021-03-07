@@ -16,9 +16,9 @@ namespace conct
 	{
 	}
 
-	void Controller::setup( RuntimeHigh* pRuntime )
+	void Controller::setup( RuntimeHigh& runtime )
 	{
-		m_pRuntime = pRuntime;
+		m_pRuntime = &runtime;
 	}
 
 	void Controller::loop()

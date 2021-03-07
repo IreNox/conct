@@ -12,7 +12,7 @@ namespace conct
 
 		void				setup( ControllerConfig* pConfig );
 
-		void				doUI( const ImAppContext* pContext );
+		void				doUI( ImAppContext* pContext );
 
 	private:
 
@@ -37,17 +37,18 @@ namespace conct
 		DynamicString		m_editHostname;
 		DynamicString		m_editPort;
 
-		void				doMenuUI( const ImAppContext* pContext );
+		void				doMenuUI( ImAppContext* pContext );
 
-		void				doHomeUI( const ImAppContext* pContext );
-		void				doDevicesUI( const ImAppContext* pContext );
-		void				doDeviceInstancesUI( const ImAppContext* pContext );
-		void				doConnectionsUI( const ImAppContext* pContext );
-		void				doConnectionEditUI( const ImAppContext* pContext );
-		void				doCreditsUI( const ImAppContext* pContext );
+		void				doHomeUI( ImAppContext* pContext );
+		void				doDevicesUI( ImAppContext* pContext );
+		void				doDeviceInstancesUI( ImAppContext* pContext );
+		void				doConnectionsUI( ImAppContext* pContext );
+		void				doConnectionEditUI( ImAppContext* pContext );
+		void				doCreditsUI( ImAppContext* pContext );
 
 		void				changeState( State state );
 
 		static const char*	getStateTitle( State value );
+		static const char*	getStateIcon( State value );
 	};
 }

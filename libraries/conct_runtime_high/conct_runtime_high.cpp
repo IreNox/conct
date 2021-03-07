@@ -562,9 +562,9 @@ namespace conct
 		}
 #endif
 
-		package.target.sourceAddress.setLength( package.target.baseHeader.sourceHops );
-		package.target.destinationAddress.setLength( package.target.baseHeader.destinationHops );
-		package.target.payload.setLength( package.target.baseHeader.payloadSize );
+		package.target.sourceAddress.setLengthUninitialized( package.target.baseHeader.sourceHops );
+		package.target.destinationAddress.setLengthUninitialized( package.target.baseHeader.destinationHops );
+		package.target.payload.setLengthUninitialized( package.target.baseHeader.payloadSize );
 
 		setState( package, PackageState_ReadSourceAddress );
 	}

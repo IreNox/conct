@@ -28,16 +28,26 @@ namespace conct
 		};
 
 		using ConnectionVector = Vector< Connection >;
+		using DeviceFavoriteVector = Vector< DeviceFavorite >;
+		using InstanceFavoriteVector = Vector< InstanceFavorite >;
 
-		void						load();
-		void						save();
+		void							load();
+		void							save();
 
-		const ConnectionVector&		getConnections() const { return m_connections; }
+		uint32							getRevision() const { return m_revision; }
+
+		const ConnectionVector&			getConnections() const { return m_connections; }
+		void							addConnection( const Connection& connection );
+
+		const DeviceFavoriteVector&		getDeviceFavorites() const { return m_deviceFavorites; }
+		const InstanceFavoriteVector&	getInstanceFavorites() const { return m_instanceFavorites; }
 		
-		void						addConnection( const Connection& connection );
-
 	private:
 
-		ConnectionVector			m_connections;
+		uint32							m_revision			= 0u;
+
+		ConnectionVector				m_connections;
+		DeviceFavoriteVector			m_deviceFavorites;
+		InstanceFavoriteVector			m_instanceFavorites;
 	};
 }

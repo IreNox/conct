@@ -60,12 +60,20 @@ namespace conct
 
 			DynamicString errorName;
 			errorName.reserve( length );
-			errorName.terminate( length );
 
+			char* pTarget = errorName.beginWrite();
+			uintreg targetLength = 0u;
 			for( uintreg i = 0u; i < length; ++i )
 			{
-				errorName[ i ] = char( pString[ i ] );
+				const char c = char( pString[ i ] );
+				if( c == '\n' || c == '\r' )
+				{
+					continue;
+				}
+
+				pTarget[ targetLength++ ] = c;
 			}
+			errorName.endWrite( targetLength );
 
 			LocalFree( pString );
 			return errorName;
@@ -257,14 +265,14 @@ namespace conct
 				return;
 			}
 
-			m_receiveData.setLength( m_receiveData.getLength() + receivedBytes );
+			m_receiveData.setLengthUninitialized( m_receiveData.getLength() + receivedBytes );
 		}
 		while( receivedBytes == 2048 );
 	}
 
 	bool PortTcpClient::openSend( Writer& writer, uintreg size, uintreg endpointId )
 	{
-		m_sendData.setLength( m_sendData.getLength() + size );
+		m_sendData.setLengthUninitialized( m_sendData.getLength() + size );
 		writer.set( m_sendData.getEnd() - size, size );
 		return true;
 	}

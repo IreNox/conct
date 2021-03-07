@@ -20,8 +20,9 @@ namespace conct
 		uintreg			getCapacity() const;
 
 		void			clear();
-		void			reserve( uintreg size );
-		void			setLength( uintreg size );
+		void			reserve( uintreg capacity );
+		void			setLengthValue( uintreg size, T value );
+		void			setLengthUninitialized( uintreg size );
 
 		T&				insert( uintreg index );
 		void			insert( const T& value, uintreg index );

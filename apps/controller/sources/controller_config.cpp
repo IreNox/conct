@@ -86,6 +86,8 @@ namespace conct
 		{
 			trace::write( "Failed to write config!" );
 		}
+
+		m_revision++;
 	}
 
 	void ControllerConfig::addConnection( const Connection& connection )

@@ -20,7 +20,7 @@ namespace conct
 											Controller();
 											~Controller();
 
-		void								setup( RuntimeHigh* pRuntime );
+		void								setup( RuntimeHigh& runtime );
 		void								loop();
 
 		ValueCommand*						getProperty( const RemoteInstance& instance, const char* pName );

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="conct::DynamicString">
+		<DisplayString>{m_pString,s}</DisplayString>
+		<Expand>
+			<Item Name="[pointer]" ExcludeView="simple">m_pString</Item>
+			<Item Name="[length]" ExcludeView="simple">m_length</Item>
+			<Item Name="[capacity]" ExcludeView="simple">m_capacity</Item>
+			<ArrayItems>
+				<Size>m_length</Size>
+				<ValuePointer>m_pString</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="conct::Path">
+		<DisplayString>{{ path="{m_path}" }}</DisplayString>
+	</Type>
+	<Type Name="conct::Array&lt;*&gt;">
+		<DisplayString>{{ length={m_length} }}</DisplayString>
+		<Expand>
+			<Item Name="[length]" ExcludeView="simple">m_length</Item>
+			<ArrayItems>
+				<Size>m_length</Size>
+				<ValuePointer>m_pData</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="conct::Vector&lt;*&gt;">
+		<DisplayString>{{ length={m_length} }}</DisplayString>
+		<Expand>
+			<Item Name="[length]" ExcludeView="simple">m_length</Item>
+			<Item Name="[capacity]" ExcludeView="simple">m_capacity</Item>
+			<ArrayItems>
+				<Size>m_length</Size>
+				<ValuePointer>m_pData</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+	<Type Name="conct::Map&lt;*&gt;">
+		<DisplayString>{{ length={m_length} }}</DisplayString>
+		<Expand>
+			<Item Name="[length]" ExcludeView="simple">m_length</Item>
+			<Item Name="[capacity]" ExcludeView="simple">m_capacity</Item>
+			<ArrayItems>
+				<Size>m_length</Size>
+				<ValuePointer>m_pData</ValuePointer>
+			</ArrayItems>
+		</Expand>
+	</Type>
+</AutoVisualizer>

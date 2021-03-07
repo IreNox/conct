@@ -6,9 +6,10 @@
 
 namespace conct
 {
-	void ControllerUI::setup( ControllerConfig* pConfig )
+	void ControllerUI::setup( ControllerConfig& config, ControllerState& state )
 	{
-		m_pConfig = pConfig;
+		m_pConfig	= &config;
+		m_pState	= &state;
 
 		m_editTitle.reserve( 256u );
 		m_editHostname.reserve( 256u );
@@ -153,7 +154,99 @@ namespace conct
 
 	void ControllerUI::doDevicesUI( ImAppContext* pContext )
 	{
+		nk_context* pNkContext = pContext->nkContext;
 
+		nk_layout_row_dynamic( pNkContext, pContext->height - 100.0f, 1 );
+
+		nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2i( 0, 0 ) );
+		if( !nk_group_begin( pNkContext, "devices", 0 ) )
+		{
+			return;
+		}
+
+		const ControllerState::DeviceVector& devices = m_pState->getDevices();
+		for( const ControllerState::ConnectedDevice* pDevice : devices )
+		{
+			const float height = pNkContext->style.window.min_size.y + (25.0f * pDevice->instances.getLength());
+			nk_layout_row_dynamic( pNkContext, height, 1 );
+
+			//nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2i( 0, 0 ) );
+			if( !nk_group_begin( pNkContext, pDevice->name.toConstCharPointer(), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
+			{
+				continue;
+			}
+			//nk_style_pop_vec2( pNkContext );
+
+			// Title
+			nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
+			{
+				nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2( pNkContext->style.window.header.padding.x, 0.0f ) );
+				nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
+				nk_group_begin( pNkContext, pDevice->name.toConstCharPointer(), NK_WINDOW_NO_SCROLLBAR );
+
+				nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 4 );
+
+				nk_layout_row_push( pNkContext, 24.0f );
+				nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
+				const struct nk_image instancesImage = ImAppImageGetBlocking( pContext, "icons/instances.png" );
+				nk_image( pNkContext, instancesImage );
+				nk_style_pop_vec2( pNkContext );
+
+				nk_layout_row_push( pNkContext, 200.0f );
+				nk_label( pNkContext, pDevice->name.toConstCharPointer(), NK_TEXT_LEFT );
+
+				nk_layout_row_push( pNkContext, 400.0f );
+				nk_spacing( pNkContext, 1 );
+
+				// Favorite Button
+				nk_layout_row_push( pNkContext, 24.0f + (pNkContext->style.button.border * 2.0f) );
+				{
+					nk_style_push_float( pNkContext, &pNkContext->style.button.border, 0.0f );
+					nk_style_push_float( pNkContext, &pNkContext->style.button.rounding, 0.0f );
+					nk_style_push_vec2( pNkContext, &pNkContext->style.button.image_padding, nk_vec2( 0.0f, 0.0f ) );
+					nk_style_push_style_item( pNkContext, &pNkContext->style.button.normal, pNkContext->style.window.header.normal );
+					//nk_style_push_style_item( pNkContext, &pNkContext->style.button.active, pNkContext->style.window.header.active );
+					nk_style_push_style_item( pNkContext, &pNkContext->style.button.hover, pNkContext->style.window.header.hover );
+
+					const struct nk_image favImage = ImAppImageGetBlocking( pContext, "icons/fav-off.png" );
+					if( nk_button_image( pNkContext, favImage ) )
+					{
+
+					}
+					nk_style_pop_vec2( pNkContext );
+					nk_style_pop_float( pNkContext );
+					nk_style_pop_float( pNkContext );
+					nk_style_pop_style_item( pNkContext );
+					//nk_style_pop_style_item( pNkContext );
+					nk_style_pop_style_item( pNkContext );
+				}
+
+				nk_layout_row_end( pNkContext );
+				nk_group_end( pNkContext );
+				nk_style_pop_style_item( pNkContext );
+				nk_style_pop_vec2( pNkContext );
+			}
+
+			for( const ControllerState::DeviceInstance& instance : pDevice->instances )
+			{
+				const char* pTypeName = "Unknown Type";
+				if( instance.pType != nullptr )
+				{
+					pTypeName = instance.pType->getName().toConstCharPointer();
+				}
+				nk_label( pNkContext, pTypeName, NK_TEXT_LEFT );
+			}
+
+			nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
+
+			nk_button_label( pNkContext, "Edit" );
+			nk_button_label( pNkContext, "Remove" );
+
+			nk_group_end( pNkContext );
+		}
+
+		nk_group_end( pNkContext );
+		nk_style_pop_vec2( pNkContext );
 	}
 
 	void ControllerUI::doDeviceInstancesUI( ImAppContext* pContext )

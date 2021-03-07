@@ -171,6 +171,7 @@ namespace conct
 		bool		isDeviceAddressEmpty( const DeviceAddress& address );
 		bool		isDeviceAddressEquals( const DeviceAddress& lhs, const DeviceAddress& rhs );
 
+		void		clearDeviceAddress( DeviceAddress& target );
 		void		copyDeviceAddress( DeviceAddress& target, const DeviceAddress& source );
 		void		pushToDeviceAddress( DeviceAddress& target, DeviceId deviceId );
 	}

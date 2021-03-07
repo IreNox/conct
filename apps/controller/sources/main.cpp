@@ -6,12 +6,16 @@
 
 void* __cdecl ImAppProgramInitialize( ImAppParameters* pParameters )
 {
-	pParameters->windowTitle		= "Controller App";
+	pParameters->windowTitle		= "Conct";
 	pParameters->defaultFullWindow	= false;
 	pParameters->tickIntervalMs		= 100u;
 
 	conct::ControllerApp* pApp = new conct::ControllerApp();
-	pApp->setup();
+	if( !pApp->setup() )
+	{
+		delete pApp;
+		return nullptr;
+	}
 
 	return pApp;
 }

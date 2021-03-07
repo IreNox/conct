@@ -26,6 +26,11 @@ namespace conct
 		return false;
 	}
 
+	void runtime::clearDeviceAddress( DeviceAddress& target )
+	{
+		target.address[ 0u ] = InvalidDeviceId;
+	}
+
 	void runtime::copyDeviceAddress( DeviceAddress& target, const DeviceAddress& source )
 	{
 		for( uintreg i = 0u; i < DeviceAddress::Size; ++i )

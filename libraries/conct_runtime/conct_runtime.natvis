@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="conct::DeviceAddress">
+		<DisplayString>{{ {address,s} }}</DisplayString>
+		<Expand>
+			<!--ArrayItems>
+				<Size>256</Size>
+				<ValuePointer>address</ValuePointer>
+			</ArrayItems-->
+			<CustomListItems>
+				<Variable Name="pItem" InitialValue="&amp;address[0]"/>
+				<Loop>
+					<Break Condition="*pItem == 0"/>
+					<Item>*pItem,x</Item>
+					<Exec>pItem++</Exec>
+				</Loop>
+			</CustomListItems>
+		</Expand>
+	</Type>
+</AutoVisualizer>

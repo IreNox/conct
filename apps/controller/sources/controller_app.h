@@ -22,7 +22,7 @@ namespace conct
 							ControllerApp();
 							~ControllerApp();
 
-		void				setup();
+		bool				setup();
 
 		void				doUI( ImAppContext* pConext );
 

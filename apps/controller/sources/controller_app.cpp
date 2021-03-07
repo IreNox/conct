@@ -16,14 +16,20 @@ namespace conct
 		m_state.destroy();
 	}
 
-	void ControllerApp::setup()
+	bool ControllerApp::setup()
 	{
 		m_device.setupDevice();
 
 		m_config.load();
 
-		m_state.setup( m_config, m_device.getRuntime() );
-		m_ui.setup( &m_config );
+		if( !m_state.setup( m_config, m_device.getRuntime() ) )
+		{
+			return false;
+		}
+
+		m_ui.setup( m_config, m_state );
+
+		return true;
 	}
 
 	void ControllerApp::doUI( ImAppContext* pConext )

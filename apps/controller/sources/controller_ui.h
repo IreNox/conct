@@ -10,7 +10,7 @@ namespace conct
 	{
 	public:
 
-		void				setup( ControllerConfig* pConfig );
+		void				setup( ControllerConfig& config, ControllerState& state );
 
 		void				doUI( ImAppContext* pContext );
 
@@ -27,8 +27,9 @@ namespace conct
 		};
 
 		ControllerConfig*	m_pConfig				= nullptr;
+		ControllerState*	m_pState				= nullptr;
 
-		State				m_state					= State::Connections;
+		State				m_state					= State::Devices;
 		bool				m_isMenuOpen			= false;
 
 		uintreg				m_selectedConnection	= 0u;

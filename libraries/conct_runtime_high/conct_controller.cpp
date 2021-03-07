@@ -14,6 +14,10 @@ namespace conct
 
 	Controller::~Controller()
 	{
+		for( uintreg i = 0u; i < m_releaseCommand.getLength(); ++i )
+		{
+			delete m_releaseCommand[ i ];
+		}
 	}
 
 	void Controller::setup( RuntimeHigh& runtime )

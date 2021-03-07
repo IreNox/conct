@@ -10,7 +10,7 @@ namespace conct
 	{
 		DynamicMemory*	getDynamicMemory();
 
-		void*			allocateSystemMemory( uintptr size, uintptr alignment );
+		void*			allocateSystemMemory( uintptr size, uintptr alignment, size_t address );
 		void			freeSystemMemory( void* pAddress );
 
 		void			protectDynamicMemory();

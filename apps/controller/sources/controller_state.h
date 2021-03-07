@@ -24,9 +24,9 @@ namespace conct
 		struct Connection
 		{
 			DynamicString				hostname;
-			uint16						port		= 0u;
+			uint16						port				= 0u;
 
-			PortTcpClient*				pClientPort	= nullptr;
+			PortTcpClient*				pClientPort			= nullptr;
 		};
 
 		struct ConnectedDevice

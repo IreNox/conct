@@ -77,6 +77,8 @@ namespace conct
 
 		void*						allocateFromAllocator( Allocator* pAllocator, uintptr size, uintptr alignment );
 		void						freeFromAllocator( Allocator* pAllocator, void* pAddress );
+
+		static void					walkPool( void* ptr, size_t size, int used, void* user );
 	};
 
 	static const uintptr s_defaultPoolSize = 100u * 1024u; // 100 kib
@@ -242,7 +244,8 @@ namespace conct
 	{
 		const uintptr allocatorSize	= alignValue( sizeof( Allocator ) + tlsf_size() + sizeof( Pool ) + tlsf_pool_overhead() + size, m_pageSize );
 
-		void* pAllocatorMemory = memory::allocateSystemMemory( allocatorSize, m_pageSize );
+		const size_t address = 1ull << 31u;
+		void* pAllocatorMemory = memory::allocateSystemMemory( allocatorSize, m_pageSize, address );
 		if( pAllocatorMemory == nullptr )
 		{
 			return nullptr;
@@ -274,6 +277,8 @@ namespace conct
 		{
 			pNextPool = pPool->pPrevious;
 
+			tlsf_walk_pool( pPool->pool, walkPool, this );
+
 			tlsf_remove_pool( pAllocator->tlsf, pPool->pool );
 			memory::freeSystemMemory( pPool );
 		}
@@ -287,7 +292,8 @@ namespace conct
 			const uintptr minPoolSize	= alignValue( sizeof( Pool ) + tlsf_pool_overhead() + tlsf_alloc_overhead() + alignment + size, m_pageSize );
 			const uintptr poolSize		= CONCT_MAX( s_defaultPoolSize, minPoolSize );
 
-			void* pPoolMemory = memory::allocateSystemMemory( poolSize, m_pageSize );
+			const size_t address = size_t( pAllocator->poolCount + 1u ) << 32u;
+			void* pPoolMemory = memory::allocateSystemMemory( poolSize, m_pageSize, address );
 			if( pPoolMemory == nullptr )
 			{
 				return nullptr;
@@ -328,15 +334,25 @@ namespace conct
 		tlsf_free( pAllocator->tlsf, pAddress );
 	}
 
+	void DynamicMemory::walkPool( void* ptr, size_t size, int used, void* user )
+	{
+		if( !used )
+		{
+			return;
+		}
+
+		trace::writeFormat( "Leak: 0x%p, size: %d", ptr, size );
+	}
+
 	DynamicMemory* memory::getDynamicMemory()
 	{
 		return s_pDynamicMemory;
 	}
 
-	void* memory::allocateSystemMemory( uintptr size, uintptr alignment )
+	void* memory::allocateSystemMemory( uintptr size, uintptr alignment, size_t address )
 	{
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		return VirtualAlloc( nullptr, size, MEM_COMMIT, PAGE_READWRITE );
+		return VirtualAlloc( (void*)address, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
 		void* pAddress;
 		if( posix_memalign( &pAddress, alignment, size ) != 0 )

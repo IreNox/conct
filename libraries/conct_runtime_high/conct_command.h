@@ -21,6 +21,7 @@ namespace conct
 	public:
 
 						Command( CommandId id );
+		virtual			~Command() {}
 
 		CommandState	getState() const { return m_state; }
 		CommandId		getId() const { return m_id; }
@@ -50,6 +51,7 @@ namespace conct
 	public:
 
 							ValueCommand( CommandId id );
+		virtual				~ValueCommand() { }
 
 		const ValueHigh&	getValue() const { return m_value; }
 

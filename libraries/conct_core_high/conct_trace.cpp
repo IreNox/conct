@@ -10,6 +10,7 @@
 #	include <android/log.h>
 #endif
 
+#include <stdarg.h>
 #include <stdio.h>
 
 namespace conct
@@ -23,6 +24,22 @@ namespace conct
 #elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		__android_log_write( ANDROID_LOG_INFO, "conct", pString );
 #endif
+	}
+
+	void trace::writeFormat( const char* pFormat, ... )
+	{
+		char buffer[ 2048u ];
+
+		va_list args;
+		va_start( args, pFormat );
+#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+		vsprintf_s( buffer, 2048u, pFormat, args );
+#else
+		vsprintf( buffer, pFormat, args );
+#endif
+		va_end( args );
+
+		write( buffer );
 	}
 
 	void trace::write( const DynamicString& string )

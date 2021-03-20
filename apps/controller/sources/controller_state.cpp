@@ -251,6 +251,7 @@ namespace conct
 				{
 					if( instanceData.type == 0x6435u )
 					{
+						// Router
 						if( !pDevice->allowRoutering )
 						{
 							continue;
@@ -388,7 +389,7 @@ namespace conct
 		if( prop.pSetCommand != nullptr &&
 			prop.pSetCommand->isFinish() )
 		{
-			if( prop.pGetCommand->isFailure() )
+			if( prop.pSetCommand->isFailure() )
 			{
 				// TODO: try again
 				//prop.hasValueChanged = true;
@@ -409,5 +410,23 @@ namespace conct
 			prop.pSetCommand = m_controller.setProperty( remoteInstance, prop.pProperty->name.toConstCharPointer(), prop.value );
 			prop.hasValueChanged = false;
 		}
+	}
+
+	void ControllerState::changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const ValueHigh& value )
+	{
+		if( prop.pSetCommand != nullptr )
+		{
+			prop.hasValueChanged = true;
+			prop.value = value;
+			return;
+		}
+
+		RemoteInstance remoteInstance;
+		remoteInstance.address	= device.address;
+		remoteInstance.id		= instance.instance.id;
+
+		prop.pSetCommand		= m_controller.setProperty( remoteInstance, prop.pProperty->name.toConstCharPointer(), value );
+		prop.value				= value;
+		prop.hasValueChanged	= false;
 	}
 }

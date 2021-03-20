@@ -1,6 +1,7 @@
 #pragma once
 
 struct ImAppContext;
+struct nk_context;
 
 namespace conct
 {
@@ -20,7 +21,6 @@ namespace conct
 		{
 			Home,
 			Devices,
-			DeviceInstances,
 			Connections,
 			ConnectionEdit,
 			Credits
@@ -42,10 +42,17 @@ namespace conct
 
 		void				doHomeUI( ImAppContext* pContext );
 		void				doDevicesUI( ImAppContext* pContext );
-		void				doDeviceInstancesUI( ImAppContext* pContext );
 		void				doConnectionsUI( ImAppContext* pContext );
 		void				doConnectionEditUI( ImAppContext* pContext );
 		void				doCreditsUI( ImAppContext* pContext );
+
+		void				doDeviceUI( ImAppContext* pContext, ControllerState::ConnectedDevice& device );
+		void				doInstanceUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance );
+		void				doPropertyUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop );
+
+		float				getDeviceHeight( nk_context* pNkContext, const ControllerState::ConnectedDevice& device ) const;
+		float				getInstanceHeight( nk_context* pNkContext, const ControllerState::DeviceInstance& instance ) const;
+		float				getPropertyHeight( nk_context* pNkContext, const ControllerState::InstanceProperty& prop ) const;
 
 		void				changeState( State state );
 

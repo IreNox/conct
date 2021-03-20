@@ -79,6 +79,8 @@ namespace conct
 
 		const DeviceVector&				getDevices() const { return m_devices; }
 
+		void							changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const ValueHigh& value );
+
 	private:
 
 		RuntimeHigh*					m_pRuntime			= nullptr;

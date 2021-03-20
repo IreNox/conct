@@ -2,6 +2,8 @@
 
 #include "conct_string_tools.h"
 
+#include "controller_ui_widgets.h"
+
 #include <imapp/imapp.h>
 
 namespace conct
@@ -33,7 +35,8 @@ namespace conct
 			return;
 		}
 
-		nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, showMenuAlways? 2 : 3 );
+		const float height = 24.0f + pNkContext->style.window.padding.y;
+		nk_layout_row_begin( pNkContext, NK_STATIC, height, showMenuAlways? 2 : 3 );
 
 		if( !showMenuAlways )
 		{
@@ -70,10 +73,6 @@ namespace conct
 
 		case ControllerUI::State::Devices:
 			doDevicesUI( pContext );
-			break;
-
-		case ControllerUI::State::DeviceInstances:
-			doDeviceInstancesUI( pContext );
 			break;
 
 		case ControllerUI::State::Connections:
@@ -156,102 +155,21 @@ namespace conct
 	{
 		nk_context* pNkContext = pContext->nkContext;
 
-		nk_layout_row_dynamic( pNkContext, pContext->height - 100.0f, 1 );
+		nk_layout_row_dynamic( pNkContext, pContext->height - 24.0f, 1 );
 
 		nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2i( 0, 0 ) );
-		if( !nk_group_begin( pNkContext, "devices", 0 ) )
-		{
-			return;
-		}
+		CONCT_ASSERT( nk_group_begin( pNkContext, "devices", 0 ) );
 
 		const ControllerState::DeviceVector& devices = m_pState->getDevices();
-		for( const ControllerState::ConnectedDevice* pDevice : devices )
+		for( ControllerState::ConnectedDevice* pDevice : devices )
 		{
-			const float height = pNkContext->style.window.min_size.y + (25.0f * pDevice->instances.getLength());
-			nk_layout_row_dynamic( pNkContext, height, 1 );
-
-			//nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2i( 0, 0 ) );
-			if( !nk_group_begin( pNkContext, pDevice->name.toConstCharPointer(), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
-			{
-				continue;
-			}
-			//nk_style_pop_vec2( pNkContext );
-
-			// Title
-			nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
-			{
-				nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2( pNkContext->style.window.header.padding.x, 0.0f ) );
-				nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
-				nk_group_begin( pNkContext, pDevice->name.toConstCharPointer(), NK_WINDOW_NO_SCROLLBAR );
-
-				nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 4 );
-
-				nk_layout_row_push( pNkContext, 24.0f );
-				nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
-				const struct nk_image instancesImage = ImAppImageGetBlocking( pContext, "icons/instances.png" );
-				nk_image( pNkContext, instancesImage );
-				nk_style_pop_vec2( pNkContext );
-
-				nk_layout_row_push( pNkContext, 200.0f );
-				nk_label( pNkContext, pDevice->name.toConstCharPointer(), NK_TEXT_LEFT );
-
-				nk_layout_row_push( pNkContext, 400.0f );
-				nk_spacing( pNkContext, 1 );
-
-				// Favorite Button
-				nk_layout_row_push( pNkContext, 24.0f + (pNkContext->style.button.border * 2.0f) );
-				{
-					nk_style_push_float( pNkContext, &pNkContext->style.button.border, 0.0f );
-					nk_style_push_float( pNkContext, &pNkContext->style.button.rounding, 0.0f );
-					nk_style_push_vec2( pNkContext, &pNkContext->style.button.image_padding, nk_vec2( 0.0f, 0.0f ) );
-					nk_style_push_style_item( pNkContext, &pNkContext->style.button.normal, pNkContext->style.window.header.normal );
-					//nk_style_push_style_item( pNkContext, &pNkContext->style.button.active, pNkContext->style.window.header.active );
-					nk_style_push_style_item( pNkContext, &pNkContext->style.button.hover, pNkContext->style.window.header.hover );
-
-					const struct nk_image favImage = ImAppImageGetBlocking( pContext, "icons/fav-off.png" );
-					if( nk_button_image( pNkContext, favImage ) )
-					{
-
-					}
-					nk_style_pop_vec2( pNkContext );
-					nk_style_pop_float( pNkContext );
-					nk_style_pop_float( pNkContext );
-					nk_style_pop_style_item( pNkContext );
-					//nk_style_pop_style_item( pNkContext );
-					nk_style_pop_style_item( pNkContext );
-				}
-
-				nk_layout_row_end( pNkContext );
-				nk_group_end( pNkContext );
-				nk_style_pop_style_item( pNkContext );
-				nk_style_pop_vec2( pNkContext );
-			}
-
-			for( const ControllerState::DeviceInstance& instance : pDevice->instances )
-			{
-				const char* pTypeName = "Unknown Type";
-				if( instance.pType != nullptr )
-				{
-					pTypeName = instance.pType->getName().toConstCharPointer();
-				}
-				nk_label( pNkContext, pTypeName, NK_TEXT_LEFT );
-			}
-
-			nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
-
-			nk_button_label( pNkContext, "Edit" );
-			nk_button_label( pNkContext, "Remove" );
-
-			nk_group_end( pNkContext );
+			doDeviceUI( pContext, *pDevice );
 		}
+
+		nk_spacing( pNkContext, 1u );
 
 		nk_group_end( pNkContext );
 		nk_style_pop_vec2( pNkContext );
-	}
-
-	void ControllerUI::doDeviceInstancesUI( ImAppContext* pContext )
-	{
-
 	}
 
 	void ControllerUI::doConnectionsUI( ImAppContext* pContext )
@@ -352,6 +270,234 @@ namespace conct
 		nk_spacing( pNkContext, 1 );
 	}
 
+	void ControllerUI::doDeviceUI( ImAppContext* pContext, ControllerState::ConnectedDevice& device )
+	{
+		nk_context* pNkContext = pContext->nkContext;
+
+		const float deviceHeight = getDeviceHeight( pNkContext, device );
+		nk_layout_row_dynamic( pNkContext, deviceHeight, 1 );
+
+		if( !nk_group_begin( pNkContext, device.name.toConstCharPointer(), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
+		{
+			return;
+		}
+
+		// Title
+		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
+		{
+			//nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
+			//CONCT_ASSERT( nk_panel_begin( pNkContext, "Bla", NK_PANEL_GROUP ) );
+
+			//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 1 );
+			//nk_label( pNkContext, "Bla", NK_TEXT_LEFT );
+
+			//nk_panel_end( pNkContext );
+			//nk_style_pop_style_item( pNkContext );
+
+			UiHeader deviceHeader( pNkContext, "deviceHeader" );
+			if( deviceHeader.isVisible )
+			{
+				const float width = nk_window_get_width( pNkContext );
+				nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 3 );
+
+				nk_layout_row_push( pNkContext, 24.0f );
+				nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
+				const struct nk_image instancesImage = ImAppImageGetBlocking( pContext, "icons/instances.png" );
+				nk_image( pNkContext, instancesImage );
+				nk_style_pop_vec2( pNkContext );
+
+				const float headerPadding	= pNkContext->style.window.header.padding.x * 2.0f;
+				const float imageWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
+				const float titleWidth		= pNkContext->style.window.group_padding.x * 2.0f;
+				const float favWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
+				const float remainingWidth	= width - (headerPadding + imageWidth + titleWidth + favWidth);
+				nk_layout_row_push( pNkContext, remainingWidth );
+				nk_label( pNkContext, device.name.toConstCharPointer(), NK_TEXT_LEFT );
+
+				// Favorite Button
+				nk_layout_row_push( pNkContext, 24.0f + (pNkContext->style.button.padding.x * 2.0f) );
+				{
+					nk_style_push_float( pNkContext, &pNkContext->style.button.border, 0.0f );
+					nk_style_push_float( pNkContext, &pNkContext->style.button.rounding, 0.0f );
+					nk_style_push_vec2( pNkContext, &pNkContext->style.button.image_padding, nk_vec2( 0.0f, 0.0f ) );
+					nk_style_push_style_item( pNkContext, &pNkContext->style.button.normal, pNkContext->style.window.header.normal );
+					//nk_style_push_style_item( pNkContext, &pNkContext->style.button.active, pNkContext->style.window.header.active );
+					nk_style_push_style_item( pNkContext, &pNkContext->style.button.hover, pNkContext->style.window.header.hover );
+
+					const struct nk_image favImage = ImAppImageGetBlocking( pContext, "icons/fav-off.png" );
+					if( nk_button_image( pNkContext, favImage ) )
+					{
+
+					}
+					nk_style_pop_vec2( pNkContext );
+					nk_style_pop_float( pNkContext );
+					nk_style_pop_float( pNkContext );
+					nk_style_pop_style_item( pNkContext );
+					//nk_style_pop_style_item( pNkContext );
+					nk_style_pop_style_item( pNkContext );
+				}
+
+				nk_layout_row_end( pNkContext );
+			}
+		}
+
+		for( ControllerState::DeviceInstance& instance : device.instances )
+		{
+			doInstanceUI( pContext, device, instance );
+		}
+
+		nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
+
+		nk_button_label( pNkContext, "Edit" );
+		nk_button_label( pNkContext, "Remove" );
+
+		nk_group_end( pNkContext );
+	}
+
+	void ControllerUI::doInstanceUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance )
+	{
+		nk_context* pNkContext = pContext->nkContext;
+
+		const char* pTypeName = "Unknown Type";
+		if( instance.pType != nullptr )
+		{
+			pTypeName = instance.pType->getName().toConstCharPointer();
+		}
+
+		{
+			nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
+
+			const struct nk_image instanceImage = ImAppImageGetBlocking( pContext, "icons/instance.png" );
+			UI::doHeaderImageLabel( pNkContext, instanceImage, pTypeName );
+
+			//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 2 );
+			//
+			//nk_layout_row_push( pNkContext, 24.0f );
+			//nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
+			//nk_image( pNkContext, instanceImage );
+			//nk_style_pop_vec2( pNkContext );
+			//
+			//nk_label( pNkContext, pTypeName, NK_TEXT_LEFT );
+		}
+
+		for( ControllerState::InstanceProperty& prop : instance.properties )
+		{
+			doPropertyUI( pContext, device, instance, prop );
+		}
+	}
+
+	void ControllerUI::doPropertyUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop )
+	{
+		nk_context* pNkContext = pContext->nkContext;
+
+		nk_layout_row_dynamic( pNkContext, 0.0f, 2 );
+
+		nk_label( pNkContext, prop.pProperty->name.toConstCharPointer(), NK_TEXT_LEFT );
+
+		if( prop.value.getType() == ValueType_Void &&
+			prop.pGetCommand != nullptr )
+		{
+			nk_label( pNkContext, "Loading...", NK_TEXT_LEFT );
+			return;
+		}
+
+		const ValueType valueType = prop.value.getType();
+		switch( valueType )
+		{
+		case ValueType_Void:
+			nk_label( pNkContext, "No Value", NK_TEXT_LEFT );
+			break;
+
+		case ValueType_Boolean:
+			{ 
+				bool active = prop.value.getBoolean();
+				if( nk_checkbox_label( pNkContext, active ? "True" : "False", &active ) )
+				{
+					ValueHigh newValue;
+					newValue.setBoolean( active );
+
+					m_pState->changeProperty( device, instance, prop, newValue );
+				}
+			}
+			break;
+
+		case ValueType_Integer:
+		case ValueType_Unsigned:
+			{
+				const sint64 value = valueType == ValueType_Integer ? prop.value.getInteger() : prop.value.getUnsigned();
+				nk_labelf( pNkContext, NK_TEXT_LEFT, "%d", value );
+			}
+			break;
+
+		case ValueType_PercentValue:
+			{
+				const int oldIntValue = (int)prop.value.getPercentValue();
+				const int newIntValue = nk_slide_int( pNkContext, 0, oldIntValue, 65535, 65535 / 100 );
+				if( newIntValue != oldIntValue )
+				{
+					ValueHigh newValue;
+					newValue.setPercentValue( (PercentValue)newIntValue );
+
+					m_pState->changeProperty( device, instance, prop, newValue );
+				}
+			}
+			break;
+
+		case ValueType_DeviceId:
+		case ValueType_InstanceId:
+		case ValueType_TypeCrc:
+		case ValueType_String:
+		case ValueType_Struct:
+		case ValueType_Array:
+			nk_label( pNkContext, "Not Implemented", NK_TEXT_LEFT );
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	float ControllerUI::getDeviceHeight( nk_context* pNkContext, const ControllerState::ConnectedDevice& device ) const
+	{
+		float height = pNkContext->style.window.border;
+		height += pNkContext->style.font->height;
+		height += pNkContext->style.window.header.label_padding.y * 2.0f;
+		height += pNkContext->style.window.header.padding.y * 2.0f;
+		height += pNkContext->style.window.spacing.y * 2.0f;
+
+		for( const ControllerState::DeviceInstance& instance : device.instances )
+		{
+			height += getInstanceHeight( pNkContext, instance );
+		}
+
+		return height;
+	}
+
+	float ControllerUI::getInstanceHeight( nk_context* pNkContext, const ControllerState::DeviceInstance& instance ) const
+	{
+		float height = pNkContext->style.window.group_border * 2.0f;
+		height += pNkContext->style.font->height;
+		height += pNkContext->style.window.header.label_padding.y * 2.0f;
+		height += pNkContext->style.window.header.padding.y * 2.0f;
+		height += pNkContext->style.window.spacing.y * 2.0f;
+
+		for( const ControllerState::InstanceProperty& prop : instance.properties )
+		{
+			height += getPropertyHeight( pNkContext, prop );
+		}
+
+		return height;
+	}
+
+	float ControllerUI::getPropertyHeight( nk_context* pNkContext, const ControllerState::InstanceProperty& prop ) const
+	{
+		float height = pNkContext->style.font->height;
+		height += pNkContext->style.window.padding.y * 2.0f;
+		height += pNkContext->style.window.spacing.y * 2.0f;
+
+		return height;
+	}
+
 	void ControllerUI::changeState( State state )
 	{
 		m_state = state;
@@ -362,9 +508,6 @@ namespace conct
 			break;
 
 		case State::Devices:
-			break;
-
-		case State::DeviceInstances:
 			break;
 
 		case State::Connections:
@@ -384,7 +527,6 @@ namespace conct
 		{
 		case State::Home:				return "Home";
 		case State::Devices:			return "Devices";
-		case State::DeviceInstances:	return "Instances";
 		case State::Connections:		return "Connections";
 		case State::ConnectionEdit:		return "Edit Connection";
 		case State::Credits:			return "Credits";
@@ -399,7 +541,6 @@ namespace conct
 		{
 		case State::Home:				return "icons/home.png";
 		case State::Devices:			return "icons/devices.png";
-		case State::DeviceInstances:	return "icons/instances.png";
 		case State::Connections:		return "icons/connections.png";
 		case State::ConnectionEdit:		return "icons/edit-connection.png";
 		case State::Credits:			return "icons/credits.png";

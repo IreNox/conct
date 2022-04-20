@@ -36,19 +36,20 @@ namespace conct
 #elif CONCT_ENABLED( CONCT_POINTER_64 )
 	typedef uint64		uintptr;
 	CONCT_STATIC_ASSERT( sizeof( void* ) == 8u );
+#else
+#	error "No Pointer size"
 #endif
 
 #if CONCT_ENABLED( CONCT_REGISTER_8 )
 	typedef uint8		uintreg;
-#endif
-#if CONCT_ENABLED( CONCT_REGISTER_16 )
+#elif CONCT_ENABLED( CONCT_REGISTER_16 )
 	typedef uint16		uintreg;
-#endif
-#if CONCT_ENABLED( CONCT_REGISTER_32 )
+#elif CONCT_ENABLED( CONCT_REGISTER_32 )
 	typedef uint32		uintreg;
-#endif
-#if CONCT_ENABLED( CONCT_REGISTER_64 )
+#elif CONCT_ENABLED( CONCT_REGISTER_64 )
 	typedef uint64		uintreg;
+#else
+#	error "No Register size"
 #endif
 
 	typedef uint8		DeviceId;

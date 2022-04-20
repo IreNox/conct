@@ -10,7 +10,8 @@ namespace conct
 
 	template< class T >
 	Vector< T >::Vector( const Vector& rhs )
-		: m_capacity( 0u )
+		: Array< T >()
+		, m_capacity( 0u )
 	{
 		*this = rhs;
 	}
@@ -51,7 +52,7 @@ namespace conct
 	{
 		checkCapacity( size );
 
-		for( size_t i = this->m_length; i < size; ++i )
+		for( uintreg i = this->m_length; i < size; ++i )
 		{
 			this->m_pData[ i ] = value;
 		}

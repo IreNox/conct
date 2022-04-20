@@ -4,7 +4,6 @@
 #include "conct_command.h"
 #include "conct_crc16.h"
 #include "conct_device.h"
-#include "conct_filesystem.h"
 #include "conct_path.h"
 #include "conct_port.h"
 #include "conct_proxy.h"

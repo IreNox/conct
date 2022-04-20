@@ -94,11 +94,11 @@ namespace conct
 
 	CONCT_FORCE_INLINE uintreg countPopulation64( uint64 w )
 	{
-		uint64 w1 = ( w & 0x2222222222222222 ) + ( ( w + w ) & 0x2222222222222222 );
-		uint64 w2 = ( w >> 1 & 0x2222222222222222 ) + ( w >> 2 & 0x2222222222222222 );
-		w1 = w1 + ( w1 >> 4 ) & 0x0f0f0f0f0f0f0f0f;
-		w2 = w2 + ( w2 >> 4 ) & 0x0f0f0f0f0f0f0f0f;
-		return ( w1 + w2 ) * 0x0101010101010101 >> 57;
+		uint64 w1 = (w & 0x2222222222222222) + ((w + w) & 0x2222222222222222);
+		uint64 w2 = (w >> 1 & 0x2222222222222222) + (w >> 2 & 0x2222222222222222);
+		w1 = (w1 + (w1 >> 4)) & 0x0f0f0f0f0f0f0f0f;
+		w2 = (w2 + (w2 >> 4)) & 0x0f0f0f0f0f0f0f0f;
+		return (w1 + w2) * 0x0101010101010101 >> 57;
 	}
 
 	CONCT_FORCE_INLINE uintreg countLeadingZeros64( uint64 value )

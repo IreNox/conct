@@ -11,6 +11,8 @@
 #	include <fcntl.h>
 #	include <sys/types.h>
 #	include <unistd.h>
+#elif CONCT_ENABLED( CONCT_PLATFORM_ESP )
+#	include <sodium/randombytes.h>
 #endif
 
 namespace conct
@@ -30,6 +32,8 @@ namespace conct
 		{
 			trace::write( "critical: failed to get secure random bytes." );
 		}
+#elif CONCT_ENABLED( CONCT_PLATFORM_ESP )
+	randombytes_buf( pBuffer, bufferSize );
 #else
 #	error "Platform not supported"
 #endif

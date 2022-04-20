@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<hardware name="ESP32" runtime="high">
+	<system>esp</system>
+	<environment>production</environment>
+	<memory>
+		<dynamic />
+	</memory>
+	<capabilities>
+		<allocation />
+		<sockets />
+		<gpio />
+		<spi />
+	</capabilities>
+</hardware>

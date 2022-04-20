@@ -148,7 +148,7 @@ namespace conct
 		char exeFileName[ PATH_MAX ];
 		readlink( "/proc/self/exe", exeFileName, sizeof( exeFileName ) );
 		return Path( DynamicString( exeFileName ) );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_ESP )
 		return Path();
 #else
 #	error "Platform not supported"

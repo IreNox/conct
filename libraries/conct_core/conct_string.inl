@@ -109,7 +109,7 @@ namespace conct
 			index++;
 		}
 
-		return pString1[ index ] == pString2[ index ] != '\0';
+		return pString1[ index ] == '\0' && pString2[ index ] != '\0';
 	}
 
 	CONCT_FORCE_INLINE StringCompareResult compareStrings( const char* pString1, const char* pString2 )

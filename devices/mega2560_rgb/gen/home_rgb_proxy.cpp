@@ -1,7 +1,5 @@
 #include "home_rgb_proxy.h"
 
-#include "conct_string.h"
-
 #include "home_rgb.h"
 #include "conct_core.h"
 
@@ -12,23 +10,23 @@ namespace conct
 	{
 	}
 
-	bool RGBProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
+	bool RGBProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const
 	{
 		const RGB* pTypedInstance = static_cast< const RGB* >( pInstance );
 
-		if( isStringEquals( pName, "Red" ) )
+		if( nameCrc == 0x6a8b )
 		{
 			targetValueBuilder.setPercentValue( pTypedInstance->getRed() );
 			return true;
 		}
 
-		if( isStringEquals( pName, "Green" ) )
+		if( nameCrc == 0xd415 )
 		{
 			targetValueBuilder.setPercentValue( pTypedInstance->getGreen() );
 			return true;
 		}
 
-		if( isStringEquals( pName, "Blue" ) )
+		if( nameCrc == 0xde32 )
 		{
 			targetValueBuilder.setPercentValue( pTypedInstance->getBlue() );
 			return true;
@@ -37,23 +35,23 @@ namespace conct
 		return false;
 	}
 
-	bool RGBProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
+	bool RGBProxy::setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const
 	{
 		RGB* pTypedInstance = static_cast< RGB* >( pInstance );
 
-		if( isStringEquals( pName, "Red" ) )
+		if( nameCrc == 0x6a8b )
 		{
 			pTypedInstance->setRed( value.getPercentValue() );
 			return true;
 		}
 
-		if( isStringEquals( pName, "Green" ) )
+		if( nameCrc == 0xd415 )
 		{
 			pTypedInstance->setGreen( value.getPercentValue() );
 			return true;
 		}
 
-		if( isStringEquals( pName, "Blue" ) )
+		if( nameCrc == 0xde32 )
 		{
 			pTypedInstance->setBlue( value.getPercentValue() );
 			return true;
@@ -62,7 +60,7 @@ namespace conct
 		return false;
 	}
 
-	bool RGBProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
+	bool RGBProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
 	{
 		return false;
 	}

@@ -1,7 +1,5 @@
 #include "home_dimmer_proxy.h"
 
-#include "conct_string.h"
-
 #include "home_dimmer.h"
 #include "conct_core.h"
 
@@ -12,11 +10,11 @@ namespace conct
 	{
 	}
 
-	bool DimmerProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
+	bool DimmerProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const
 	{
 		const Dimmer* pTypedInstance = static_cast< const Dimmer* >( pInstance );
 
-		if( isStringEquals( pName, "Brightness" ) )
+		if( nameCrc == 0xf9df )
 		{
 			targetValueBuilder.setPercentValue( pTypedInstance->getBrightness() );
 			return true;
@@ -25,11 +23,11 @@ namespace conct
 		return false;
 	}
 
-	bool DimmerProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
+	bool DimmerProxy::setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const
 	{
 		Dimmer* pTypedInstance = static_cast< Dimmer* >( pInstance );
 
-		if( isStringEquals( pName, "Brightness" ) )
+		if( nameCrc == 0xf9df )
 		{
 			pTypedInstance->setBrightness( value.getPercentValue() );
 			return true;
@@ -38,7 +36,7 @@ namespace conct
 		return false;
 	}
 
-	bool DimmerProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
+	bool DimmerProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
 	{
 		return false;
 	}

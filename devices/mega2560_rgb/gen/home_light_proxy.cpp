@@ -1,7 +1,5 @@
 #include "home_light_proxy.h"
 
-#include "conct_string.h"
-
 #include "home_light.h"
 #include "conct_core.h"
 
@@ -12,11 +10,11 @@ namespace conct
 	{
 	}
 
-	bool LightProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
+	bool LightProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const
 	{
 		const Light* pTypedInstance = static_cast< const Light* >( pInstance );
 
-		if( isStringEquals( pName, "On" ) )
+		if( nameCrc == 0xdcb5 )
 		{
 			targetValueBuilder.setBoolean( pTypedInstance->getOn() );
 			return true;
@@ -25,11 +23,11 @@ namespace conct
 		return false;
 	}
 
-	bool LightProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
+	bool LightProxy::setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const
 	{
 		Light* pTypedInstance = static_cast< Light* >( pInstance );
 
-		if( isStringEquals( pName, "On" ) )
+		if( nameCrc == 0xdcb5 )
 		{
 			pTypedInstance->setOn( value.getBoolean() );
 			return true;
@@ -38,7 +36,7 @@ namespace conct
 		return false;
 	}
 
-	bool LightProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
+	bool LightProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
 	{
 		return false;
 	}

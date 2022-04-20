@@ -1,7 +1,5 @@
 #include "core_device_proxy.h"
 
-#include "conct_string.h"
-
 #include "conct_device.h"
 #include "conct_core.h"
 #include "conct_array_view.h"
@@ -13,23 +11,23 @@ namespace conct
 	{
 	}
 
-	bool DeviceProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, const char* pName ) const
+	bool DeviceProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const
 	{
 		const Device* pTypedInstance = static_cast< const Device* >( pInstance );
 
-		if( isStringEquals( pName, "Name" ) )
+		if( nameCrc == 0x4daa )
 		{
 			targetValueBuilder.setString( pTypedInstance->getName() );
 			return true;
 		}
 
-		if( isStringEquals( pName, "Guid" ) )
+		if( nameCrc == 0x7ab5 )
 		{
-			targetValueBuilder.setGuid( pTypedInstance->getGuid() );
+			targetValueBuilder.setUnsigned( pTypedInstance->getSerialNumber() );
 			return true;
 		}
 
-		if( isStringEquals( pName, "Instances" ) )
+		if( nameCrc == 0xcfaf )
 		{
 			targetValueBuilder.setArray( pTypedInstance->getInstances() );
 			return true;
@@ -38,24 +36,24 @@ namespace conct
 		return false;
 	}
 
-	bool DeviceProxy::setProperty( void* pInstance, const char* pName, const Value& value ) const
+	bool DeviceProxy::setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const
 	{
 		return false;
 	}
 
-	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, const char* pName, const ArrayView< Value >& parameters ) const
+	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
 	{
 		Device* pTypedInstance = static_cast< Device* >( pInstance );
 
-		if( isStringEquals( pName, "findInstances" ) )
+		if( nameCrc == 0xb733 )
 		{
 			targetValueBuilder.setArray( pTypedInstance->findInstances( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 
-		if( isStringEquals( pName, "findFirstInstance" ) )
+		if( nameCrc == 0xe2a7 )
 		{
-			targetValueBuilder.setInstance( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
+			targetValueBuilder.setStruct( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 

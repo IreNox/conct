@@ -27,6 +27,12 @@
     <Filter Include="third_party\tinyxml2">
       <UniqueIdentifier>{85f1d649-f7e0-4c52-82d8-b4d1d295e2b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libraries\conct_core_tool">
+      <UniqueIdentifier>{046741e9-e54a-4b79-94fc-c34aa71c4763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third_party\tlsf">
+      <UniqueIdentifier>{ad15c5d7-1302-490a-aef6-deb19602d436}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\generator.h">
@@ -48,9 +54,6 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h">
       <Filter>libraries\conct_core_high</Filter>
     </ClInclude>
     <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h">
@@ -122,9 +125,6 @@
     <ClInclude Include="..\..\third_party\tinyxml2\tinyxml2.h">
       <Filter>third_party\tinyxml2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h">
-      <Filter>libraries\conct_core_high</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\libraries\conct_types\conct_type.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
@@ -164,6 +164,27 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h">
       <Filter>libraries\conct_types</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_directory_iterator.h">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_dynamic_memory.h">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_filesystem.h">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_mutex.h">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_thread_local_storage.h">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_atomic.h">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\third_party\tlsf\tlsf.h">
+      <Filter>third_party\tlsf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\generator.cpp">
@@ -186,9 +207,6 @@
     </ClCompile>
     <ClCompile Include="sources\main.cpp">
       <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp">
-      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp">
       <Filter>libraries\conct_core_high</Filter>
@@ -222,9 +240,6 @@
     </ClCompile>
     <ClCompile Include="..\..\third_party\tinyxml2\tinyxml2.cpp">
       <Filter>third_party\tinyxml2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp">
-      <Filter>libraries\conct_core_high</Filter>
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp">
       <Filter>libraries\conct_types</Filter>
@@ -261,6 +276,27 @@
     </ClCompile>
     <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp">
       <Filter>libraries\conct_types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_dynamic_memory.cpp">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_filesystem.cpp">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_mutex.cpp">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_thread_local_storage.cpp">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_atomic.cpp">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_directory_iterator.cpp">
+      <Filter>libraries\conct_core_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\third_party\tlsf\tlsf.c">
+      <Filter>third_party\tlsf</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,6 +335,9 @@
     </None>
     <None Include="..\..\libraries\conct_core_high\conct_queue.inl">
       <Filter>libraries\conct_core_high</Filter>
+    </None>
+    <None Include="..\..\libraries\conct_core_tool\conct_atomic.inl">
+      <Filter>libraries\conct_core_tool</Filter>
     </None>
   </ItemGroup>
 </Project>

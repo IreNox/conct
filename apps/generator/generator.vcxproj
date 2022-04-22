@@ -39,15 +39,19 @@
     <ClInclude Include="..\..\libraries\conct_core\conct_value_type.h" />
     <ClInclude Include="..\..\libraries\conct_core\conct_writer.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_core_high.h" />
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_directory_iterator.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_dynamic_string.h" />
-    <ClInclude Include="..\..\libraries\conct_core_high\conct_filesystem.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_path.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_queue.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_string_tools.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_trace.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_unsorted_set.h" />
     <ClInclude Include="..\..\libraries\conct_core_high\conct_vector.h" />
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_atomic.h" />
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_directory_iterator.h" />
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_dynamic_memory.h" />
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_filesystem.h" />
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_mutex.h" />
+    <ClInclude Include="..\..\libraries\conct_core_tool\conct_thread_local_storage.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_array_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_enum_type.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_interface_type.h" />
@@ -56,6 +60,7 @@
     <ClInclude Include="..\..\libraries\conct_types\conct_type_collection.h" />
     <ClInclude Include="..\..\libraries\conct_types\conct_xml_helper.h" />
     <ClInclude Include="..\..\third_party\tinyxml2\tinyxml2.h" />
+    <ClInclude Include="..\..\third_party\tlsf\tlsf.h" />
     <ClInclude Include="include\capabilities.h" />
     <ClInclude Include="include\device.h" />
     <ClInclude Include="include\generator.h" />
@@ -75,12 +80,16 @@
     <ClCompile Include="..\..\libraries\conct_core\conct_timer.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_value_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_core\conct_writer.cpp" />
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_directory_iterator.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_dynamic_string.cpp" />
-    <ClCompile Include="..\..\libraries\conct_core_high\conct_filesystem.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_path.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_string_tools.cpp" />
     <ClCompile Include="..\..\libraries\conct_core_high\conct_trace.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_atomic.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_directory_iterator.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_dynamic_memory.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_filesystem.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_mutex.cpp" />
+    <ClCompile Include="..\..\libraries\conct_core_tool\conct_thread_local_storage.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_array_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_enum_type.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_interface_type.cpp" />
@@ -89,6 +98,7 @@
     <ClCompile Include="..\..\libraries\conct_types\conct_type_collection.cpp" />
     <ClCompile Include="..\..\libraries\conct_types\conct_xml_helper.cpp" />
     <ClCompile Include="..\..\third_party\tinyxml2\tinyxml2.cpp" />
+    <ClCompile Include="..\..\third_party\tlsf\tlsf.c" />
     <ClCompile Include="sources\capabilities.cpp" />
     <ClCompile Include="sources\device.cpp" />
     <ClCompile Include="sources\generator.cpp" />
@@ -112,13 +122,14 @@
     <None Include="..\..\libraries\conct_core_high\conct_queue.inl" />
     <None Include="..\..\libraries\conct_core_high\conct_unsorted_set.inl" />
     <None Include="..\..\libraries\conct_core_high\conct_vector.inl" />
+    <None Include="..\..\libraries\conct_core_tool\conct_atomic.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{933E5340-4314-47DC-B3FF-C8D0151C687D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>generator</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

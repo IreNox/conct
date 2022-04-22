@@ -62,6 +62,8 @@ namespace conct
 		return ( GetFileAttributesA( path.getNativePath().toConstCharPointer() ) != INVALID_FILE_ATTRIBUTES );
 #elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
 		return access( path.getNativePath().toConstCharPointer(), F_OK ) != -1;
+#else
+#	error "Platform not supported"
 #endif
 	}
 
@@ -83,6 +85,8 @@ namespace conct
 		}
 
 		return isBitSet( fileStats.st_mode, S_IFMT );
+#else
+#	error "Platform not supported"
 #endif
 	}
 
@@ -98,6 +102,8 @@ namespace conct
 		}
 
 		return S_ISDIR( fileStats.st_mode );
+#else
+#	error "Platform not supported"
 #endif
 	}
 
@@ -117,6 +123,8 @@ namespace conct
 		}
 
 		return createSuccessResult();
+#else
+#	error "Platform not supported"
 #endif
 	}
 
@@ -129,14 +137,7 @@ namespace conct
 		}
 
 		fseek( pFile, 0, SEEK_END );
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		fpos_t pos;
-		fgetpos( pFile, &pos );
-		const size_t fileSize = pos.__pos;
-#else
-		fpos_t fileSize;
-		fgetpos( pFile, &fileSize );
-#endif
+		const long int fileSize = ftell( pFile );
 		fseek( pFile, 0, SEEK_SET );
 
 		DynamicString result;
@@ -163,20 +164,13 @@ namespace conct
 		}
 
 		fseek( pFile, 0, SEEK_END );
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
-		fpos_t pos2;
-		fgetpos( pFile, &pos2 );
-		const size_t pos = pos2.__pos;
-#else
-		fpos_t pos;
-		fgetpos( pFile, &pos );
-#endif
+		const long int fileSize = ftell( pFile );
 		fseek( pFile, 0, SEEK_SET );
 
 		Vector< uint8 > result;
-		result.setLengthUninitialized( uintreg( pos ) );
+		result.setLengthUninitialized( uintreg( fileSize ) );
 
-		if( fread( result.getData(), 1u, size_t( pos ), pFile ) != pos )
+		if( fread( result.getData(), 1u, size_t( fileSize ), pFile ) != fileSize )
 		{
 			fclose( pFile );
 			return createFailureResult< Vector< uint8 > >( getResultFromErrno() );

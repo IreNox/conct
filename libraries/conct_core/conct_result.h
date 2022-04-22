@@ -47,7 +47,7 @@ namespace conct
 		TValue			value;
 	};
 
-	template< >
+	template<>
 	struct Result< void > : public ResultBase
 	{
 	};
@@ -76,7 +76,7 @@ namespace conct
 		return result;
 	}
 
-	template< >
+	template<>
 	inline Result< void > createFailureResult< void >( ResultId resultId )
 	{
 		Result< void > result;

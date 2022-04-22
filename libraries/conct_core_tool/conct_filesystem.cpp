@@ -109,15 +109,16 @@ namespace conct
 
 	Result< void > filesystem::createDirectory( const Path& path )
 	{
+		const DynamicString nativePath = path.getNativePath();
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		if( !CreateDirectoryA( path.getNativePath().toConstCharPointer(), nullptr ) )
+		if( !CreateDirectoryA( nativePath.toConstCharPointer(), nullptr ) )
 		{
 			return createFailureResult< void >( getResultFromLastError() );
 		}
 
 		return createSuccessResult();
 #elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
-		if( mkdir( path.getNativePath().toConstCharPointer(), S_IRWXU ) != 0 )
+		if( mkdir( nativePath.toConstCharPointer(), S_IRWXU ) != 0 )
 		{
 			return createFailureResult< void >( getResultFromErrno() );
 		}

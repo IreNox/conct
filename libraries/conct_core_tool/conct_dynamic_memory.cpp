@@ -244,7 +244,11 @@ namespace conct
 	{
 		const uintptr allocatorSize	= alignValue( sizeof( Allocator ) + tlsf_size() + sizeof( Pool ) + tlsf_pool_overhead() + size, m_pageSize );
 
-		const size_t address = 1ull << 31u;
+#if CONCT_ENABLED( CONCT_POINTER_64 )
+		const size_t address = 1ull << 32u;
+#else
+		const size_t address = 1u << 28u;
+#endif
 		void* pAllocatorMemory = memory::allocateSystemMemory( allocatorSize, m_pageSize, address );
 		if( pAllocatorMemory == nullptr )
 		{
@@ -292,7 +296,11 @@ namespace conct
 			const uintptr minPoolSize	= alignValue( sizeof( Pool ) + tlsf_pool_overhead() + tlsf_alloc_overhead() + alignment + size, m_pageSize );
 			const uintptr poolSize		= CONCT_MAX( s_defaultPoolSize, minPoolSize );
 
+#if CONCT_ENABLED( CONCT_POINTER_64 )
 			const size_t address = size_t( pAllocator->poolCount + 1u ) << 32u;
+#else
+			const size_t address = size_t( pAllocator->poolCount + 1u ) << 28u;
+#endif
 			void* pPoolMemory = memory::allocateSystemMemory( poolSize, m_pageSize, address );
 			if( pPoolMemory == nullptr )
 			{

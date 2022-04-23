@@ -8,10 +8,12 @@
 #include "conct_writer.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <windows.h>
 #	include <WinSock2.h>
 #	include <WS2tcpip.h>
 #	include <ws2ipdef.h>
 #elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#	include <errno.h>
 #	include <fcntl.h>
 #	include <netdb.h>
 #	include <sys/socket.h>
@@ -19,7 +21,6 @@
 
 #include <stdio.h>
 #include <cstring>
-#include <errno.h>
 
 namespace conct
 {

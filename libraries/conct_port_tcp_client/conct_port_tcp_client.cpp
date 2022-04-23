@@ -7,6 +7,7 @@
 #include "conct_writer.h"
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#	include <windows.h>
 #	include <WinSock2.h>
 #	include <WS2tcpip.h>
 #	include <ws2ipdef.h>

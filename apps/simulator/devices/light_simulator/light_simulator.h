@@ -2,7 +2,7 @@
 
 #include "i_simulator_device.h"
 
-#include "device_impl.h"
+#include "device_light_simulator.h"
 
 namespace conct
 {

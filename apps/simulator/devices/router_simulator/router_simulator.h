@@ -4,7 +4,7 @@
 
 #include "conct_controller.h"
 
-#include "device_impl.h"
+#include "device_router_simulator.h"
 
 namespace conct
 {

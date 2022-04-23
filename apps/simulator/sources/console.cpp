@@ -21,7 +21,7 @@ namespace conct
 		ConsoleRenderer::setup();
 
 		const Path exePath = Path::getExecutablePath();
-		const Path basePath = exePath.getParent().getParent().getParent().getParent().getParent();
+		const Path basePath = exePath.getParent().getParent().getParent().getParent().getParent().getParent();
 		const Path configPath = basePath.push( "config"_s );
 		const Path typesPath = configPath.push( "types"_s );
 

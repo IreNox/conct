@@ -4,7 +4,6 @@ namespace conct
 {
 	void DeviceControllerSimulator::setup()
 	{
-		// TODO: implement
 	}
 
 	void DeviceControllerSimulator::loop()

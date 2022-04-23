@@ -626,6 +626,11 @@ namespace conct
 
 	DynamicString ConsoleController::getInstanceName( const ControllerInstance& instance ) const
 	{
+		if( instance.pType == nullptr )
+		{
+			return "Unknown @ "_s + instance.pDevice->name;
+		}
+
 		return instance.pType->getFullName() + " @ " + instance.pDevice->name;
 	}
 

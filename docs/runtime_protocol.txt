@@ -4,7 +4,7 @@ Base Header
 Bits	Count					Name				Description
 16-31	16						Size				Packet Size
 40-47	 8						Source Hop			Hop Count to Source Device
-48-55	 8						Destination Hop		Hop Count to Source Device
+48-55	 8						Destination Hop		Hop Count to DestinationDevice
 
 Address Header
 40-xx	 8 * Source Hop			Source				Route to Source

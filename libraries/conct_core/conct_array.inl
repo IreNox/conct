@@ -51,6 +51,34 @@ namespace conct
 	}
 
 	template< class T >
+	T& conct::Array<T>::getElement( uintreg index )
+	{
+		CONCT_ASSERT( index < m_length );
+		return m_pData[ index ];
+	}
+
+	template< class T >
+	const T& conct::Array<T>::getElement( uintreg index ) const
+	{
+		CONCT_ASSERT( index < m_length );
+		return m_pData[ index ];
+	}
+
+	template< class T >
+	T& conct::Array<T>::getReverseElement( uintreg index )
+	{
+		CONCT_ASSERT( index < m_length );
+		return m_pData[ (m_length - 1u) - index ];
+	}
+
+	template< class T >
+	const T& conct::Array<T>::getReverseElement( uintreg index ) const
+	{
+		CONCT_ASSERT( index < m_length );
+		return m_pData[ (m_length - 1u) - index ];
+	}
+
+	template< class T >
 	T& Array< T >::operator[]( uintreg index )
 	{
 		CONCT_ASSERT( index < m_length );

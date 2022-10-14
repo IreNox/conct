@@ -15,28 +15,28 @@ namespace conct
 	{
 	public:
 
-						DirectoryIterator( const Path& path );
-						DirectoryIterator( const DynamicString& path );
-						~DirectoryIterator();
+							DirectoryIterator( const Path& path );
+							DirectoryIterator( const DynamicString& path );
+							~DirectoryIterator();
 
-		bool			isEnd() const { return m_currentPath.isEmpty(); }
+		bool				isEnd() const { return m_currentPath.isEmpty(); }
 
-		bool			next();
+		bool				next();
 
-		inline Path		getCurrent() const { return m_currentPath; }
+		inline const Path&	getCurrent() const { return m_currentPath; }
 
 	private:
 
-		Path			m_iteratorPath;
-		Path			m_currentPath;
+		Path				m_iteratorPath;
+		Path				m_currentPath;
 
 #if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		void*			m_pSearchHandle;
+		void*				m_pSearchHandle;
 #elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
-		DIR*			m_pDir;
+		DIR*				m_pDir;
 #endif
 
-		void			initialize();
-		void			shutdown();
+		void				initialize();
+		void				shutdown();
 	};
 }

@@ -4,4 +4,4 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
 set(EXTRA_COMPONENT_DIRS "../../libraries")
 
-project(esp32_router_test)
+project(esp32_router)

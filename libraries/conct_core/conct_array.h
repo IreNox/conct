@@ -30,6 +30,11 @@ namespace conct
 		T&				getBack();
 		const T&		getBack() const;
 
+		T&				getElement( uintreg index );
+		const T&		getElement( uintreg index ) const;
+		T&				getReverseElement( uintreg index );
+		const T&		getReverseElement( uintreg index ) const;
+
 		ArrayView< T >	toView() const;
 
 		T&				operator[]( uintreg index );

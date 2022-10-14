@@ -1,0 +1,63 @@
+{
+	"folders": [
+		{
+			"path": ".",
+			"name": "Test"
+		},
+		{
+			"path": "../../libraries",
+			"name": "Libraries"
+		}
+	],
+	"settings": {
+	},
+    "tasks": {
+		"version": "2.0.0",
+		"windows": {
+			"options": {
+			  "shell": {
+				"executable": "cmd.exe",
+				"args": [
+				  "/C",
+				  "\"${env:IDF_TOOLS_PATH}\\idf_cmd_init.bat\"",
+				  "esp-idf-f021118f6d440fa48c3269288dfdf0ef",
+				  "&&"
+				]
+			  }
+			}
+		},
+		"tasks": [
+			{
+				"label": "Build",
+				"type": "shell",
+				"command": "idf.py build",
+				"problemMatcher": ["$gcc"],
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"presentation": {
+					"panel": "shared"
+				}
+			},
+			{
+				"label": "Flash and Monitor",
+				"type": "shell",
+				"command": "idf.py -p ${config:idf.port} flash monitor",
+				"problemMatcher": ["$gcc"],
+				"presentation": {
+					"panel": "shared"
+				}
+			},
+			{
+				"label": "Monitor",
+				"type": "shell",
+				"command": "idf.py -p ${config:idf.port} monitor",
+				"problemMatcher": ["$gcc"],
+				"presentation": {
+					"panel": "shared"
+				}
+			}
+		]
+	}
+}

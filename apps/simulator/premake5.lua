@@ -6,6 +6,7 @@ add_module_include_path( "../../libraries" )
 add_module_include_path( "../.." )
 
 local main_project = Project:new( "simulator", ProjectTypes.ConsoleApplication )
+main_project:set_setting( ConfigurationSettings.MultiProcessorCompile, ConfigurationMultiProcessorCompile.On )
 main_project:add_include_dir( "include" )
 main_project:add_include_dir( "devices/shared" )
 main_project:add_dependency( "conct_core_high" )
@@ -17,6 +18,8 @@ main_project:add_files( 'sources/*.cpp' )
 
 function setup_simulator_device( project, high )
 	project:set_base_path( project.module.config.base_path .. "/devices/" .. project.name )
+
+	project:set_setting( ConfigurationSettings.MultiProcessorCompile, ConfigurationMultiProcessorCompile.On )
 
 	project:add_include_dir( "../shared" )
 

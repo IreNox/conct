@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<hardware name="ESP32" runtime="high">
+<hardware name="ESP32C3" runtime="high">
 	<system>esp</system>
 	<environment>production</environment>
 	<memory>
-		<dynamic />
+		<program>4194304</program>
+		<ram>409600</ram>
+		<flash>4194304</flash>
 	</memory>
 	<capabilities>
 		<allocation />

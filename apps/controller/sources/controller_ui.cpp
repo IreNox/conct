@@ -56,7 +56,7 @@ namespace conct
 			const struct nk_color color	= { 0xff, 0xff, 0xff, 0xff };
 			nk_image_color( pNkContext, image, color );
 		}
-		
+
 		nk_layout_row_push( pNkContext, 500.0f );
 		{
 			const char* pTitle = getStateTitle( m_state );
@@ -166,7 +166,10 @@ namespace conct
 			doDeviceUI( pContext, *pDevice );
 		}
 
-		nk_spacing( pNkContext, 1u );
+		if( devices.hasElements() )
+		{
+			nk_spacing( pNkContext, 1u );
+		}
 
 		nk_group_end( pNkContext );
 		nk_style_pop_vec2( pNkContext );
@@ -409,7 +412,7 @@ namespace conct
 			break;
 
 		case ValueType_Boolean:
-			{ 
+			{
 				bool active = prop.value.getBoolean();
 				if( nk_checkbox_label( pNkContext, active ? "True" : "False", &active ) )
 				{

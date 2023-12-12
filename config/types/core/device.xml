@@ -17,7 +17,7 @@
 		</property>
 	</properties>
 	<functions>
-		<function name="findInstances">
+		<function name="FindInstances">
 			<return>
 				<array type="Instance" />
 			</return>
@@ -25,10 +25,17 @@
 				<parameter name="type" type="TypeCrc" />
 			</parameters>
 		</function>
-		<function name="findFirstInstance" return="Instance">
+		<function name="FindFirstInstance" return="Instance">
 			<parameters>
 				<parameter name="type" type="TypeCrc" />
 			</parameters>
 		</function>
 	</functions>
+	<events>
+		<event name="InstancesChanged">
+			<type>
+				<array type="Instance" />
+			</type>
+		</event>
+	</events>
 </interface>

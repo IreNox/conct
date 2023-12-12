@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <interface namespace="Core" name="Router">
-	<internal include="conct_router.h" class="Router" />
+	<internal include="conct_router.h" />
 	<singleton />
 	<properties>
 		<property name="ConnectedDevices">
@@ -11,7 +11,7 @@
 		</property>
 	</properties>
 	<functions>
-		<function name="changeDevice" return="Void">
+		<function name="ChangeDevice" return="Void">
 			<parameters>
 				<parameter name="deviceId" type="DeviceId" />
 				<parameter name="deviceStatus" type="DeviceStatus" />

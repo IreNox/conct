@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Core" name="Mastermind">
+	<internal include="conct_mastermind.h" />
+	<singleton />
+	<properties>
+		<property name="Devices">
+			<type>
+				<array type="DeviceConnection" />
+			</type>
+			<get />
+		</property>
+	</properties>
+	<functions>
+		<function name="ChangeDevice" return="Void">
+			<parameters>
+				<parameter name="deviceId" type="DeviceId" />
+				<parameter name="deviceStatus" type="DeviceStatus" />
+			</parameters>
+		</function>
+	</functions>
+</interface>

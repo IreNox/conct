@@ -21,6 +21,7 @@ namespace conct
 		addValueType( ""_s, "Boolean"_s, "bool"_s, ValueType_Boolean );
 		addValueType( ""_s, "Integer"_s, "sint32"_s, ValueType_Integer );
 		addValueType( ""_s, "Unsigned"_s, "uint32"_s, ValueType_Unsigned );
+		addValueType( ""_s, "Decimal"_s, "uint32"_s, ValueType_Decimal );
 		addValueType( ""_s, "String"_s, "const char*"_s, ValueType_String );
 		addValueType( ""_s, "PercentValue"_s, "PercentValue"_s, ValueType_PercentValue );
 		addValueType( ""_s, "DeviceId"_s, "DeviceId"_s, ValueType_DeviceId );

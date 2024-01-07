@@ -34,9 +34,9 @@ namespace conct
 	{
 		Router* pTypedInstance = static_cast< Router* >( pInstance );
 
-		if( nameCrc == 0xf7f5 )
+		if( nameCrc == 0x4874 )
 		{
-			pTypedInstance->changeDevice( parameters[ 0u ].getDeviceId(), (DeviceStatus)(parameters[ 1u ].getInteger() ) ); targetValueBuilder.setVoid();
+			pTypedInstance->ChangeDevice( parameters[ 0u ].getDeviceId(), (DeviceStatus)(parameters[ 1u ].getInteger() ) ); targetValueBuilder.setVoid();
 			return true;
 		}
 

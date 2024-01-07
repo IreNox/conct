@@ -129,6 +129,28 @@ namespace conct
 			}
 		}
 
+		const tinyxml2::XMLElement* pEventsNode = pRootNode->FirstChildElement( "events" );
+		if( pEventsNode != nullptr )
+		{
+			for( const tinyxml2::XMLElement* pEventNode = pEventsNode->FirstChildElement( "event" ); pEventNode != nullptr; pEventNode = pEventNode->NextSiblingElement( "event" ) )
+			{
+				DynamicString eventName;
+				const Type* pEventType = nullptr;
+				if( !loadStringValue( eventName, pEventNode, "name" ) ||
+					!loadTypeValue( &pEventType, pEventNode, "type", getNamespace(), typeCollection ) )
+				{
+					return false;
+				}
+
+				InterfaceEvent event;
+				event.name	= eventName;
+				event.pType	= pEventType;
+
+				m_events.pushBack( event );
+				pushDependingType( pEventType );
+			}
+		}
+
 		return true;
 	}
 }

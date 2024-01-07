@@ -17,7 +17,7 @@ namespace conct
 		return instances;
 	}
 
-	ArrayView< Instance > Device::findInstances( TypeCrc typeCrc )
+	ArrayView< Instance > Device::FindInstances( TypeCrc typeCrc )
 	{
 		ArrayView< Instance > instances;
 		getPublicInstances( instances );
@@ -39,7 +39,7 @@ namespace conct
 		return ArrayView< Instance >( resultInstances.getData(), count );
 	}
 
-	Instance Device::findFirstInstance( TypeCrc typeCrc )
+	Instance Device::FindFirstInstance( TypeCrc typeCrc )
 	{
 		ArrayView< Instance > instances;
 		getPublicInstances( instances );

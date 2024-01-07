@@ -12,6 +12,7 @@ namespace conct
 			"Boolean",
 			"Integer",
 			"Unsigned",
+			"Decimal",
 			"PercentValue",
 			"DeviceId",
 			"InstanceId",

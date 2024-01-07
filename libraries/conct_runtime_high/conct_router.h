@@ -15,7 +15,8 @@ namespace conct
 
 		ArrayView< DeviceConnection >		getConnectedDevices() const;
 
-		void								changeDevice( DeviceId id, DeviceStatus status );
+		// interface functions
+		void								ChangeDevice( DeviceId id, DeviceStatus status );
 
 	private:
 

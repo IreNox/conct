@@ -10,6 +10,7 @@ namespace conct
 		ValueType_Boolean,
 		ValueType_Integer,
 		ValueType_Unsigned,
+		ValueType_Decimal,
 		ValueType_PercentValue,
 		ValueType_DeviceId,
 		ValueType_InstanceId,

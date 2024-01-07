@@ -63,6 +63,11 @@ namespace conct
 		TypeCrc		type;
 	};
 
+	struct Decimal
+	{
+		sint32		number;
+	};
+
 	static const DeviceId InvalidDeviceId = 0u;
 	static const DeviceId FirstDeviceId = 1u;
 	static const TypeCrc InvalidTypeCrc = 0u;

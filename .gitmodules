@@ -1,0 +1,3 @@
+[submodule "third_party/imapp"]
+	path = third_party/imapp
+	url = https://github.com/IreNox/imapp.git

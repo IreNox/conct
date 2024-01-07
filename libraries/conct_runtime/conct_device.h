@@ -18,10 +18,11 @@ namespace conct
 		uint32					getSerialNumber() const;
 		ArrayView< Instance >	getInstances() const;
 
-		ArrayView< Instance >	findInstances( TypeCrc typeCrc );
-		Instance				findFirstInstance( TypeCrc typeCrc );
-
 		const LocalInstance*	getInstance( InstanceId instanceId );
+
+		// interface functions
+		ArrayView< Instance >	FindInstances( TypeCrc typeCrc );
+		Instance				FindFirstInstance( TypeCrc typeCrc );
 
 	protected:
 

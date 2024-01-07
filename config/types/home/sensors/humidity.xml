@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Home.Sensors" name="Humidity">
+	<properties>
+		<property name="Humidity" type="PercentValue">
+			<get />
+		</property>
+	</properties>
+	<events>
+		<event name="HumidityChanged" type="PercentValue" />
+	</events>
+</interface>

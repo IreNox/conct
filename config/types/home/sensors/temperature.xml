@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="Home.Sensors" name="Temperature">
+	<properties>
+		<property name="Temperature" type="Decimal">
+			<get />
+		</property>
+	</properties>
+	<events>
+		<event name="TemperatureChanged" type="Decimal" />
+	</events>
+</interface>

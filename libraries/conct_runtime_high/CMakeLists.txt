@@ -1,3 +1,0 @@
-idf_component_register(SRC_DIRS "."
-                       INCLUDE_DIRS "."
-                       REQUIRES conct_core_high conct_runtime)

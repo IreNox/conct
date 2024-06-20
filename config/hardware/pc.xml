@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<hardware name="SimulatorHigh" runtime="high">
-	<system>windows</system>
-	<environment>simulator</environment>
+<hardware name="PC">
+	<system>pc</system>
+	<environment>production</environment>
 	<memory>
 		<dynamic />
 	</memory>
 	<capabilities>
 		<allocation />
 		<sockets />
-		<gpio />
-		<spi />
+		<wifi />
 	</capabilities>
 </hardware>

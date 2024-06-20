@@ -1,3 +1,8 @@
 [submodule "third_party/imapp"]
 	path = third_party/imapp
 	url = https://github.com/IreNox/imapp.git
+	branch = master
+[submodule "third_party/tiki_core"]
+	path = third_party/tiki_core
+	url = https://github.com/IreNox/tiki_core.git
+	branch = master

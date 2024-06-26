@@ -1,21 +1,26 @@
 #include "conct_dynamic_memory.h"
 
-#include "conct_memory.h"
+#include "conct_core.h"
 #include "conct_mutex.h"
 #include "conct_thread_local_storage.h"
 #include "conct_trace.h"
 
+#include <tiki/tiki_memory.h>
 #include <tlsf/tlsf.h>
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_POSIX )
 #	include <stdlib.h>
 #	include <sys/mman.h>
 #	include <unistd.h>
 #endif
 
-#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) && CONCT_ENABLED( CONCT_TARGET_DLL )
+#if !defined( CONCT_ENVIRONMENT_SIMULATOR )
+#	define CONCT_ENVIRONMENT_SIMULATOR TIKI_OFF
+#endif
+
+#if TIKI_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) && TIKI_ENABLED( TIKI_TARGET_DLL )
 #	include "conct_simulator.h"
 #	include "conct_simulator_context.h"
 #endif
@@ -82,7 +87,7 @@ namespace conct
 
 	static const uintptr s_defaultPoolSize = 100u * 1024u; // 100 kib
 
-#if CONCT_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) && CONCT_ENABLED( CONCT_TARGET_DLL )
+#if TIKI_ENABLED( CONCT_ENVIRONMENT_SIMULATOR ) && TIKI_ENABLED( TIKI_TARGET_DLL )
 	static DynamicMemory* s_pDynamicMemory = getSimulatorContext().getDynamicMemory();
 #else
 	static DynamicMemory s_dynamicMemory;
@@ -91,11 +96,11 @@ namespace conct
 
 	DynamicMemory::DynamicMemory()
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		SYSTEM_INFO systemInfo;
 		GetSystemInfo( &systemInfo );
 		m_pageSize = systemInfo.dwPageSize;
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_POSIX )
 		m_pageSize = sysconf( _SC_PAGE_SIZE );
 #else
 #	error "Platform not supported"
@@ -105,7 +110,7 @@ namespace conct
 		m_pDefaultAllocator	= createAllocator( s_defaultPoolSize );
 		m_protectionCounter	= 1u;
 
-#if CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#if TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		protectDynamicMemory();
 #endif
 	}
@@ -126,7 +131,7 @@ namespace conct
 
 	void* DynamicMemory::allocateMemory( uintptr size, uintptr alignment /*= 0u */ )
 	{
-		CONCT_ASSERT( alignment <= m_pageSize );
+		TIKI_ASSERT( alignment <= m_pageSize );
 
 		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
 		if( pAllocator != nullptr )
@@ -174,9 +179,9 @@ namespace conct
 
 		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
 		{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 			VirtualProtect( pPool, pPool->size, PAGE_READONLY, nullptr );
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_POSIX )
 			mprotect( pPool, pPool->size, PROT_READ );
 #else
 #	error "Platform not supported"
@@ -199,9 +204,9 @@ namespace conct
 
 		for( Pool* pPool = pAllocator->pCurrentPool; pPool != nullptr; pPool = pPool->pPrevious )
 		{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 			VirtualProtect( pPool, pPool->size, PAGE_READWRITE, nullptr );
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_POSIX )
 			mprotect( pPool, pPool->size, PROT_READ | PROT_WRITE );
 #else
 #	error "Platform not supported"
@@ -218,7 +223,7 @@ namespace conct
 	void DynamicMemory::endThreadAllocator()
 	{
 		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
-		CONCT_ASSERT( pAllocator != nullptr );
+		TIKI_ASSERT( pAllocator != nullptr );
 
 		pAllocator->pNext = m_pFirstPreviousAllocator;
 		m_pFirstPreviousAllocator = pAllocator;
@@ -229,7 +234,7 @@ namespace conct
 	void DynamicMemory::endAndProtectThreadAllocator()
 	{
 		Allocator* pAllocator = (Allocator*)thread_local_storage::getValue( m_allocatorTls );
-		CONCT_ASSERT( pAllocator != nullptr );
+		TIKI_ASSERT( pAllocator != nullptr );
 
 		pAllocator->pNext = m_pFirstPreviousAllocator;
 		m_pFirstPreviousAllocator = pAllocator;
@@ -243,7 +248,7 @@ namespace conct
 	{
 		const uintptr allocatorSize	= alignValue( sizeof( Allocator ) + tlsf_size() + sizeof( Pool ) + tlsf_pool_overhead() + size, m_pageSize );
 
-#if CONCT_ENABLED( CONCT_POINTER_64 )
+#if TIKI_ENABLED( TIKI_POINTER_64 )
 		const size_t address = 1ull << 32u;
 #else
 		const size_t address = 1u << 28u;
@@ -255,13 +260,13 @@ namespace conct
 		}
 
 		Pool* pPool					= (Pool*)pAllocatorMemory;
-		Allocator* pAllocator		= (Allocator*)alignPointer( &pPool[ 1u ], CONCT_ALIGNOF( Allocator ) );
+		Allocator* pAllocator		= (Allocator*)alignPointer( &pPool[ 1u ], TIKI_ALIGNOF( Allocator ) );
 		uint8* pTlsf				= (uint8*)alignPointer( &pAllocator[ 1u ], tlsf_align_size() );
 		void* pPoolData				= alignPointer( pTlsf + tlsf_size(), tlsf_align_size() );
 
 		const uintptr poolSize		= allocatorSize - (uintptr( pPoolData ) - uintptr( pAllocatorMemory ));
 
-		memory::zero( *pAllocator );
+		tiki::memory::zero( *pAllocator );
 		pAllocator->pCurrentPool	= pPool;
 		pAllocator->tlsf			= tlsf_create( pTlsf );
 		pAllocator->poolCount		= 1u;
@@ -293,9 +298,9 @@ namespace conct
 		if( pAddress == nullptr )
 		{
 			const uintptr minPoolSize	= alignValue( sizeof( Pool ) + tlsf_pool_overhead() + tlsf_alloc_overhead() + alignment + size, m_pageSize );
-			const uintptr poolSize		= CONCT_MAX( s_defaultPoolSize, minPoolSize );
+			const uintptr poolSize		= max( s_defaultPoolSize, minPoolSize );
 
-#if CONCT_ENABLED( CONCT_POINTER_64 )
+#if TIKI_ENABLED( TIKI_POINTER_64 )
 			const size_t address = size_t( pAllocator->poolCount + 1u ) << 32u;
 #else
 			const size_t address = size_t( pAllocator->poolCount + 1u ) << 28u;
@@ -328,7 +333,7 @@ namespace conct
 		pAllocator->allocatedSize += tlsf_block_size( pAddress );
 		pAllocator->allocationCount++;
 		pAllocator->totalAllocations++;
-		pAllocator->maxAllocated = CONCT_MAX( pAllocator->maxAllocated, pAllocator->allocatedSize );
+		pAllocator->maxAllocated = max( pAllocator->maxAllocated, pAllocator->allocatedSize );
 
 		return pAddress;
 	}
@@ -358,9 +363,9 @@ namespace conct
 
 	void* memory::allocateSystemMemory( uintptr size, uintptr alignment, size_t address )
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		return VirtualAlloc( (void*)address, size, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID ) || TIKI_ENABLED( TIKI_PLATFORM_LINUX )
 		void* pAddress;
 		if( posix_memalign( &pAddress, alignment, size ) != 0 )
 		{
@@ -374,9 +379,9 @@ namespace conct
 
 	void memory::freeSystemMemory( void* pAddress )
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		VirtualFree( pAddress, 0u, MEM_RELEASE );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID ) || TIKI_ENABLED( TIKI_PLATFORM_LINUX )
 		free( pAddress );
 #else
 #	error "Platform not supported"

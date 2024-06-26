@@ -1,8 +1,5 @@
 #pragma once
 
-#include "conct_dynamic_string.h"
-#include "conct_vector.h"
-
 #include "hardware.h"
 
 namespace tinyxml2
@@ -14,12 +11,12 @@ namespace conct
 {
 	class Device;
 
-	enum PortParameterValueType
+	enum PortParameterValueType : uint8
 	{
-		PortParameterValueType_Invalid,
+		Invalid,
 
-		PortParameterValueType_String,
-		PortParameterValueType_Integer
+		String,
+		Integer
 	};
 
 	struct PortParameterValue
@@ -29,17 +26,15 @@ namespace conct
 		int						integer;
 	};
 
-	enum PortParameterFilterType
+	enum class PortParameterFilterType : uint8
 	{
-		PortParameterFilterType_HardwareRuntime,
-		PortParameterFilterType_HardwareSystem,
-		PortParameterFilterType_HardwareEnvironment
+		HardwareSystem,
+		HardwareEnvironment
 	};
 
 	struct PortParameterFilter
 	{
 		PortParameterFilterType	type;
-		HardwareRuntime			runtime;
 		HardwareSystem			system;
 		HardwareEnvironment		environment;
 	};
@@ -50,8 +45,8 @@ namespace conct
 
 	public:
 
-		typedef Vector< PortParameterFilter > FilterVector;
-		typedef Vector< PortParameterValue > ValueVector;
+		typedef DynamicArray< PortParameterFilter > FilterVector;
+		typedef DynamicArray< PortParameterValue > ValueVector;
 
 		const DynamicString&		getName() const { return m_name;  }
 		PortParameterValueType		getType() const { return m_type; }

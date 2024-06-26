@@ -1,8 +1,6 @@
 #include "device.h"
 
 #include "conct_interface_type.h"
-#include "conct_path.h"
-#include "conct_string_tools.h"
 #include "conct_trace.h"
 #include "conct_type_collection.h"
 #include "conct_xml_helper.h"
@@ -13,6 +11,8 @@
 #include "port_collection.h"
 
 #include <tinyxml2/tinyxml2.h>
+
+#include <tiki/tiki_string_tools.h>
 
 namespace conct
 {
@@ -80,7 +80,7 @@ namespace conct
 				return false;
 			}
 
-			UnsortedSet< Capability > missingCapabilities;
+			DynamicArray< Capability > missingCapabilities;
 			if( !m_pHardware->getCapabilities().metRequirements( port.pPort->getRequirements(), &missingCapabilities ) )
 			{
 				DynamicString missing;
@@ -114,7 +114,7 @@ namespace conct
 						return false;
 					}
 
-					const PortParameter* pParameter = parameters[ nameString ];
+					const PortParameter* pParameter = parameters.findOrDefault( nameString );
 					if( pParameter == nullptr )
 					{
 						traceNodeError( pPortParameterNode, "Error: could not find port parameter with name '"_s + nameString + "'.\n" );
@@ -135,7 +135,7 @@ namespace conct
 			for( const Port::ParameterMap::PairType& kvp : parameters )
 			{
 				const PortParameter* pParameter = kvp.value;
-				if( pParameter->getDefaultValue().type != PortParameterValueType_Invalid ||
+				if( pParameter->getDefaultValue().type != PortParameterValueType::Invalid ||
 					!pParameter->matchFilters( *this ) )
 				{
 					continue;
@@ -242,6 +242,6 @@ namespace conct
 			}
 		}
 
-		return m_pHardware->getRuntime() == HardwareRuntime_High;
+		return false;
 	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "conct_path.h"
 #include "conct_type.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_dynamic_string.h>
 
 namespace conct
 {
@@ -18,7 +18,7 @@ namespace conct
 
 	public:
 
-		typedef Vector< StructField > FieldVector;
+		typedef DynamicArray< StructField > FieldVector;
 
 		const FieldVector&		getFields() const { return m_fields; }
 

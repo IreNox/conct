@@ -1,8 +1,9 @@
 #include "conct_data_builder.h"
 
-#include "conct_memory.h"
-#include "conct_string.h"
 #include "conct_value_builder.h"
+
+#include <tiki/tiki_memory.h>
+#include <tiki/tiki_string.h>
 
 namespace conct
 {

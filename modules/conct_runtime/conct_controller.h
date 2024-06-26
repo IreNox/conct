@@ -1,46 +1,47 @@
 #pragma once
 
-#include "conct_array.h"
-#include "conct_array_view.h"
 #include "conct_command.h"
 #include "conct_value_high.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_dynamic_array.h>
 
 namespace conct
 {
 	class DataBuilder;
-	class RuntimeHigh;
+	class Runtime;
 
-	typedef void( CONCT_CDECL *ControllerCommandCallback )( Command* pCommand );
+	typedef void( TIKI_CDECL *ControllerCommandCallback )( Command* pCommand );
 
 	class Controller
 	{
 	public:
 
-											Controller();
-											~Controller();
+									Controller();
+									~Controller();
 
-		void								setup( RuntimeHigh& runtime );
-		void								loop();
+		void						setup( Runtime& runtime );
+		void						loop();
 
-		ValueCommand*						getProperty( const RemoteInstance& instance, const char* pName );
-		Command*							setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value );
+		ValueCommand*				getProperty( const RemoteInstance& instance, const char* pName );
+		Command*					setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value );
 
-		ValueCommand*						callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments );
+		ValueCommand*				callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments );
 
-		void								releaseCommand( Command* pCommand );
+		void						releaseCommand( Command* pCommand );
 
-		void								registerCommandCallback( ControllerCommandCallback callback );
-		void								unregisterCommandCallback( ControllerCommandCallback callback );
+		void						registerCommandCallback( ControllerCommandCallback callback );
+		void						unregisterCommandCallback( ControllerCommandCallback callback );
 
 	private:
 
-		RuntimeHigh*						m_pRuntime;
+		using CommandCallbackArray = DynamicArray< ControllerCommandCallback >;
 
-		Vector< ControllerCommandCallback >	m_callbacks;
-		Vector< Command* >					m_releaseCommand;
+		Runtime*					m_pRuntime;
+
+		CommandCallbackArray		m_callbacks;
+		DynamicArray< Command* >	m_releaseCommand;
 
 		template< class TCommand >
-		TCommand*							beginCommand( const DeviceAddress& deviceAddress, const DataBuilder& payload, MessageType messageType );
+		TCommand*					beginCommand( const DeviceAddress& deviceAddress, const DataBuilder& payload, MessageType messageType );
 	};
 }

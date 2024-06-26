@@ -3,7 +3,7 @@
 namespace conct
 {
 	template< class TEnum >
-	bool loadEnumValue( TEnum& target, const tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< Pair< TEnum, const char*> >& mapping, bool ignoreMissing /*= false */ )
+	bool loadEnumValue( TEnum& target, const tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< const Pair< TEnum, const char*> >& mapping, bool ignoreMissing /*= false */ )
 	{
 		const char* pStringValue = pNode->Attribute( pName );
 		if( pStringValue == nullptr )

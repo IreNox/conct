@@ -1,7 +1,8 @@
 #pragma once
 
-#include "conct_number_limits.h"
 #include "conct_value_triats.h"
+
+#include <tiki/tiki_number_limits.h>
 
 namespace conct
 {
@@ -12,7 +13,7 @@ namespace conct
 	}
 
 	template< class T >
-	ResultId ValueBuilder::setArray( const ArrayView< T >& value )
+	ResultId ValueBuilder::setArray( const ArrayView< const T >& value )
 	{
 		return setArray( value.getData(), sizeof( T ), value.getLength(), ValueTypeTraits< T >::getTypeCrc() );
 	}
@@ -22,40 +23,40 @@ namespace conct
 	{
 		switch( pValue->getType() )
 		{
-		case ValueType_Void:
+		case ValueType::Void:
 			return setVoid();
 
-		case ValueType_Boolean:
+		case ValueType::Boolean:
 			return setBoolean( pValue->getBoolean() );
 
-		case ValueType_Integer:
+		case ValueType::Integer:
 			return setInteger( pValue->getInteger() );
 
-		case ValueType_Unsigned:
+		case ValueType::Unsigned:
 			return setUnsigned( pValue->getUnsigned() );
 
-		case ValueType_String:
+		case ValueType::String:
 			return setString( pValue->getString() );
 
-		case ValueType_PercentValue:
+		case ValueType::PercentValue:
 			return setPercentValue( pValue->getPercentValue() );
 
-		case ValueType_DeviceId:
+		case ValueType::DeviceId:
 			return setDeviceId( pValue->getDeviceId() );
 
-		case ValueType_InstanceId:
+		case ValueType::InstanceId:
 			return setInstanceId( pValue->getInstanceId() );
 
-		case ValueType_TypeCrc:
+		case ValueType::TypeCrc:
 			return setTypeCrc( pValue->getTypeCrc() );
 
-		case ValueType_Struct:
+		case ValueType::Struct:
 			return setStruct( pValue->getStructData(), pValue->getStructSize(), pValue->getStructType() );
 
-		case ValueType_Array:
+		case ValueType::Array:
 			return setArray( pValue->getArrayData(), pValue->getArrayElementSize(), pValue->getArrayLength(), pValue->getArrayType() );
 
-		case ValueType_Count:
+		case ValueType::Count:
 			break;
 		}
 

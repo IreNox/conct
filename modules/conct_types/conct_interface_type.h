@@ -2,7 +2,7 @@
 
 #include "conct_type.h"
 
-#include "conct_vector.h"
+#include <tiki/tiki_dynamic_array.h>
 
 namespace conct
 {
@@ -23,7 +23,7 @@ namespace conct
 
 	struct InterfaceFunction
 	{
-		typedef Vector< InterfaceFunctionParameter > ParameterVector;
+		typedef DynamicArray< InterfaceFunctionParameter > ParameterVector;
 
 		DynamicString	name;
 		const Type*		pReturnType;
@@ -43,9 +43,9 @@ namespace conct
 
 	public:
 
-		typedef Vector< InterfaceProperty > PropertyVector;
-		typedef Vector< InterfaceFunction > FunctionVector;
-		typedef Vector< InterfaceEvent > EventVector;
+		typedef DynamicArray< InterfaceProperty > PropertyVector;
+		typedef DynamicArray< InterfaceFunction > FunctionVector;
+		typedef DynamicArray< InterfaceEvent > EventVector;
 
 		const InterfaceType*	getBaseType() const { return m_pBaseType; }
 

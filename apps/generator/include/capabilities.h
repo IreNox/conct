@@ -1,6 +1,9 @@
 #pragma once
 
-#include "conct_unsorted_set.h"
+#include "conct_core.h"
+
+#include <tiki/tiki_dynamic_array.h>
+#include <tiki/tiki_flags.h>
 
 namespace tinyxml2
 {
@@ -9,17 +12,19 @@ namespace tinyxml2
 
 namespace conct
 {
-	enum Capability
+	enum class Capability : uint8
 	{
-		Capability_Allocation,
-		Capability_I2C,
-		Capability_GPIO,
-		Capability_SPI,
-		Capability_Sockets,
-		Capability_UART,
+		Allocation,
+		I2C,
+		GPIO,
+		SPI,
+		Sockets,
+		UART,
 
-		Capability_Count
+		Count
 	};
+
+	using CapabilityFlags = Flags8< Capability >;
 
 	class Capabilities
 	{
@@ -28,21 +33,21 @@ namespace conct
 
 	public:
 
-		bool								hasCapability( Capability capability ) const { return m_capabilities.contains( capability ); }
-		const UnsortedSet< Capability >&	getCapabilities() const { return m_capabilities; }
+		bool					hasCapability( Capability capability ) const { return m_capabilities.isSet( capability ); }
+		const CapabilityFlags&	getCapabilities() const { return m_capabilities; }
 
-		bool								metRequirements( const Capabilities& requirements, UnsortedSet< Capability >* pMissingCapabilities = nullptr ) const;
+		bool					metRequirements( const Capabilities& requirements, DynamicArray< Capability >* pMissingCapabilities = nullptr ) const;
 
 	private: // friend
 
-											Capabilities();
+								Capabilities();
 
-		bool								load( const tinyxml2::XMLElement* pNode );;
+		bool					load( const tinyxml2::XMLElement* pNode );;
 
 	private:
 
-		UnsortedSet< Capability >			m_capabilities;
+		CapabilityFlags			m_capabilities;
 	};
 
-	const char*								getCapabilityName( Capability value );
+	const char*					getCapabilityName( Capability value );
 }

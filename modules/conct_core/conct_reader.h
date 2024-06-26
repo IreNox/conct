@@ -2,8 +2,6 @@
 
 #include "conct_core.h"
 
-#include <tiki/tiki_array.h>
-
 namespace conct
 {
 	class Reader

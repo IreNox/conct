@@ -1,7 +1,6 @@
 #include "conct_value.h"
 
-#include "conct_functions.h"
-#include "conct_memory.h"
+#include <tiki/tiki_memory.h>
 
 namespace conct
 {
@@ -53,25 +52,25 @@ namespace conct
 
 	bool Value::getBoolean() const
 	{
-		CONCT_ASSERT( type == ValueType_Boolean );
+		TIKI_ASSERT( type == ValueType::Boolean );
 		return getData( data ).boolean;
 	}
 
 	sint32 Value::getInteger() const
 	{
-		CONCT_ASSERT( type == ValueType_Integer );
+		TIKI_ASSERT( type == ValueType::Integer );
 		return getData( data ).integer;
 	}
 
 	uint32 Value::getUnsigned() const
 	{
-		CONCT_ASSERT( type == ValueType_Unsigned );
+		TIKI_ASSERT( type == ValueType::Unsigned );
 		return getData( data ).unsignedInteger;
 	}
 
 	const char* Value::getString() const
 	{
-		CONCT_ASSERT( type == ValueType_String );
+		TIKI_ASSERT( type == ValueType::String );
 		const ValueData valueData = getData( data );
 		if( valueData.string.offset == 0u )
 		{
@@ -83,31 +82,31 @@ namespace conct
 
 	PercentValue Value::getPercentValue() const
 	{
-		CONCT_ASSERT( type == ValueType_PercentValue );
+		TIKI_ASSERT( type == ValueType::PercentValue );
 		return getData( data ).percent;
 	}
 
 	DeviceId Value::getDeviceId() const
 	{
-		CONCT_ASSERT( type == ValueType_DeviceId );
+		TIKI_ASSERT( type == ValueType::DeviceId );
 		return getData( data ).device;
 	}
 
 	InstanceId Value::getInstanceId() const
 	{
-		CONCT_ASSERT( type == ValueType_InstanceId );
+		TIKI_ASSERT( type == ValueType::InstanceId );
 		return getData( data ).instanceId;
 	}
 
 	TypeCrc Value::getTypeCrc() const
 	{
-		CONCT_ASSERT( type == ValueType_TypeCrc );
+		TIKI_ASSERT( type == ValueType::TypeCrc );
 		return getData( data ).type;
 	}
 
 	const void* Value::getStructData() const
 	{
-		CONCT_ASSERT( type == ValueType_Struct );
+		TIKI_ASSERT( type == ValueType::Struct );
 		const ValueData valueData = getData( data );
 		if( valueData.structure.offset == 0u )
 		{
@@ -119,19 +118,19 @@ namespace conct
 
 	uint16 Value::getStructSize() const
 	{
-		CONCT_ASSERT( type == ValueType_Struct );
+		TIKI_ASSERT( type == ValueType::Struct );
 		return getData( data ).structure.size;
 	}
 
 	TypeCrc Value::getStructType() const
 	{
-		CONCT_ASSERT( type == ValueType_Struct );
+		TIKI_ASSERT( type == ValueType::Struct );
 		return getData( data ).structure.type;
 	}
 
 	const void* Value::getArrayData() const
 	{
-		CONCT_ASSERT( type == ValueType_Array );
+		TIKI_ASSERT( type == ValueType::Array );
 		const ValueData valueData = getData( data );
 		if( valueData.array.offset == 0u )
 		{
@@ -143,30 +142,30 @@ namespace conct
 
 	uint8 Value::getArrayElementSize() const
 	{
-		CONCT_ASSERT( type == ValueType_Array );
+		TIKI_ASSERT( type == ValueType::Array );
 		return getData( data ).array.size;
 	}
 
 	uint8 Value::getArrayLength() const
 	{
-		CONCT_ASSERT( type == ValueType_Array );
+		TIKI_ASSERT( type == ValueType::Array );
 		return getData( data ).array.length;
 	}
 
 	TypeCrc Value::getArrayType() const
 	{
-		CONCT_ASSERT( type == ValueType_Array );
+		TIKI_ASSERT( type == ValueType::Array );
 		return getData( data ).array.type;
 	}
 
 	void Value::setVoid()
 	{
-		type = ValueType_Void;
+		type = ValueType::Void;
 	}
 
 	void Value::setBoolean( bool value )
 	{
-		type = ValueType_Boolean;
+		type = ValueType::Boolean;
 		ValueData valueData;
 		valueData.boolean = value;
 		setData( data, valueData );
@@ -174,7 +173,7 @@ namespace conct
 
 	void Value::setInteger( sint32 value )
 	{
-		type = ValueType_Integer;
+		type = ValueType::Integer;
 		ValueData valueData;
 		valueData.integer = value;
 		setData( data, valueData );
@@ -182,7 +181,7 @@ namespace conct
 
 	void Value::setUnsigned( uint32 value )
 	{
-		type = ValueType_Unsigned;
+		type = ValueType::Unsigned;
 		ValueData valueData;
 		valueData.unsignedInteger = value;
 		setData( data, valueData );
@@ -190,7 +189,7 @@ namespace conct
 
 	void Value::setPercentValue( PercentValue value )
 	{
-		type = ValueType_PercentValue;
+		type = ValueType::PercentValue;
 		ValueData valueData;
 		valueData.percent = value;
 		setData( data, valueData );
@@ -198,7 +197,7 @@ namespace conct
 
 	void Value::setDeviceId( DeviceId value )
 	{
-		type = ValueType_DeviceId;
+		type = ValueType::DeviceId;
 		ValueData valueData;
 		valueData.device = value;
 		setData( data, valueData );
@@ -206,7 +205,7 @@ namespace conct
 
 	void Value::setInstanceId( InstanceId value )
 	{
-		type = ValueType_InstanceId;
+		type = ValueType::InstanceId;
 		ValueData valueData;
 		valueData.instanceId = value;
 		setData( data, valueData );
@@ -214,7 +213,7 @@ namespace conct
 
 	void Value::setTypeCrc( TypeCrc value )
 	{
-		type = ValueType_TypeCrc;
+		type = ValueType::TypeCrc;
 		ValueData valueData;
 		valueData.type = value;
 		setData( data, valueData );
@@ -222,7 +221,7 @@ namespace conct
 
 	void Value::setString( uint16 offset )
 	{
-		type = ValueType_String;
+		type = ValueType::String;
 		ValueData valueData;
 		valueData.string.offset = offset;
 		setData( data, valueData );
@@ -230,7 +229,7 @@ namespace conct
 
 	void Value::setStruct( uint16 offset, uint16 size, TypeCrc typeCrc )
 	{
-		type = ValueType_Struct;
+		type = ValueType::Struct;
 		ValueData valueData;
 		valueData.structure.offset = offset;
 		valueData.structure.size = size;
@@ -240,7 +239,7 @@ namespace conct
 
 	void Value::setArray( uint16 offset, uint8 size, uint8 length, TypeCrc typeCrc )
 	{
-		type = ValueType_Array;
+		type = ValueType::Array;
 		ValueData valueData;
 		valueData.array.offset = offset;
 		valueData.array.size = size;

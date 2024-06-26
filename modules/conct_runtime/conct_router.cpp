@@ -1,20 +1,20 @@
 #include "conct_router.h"
 
-#include "conct_runtime_high.h"
+#include "conct_runtime.h"
 
 namespace conct
 {
-	Router::Router( RuntimeHigh& runtime )
+	Router::Router( Runtime& runtime )
 		: m_runtime( runtime )
 	{
 	}
 
-	ArrayView< DeviceConnection > Router::getConnectedDevices() const
+	ArrayView< const DeviceConnection > Router::getConnectedDevices() const
 	{
 		m_devices.clear();
 		m_runtime.getDevices( m_devices );
 
-		return m_devices.toView();
+		return m_devices;
 	}
 
 	void Router::ChangeDevice( DeviceId id, DeviceStatus status )

@@ -1,6 +1,6 @@
 #include "conct_value_type.h"
 
-#include "conct_functions.h"
+#include <tiki/tiki_types.h>
 
 namespace conct
 {
@@ -21,9 +21,9 @@ namespace conct
 			"Structure",
 			"Array"
 		};
-		CONCT_STATIC_ASSERT( CONCT_COUNT( s_aValueTypeNames ) == ValueType_Count );
+		TIKI_STATIC_ASSERT( TIKI_ARRAY_COUNT( s_aValueTypeNames ) == (uintsize)ValueType::Count );
 
-		CONCT_ASSERT( value < ValueType_Count );
-		return s_aValueTypeNames[ value ];
+		TIKI_ASSERT( value < ValueType::Count );
+		return s_aValueTypeNames[ (uintsize)value ];
 	}
 }

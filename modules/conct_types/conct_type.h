@@ -1,9 +1,9 @@
 #pragma once
 
-#include "conct_dynamic_string.h"
-#include "conct_path.h"
-#include "conct_unsorted_set.h"
 #include "conct_value_type.h"
+
+#include <tiki/tiki_hash_set.h>
+#include <tiki/tiki_path.h>
 
 namespace tinyxml2
 {
@@ -14,13 +14,13 @@ namespace conct
 {
 	class TypeCollection;
 
-	enum TypeKind
+	enum class TypeKind : uint8
 	{
-		TypeKind_Value,
-		TypeKind_Interface,
-		TypeKind_Struct,
-		TypeKind_Enum,
-		TypeKind_Array
+		Value,
+		Interface,
+		Struct,
+		Enum,
+		Array
 	};
 
 	class Type
@@ -29,7 +29,7 @@ namespace conct
 
 	public:
 
-		typedef UnsortedSet< const Type* > TypeSet;
+		typedef HashSet< const Type* > TypeSet;
 
 		virtual					~Type() { }
 

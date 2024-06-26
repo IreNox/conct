@@ -1,17 +1,20 @@
 #pragma  once
 
-#include "conct_array_view.h"
 #include "conct_core.h"
-#include "conct_dynamic_string.h"
-#include "conct_pair.h"
 
+#include <tiki/tiki_dynamic_string.h>
+#include <tiki/tiki_pair.h>
 #include <tinyxml2/tinyxml2.h>
+
+namespace tiki
+{
+	class DynamicString;
+	class Path;
+}
 
 namespace conct
 {
-	class DynamicString;
 	class InterfaceType;
-	class Path;
 	class Type;
 	class TypeCollection;
 
@@ -28,7 +31,7 @@ namespace conct
 	bool	loadInterfaceValue( const InterfaceType** ppInterface, const tinyxml2::XMLElement* pNode, const char* pName, const DynamicString& referenceNamespace, TypeCollection& typeCollection, bool ignoreMissing = false );
 
 	template< class TEnum >
-	bool	loadEnumValue( TEnum& target, const tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< Pair< TEnum, const char*> >& mapping, bool ignoreMissing = false );
+	bool	loadEnumValue( TEnum& target, const tinyxml2::XMLElement* pNode, const char* pName, const ArrayView< const Pair< TEnum, const char* > >& mapping, bool ignoreMissing = false );
 }
 
 #include "conct_xml_helper.inl"

@@ -3,10 +3,10 @@
 #include <tiki/tiki_dynamic_string.h>
 #include <tiki/tiki_string_tools.h>
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <windows.h>
 #	include <DbgHelp.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 #	include <android/log.h>
 #endif
 
@@ -15,15 +15,13 @@
 
 namespace conct
 {
-	using namespace tiki;
-
 	void trace::write( const char* pString )
 	{
 		puts( pString );
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		OutputDebugStringA( pString );
 		OutputDebugStringA( "\n" );
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		__android_log_write( ANDROID_LOG_INFO, "conct", pString );
 #endif
 	}
@@ -34,7 +32,7 @@ namespace conct
 
 		va_list args;
 		va_start( args, pFormat );
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		vsprintf_s( buffer, 2048u, pFormat, args );
 #else
 		vsprintf( buffer, pFormat, args );

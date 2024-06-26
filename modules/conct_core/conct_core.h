@@ -2,22 +2,10 @@
 
 #include <tiki/tiki_types.h>
 
+using namespace tiki;
+
 namespace conct
 {
-	using uint8			= tiki::uint8;
-	using sint8			= tiki::sint8;
-	using uint16		= tiki::uint16;
-	using sint16		= tiki::sint16;
-	using uint32		= tiki::uint32;
-	using sint32		= tiki::sint32;
-	using uint64		= tiki::uint64;
-	using sint64		= tiki::sint64;
-
-	using sint			= tiki::sint;
-	using uint			= tiki::uint;
-	using uintptr		= tiki::uintptr;
-	using uintreg		= tiki::uintreg;
-
 	using DeviceId		= uint8;
 	using TypeCrc		= uint16;
 	using InstanceId	= uint16;

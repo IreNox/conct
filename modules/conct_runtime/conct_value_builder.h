@@ -1,8 +1,9 @@
 #pragma once
 
-#include "conct_array_view.h"
 #include "conct_result.h"
 #include "conct_value.h"
+
+#include <tiki/tiki_array_view.h>
 
 namespace conct
 {
@@ -12,11 +13,13 @@ namespace conct
 	{
 	public:
 
+		using ByteView = ArrayView< const byte >;
+
 							ValueBuilder( DataBuilder* pBuilder, Value* pValue );
 
 		const Value*		getValue() const { return m_pValue; }
 		uintreg				getValueSize() const;
-		ArrayView< uint8 >	toArrayView() const;
+		ByteView			toArrayView() const;
 
 		ResultId			setVoid();
 		ResultId			setBoolean( bool value );
@@ -34,7 +37,7 @@ namespace conct
 
 		ResultId			setArray( const void* pData, uintreg elementSize, uintreg length, TypeCrc type );
 		template< class T >
-		ResultId			setArray( const ArrayView< T >& value );
+		ResultId			setArray( const ArrayView< const T >& value );
 
 		template< class T >
 		ResultId			setValue( const T* pValue );

@@ -1,13 +1,13 @@
 #include "generator.h"
 
-#include "conct_dynamic_string.h"
+#include "tiki/tiki_dynamic_string.h"
 
 int main( int argc, char* argv[] )
 {
-	conct::Vector< conct::DynamicString > arguments;
+	tiki::DynamicArray< tiki::DynamicString > arguments;
 	for( int i = 0u; i < argc; ++i )
 	{
-		arguments.pushBack( conct::DynamicString( argv[ i ] ) );
+		arguments.pushBack( tiki::DynamicString( argv[ i ] ) );
 	}
 
 	conct::Generator generator;

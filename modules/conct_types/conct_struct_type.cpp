@@ -14,7 +14,7 @@ namespace conct
 
 	void StructType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
-		Type::create( fileName, namespaceVar, name, name, TypeKind_Struct, ValueType_Struct, false );
+		Type::create( fileName, namespaceVar, name, name, TypeKind::Struct, ValueType::Struct, false );
 	}
 
 	bool StructType::load( TypeCollection& typeCollection )
@@ -51,10 +51,10 @@ namespace conct
 					return false;
 				}
 
-				if( pType->getKind() == TypeKind_Array ||
-					pType->getKind() == TypeKind_Interface )
+				if( pType->getKind() == TypeKind::Array ||
+					pType->getKind() == TypeKind::Interface )
 				{
-					trace::fileError( m_fileName.getGenericPath(), pFieldNode->GetLineNum(), "Error: It is not allowed to use arrays or interfaces in structs.\n"_s );
+					trace::fileError( m_fileName.getGenericPath().toConstCharPointer(), pFieldNode->GetLineNum(), "Error: It is not allowed to use arrays or interfaces in structs.\n"_s );
 					return false;
 				}
 

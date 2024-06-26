@@ -5,15 +5,14 @@
 #include "port.h"
 
 #include "conct_array_type.h"
-#include "conct_ascii.h"
 #include "conct_crc16.h"
 #include "conct_enum_type.h"
 #include "conct_filesystem.h"
 #include "conct_interface_type.h"
-#include "conct_path.h"
-#include "conct_string_tools.h"
 #include "conct_struct_type.h"
 #include "conct_trace.h"
+
+#include <tiki/tiki_string.h>
 
 namespace conct
 {
@@ -28,9 +27,9 @@ namespace conct
 	{
 	}
 
-	bool Generator::run( const Vector< DynamicString >& arguments )
+	bool Generator::run( const DynamicArray< DynamicString >& arguments )
 	{
-		const Path exePath = Path::getExecutablePath();
+		const Path exePath = filesystem::getExecutablePath();
 		const Path basePath = exePath.getParent().getParent().getParent().getParent().getParent().getParent();
 		const Path configPath = basePath.push( "config"_s );
 
@@ -83,8 +82,7 @@ namespace conct
 			!exportInterfaceProxies( device, parameters ) ||
 			!exportInterfaceImpl( device, parameters ) ||
 			!exportDeviceInterface( device, parameters ) ||
-			!exportDeviceImpl( device, parameters ) ||
-			!exportIno( device, parameters ) )
+			!exportDeviceImpl( device, parameters ) )
 		{
 			return false;
 		}
@@ -117,12 +115,12 @@ namespace conct
 
 	DynamicString Generator::getTypeCppReturnName( const Type* pType ) const
 	{
-		if( pType->getKind() == TypeKind_Array )
+		if( pType->getKind() == TypeKind::Array )
 		{
 			const ArrayType* pArrayType = static_cast< const ArrayType* >( pType );
 			return "ArrayView< "_s + getTypeCppReturnName( pArrayType->getBaseType() ) + " >";
 		}
-		//else if( pType->getKind() == TypeKind_Interface )
+		//else if( pType->getKind() == TypeKind::Interface )
 		//{
 		//	//return
 		//}
@@ -137,7 +135,7 @@ namespace conct
 
 	DynamicString Generator::getTypeCppValueGetFunction( const Type* pType, const DynamicString& variableName ) const
 	{
-		if( pType->getKind() == TypeKind_Enum )
+		if( pType->getKind() == TypeKind::Enum )
 		{
 			return "("_s + pType->getCppName() + ")(" + variableName + ".getInteger() )";
 		}
@@ -147,15 +145,15 @@ namespace conct
 
 	DynamicString Generator::getTypeCppValueSetFunction( const Type* pType, const DynamicString& variableName, const DynamicString& value ) const
 	{
-		if( pType->getKind() == TypeKind_Array )
+		if( pType->getKind() == TypeKind::Array )
 		{
 			return variableName + ".setArray( " + value + " )";
 		}
-		else if( pType->getKind() == TypeKind_Struct )
+		else if( pType->getKind() == TypeKind::Struct )
 		{
 			return variableName + ".setStruct( " + value + " )";
 		}
-		else if( pType->getValueType() == ValueType_Void )
+		else if( pType->getValueType() == ValueType::Void )
 		{
 			return value + "; " + variableName + ".setVoid()";
 		}
@@ -221,7 +219,7 @@ namespace conct
 		return true;
 	}
 
-	bool Generator::parseArguments( GeneratorParameters& parameters, const Vector< DynamicString >& arguments )
+	bool Generator::parseArguments( GeneratorParameters& parameters, const DynamicArray< DynamicString >& arguments )
 	{
 		if( arguments.getLength() < 2u )
 		{
@@ -312,7 +310,7 @@ namespace conct
 
 	void Generator::collectTypesToExport( TypeSet& types, const Type* pType )
 	{
-		if( pType->getKind() == TypeKind_Value )
+		if( pType->getKind() == TypeKind::Value )
 		{
 			return;
 		}
@@ -335,7 +333,7 @@ namespace conct
 
 		for( const Type* pType : types )
 		{
-			if( pType->getKind() == TypeKind_Interface )
+			if( pType->getKind() == TypeKind::Interface )
 			{
 				const InterfaceType* pInterface = static_cast<const InterfaceType*>(pType);
 				if( !exportInterface( device, parameters, pInterface ) )
@@ -343,7 +341,7 @@ namespace conct
 					return false;
 				}
 			}
-			else if( pType->getKind() == TypeKind_Struct )
+			else if( pType->getKind() == TypeKind::Struct )
 			{
 				const StructType* pStruct = static_cast< const StructType* >( pType );
 				if( !exportStruct( device, parameters, pStruct ) )
@@ -351,7 +349,7 @@ namespace conct
 					return false;
 				}
 			}
-			else if( pType->getKind() == TypeKind_Enum )
+			else if( pType->getKind() == TypeKind::Enum )
 			{
 				const EnumType* pEnum = static_cast<const EnumType*>(pType);
 				if( !exportEnum( device, parameters, pEnum ) )
@@ -527,10 +525,10 @@ namespace conct
 			headerContent += "\n";
 			headerContent += "\t\t"_s + proxyName + "();\n";
 			headerContent += "\n";
-			headerContent += "\t\tvirtual bool getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const CONCT_OVERRIDE_FINAL;\n";
-			headerContent += "\t\tvirtual bool setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const CONCT_OVERRIDE_FINAL;\n";
+			headerContent += "\t\tvirtual bool getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const TIKI_OVERRIDE_FINAL;\n";
+			headerContent += "\t\tvirtual bool setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const TIKI_OVERRIDE_FINAL;\n";
 			headerContent += "\n";
-			headerContent += "\t\tvirtual bool callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const CONCT_OVERRIDE_FINAL;\n";
+			headerContent += "\t\tvirtual bool callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const TIKI_OVERRIDE_FINAL;\n";
 			headerContent += "\t};\n";
 			headerContent += "}\n";
 
@@ -622,7 +620,7 @@ namespace conct
 			sourceContent += "\t}\n";
 			sourceContent += "\n";
 
-			sourceContent += "\tbool "_s + pInterface->getName() + "Proxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const\n";
+			sourceContent += "\tbool "_s + pInterface->getName() + "Proxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const\n";
 			sourceContent += "\t{\n";
 
 			if( !pInterface->getFunctions().isEmpty() )
@@ -713,12 +711,12 @@ namespace conct
 			{
 				if( property.hasGetter )
 				{
-					headerContent += "\t\tvirtual "_s + getTypeCppReturnName( property.pType ) + " get" + property.name + "() const CONCT_OVERRIDE_FINAL;\n";
+					headerContent += "\t\tvirtual "_s + getTypeCppReturnName( property.pType ) + " get" + property.name + "() const TIKI_OVERRIDE_FINAL;\n";
 				}
 
 				if( property.hasSetter )
 				{
-					headerContent += "\t\tvirtual void set"_s + property.name + "( " + getTypeCppArgumentName( property.pType ) + " value ) CONCT_OVERRIDE_FINAL;\n";
+					headerContent += "\t\tvirtual void set"_s + property.name + "( " + getTypeCppArgumentName( property.pType ) + " value ) TIKI_OVERRIDE_FINAL;\n";
 				}
 			}
 
@@ -740,7 +738,7 @@ namespace conct
 					parameters += getTypeCppArgumentName( parameter.pType ) + " " + parameter.name;
 				}
 
-				headerContent += "\t\tvirtual "_s + getTypeCppReturnName( function.pReturnType ) + " " + function.name + "( " + parameters + " ) CONCT_OVERRIDE_FINAL;\n";
+				headerContent += "\t\tvirtual "_s + getTypeCppReturnName( function.pReturnType ) + " " + function.name + "( " + parameters + " ) TIKI_OVERRIDE_FINAL;\n";
 			}
 
 			headerContent += "\t};\n";
@@ -816,15 +814,11 @@ namespace conct
 	{
 		const InterfaceType* pDeviceInterface = m_types.findInterface( "Core.Device"_s, ""_s );
 
-		const HardwareRuntime runtime = device.getHardware().getRuntime();
-		const DynamicString runitmeHeaderFilename = DynamicString( runtime == HardwareRuntime_Low ? "conct_runtime_low.h" : "conct_runtime_high.h" );
-		const DynamicString runitmeClassName = DynamicString( runtime == HardwareRuntime_Low ? "RuntimeLow" : "RuntimeHigh" );
-
 		DynamicString headerContent;
 		headerContent += "#pragma once\n";
 		headerContent += "\n";
 		headerContent += "#include \""_s + pDeviceInterface->getHeaderFilename() + "\"\n";
-		headerContent += "#include \""_s + runitmeHeaderFilename + "\"\n";
+		headerContent += "#include \"conct_runtime.h\"\n";
 		headerContent += "\n";
 
 		for( const DevicePort& port : device.getPorts() )
@@ -869,11 +863,11 @@ namespace conct
 		headerContent += "\t\tvoid setupDevice();\n";
 		headerContent += "\t\tvoid loopDevice();\n";
 		headerContent += "\n";
-		headerContent += "\t\tvirtual const char* getName() const CONCT_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual const char* getName() const TIKI_OVERRIDE_FINAL;\n";
 		headerContent += "\n";
 		headerContent += "\tprotected:\n";
 		headerContent += "\n";
-		headerContent += "\t\t"_s + runitmeClassName + " m_runtime;\n";
+		headerContent += "\t\tRuntime m_runtime;\n";
 		headerContent += "\n";
 
 		for( const DevicePort& port : device.getPorts() )
@@ -910,9 +904,9 @@ namespace conct
 		headerContent += "\t\tvirtual void setup() = 0;\n";
 		headerContent += "\t\tvirtual void loop() = 0;\n";
 		headerContent += "\n";
-		headerContent += "\t\tvirtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;\n";
-		headerContent += "\t\tvirtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;\n";
-		headerContent += "\t\tvirtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void getEmptyInstances( ArrayView< Instance >& instances ) TIKI_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void getPublicInstances( ConstInstanceView& instances ) const TIKI_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void getLocalInstances( ArrayView< const LocalInstance >& instances ) TIKI_OVERRIDE_FINAL;\n";
 		headerContent += "\t};\n";
 		headerContent += "}\n";
 
@@ -962,15 +956,15 @@ namespace conct
 
 					switch( pValue->type )
 					{
-					case PortParameterValueType_Invalid:
+					case PortParameterValueType::Invalid:
 						sourceContent += "error";
 						break;
 
-					case PortParameterValueType_String:
+					case PortParameterValueType::String:
 						sourceContent += "\t\t"_s + parametersVariableName + "." + pParameter->getName() + " = \"" + pValue->string + "\"_s;\n";
 						break;
 
-					case PortParameterValueType_Integer:
+					case PortParameterValueType::Integer:
 						sourceContent += "\t\t"_s + parametersVariableName + "." + pParameter->getName() + " = " + string_tools::toString( pValue->integer ) + ";\n";
 						break;
 					}
@@ -987,12 +981,9 @@ namespace conct
 		sourceContent += "\n";
 		sourceContent += "\t\tm_runtime.setup( this );\n";
 
-		if( runtime == HardwareRuntime_High )
+		for( const DevicePort& port : device.getPorts() )
 		{
-			for( const DevicePort& port : device.getPorts() )
-			{
-				sourceContent += "\t\tm_runtime.registerPort( &m_port"_s + string_tools::toString( port.index ) + " );\n";
-			}
+			sourceContent += "\t\tm_runtime.registerPort( &m_port"_s + string_tools::toString( port.index ) + " );\n";
 		}
 
 		sourceContent += "\n";
@@ -1026,7 +1017,7 @@ namespace conct
 		sourceContent += "\t}\n";
 		sourceContent += "\n";
 
-		sourceContent += "\tvoid DeviceInterface::getEmptyInstances( Array< Instance >& instances )\n";
+		sourceContent += "\tvoid DeviceInterface::getEmptyInstances( ArrayView< Instance >& instances )\n";
 		sourceContent += "\t{\n";
 
 		if( device.getInstances().isEmpty() )
@@ -1036,13 +1027,13 @@ namespace conct
 		else
 		{
 			sourceContent += "\t\tstatic Instance s_instances[ "_s + string_tools::toString( device.getInstances().getLength() ) + "u ];\n";
-			sourceContent += "\t\tinstances = Array< Instance >( s_instances, CONCT_COUNT( s_instances ) );\n";
+			sourceContent += "\t\tinstances = ArrayView< Instance >( s_instances, TIKI_ARRAY_COUNT( s_instances ) );\n";
 		}
 
 		sourceContent += "\t}\n";
 		sourceContent += "\n";
 
-		sourceContent += "\tvoid DeviceInterface::getPublicInstances( ArrayView< Instance >& instances ) const\n";
+		sourceContent += "\tvoid DeviceInterface::getPublicInstances( ConstInstanceView& instances ) const\n";
 		sourceContent += "\t{\n";
 
 		if( device.getInstances().isEmpty() )
@@ -1061,13 +1052,13 @@ namespace conct
 
 			sourceContent += "\t\t};\n";
 			sourceContent += "\n";
-			sourceContent += "\t\tinstances.set( s_instances, CONCT_COUNT( s_instances ) );\n";
+			sourceContent += "\t\tinstances.set( s_instances, TIKI_ARRAY_COUNT( s_instances ) );\n";
 		}
 
 		sourceContent += "\t}\n";
 		sourceContent += "\n";
 
-		sourceContent += "\tvoid DeviceInterface::getLocalInstances( ArrayView< LocalInstance >& instances )\n";
+		sourceContent += "\tvoid DeviceInterface::getLocalInstances( ArrayView< const LocalInstance >& instances )\n";
 		sourceContent += "\t{\n";
 
 		if( device.getInstances().isEmpty() )
@@ -1093,7 +1084,7 @@ namespace conct
 
 			sourceContent += "\t\t};\n";
 			sourceContent += "\n";
-			sourceContent += "\t\tinstances.set( s_instances, CONCT_COUNT( s_instances ) );\n";
+			sourceContent += "\t\tinstances.set( s_instances, TIKI_ARRAY_COUNT( s_instances ) );\n";
 		}
 
 		sourceContent += "\t}\n";
@@ -1123,8 +1114,8 @@ namespace conct
 		headerContent += "\t{\n";
 		headerContent += "\tprotected:\n";
 		headerContent += "\n";
-		headerContent += "\t\tvirtual void setup() CONCT_OVERRIDE_FINAL;\n";
-		headerContent += "\t\tvirtual void loop() CONCT_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void setup() TIKI_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void loop() TIKI_OVERRIDE_FINAL;\n";
 		headerContent += "\t};\n";
 		headerContent += "}\n";
 
@@ -1150,68 +1141,9 @@ namespace conct
 			writeStringToFile( sourceFilepath, sourceContent, true );
 	}
 
-	bool Generator::exportIno( const Device& device, const GeneratorParameters& parameters )
-	{
-		if( device.getHardware().getSystem() != HardwareSystem_Arduino )
-		{
-			return true;
-		}
-
-		const DynamicString deviceFilename = getDeviceFilename( device );
-		const DynamicString headerFilename = "device_"_s + deviceFilename + ".h";
-
-		const DynamicString deviceClassName = "Device"_s + device.getName();
-
-		DynamicString headerContent;
-		headerContent += "#pragma once\n";
-		headerContent += "\n";
-
-		for( const Path& file : m_exportedFiles )
-		{
-			if( file.getParent() != parameters.genOutputPath ||
-				file.getExtension() != ".cpp" )
-			{
-				continue;
-			}
-
-			headerContent += "#include \""_s + file.getFilename() + "\"\n";
-		}
-
-		headerContent += "\n";
-
-		DynamicString sourceContent;
-		sourceContent += "#include \""_s + headerFilename + "\"\n";
-		sourceContent += "#include \"gen/files.h\"\n";
-		sourceContent += "\n";
-		sourceContent += "conct::"_s + deviceClassName + " device;\n";
-		sourceContent += "\n";
-		sourceContent += "void setup()\n";
-		sourceContent += "{\n";
-		sourceContent += "\tdevice.setupDevice();\n";
-		sourceContent += "}\n";
-		sourceContent += "\n";
-		sourceContent += "void loop()\n";
-		sourceContent += "{\n";
-		sourceContent += "\tdevice.loopDevice();\n";
-		sourceContent += "}\n";
-		sourceContent += "\n";
-
-		const DynamicString sourceFilename = getDeviceFilename( device );
-		if( parameters.outputPath.getFilename() != sourceFilename )
-		{
-			trace::write( "Error: device name("_s + sourceFilename + ") is not equals to the device folder name(" + parameters.outputPath.getFilename() + ").\n" );
-			return false;
-		}
-
-		const Path sourceFilepath = parameters.outputPath.push( sourceFilename + ".ino" );
-		const Path headerFilepath = parameters.genOutputPath.push( "files.h"_s );
-		return writeStringToFile( headerFilepath, headerContent, false ) &&
-			writeStringToFile( sourceFilepath, sourceContent, true );
-	}
-
 	void Generator::writeDependingTypeIncludes( DynamicString& target, const Type* pType )
 	{
-		UnsortedSet< DynamicString > headerFiles;
+		HashSet< DynamicString > headerFiles;
 
 		for( const Type* pDependingType : pType->getDependingTypes() )
 		{
@@ -1220,7 +1152,14 @@ namespace conct
 
 		for( const DynamicString& headerFile : headerFiles )
 		{
-			target += "#include \""_s + headerFile + "\"\n";
+			if( headerFile.startsWith( "tiki/" ) )
+			{
+				target += "#include <"_s + headerFile + ">\n";
+			}
+			else
+			{
+				target += "#include \""_s + headerFile + "\"\n";
+			}
 		}
 	}
 }

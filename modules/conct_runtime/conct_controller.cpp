@@ -2,8 +2,7 @@
 
 #include "conct_crc16.h"
 #include "conct_data_builder.h"
-#include "conct_runtime_high.h"
-#include "conct_string.h"
+#include "conct_runtime.h"
 
 namespace conct
 {
@@ -20,7 +19,7 @@ namespace conct
 		}
 	}
 
-	void Controller::setup( RuntimeHigh& runtime )
+	void Controller::setup( Runtime& runtime )
 	{
 		m_pRuntime = &runtime;
 	}
@@ -79,8 +78,8 @@ namespace conct
 		pRequest->instanceId	= instance.id;
 		pRequest->nameCrc		= calculateStringCrc16( pName );
 
-		Array< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getLength() );
-		pRequest->arguments		= workingArguments;
+		ArrayView< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getLength() );
+		pRequest->arguments = workingArguments;
 
 		for( uintreg i = 0u; i < workingArguments.getLength(); ++i )
 		{
@@ -115,7 +114,7 @@ namespace conct
 	template< class TCommand >
 	TCommand* Controller::beginCommand( const DeviceAddress& deviceAddress, const DataBuilder& payload, MessageType messageType )
 	{
-		CONCT_ASSERT( m_pRuntime != nullptr );
+		TIKI_ASSERT( m_pRuntime != nullptr );
 
 		if( payload.isExceeded() )
 		{

@@ -1,6 +1,5 @@
 #include "port.h"
 
-#include "conct_path.h"
 #include "conct_xml_helper.h"
 #include "conct_trace.h"
 

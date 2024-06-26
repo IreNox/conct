@@ -1,12 +1,16 @@
 #pragma once
 
-#include "conct_vector.h"
+#include <tiki/tiki_dynamic_array.h>
+
+namespace tiki
+{
+	class DynamicString;
+	class Path;
+}
 
 namespace conct
 {
-	class DynamicString;
 	class Hardware;
-	class Path;
 
 	class HardwareCollection
 	{
@@ -21,6 +25,8 @@ namespace conct
 
 	private:
 
-		Vector< Hardware* >	m_hardware;
+		using HardwareArray = DynamicArray< Hardware* >;
+
+		HardwareArray		m_hardware;
 	};
 }

@@ -1,42 +1,27 @@
 #pragma once
 
-#include "conct_array_view.h"
-#include "conct_dynamic_string.h"
-#include "conct_pair.h"
-
 #include "capabilities.h"
 
 namespace conct
 {
 	class HardwareCollection;
-	class Path;
 
-	enum HardwareRuntime
+	enum class HardwareSystem : uint8
 	{
-		HardwareRuntime_Low,
-		HardwareRuntime_High,
+		Computer,
+		Android,
+		Esp,
 
-		HardwareRuntime_Count
+		Count
 	};
 
-	enum HardwareSystem
+	enum class HardwareEnvironment : uint8
 	{
-		HardwareSystem_Android,
-		HardwareSystem_Arduino,
-		HardwareSystem_Esp,
-		HardwareSystem_Linux,
-		HardwareSystem_Windows,
+		Production,
+		Simulator,
+		Tests,
 
-		HardwareSystem_Count
-	};
-
-	enum HardwareEnvironment
-	{
-		HardwareEnvironment_Production,
-		HardwareEnvironment_Simulator,
-		HardwareEnvironment_Tests,
-
-		HardwareEnvironment_Count
+		Count
 	};
 
 	class Hardware
@@ -48,7 +33,6 @@ namespace conct
 		const DynamicString&	getFileName() const { return m_fileName; }
 		const DynamicString&	getName() const { return m_name; }
 
-		HardwareRuntime			getRuntime() const { return m_runtime; }
 		HardwareSystem			getSystem() const { return m_system; }
 		HardwareEnvironment		getEnvironment() const { return m_environment; }
 
@@ -69,7 +53,6 @@ namespace conct
 		DynamicString			m_fileName;
 		DynamicString			m_name;
 
-		HardwareRuntime			m_runtime;
 		HardwareSystem			m_system;
 		HardwareEnvironment		m_environment;
 
@@ -80,7 +63,6 @@ namespace conct
 		Capabilities			m_capabilities;
 	};
 
-	const ArrayView< Pair< HardwareRuntime, const char* > >&		getHardwareRuntimeMapping();
-	const ArrayView< Pair< HardwareSystem, const char* > >&			getHardwareSystemMapping();
-	const ArrayView< Pair< HardwareEnvironment, const char* > >&	getHardwareEnvironmentMapping();
+	const ArrayView< const Pair< HardwareSystem, const char* > >&		getHardwareSystemMapping();
+	const ArrayView< const Pair< HardwareEnvironment, const char* > >&	getHardwareEnvironmentMapping();
 }

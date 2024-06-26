@@ -1,26 +1,32 @@
 #pragma once
 
-#include "conct_vector.h"
+#include <tiki/tiki_dynamic_array.h>
 
-namespace conct
+namespace tiki
 {
 	class DynamicString;
 	class Path;
+}
+
+namespace conct
+{
 	class Port;
 
 	class PortCollection
 	{
 	public:
 
-								PortCollection();
-								~PortCollection();
+						PortCollection();
+						~PortCollection();
 
-		bool					load( const Path& path );
+		bool			load( const Path& path );
 
-		const Port*				findPortByName( const DynamicString& name ) const;
+		const Port*		findPortByName( const DynamicString& name ) const;
 
 	private:
 
-		Vector< Port* >	m_ports;
+		using PortArray = DynamicArray< Port* >;
+
+		PortArray		m_ports;
 	};
 }

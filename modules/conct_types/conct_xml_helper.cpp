@@ -1,7 +1,6 @@
 #include "conct_xml_helper.h"
 
 #include "conct_array_type.h"
-#include "conct_dynamic_string.h"
 #include "conct_interface_type.h"
 #include "conct_trace.h"
 #include "conct_type_collection.h"
@@ -182,7 +181,7 @@ namespace conct
 			return false;
 		}
 
-		if( pType->getKind() != TypeKind_Interface )
+		if( pType->getKind() != TypeKind::Interface )
 		{
 			traceNodeError( pNode, "Error: '"_s + pType->getFullName() + "' is not an interface. loaded type value '" + pName + "'.\n" );
 			return false;

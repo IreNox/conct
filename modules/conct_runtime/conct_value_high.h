@@ -1,9 +1,8 @@
 #pragma once
 
-#include "conct_dynamic_string.h"
 #include "conct_value.h"
-#include "conct_vector.h"
-#include "conct_array_view.h"
+
+#include <tiki/tiki_dynamic_string.h>
 
 namespace conct
 {
@@ -32,7 +31,7 @@ namespace conct
 		TypeCrc			getStructType() const;
 
 		template< class T >
-		ArrayView< T >	getArray() const;
+		ConstArrayView< T >	getArray() const;
 		const void*		getArrayData() const;
 		uintreg			getArrayElementSize() const;
 		uintreg			getArrayLength() const;
@@ -52,9 +51,11 @@ namespace conct
 
 	private:
 
+		using ByteArray = DynamicArray< byte >;
+
 		Value			m_value;
 		DynamicString	m_string;
-		Vector< uint8 >	m_buffer;
+		ByteArray		m_buffer;
 	};
 }
 

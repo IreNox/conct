@@ -2,17 +2,15 @@
 
 #include "tiki/tiki_path.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#if TIKI_ENABLED( TIKI_PLATFORM_LINUX )
 struct __dirstream;
 typedef __dirstream DIR;
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 struct DIR;
 #endif
 
 namespace conct
 {
-	using namespace tiki;
-
 	class DirectoryIterator
 	{
 	public:
@@ -32,9 +30,9 @@ namespace conct
 		Path				m_iteratorPath;
 		Path				m_currentPath;
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		void*				m_pSearchHandle;
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		DIR*				m_pDir;
 #endif
 

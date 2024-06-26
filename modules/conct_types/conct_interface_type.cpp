@@ -17,7 +17,7 @@ namespace conct
 
 	void InterfaceType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
-		Type::create( fileName, namespaceVar, name, name, TypeKind_Interface, ValueType_InstanceId, false );
+		Type::create( fileName, namespaceVar, name, name, TypeKind::Interface, ValueType::InstanceId, false );
 	}
 
 	bool InterfaceType::load( TypeCollection& typeCollection )
@@ -43,7 +43,7 @@ namespace conct
 		const Type* pBaseType = nullptr;
 		if( loadTypeValue( &pBaseType, pRootNode, "base", getNamespace(), typeCollection, true ) )
 		{
-			if( pBaseType->getKind() != TypeKind_Interface )
+			if( pBaseType->getKind() != TypeKind::Interface )
 			{
 				trace::write( "Error: Base type of '"_s + getFullName() + "' is not an interface in '" + m_fileName.getGenericPath() + "'." + "\n" );
 				return false;

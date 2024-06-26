@@ -1,27 +1,30 @@
 #pragma once
 
 #include "conct_runtime.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_dynamic_array.h>
 
 namespace conct
 {
-	class RuntimeHigh;
+	class Runtime;
 
 	class Router
 	{
 	public:
 
-											Router( RuntimeHigh& runtime );
+											Router( Runtime& runtime );
 
-		ArrayView< DeviceConnection >		getConnectedDevices() const;
+		ArrayView< const DeviceConnection >	getConnectedDevices() const;
 
 		// interface functions
 		void								ChangeDevice( DeviceId id, DeviceStatus status );
 
 	private:
 
-		RuntimeHigh&						m_runtime;
+		using DeviceConnectionArray = DynamicArray< DeviceConnection >;
 
-		mutable Vector< DeviceConnection >	m_devices; // TODO: get rid of mutable
+		Runtime&							m_runtime;
+
+		mutable DeviceConnectionArray		m_devices; // TODO: get rid of mutable
 	};
 }

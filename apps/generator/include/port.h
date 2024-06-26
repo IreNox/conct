@@ -1,13 +1,9 @@
 #pragma once
 
-#include "conct_dynamic_string.h"
-#include "conct_map.h"
-
 #include "capabilities.h"
 
 namespace conct
 {
-	class Path;
 	class PortCollection;
 	class PortParameter;
 
@@ -17,7 +13,7 @@ namespace conct
 
 	public:
 
-		typedef Map< DynamicString, PortParameter* > ParameterMap;
+		using ParameterMap = HashMap< DynamicString, PortParameter* >;
 
 		const DynamicString&	getName() const { return m_name;  }
 

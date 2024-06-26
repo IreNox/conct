@@ -1,17 +1,18 @@
 #include "conct_port_tcp_client.h"
 
-#include "conct_memory.h"
 #include "conct_reader.h"
-#include "conct_string_tools.h"
 #include "conct_trace.h"
 #include "conct_writer.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#include <tiki/tiki_memory.h>
+#include <tiki/tiki_string_tools.h>
+
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <windows.h>
 #	include <WinSock2.h>
 #	include <WS2tcpip.h>
 #	include <ws2ipdef.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 #	include <arpa/inet.h>
 #	include <errno.h>
 #	include <fcntl.h>
@@ -25,7 +26,7 @@ namespace conct
 {
 	static const uintreg InvalidSocket = ( uintreg )-1;
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 	static const int ErrorWouldBlock = WSAEWOULDBLOCK;
 	static const int ErrorAgain = WSAEWOULDBLOCK;
 	static const int ErrorAlreadyInProgress = WSAEALREADY;
@@ -40,14 +41,14 @@ namespace conct
 
 	int getLastError()
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		return WSAGetLastError();
 #else
 		return errno;
 #endif
 	}
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 	DynamicString getErrorString( int errorCode )
 	{
 		LPTSTR pString;
@@ -104,7 +105,7 @@ namespace conct
 
 	bool PortTcpClient::setup( const PortTcpClientParameters& parameters )
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		const WORD requestedVersion = MAKEWORD( 2, 2 );
 		WSADATA wsaData;
 		WSAStartup( requestedVersion, &wsaData );
@@ -119,7 +120,7 @@ namespace conct
 		}
 
 		// set non blocking
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		unsigned long nonBlocking = 1;
 		if( ioctlsocket( m_socket, FIONBIO, &nonBlocking ) == SOCKET_ERROR )
 		{
@@ -149,7 +150,7 @@ namespace conct
 		if( result != 0 )
 		{
 			DynamicString errorName;
-#if CONCT_DISABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_DISABLED( TIKI_PLATFORM_WINDOWS )
 			if( result == EAI_SYSTEM )
 			{
 				const int error = getLastError();
@@ -175,7 +176,7 @@ namespace conct
 		//inet_pton( AF_INET6, parameters.targetHost.toConstCharPointer(), &m_serverAddress.sin6_addr );
 	}
 
-	void PortTcpClient::getEndpoints( ArrayView< uintreg >& endpoints )
+	void PortTcpClient::getEndpoints( ArrayView< const uintreg >& endpoints )
 	{
 		if( !m_connectionLost && !m_connectionReset )
 		{
@@ -280,7 +281,7 @@ namespace conct
 
 	void PortTcpClient::closeSend( Writer& writer, uintreg endpointId )
 	{
-		CONCT_ASSERT( writer.isEnd() );
+		TIKI_ASSERT( writer.isEnd() );
 	}
 
 	bool PortTcpClient::openReceived( Reader& reader, uintreg& endpointId )
@@ -297,7 +298,7 @@ namespace conct
 
 	void PortTcpClient::closeReceived( Reader& reader, uintreg endpointId )
 	{
-		CONCT_ASSERT( reader.isEnd() );
+		TIKI_ASSERT( reader.isEnd() );
 
 		m_receiveData.clear();
 	}

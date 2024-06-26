@@ -65,7 +65,7 @@ namespace conct
 
 	uint16 calculateStringCrc16( const char* pString )
 	{
-		const uintreg stringLength = getStringLength( pString );
+		const uintreg stringLength = tiki::getStringLength( pString );
 		return calculateCrc16( pString, stringLength );
 	}
 }

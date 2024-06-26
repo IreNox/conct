@@ -1,8 +1,8 @@
 #pragma once
 
-#include "conct_path.h"
 #include "conct_type.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_path.h>
 
 namespace conct
 {
@@ -18,7 +18,7 @@ namespace conct
 
 	public:
 
-		typedef Vector< EnumValue > ValueVector;
+		typedef DynamicArray< EnumValue > ValueVector;
 
 		const ValueVector&		getValues() const { return m_values; }
 

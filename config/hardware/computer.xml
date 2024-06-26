@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<hardware name="PC">
-	<system>pc</system>
+<hardware name="Computer">
+	<system>computer</system>
 	<environment>production</environment>
 	<memory>
 		<dynamic />

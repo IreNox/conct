@@ -1,15 +1,20 @@
 #pragma once
 
 #include "conct_value_type.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_dynamic_array.h>
+
+namespace tiki
+{
+	class DynamicString;
+	class Path;
+}
 
 namespace conct
 {
 	class ArrayType;
-	class DynamicString;
 	class EnumType;
 	class InterfaceType;
-	class Path;
 	class StructType;
 	class Type;
 
@@ -17,36 +22,36 @@ namespace conct
 	{
 	public:
 
-												TypeCollection();
-												~TypeCollection();
+										TypeCollection();
+										~TypeCollection();
 
-		bool									load( const Path& path );
+		bool							load( const Path& path );
 
-		const Type*								addValueType( const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, ValueType valueType );
+		const Type*						addValueType( const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, ValueType valueType );
 
-		const Type*								findType( const DynamicString& fullName, const DynamicString& referenceNamespace );
-		const Type*								findTypeByCrc( TypeCrc typeCrc );
-		const InterfaceType*					findInterface( const DynamicString& fullName, const DynamicString& referenceNamespace );
-		const InterfaceType*					findInterfaceByCrc( TypeCrc typeCrc );
-		const StructType*						findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace );
-		const StructType*						findStructByCrc( TypeCrc typeCrc );
-		const EnumType*							findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace );
-		const EnumType*							findEnumByCrc( TypeCrc typeCrc );
+		const Type*						findType( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const Type*						findTypeByCrc( TypeCrc typeCrc );
+		const InterfaceType*			findInterface( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const InterfaceType*			findInterfaceByCrc( TypeCrc typeCrc );
+		const StructType*				findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const StructType*				findStructByCrc( TypeCrc typeCrc );
+		const EnumType*					findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const EnumType*					findEnumByCrc( TypeCrc typeCrc );
 
-		const ArrayType*						makeArray( const Type* pBaseType );
+		const ArrayType*				makeArray( const Type* pBaseType );
 
-		const Vector< Type* >&					getTypes() const { return m_types; }
-		const Vector< InterfaceType* >&			getInterfaces() const { return m_interfaces; }
-		const Vector< StructType* >&			getStruct() const { return m_structs; }
+		ArrayView< Type* >				getTypes() const { return m_types; }
+		ArrayView< InterfaceType* >		getInterfaces() const { return m_interfaces; }
+		ArrayView< StructType* >		getStruct() const { return m_structs; }
 
 	private:
 
-		Vector< Type* >							m_types;
-		Vector< ArrayType* >					m_arrays;
-		Vector< InterfaceType* >				m_interfaces;
-		Vector< StructType* >					m_structs;
-		Vector< EnumType* >						m_enums;
+		DynamicArray< Type* >			m_types;
+		DynamicArray< ArrayType* >		m_arrays;
+		DynamicArray< InterfaceType* >	m_interfaces;
+		DynamicArray< StructType* >		m_structs;
+		DynamicArray< EnumType* >		m_enums;
 
-		bool									loadFiles( const Path& path );
+		bool							loadFiles( const Path& path );
 	};
 }

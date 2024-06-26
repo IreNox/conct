@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <hardware name="Simulator">
-	<system>windows</system>
+	<system>computer</system>
 	<environment>simulator</environment>
 	<memory>
 		<dynamic />

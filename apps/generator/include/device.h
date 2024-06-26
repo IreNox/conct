@@ -1,18 +1,15 @@
 #pragma once
 
-#include "conct_dynamic_string.h"
-#include "conct_map.h"
-#include "conct_unsorted_set.h"
-#include "conct_vector.h"
-
 #include "port_parameter.h"
+
+#include "tiki/tiki_hash_set.h"
+#include "tiki/tiki_hash_map.h"
 
 namespace conct
 {
 	class Hardware;
 	class HardwareCollection;
 	class InterfaceType;
-	class Path;
 	class Port;
 	class PortCollection;
 	class StructType;
@@ -20,7 +17,7 @@ namespace conct
 
 	struct DevicePort
 	{
-		typedef Map< const PortParameter*, PortParameterValue > ParameterValueMap;
+		typedef HashMap< const PortParameter*, PortParameterValue > ParameterValueMap;
 
 		size_t				index;
 		const Port*			pPort;
@@ -37,10 +34,10 @@ namespace conct
 	{
 	public:
 
-		typedef Vector< DevicePort > PortVector;
-		typedef UnsortedSet< const InterfaceType* > InterfaceSet;
-		typedef UnsortedSet< const StructType* > StructSet;
-		typedef Vector< DeviceInstance > InstanceVector;
+		typedef DynamicArray< DevicePort > PortVector;
+		typedef HashSet< const InterfaceType* > InterfaceSet;
+		typedef HashSet< const StructType* > StructSet;
+		typedef DynamicArray< DeviceInstance > InstanceVector;
 
 								Device();
 

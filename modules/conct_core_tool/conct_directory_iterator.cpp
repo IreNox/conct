@@ -1,8 +1,8 @@
 #include "conct_directory_iterator.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 #	include <dirent.h>
 #endif
 
@@ -27,7 +27,7 @@ namespace conct
 
 	bool DirectoryIterator::next()
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		WIN32_FIND_DATAA findData;
 		if( m_pSearchHandle == INVALID_HANDLE_VALUE )
 		{
@@ -57,7 +57,7 @@ namespace conct
 
 		m_currentPath = m_iteratorPath.push( DynamicString( findData.cFileName ) );
 		return true;
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		if( m_pDir == nullptr )
 		{
 			m_pDir = opendir( m_iteratorPath.getNativePath().toConstCharPointer() );
@@ -88,9 +88,9 @@ namespace conct
 
 	void DirectoryIterator::initialize()
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		m_pSearchHandle = INVALID_HANDLE_VALUE;
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		m_pDir = nullptr;
 #endif
 	}
@@ -99,13 +99,13 @@ namespace conct
 	{
 		m_currentPath.clear();
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		if( m_pSearchHandle != INVALID_HANDLE_VALUE )
 		{
 			FindClose( m_pSearchHandle );
 			m_pSearchHandle = INVALID_HANDLE_VALUE;
 		}
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		if( m_pDir != nullptr )
 		{
 			closedir( m_pDir );

@@ -14,7 +14,7 @@ namespace conct
 
 	void EnumType::create( const Path& fileName, const DynamicString& namespaceVar, const DynamicString& name )
 	{
-		Type::create( fileName, namespaceVar, name, name, TypeKind_Enum, ValueType_Integer, false );
+		Type::create( fileName, namespaceVar, name, name, TypeKind::Enum, ValueType::Integer, false );
 	}
 
 	bool EnumType::load( TypeCollection& typeCollection )

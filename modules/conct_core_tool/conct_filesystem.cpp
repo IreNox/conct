@@ -1,12 +1,8 @@
 #include "conct_filesystem.h"
 
-#include "conct_dynamic_string.h"
-#include "conct_path.h"
-#include "conct_vector.h"
-
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 #	include <unistd.h>
 #	include <sys/stat.h>
 #endif
@@ -16,7 +12,7 @@
 
 namespace conct
 {
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 	ResultId getResultFromLastError()
 	{
 		const DWORD lastError = GetLastError();
@@ -58,9 +54,9 @@ namespace conct
 
 	bool filesystem::exists( const Path& path )
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		return ( GetFileAttributesA( path.getNativePath().toConstCharPointer() ) != INVALID_FILE_ATTRIBUTES );
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		return access( path.getNativePath().toConstCharPointer(), F_OK ) != -1;
 #else
 #	error "Platform not supported"
@@ -69,15 +65,15 @@ namespace conct
 
 	bool filesystem::isFile( const Path& path )
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		const DWORD attributes = GetFileAttributesA( path.getNativePath().toConstCharPointer() );
 		if( attributes == INVALID_FILE_ATTRIBUTES )
 		{
 			return false;
 		}
 
-		return !isBitSet( attributes, FILE_ATTRIBUTE_DIRECTORY );
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+		return !isBitSet32( attributes, FILE_ATTRIBUTE_DIRECTORY );
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		struct stat fileStats;
 		if( ::stat( path.getNativePath().toConstCharPointer(), &fileStats ) != 0 )
 		{
@@ -92,9 +88,9 @@ namespace conct
 
 	bool filesystem::isDirectory( const Path& path )
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
-		return isBitSet( GetFileAttributesA( path.getNativePath().toConstCharPointer() ), FILE_ATTRIBUTE_DIRECTORY );
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
+		return isBitSet32( GetFileAttributesA( path.getNativePath().toConstCharPointer() ), FILE_ATTRIBUTE_DIRECTORY );
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		struct stat fileStats;
 		if( ::stat( path.getNativePath().toConstCharPointer(), &fileStats ) != 0 )
 		{
@@ -107,17 +103,34 @@ namespace conct
 #endif
 	}
 
+	Path filesystem::getExecutablePath()
+	{
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
+		char exeFileName[ MAX_PATH ];
+		GetModuleFileNameA( nullptr, exeFileName, sizeof( exeFileName ) );
+		return Path( StringView( exeFileName ) );
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX )
+		char exeFileName[ PATH_MAX ];
+		readlink( "/proc/self/exe", exeFileName, sizeof( exeFileName ) );
+		return Path( StringView( exeFileName ) );
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID ) || TIKI_ENABLED( TIKI_PLATFORM_ESP )
+		return Path();
+#else
+#	error "Platform not supported"
+#endif
+	}
+
 	Result< void > filesystem::createDirectory( const Path& path )
 	{
 		const DynamicString nativePath = path.getNativePath();
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		if( !CreateDirectoryA( nativePath.toConstCharPointer(), nullptr ) )
 		{
 			return createFailureResult< void >( getResultFromLastError() );
 		}
 
 		return createSuccessResult();
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
 		if( mkdir( nativePath.toConstCharPointer(), S_IRWXU ) != 0 )
 		{
 			return createFailureResult< void >( getResultFromErrno() );
@@ -156,25 +169,25 @@ namespace conct
 		return createSuccessResult( result );
 	}
 
-	Result< Vector< uint8 > > filesystem::readBinaryFile( const Path& path )
+	Result< DynamicArray< byte > > filesystem::readBinaryFile( const Path& path )
 	{
 		FILE* pFile = fopen( path.getNativePath().toConstCharPointer(), "rb" );
 		if( pFile == nullptr )
 		{
-			return createFailureResult< Vector< uint8 > >( getResultFromErrno() );
+			return createFailureResult< DynamicArray< byte > >( getResultFromErrno() );
 		}
 
 		fseek( pFile, 0, SEEK_END );
 		const long int fileSize = ftell( pFile );
 		fseek( pFile, 0, SEEK_SET );
 
-		Vector< uint8 > result;
+		DynamicArray< byte > result;
 		result.setLengthUninitialized( uintreg( fileSize ) );
 
 		if( fread( result.getData(), 1u, size_t( fileSize ), pFile ) != fileSize )
 		{
 			fclose( pFile );
-			return createFailureResult< Vector< uint8 > >( getResultFromErrno() );
+			return createFailureResult< DynamicArray< byte > >( getResultFromErrno() );
 		}
 		fclose( pFile );
 
@@ -199,7 +212,7 @@ namespace conct
 		return createSuccessResult();
 	}
 
-	Result< void > filesystem::writeBinaryFile( const Path& path, const Vector< uint8 >& data )
+	Result< void > filesystem::writeBinaryFile( const Path& path, const DynamicArray< byte >& data )
 	{
 		FILE* pFile = fopen( path.getNativePath().toConstCharPointer(), "wb" );
 		if( pFile == nullptr )

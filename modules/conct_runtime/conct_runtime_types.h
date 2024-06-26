@@ -1,12 +1,13 @@
 #pragma once
 
 #include "conct_core.h"
-#include "conct_relative_array.h"
-#include "conct_relative_pointer.h"
 #include "conct_value.h"
 #include "conct_result.h"
 
-#define CONCT_RUNTIME_USE_CRYPTO CONCT_OFF
+#include <tiki/tiki_relative_array.h>
+#include <tiki/tiki_relative_pointer.h>
+
+#define CONCT_RUNTIME_USE_CRYPTO TIKI_OFF
 
 namespace conct
 {
@@ -44,7 +45,7 @@ namespace conct
 
 	enum DeviceStatus : uint8
 	{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		DeviceStatus_AwaitCryptoKey,
 #endif
 		DeviceStatus_Unknown,
@@ -61,7 +62,7 @@ namespace conct
 		DeviceId		id;
 	};
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 	struct CryptoKey
 	{
 		uint8					data[ 32u ];
@@ -99,7 +100,7 @@ namespace conct
 		//MessageType_UnregisterEvent,
 		//MessageType_CallEventHandler,
 		//MessageType_CheckEventHandler,
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		MessageType_CryptoHandshake
 #endif
 	};
@@ -159,7 +160,7 @@ namespace conct
 		Value					value;
 	};
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 	struct CryptoHandshake
 	{
 		CryptoKey				publicKey;
@@ -170,7 +171,7 @@ namespace conct
 	{
 		uint32					serialNumber;
 		uint16					hash;
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		CryptoKey				key;
 		CryptoCounter			counter;
 #endif

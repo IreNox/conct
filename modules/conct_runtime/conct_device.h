@@ -1,7 +1,8 @@
 #pragma once
 
-#include "conct_array.h"
-#include "conct_array_view.h"
+#include "conct_core.h"
+
+#include <tiki/tiki_array_view.h>
 
 namespace conct
 {
@@ -12,22 +13,24 @@ namespace conct
 	{
 	public:
 
+		using ConstInstanceView = ArrayView< const Instance >;
+
 		virtual					~Device() { }
 
 		virtual const char*		getName() const = 0;
 		uint32					getSerialNumber() const;
-		ArrayView< Instance >	getInstances() const;
+		ConstInstanceView		getInstances() const;
 
 		const LocalInstance*	getInstance( InstanceId instanceId );
 
 		// interface functions
-		ArrayView< Instance >	FindInstances( TypeCrc typeCrc );
+		ConstInstanceView		FindInstances( TypeCrc typeCrc );
 		Instance				FindFirstInstance( TypeCrc typeCrc );
 
 	protected:
 
-		virtual void			getEmptyInstances( Array< Instance >& instances ) = 0;
-		virtual void			getPublicInstances( ArrayView< Instance >& instances ) const = 0;
-		virtual void			getLocalInstances( ArrayView< LocalInstance >& instances ) = 0;
+		virtual void			getEmptyInstances( ArrayView< Instance >& instances ) = 0;
+		virtual void			getPublicInstances( ConstInstanceView& instances ) const = 0;
+		virtual void			getLocalInstances( ArrayView< const LocalInstance >& instances ) = 0;
 	};
 }

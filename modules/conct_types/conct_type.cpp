@@ -1,17 +1,18 @@
 #include "conct_type.h"
 
 #include "conct_array_type.h"
-#include "conct_ascii.h"
 #include "conct_crc16.h"
 #include "conct_trace.h"
 #include "conct_xml_helper.h"
+
+#include <tiki/tiki_string.h>
 
 namespace conct
 {
 	Type::Type()
 	{
-		m_kind		= TypeKind_Value;
-		m_valueType	= ValueType_Void;
+		m_kind		= TypeKind::Value;
+		m_valueType	= ValueType::Void;
 		m_typeCrc	= 0u;
 		m_internal	= false;
 	}
@@ -34,11 +35,11 @@ namespace conct
 
 		switch( kind )
 		{
-		case TypeKind_Array:
-			m_headerFilename = "conct_array_view.h"_s;
+		case TypeKind::Array:
+			m_headerFilename = "tiki/tiki_array_view.h"_s;
 			break;
 
-		case TypeKind_Value:
+		case TypeKind::Value:
 			m_headerFilename = "conct_core.h"_s;
 			break;
 
@@ -76,7 +77,7 @@ namespace conct
 	{
 		m_dependingTypes.insert( pType );
 
-		if( pType->getKind() == TypeKind_Array )
+		if( pType->getKind() == TypeKind::Array )
 		{
 			const ArrayType* pArrayType = static_cast< const ArrayType* >( pType );
 			m_dependingTypes.insert( pArrayType->getBaseType() );

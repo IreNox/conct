@@ -4,22 +4,22 @@
 
 namespace conct
 {
-	enum ValueType : uint8
+	enum class ValueType : uint8
 	{
-		ValueType_Void,
-		ValueType_Boolean,
-		ValueType_Integer,
-		ValueType_Unsigned,
-		ValueType_Decimal,
-		ValueType_PercentValue,
-		ValueType_DeviceId,
-		ValueType_InstanceId,
-		ValueType_TypeCrc,
-		ValueType_String,
-		ValueType_Struct,
-		ValueType_Array,
+		Void,
+		Boolean,
+		Integer,
+		Unsigned,
+		Decimal,
+		PercentValue,
+		DeviceId,
+		InstanceId,
+		TypeCrc,
+		String,
+		Struct,
+		Array,
 
-		ValueType_Count
+		Count
 	};
 	const char*	getValueTypeName( ValueType value );
 }

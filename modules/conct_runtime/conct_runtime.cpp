@@ -1,10 +1,9 @@
-#include "conct_runtime_high.h"
+#include "conct_runtime.h"
 
 #include "conct_buffered_value_builder.h"
 #include "conct_command.h"
 #include "conct_crc16.h"
 #include "conct_device.h"
-#include "conct_path.h"
 #include "conct_port.h"
 #include "conct_proxy.h"
 #include "conct_reader.h"
@@ -13,7 +12,9 @@
 #include "conct_value_high.h"
 #include "conct_writer.h"
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#include <tiki/tiki_path.h>
+
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 #	include "conct_crypto_random.h"
 
 #	include <Curve25519.h>
@@ -21,18 +22,18 @@
 
 namespace conct
 {
-	void RuntimeHigh::setup( Device* pDevice )
+	void Runtime::setup( Device* pDevice )
 	{
 		m_pDevice		= pDevice;
 		m_nextDeviceId	= FirstDeviceId;
 	}
 
-	void RuntimeHigh::registerPort( Port* pPort )
+	void Runtime::registerPort( Port* pPort )
 	{
 		m_ports[ pPort ];
 	}
 
-	void RuntimeHigh::unregisterPort( Port* pPort )
+	void Runtime::unregisterPort( Port* pPort )
 	{
 		PortData& portData = m_ports[ pPort ];
 
@@ -44,7 +45,7 @@ namespace conct
 		m_ports.remove( pPort );
 	}
 
-	void RuntimeHigh::processPort( Port* pPort )
+	void Runtime::processPort( Port* pPort )
 	{
 		PortData& portData = m_ports[ pPort ];
 
@@ -66,7 +67,7 @@ namespace conct
 			portData.endpointToDevice.remove( endpointId );
 		}
 
-		ArrayView< uintreg > endpoints;
+		ConstArrayView< uintreg > endpoints;
 		pPort->getEndpoints( endpoints );
 		for( uintreg i = 0u; i < endpoints.getLength(); ++i )
 		{
@@ -85,12 +86,12 @@ namespace conct
 		processPackages( portData );
 	}
 
-	uintreg RuntimeHigh::getDeviceCount() const
+	uintreg Runtime::getDeviceCount() const
 	{
 		return m_devices.getLength();
 	}
 
-	void RuntimeHigh::getDevices( Vector< DeviceConnection >& devices ) const
+	void Runtime::getDevices( DynamicArray< DeviceConnection >& devices ) const
 	{
 		devices.reserve( m_devices.getLength() );
 		for( const DeviceMap::PairType& kvp : m_devices )
@@ -102,7 +103,7 @@ namespace conct
 		}
 	}
 
-	bool RuntimeHigh::isThisDevice( const DeviceAddress& address ) const
+	bool Runtime::isThisDevice( const DeviceAddress& address ) const
 	{
 		if( address.address[ 0u ] == InvalidDeviceId )
 		{
@@ -124,12 +125,12 @@ namespace conct
 		return pDevice->ownDeviceId == address.address[ 1u ];
 	}
 
-	void RuntimeHigh::changeDevice( DeviceId id, DeviceStatus status )
+	void Runtime::changeDevice( DeviceId id, DeviceStatus status )
 	{
-		CONCT_BREAK;
+		TIKI_BREAK;
 	}
 
-	CommandId RuntimeHigh::getNextCommandId( DeviceId deviceId )
+	CommandId Runtime::getNextCommandId( DeviceId deviceId )
 	{
 		DeviceData* pDevice = m_devices.find( deviceId );
 		if( pDevice == nullptr )
@@ -143,7 +144,7 @@ namespace conct
 		return commandId;
 	}
 
-	ResultId RuntimeHigh::sendCommandPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
+	ResultId Runtime::sendCommandPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType )
 	{
 		const ResultId result = sendPackage( deviceAddress, payload, pCommand->getId(), messageType, ResultId_Success );
 		if( result == ResultId_Success )
@@ -156,12 +157,12 @@ namespace conct
 		return result;
 	}
 
-	bool RuntimeHigh::popFinishCommand( Command*& pCommand )
+	bool Runtime::popFinishCommand( Command*& pCommand )
 	{
 		return m_finishCommands.tryPopFront( pCommand );
 	}
 
-	void RuntimeHigh::processPackages( PortData& portData )
+	void Runtime::processPackages( PortData& portData )
 	{
 		for( ReceivedPackage& package : portData.receivedPackages )
 		{
@@ -177,7 +178,7 @@ namespace conct
 		portData.receivedPackages.clear();
 	}
 
-	void RuntimeHigh::processRoute( PortData& portData, const ReceivedPackage& sourcePackage )
+	void Runtime::processRoute( PortData& portData, const ReceivedPackage& sourcePackage )
 	{
 		const DeviceId nextDeviceId = sourcePackage.destinationAddress[ 1u ];
 
@@ -199,7 +200,7 @@ namespace conct
 		const uintreg headerSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops;
 		uintreg packageSize = headerSize + sourcePackage.payload.getLength();
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		MessageCryptoHeader cryptoHeader;
 		if( pTargetDeviceData->status != DeviceStatus_AwaitCryptoKey )
 		{
@@ -216,7 +217,7 @@ namespace conct
 
 		package.data.reserve( packageSize );
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		if( pTargetDeviceData->status != DeviceStatus_AwaitCryptoKey )
 		{
 			const uint8* pCryptoHeaderData = (const uint8*)&cryptoHeader;
@@ -233,7 +234,7 @@ namespace conct
 		package.data.pushRange( sourcePackage.destinationAddress.getData() + 1u, sourcePackage.destinationAddress.getLength() - 1u );
 		package.data.pushRange( sourcePackage.payload );
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		if( pTargetDeviceData->status != DeviceStatus_AwaitCryptoKey )
 		{
 			uint8* pPayload = package.data.getData() + sizeof( cryptoHeader );
@@ -246,7 +247,7 @@ namespace conct
 		targetPortData.sendPackages.pushBack( package );
 	}
 
-	void RuntimeHigh::processPackage( PortData& portData, ReceivedPackage& package )
+	void Runtime::processPackage( PortData& portData, ReceivedPackage& package )
 	{
 		Command* pCommand = nullptr;
 		if( package.baseHeader.commandId != InvalidCommandId &&
@@ -380,7 +381,7 @@ namespace conct
 			}
 			break;
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		case MessageType_CryptoHandshake:
 			{
 				DeviceData* pDevice = m_devices.find( package.deviceId );
@@ -414,7 +415,7 @@ namespace conct
 		}
 	}
 
-	DeviceId RuntimeHigh::addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId )
+	DeviceId Runtime::addDevice( Port* pPort, PortData& portData, DeviceId ownDeviceId, uintreg endpointId )
 	{
 		if( m_nextDeviceId == InvalidDeviceId )
 		{
@@ -433,7 +434,7 @@ namespace conct
 
 		portData.endpointToDevice[ endpointId ] = deviceId;
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		{
 			deviceData.status = DeviceStatus_AwaitCryptoKey;
 
@@ -452,7 +453,7 @@ namespace conct
 		return deviceId;
 	}
 
-	RuntimeHigh::DeviceData* RuntimeHigh::findDevice( PortData& portData, uintreg endpointId )
+	Runtime::DeviceData* Runtime::findDevice( PortData& portData, uintreg endpointId )
 	{
 		const DeviceId* pDeviceId = portData.endpointToDevice.find( endpointId );
 		if( pDeviceId == nullptr )
@@ -463,7 +464,7 @@ namespace conct
 		return m_devices.find( *pDeviceId );
 	}
 
-	void RuntimeHigh::readPort( Port* pPort, PortData& portData )
+	void Runtime::readPort( Port* pPort, PortData& portData )
 	{
 		Reader reader;
 		uintreg endpointId;
@@ -474,9 +475,9 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId )
+	void Runtime::readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId )
 	{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		const DeviceData* pDevice = findDevice( portData, endpointId );
 		const bool encrypted = (pDevice != nullptr && pDevice->status != DeviceStatus_AwaitCryptoKey);
 #else
@@ -486,7 +487,7 @@ namespace conct
 		PendingReceivedPackage& package = portData.pendingPackages[ endpointId ];
 		while( !reader.isEnd() )
 		{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			if( package.state == PackageState_ReadCryptoHeader )
 			{
 				readCryptoHeader( package, reader, pDevice );
@@ -520,8 +521,8 @@ namespace conct
 		}
 	}
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-	void RuntimeHigh::readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+	void Runtime::readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice )
 	{
 		if( pDevice != nullptr && pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
@@ -540,7 +541,7 @@ namespace conct
 	}
 #endif
 
-	void RuntimeHigh::readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted )
+	void Runtime::readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted )
 	{
 		package.data.readBytes.alreadyRead += reader.readStruct( package.target.baseHeader, package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead < sizeof( package.target.baseHeader ) )
@@ -553,7 +554,7 @@ namespace conct
 			// no answer id
 		}
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		if( encrypted )
 		{
 			uint8* pBaseHeader = (uint8*)&package.target.baseHeader;
@@ -568,12 +569,12 @@ namespace conct
 		setState( package, PackageState_ReadSourceAddress );
 	}
 
-	void RuntimeHigh::readBytes( Vector<uint8>& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted )
+	void Runtime::readBytes( DynamicArray< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted )
 	{
 		package.data.readBytes.alreadyRead += reader.readData( target.getData(), target.getLength(), package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead == target.getLength() )
 		{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			if( encrypted )
 			{
 				m_crypto.decrypt( target.getData(), target.getData(), target.getLength() );
@@ -584,7 +585,7 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId )
+	void Runtime::readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId )
 	{
 		const DeviceId ownDeviceId = package.target.destinationAddress.getFront();
 
@@ -593,7 +594,7 @@ namespace conct
 		{
 			DeviceData& deviceData = m_devices[ *pEndpointDeviceId ];
 
-			CONCT_ASSERT( deviceData.ownDeviceId == InvalidDeviceId || deviceData.ownDeviceId == ownDeviceId );
+			TIKI_ASSERT( deviceData.ownDeviceId == InvalidDeviceId || deviceData.ownDeviceId == ownDeviceId );
 			deviceData.ownDeviceId = ownDeviceId;
 
 			package.target.deviceId = *pEndpointDeviceId;
@@ -609,7 +610,7 @@ namespace conct
 		setState( package, PackageState_First );
 	}
 
-	void RuntimeHigh::writePort( Port* pPort, PortData& portData )
+	void Runtime::writePort( Port* pPort, PortData& portData )
 	{
 		if( portData.sendPackages.isEmpty() )
 		{
@@ -638,13 +639,13 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::setState( PendingReceivedPackage& package, PackageState state )
+	void Runtime::setState( PendingReceivedPackage& package, PackageState state )
 	{
 		package.state = state;
 
 		switch( state )
 		{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		case PackageState_ReadCryptoHeader:
 #endif
 		case PackageState_ReadBaseHeader:
@@ -659,7 +660,7 @@ namespace conct
 		}
 	}
 
-	void RuntimeHigh::getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const Vector< DeviceId >& sourceAddress ) const
+	void Runtime::getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const DynamicArray< DeviceId >& sourceAddress ) const
 	{
 		targetAddress.address[ 0u ] = targetDeviceId;
 
@@ -671,7 +672,7 @@ namespace conct
 		targetAddress.address[ sourceAddress.getLength() ] = InvalidDeviceId;
 	}
 
-	ResultId RuntimeHigh::sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result )
+	ResultId Runtime::sendPackage( const DeviceAddress& deviceAddress, const ArrayView< const byte >& payload, CommandId commandId, MessageType messageType, ResultId result )
 	{
 		MessageBaseHeader baseHeader;
 
@@ -706,7 +707,7 @@ namespace conct
 		const uintreg headerSize = sizeof( baseHeader ) + baseHeader.sourceHops + baseHeader.destinationHops;
 		uintreg packageSize = headerSize + payload.getLength();
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		MessageCryptoHeader cryptoHeader;
 		if( pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
@@ -727,7 +728,7 @@ namespace conct
 
 		package.data.reserve( packageSize );
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		if( pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
 			const uint8* pCryptoHeaderData = (const uint8*)&cryptoHeader;
@@ -747,7 +748,7 @@ namespace conct
 
 		package.data.pushRange( payload );
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		if( pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
 			uint8* pPayload = package.data.getData() + sizeof( cryptoHeader );
@@ -762,7 +763,7 @@ namespace conct
 		return ResultId_Success;
 	}
 
-	ResultId RuntimeHigh::sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType )
+	ResultId Runtime::sendResponse( const ReceivedPackage& package, const ArrayView< const byte >& payload, MessageType messageType )
 	{
 		DeviceAddress address;
 		getDeviceAddress( address, package.deviceId, package.sourceAddress );
@@ -770,7 +771,7 @@ namespace conct
 		return sendPackage( address, payload, package.baseHeader.commandId, messageType, ResultId_Success );
 	}
 
-	ResultId RuntimeHigh::sendErrorResponse( const ReceivedPackage& package, MessageType messageType, ResultId result )
+	ResultId Runtime::sendErrorResponse( const ReceivedPackage& package, MessageType messageType, ResultId result )
 	{
 		DeviceAddress address;
 		getDeviceAddress( address, package.deviceId, package.sourceAddress );

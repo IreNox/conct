@@ -20,22 +20,22 @@ namespace conct
 				Mutex( const Mutex& );
 		Mutex&	operator=( const Mutex& );
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS)
-#	if CONCT_ENABLED( CONCT_POINTER_64 )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS)
+#	if TIKI_ENABLED( TIKI_POINTER_64 )
 		uint64	m_data[ 5u ];
-#	elif CONCT_ENABLED( CONCT_POINTER_32 )
+#	elif TIKI_ENABLED( TIKI_POINTER_32 )
 		uint32	m_data[ 6u ];
 #	endif
-#elif CONCT_ENABLED( CONCT_PLATFORM_ANDROID )
-#	if CONCT_ENABLED( CONCT_POINTER_64 )
+#elif TIKI_ENABLED( TIKI_PLATFORM_ANDROID )
+#	if TIKI_ENABLED( TIKI_POINTER_64 )
 		sint32	m_data[ 10u ];
-#	elif CONCT_ENABLED( CONCT_POINTER_32 )
+#	elif TIKI_ENABLED( TIKI_POINTER_32 )
 		sint32	m_data[ 1u ];
 #	endif
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
-#	if CONCT_ENABLED( CONCT_POINTER_64 )
+#elif TIKI_ENABLED( TIKI_PLATFORM_POSIX )
+#	if TIKI_ENABLED( TIKI_POINTER_64 )
 		//uint64	m_data[ 5u ];
-#	elif CONCT_ENABLED( CONCT_POINTER_32 )
+#	elif TIKI_ENABLED( TIKI_POINTER_32 )
 		sint32	m_data[ 6u ];
 #	endif
 #endif

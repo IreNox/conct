@@ -3,7 +3,6 @@
 #include "hardware.h"
 
 #include "conct_directory_iterator.h"
-#include "conct_path.h"
 #include "conct_trace.h"
 
 namespace conct

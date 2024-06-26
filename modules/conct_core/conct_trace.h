@@ -1,9 +1,12 @@
 #pragma once
 
-namespace conct
+namespace tiki
 {
 	class DynamicString;
+}
 
+namespace conct
+{
 	namespace trace
 	{
 		void	write( const char* pString );

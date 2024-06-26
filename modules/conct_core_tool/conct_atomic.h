@@ -5,18 +5,18 @@
 #include <atomic>
 
 #if defined( _MSC_VER ) && _MSC_VER >= 1920
-#	define CONCT_ATOMIC_STD CONCT_ON
+#	define TIKI_ATOMIC_STD TIKI_ON
 #else
-#	define CONCT_ATOMIC_STD CONCT_OFF
+#	define TIKI_ATOMIC_STD TIKI_OFF
 #endif
 
 namespace conct
 {
-#if CONCT_ENABLED( CONCT_ATOMIC_STD )
+#if TIKI_ENABLED( TIKI_ATOMIC_STD )
 	using uint32_atomic = std::atomic< uint32 >;
-#elif CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#elif TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 	using uint32_atomic = volatile uint32;
-#elif CONCT_ENABLED( CONCT_COMPILER_GCC ) || CONCT_ENABLED( CONCT_COMPILER_CLANG )
+#elif TIKI_ENABLED( TIKI_COMPILER_GCC ) || TIKI_ENABLED( TIKI_COMPILER_CLANG )
 	using uint32_atomic = uint32;
 #else
 #	error Platform not supported

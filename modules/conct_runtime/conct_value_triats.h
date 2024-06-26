@@ -7,7 +7,7 @@ namespace conct
 	template< class T >
 	struct ValueTypeTraits
 	{
-		static CONCT_FORCE_INLINE TypeCrc getTypeCrc();
+		static TIKI_FORCE_INLINE TypeCrc getTypeCrc();
 	};
 }
 

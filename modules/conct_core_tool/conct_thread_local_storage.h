@@ -4,10 +4,10 @@
 
 namespace conct
 {
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 	typedef uint32 ThreadLocalStorageHandle;
 	static const ThreadLocalStorageHandle InvalidThreadLocalStorageHandle = 0xffffffffu;
-#elif CONCT_ENABLED( CONCT_PLATFORM_POSIX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_POSIX )
 	typedef unsigned int ThreadLocalStorageHandle;
 	static const ThreadLocalStorageHandle InvalidThreadLocalStorageHandle = 0u;
 #endif

@@ -1,16 +1,11 @@
 #pragma once
 
-#include "conct_array_view.h"
 #include "conct_core.h"
-#include "conct_map.h"
-#include "conct_queue.h"
-#include "conct_runtime.h"
-#include "conct_runtime_high_types.h"
-#include "conct_vector.h"
+#include "conct_runtime_types.h"
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-#	include <ChaCha.h>
-#endif
+#include <tiki/tiki_dynamic_array.h>
+#include <tiki/tiki_hash_map.h>
+#include <tiki/tiki_queue.h>
 
 namespace conct
 {
@@ -19,7 +14,7 @@ namespace conct
 	class Reader;
 	class Command;
 
-	class RuntimeHigh
+	class Runtime
 	{
 	public:
 
@@ -31,7 +26,7 @@ namespace conct
 		void					processPort( Port* pPort );
 
 		uintreg					getDeviceCount() const;
-		void					getDevices( Vector< DeviceConnection >& devices ) const;
+		void					getDevices( DynamicArray< DeviceConnection >& devices ) const;
 		bool					isThisDevice( const DeviceAddress& address ) const;
 		void					changeDevice( DeviceId id, DeviceStatus status );
 
@@ -44,7 +39,7 @@ namespace conct
 
 		enum PackageState
 		{
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			PackageState_ReadCryptoHeader,
 #endif
 			PackageState_ReadBaseHeader,
@@ -53,7 +48,7 @@ namespace conct
 			PackageState_ReadPayload,
 			PackageState_PushToQueue,
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			PackageState_First					= PackageState_ReadCryptoHeader
 #else
 			PackageState_First					= PackageState_ReadBaseHeader
@@ -74,13 +69,13 @@ namespace conct
 		{
 			DeviceId						deviceId;
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			MessageCryptoHeader				cryptoHeader;
 #endif
 			MessageBaseHeader				baseHeader;
-			Vector< DeviceId >				sourceAddress;
-			Vector< DeviceId >				destinationAddress;
-			Vector< uint8 >					payload;
+			DynamicArray< DeviceId >		sourceAddress;
+			DynamicArray< DeviceId >		destinationAddress;
+			DynamicArray< uint8 >			payload;
 		};
 
 		struct PendingReceivedPackage
@@ -93,16 +88,16 @@ namespace conct
 		struct SendPackage
 		{
 			uintreg							targetEndpointId;
-			Vector< uint8 >					data;
+			DynamicArray< uint8 >			data;
 			uintreg							currentOffset;
 		};
 
 		struct PortData
 		{
-			typedef Map< uintreg, PendingReceivedPackage > PendingPackageMap;
-			typedef Vector< ReceivedPackage > ReceivedPackageVector;
+			typedef HashMap< uintreg, PendingReceivedPackage > PendingPackageMap;
+			typedef DynamicArray< ReceivedPackage > ReceivedPackageVector;
 			typedef Queue< SendPackage > SendPackageQueue;
-			typedef Map< uintreg, DeviceId > EndpointDeviceMap;
+			typedef HashMap< uintreg, DeviceId > EndpointDeviceMap;
 
 			PendingPackageMap		pendingPackages;
 			ReceivedPackageVector	receivedPackages;
@@ -113,7 +108,7 @@ namespace conct
 
 		struct DeviceData
 		{
-			typedef Map< CommandId, Command* > CommandMap;
+			typedef HashMap< CommandId, Command* > CommandMap;
 
 			Port*			pTargetPort;
 			uintreg			endpointId;
@@ -121,15 +116,15 @@ namespace conct
 			DeviceStatus	status;
 			CommandId		nextCommandId;
 			CommandMap		commands;
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 			CryptoKey		cryptoKey;
 #endif
 		};
 
-		typedef Map< Port*, PortData > PortMap;
-		typedef Map< DeviceId, DeviceData > DeviceMap;
+		typedef HashMap< Port*, PortData > PortMap;
+		typedef HashMap< DeviceId, DeviceData > DeviceMap;
 		typedef Queue< Command* > CommandQueue;
-		typedef Map< uint32, RuntimeHighStoredDevice > StoredDeviceMap;
+		typedef HashMap< uint32, RuntimeHighStoredDevice > StoredDeviceMap;
 
 		Device*				m_pDevice;
 
@@ -139,7 +134,7 @@ namespace conct
 
 		CommandQueue		m_finishCommands;
 
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		ChaCha				m_crypto;
 #endif
 
@@ -148,11 +143,11 @@ namespace conct
 
 		void				readPort( Port* pPort, PortData& portData );
 		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );
-#if CONCT_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
+#if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		void				readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice );
 #endif
 		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted );
-		void				readBytes( Vector< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted );
+		void				readBytes( DynamicArray< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted );
 		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId );
 
 		void				writePort( Port* pPort, PortData& portData );
@@ -163,10 +158,10 @@ namespace conct
 
 		void				setState( PendingReceivedPackage& package, PackageState state );
 
-		void				getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const Vector< DeviceId >& sourceAddress ) const;
+		void				getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const DynamicArray< DeviceId >& sourceAddress ) const;
 
-		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, CommandId commandId, MessageType messageType, ResultId result );
-		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< uint8 >& payload, MessageType messageType );
+		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< const byte >& payload, CommandId commandId, MessageType messageType, ResultId result );
+		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< const byte >& payload, MessageType messageType );
 		ResultId			sendErrorResponse( const ReceivedPackage& package, MessageType messageType, ResultId result );
 	};
 }

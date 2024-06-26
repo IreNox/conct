@@ -1,18 +1,16 @@
 #include "conct_timer.h"
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <windows.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_ESP )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID ) || TIKI_ENABLED( TIKI_PLATFORM_ESP )
 #	include <time.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_AVR )
-#	include <arduino.h>
 #endif
 
 namespace conct
 {
 	Timer::Timer()
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		QueryPerformanceFrequency( ( LARGE_INTEGER* )&m_frequence );
 #endif
 		reset();
@@ -30,11 +28,11 @@ namespace conct
 
 	double Timer::getCurrentTime() const
 	{
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 		LARGE_INTEGER currentCounter;
 		QueryPerformanceCounter( ( LARGE_INTEGER* )&currentCounter );
 		return double( currentCounter.QuadPart ) / m_frequence;
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX ) || CONCT_ENABLED( CONCT_PLATFORM_ANDROID ) || CONCT_ENABLED( CONCT_PLATFORM_ESP )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX ) || TIKI_ENABLED( TIKI_PLATFORM_ANDROID ) || TIKI_ENABLED( TIKI_PLATFORM_ESP )
 		timespec currentTime;
 		currentTime.tv_sec = 0;
 		currentTime.tv_nsec = 0;
@@ -43,8 +41,6 @@ namespace conct
 		const double seconds = double( currentTime.tv_sec );
 		const double nanoseconds = double( currentTime.tv_nsec );
 		return seconds + ( nanoseconds / 1000000000.0 );
-#elif CONCT_ENABLED( CONCT_PLATFORM_AVR )
-		return micros() / 1000000.0;
 #else
 #	error "Platform not supported"
 #endif

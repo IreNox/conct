@@ -10,19 +10,19 @@ namespace conct
 		return 7u;
 	}
 
-	ArrayView< Instance > Device::getInstances() const
+	Device::ConstInstanceView Device::getInstances() const
 	{
-		ArrayView< Instance > instances;
+		Device::ConstInstanceView instances;
 		getPublicInstances( instances );
 		return instances;
 	}
 
-	ArrayView< Instance > Device::FindInstances( TypeCrc typeCrc )
+	Device::ConstInstanceView Device::FindInstances( TypeCrc typeCrc )
 	{
-		ArrayView< Instance > instances;
+		ArrayView< const Instance > instances;
 		getPublicInstances( instances );
 
-		Array< Instance > resultInstances;
+		ArrayView< Instance > resultInstances;
 		getEmptyInstances( resultInstances );
 
 		uintreg count = 0u;
@@ -36,12 +36,12 @@ namespace conct
 			resultInstances[ count++ ] = instances[ i ];
 		}
 
-		return ArrayView< Instance >( resultInstances.getData(), count );
+		return Device::ConstInstanceView( resultInstances.getData(), count );
 	}
 
 	Instance Device::FindFirstInstance( TypeCrc typeCrc )
 	{
-		ArrayView< Instance > instances;
+		ArrayView< const Instance > instances;
 		getPublicInstances( instances );
 
 		for( uintreg i = 0u; i < instances.getLength(); ++i )
@@ -57,7 +57,7 @@ namespace conct
 
 	const LocalInstance* Device::getInstance( InstanceId instanceId )
 	{
-		ArrayView< LocalInstance > instances;
+		ArrayView< const LocalInstance > instances;
 		getLocalInstances( instances );
 
 		if( instanceId > instances.getLength() )

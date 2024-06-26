@@ -5,7 +5,7 @@
 
 namespace conct
 {
-	class RuntimeHigh;
+	class Runtime;
 
 	enum CommandState
 	{
@@ -16,7 +16,7 @@ namespace conct
 
 	class Command
 	{
-		friend class RuntimeHigh;
+		friend class Runtime;
 
 	public:
 
@@ -46,7 +46,7 @@ namespace conct
 
 	class ValueCommand : public Command
 	{
-		friend class RuntimeHigh;
+		friend class Runtime;
 
 	public:
 

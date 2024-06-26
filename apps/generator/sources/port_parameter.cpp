@@ -1,6 +1,5 @@
 #include "port_parameter.h"
 
-#include "conct_string_tools.h"
 #include "conct_trace.h"
 #include "conct_xml_helper.h"
 
@@ -10,21 +9,20 @@
 
 namespace conct
 {
-	static const Pair< PortParameterFilterType, const char*> s_portParameterFilterTypeMapping[] =
+	static const Pair< PortParameterFilterType, const char* > s_portParameterFilterTypeMapping[] =
 	{
-		{ PortParameterFilterType_HardwareRuntime,		"runtime" },
-		{ PortParameterFilterType_HardwareSystem,		"system" },
-		{ PortParameterFilterType_HardwareEnvironment,	"environment" }
+		{ PortParameterFilterType::HardwareSystem,		"system" },
+		{ PortParameterFilterType::HardwareEnvironment,	"environment" }
 	};
-	static const ArrayView< Pair< PortParameterFilterType, const char*> > s_portParameterFilterTypeMappingView( s_portParameterFilterTypeMapping, CONCT_COUNT( s_portParameterFilterTypeMapping ) );
-	CONCT_STATIC_ASSERT( CONCT_COUNT( s_portParameterFilterTypeMapping ) == 3u );
+	static const ArrayView< const Pair< PortParameterFilterType, const char* > > s_portParameterFilterTypeMappingView( s_portParameterFilterTypeMapping, TIKI_ARRAY_COUNT( s_portParameterFilterTypeMapping ) );
+	TIKI_STATIC_ASSERT( TIKI_ARRAY_COUNT( s_portParameterFilterTypeMapping ) == 2u );
 
 	PortParameter::PortParameter()
 	{
-		m_type				= PortParameterValueType_Invalid;
-		m_minValue.type		= PortParameterValueType_Invalid;
-		m_maxValue.type		= PortParameterValueType_Invalid;
-		m_defaultValue.type	= PortParameterValueType_Invalid;
+		m_type				= PortParameterValueType::Invalid;
+		m_minValue.type		= PortParameterValueType::Invalid;
+		m_maxValue.type		= PortParameterValueType::Invalid;
+		m_defaultValue.type	= PortParameterValueType::Invalid;
 	}
 
 	bool PortParameter::load( const tinyxml2::XMLElement* pParameterNode )
@@ -38,11 +36,11 @@ namespace conct
 
 		if( typeString == "string" )
 		{
-			m_type = PortParameterValueType_String;
+			m_type = PortParameterValueType::String;
 		}
 		else if( typeString == "integer" )
 		{
-			m_type = PortParameterValueType_Integer;
+			m_type = PortParameterValueType::Integer;
 		}
 		else
 		{
@@ -63,21 +61,14 @@ namespace conct
 
 				switch( filter.type )
 				{
-				case PortParameterFilterType_HardwareRuntime:
-					if( !loadEnumValue( filter.runtime, pFilterNode, "value", getHardwareRuntimeMapping() ) )
-					{
-						return false;
-					}
-					break;
-
-				case PortParameterFilterType_HardwareSystem:
+				case PortParameterFilterType::HardwareSystem:
 					if( !loadEnumValue( filter.system, pFilterNode, "value", getHardwareSystemMapping() ) )
 					{
 						return false;
 					}
 					break;
 
-				case PortParameterFilterType_HardwareEnvironment:
+				case PortParameterFilterType::HardwareEnvironment:
 					if( !loadEnumValue( filter.environment, pFilterNode, "value", getHardwareEnvironmentMapping() ) )
 					{
 						return false;
@@ -92,7 +83,7 @@ namespace conct
 		DynamicString valueString;
 		if( loadStringValue( valueString, pParameterNode, "min", true ) )
 		{
-			if( m_type != PortParameterValueType_Integer )
+			if( m_type != PortParameterValueType::Integer )
 			{
 				traceNodeError( pParameterNode, "Error: min attribute is only valid for numeric types.\n" );
 				return false;
@@ -107,7 +98,7 @@ namespace conct
 
 		if( loadStringValue( valueString, pParameterNode, "max", true ) )
 		{
-			if( m_type != PortParameterValueType_Integer )
+			if( m_type != PortParameterValueType::Integer )
 			{
 				traceNodeError( pParameterNode, "Error: max attribute is only valid for numeric types.\n" );
 				return false;
@@ -128,14 +119,14 @@ namespace conct
 				return false;
 			}
 
-			if( m_minValue.type != PortParameterValueType_Invalid &&
+			if( m_minValue.type != PortParameterValueType::Invalid &&
 				m_minValue.integer > m_defaultValue.integer )
 			{
 				traceNodeError( pParameterNode, "Error: default attribute: '"_s + valueString + "' is lower than min value of '" + string_tools::toString( m_minValue.integer ) + "'.\n" );
 				return false;
 			}
 
-			if( m_maxValue.type != PortParameterValueType_Invalid &&
+			if( m_maxValue.type != PortParameterValueType::Invalid &&
 				m_maxValue.integer < m_defaultValue.integer )
 			{
 				traceNodeError( pParameterNode, "Error: default attribute: '"_s + valueString + "' is greater than max value of '" + string_tools::toString( m_maxValue.integer ) + "'.\n" );
@@ -146,8 +137,8 @@ namespace conct
 		const tinyxml2::XMLElement* pValuesNode = pParameterNode->FirstChildElement( "values" );
 		if( pValuesNode != nullptr )
 		{
-			if( m_minValue.type != PortParameterValueType_Invalid ||
-				m_maxValue.type != PortParameterValueType_Invalid )
+			if( m_minValue.type != PortParameterValueType::Invalid ||
+				m_maxValue.type != PortParameterValueType::Invalid )
 			{
 				traceNodeError( pValuesNode, "Error: parameter can't have min/max and values.\n" );
 				return false;
@@ -165,7 +156,7 @@ namespace conct
 				m_values.pushBack( value );
 			}
 
-			if( m_defaultValue.type != PortParameterValueType_Invalid )
+			if( m_defaultValue.type != PortParameterValueType::Invalid )
 			{
 				bool found = false;
 				for( const PortParameterValue& value : m_values )
@@ -186,18 +177,18 @@ namespace conct
 
 	bool PortParameter::loadValue( PortParameterValue& value, const char* pValueText ) const
 	{
-		if( m_type == PortParameterValueType_String )
+		if( m_type == PortParameterValueType::String )
 		{
-			value.type		= PortParameterValueType_String;
+			value.type		= PortParameterValueType::String;
 			value.string	= DynamicString( pValueText );
 
 			return true;
 		}
-		else if( m_type == PortParameterValueType_Integer )
+		else if( m_type == PortParameterValueType::Integer )
 		{
-			value.type		= PortParameterValueType_Integer;
+			value.type		= PortParameterValueType::Integer;
 
-			return string_tools::tryParseSInt32( value.integer, pValueText );
+			return string_tools::tryParseSInt32( value.integer, StringView( pValueText ) );
 		}
 
 		return false;
@@ -205,14 +196,14 @@ namespace conct
 
 	bool PortParameter::isValueEquals( const PortParameterValue& lhs, const PortParameterValue& rhs ) const
 	{
-		CONCT_ASSERT( lhs.type == m_type );
-		CONCT_ASSERT( rhs.type == m_type );
+		TIKI_ASSERT( lhs.type == m_type );
+		TIKI_ASSERT( rhs.type == m_type );
 
-		if( m_type == PortParameterValueType_String )
+		if( m_type == PortParameterValueType::String )
 		{
 			return lhs.string == rhs.string;
 		}
-		else if( m_type == PortParameterValueType_Integer )
+		else if( m_type == PortParameterValueType::Integer )
 		{
 			return lhs.integer == rhs.integer;
 		}
@@ -226,21 +217,14 @@ namespace conct
 		{
 			switch( filter.type )
 			{
-			case PortParameterFilterType_HardwareRuntime:
-				if( device.getHardware().getRuntime() != filter.runtime )
-				{
-					return false;
-				}
-				break;
-
-			case PortParameterFilterType_HardwareSystem:
+			case PortParameterFilterType::HardwareSystem:
 				if( device.getHardware().getSystem() != filter.system )
 				{
 					return false;
 				}
 				break;
 
-			case PortParameterFilterType_HardwareEnvironment:
+			case PortParameterFilterType::HardwareEnvironment:
 				if( device.getHardware().getEnvironment() != filter.environment )
 				{
 					return false;

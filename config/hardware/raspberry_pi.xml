@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <hardware name="RaspberryPi" runtime="high">
-	<system>linux</system>
+	<system>computer</system>
 	<environment>production</environment>
 	<memory>
 		<dynamic />

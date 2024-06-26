@@ -5,7 +5,6 @@
 #include "conct_enum_type.h"
 #include "conct_filesystem.h"
 #include "conct_interface_type.h"
-#include "conct_path.h"
 #include "conct_struct_type.h"
 #include "conct_trace.h"
 #include "conct_type.h"
@@ -17,16 +16,16 @@ namespace conct
 {
 	TypeCollection::TypeCollection()
 	{
-		addValueType( ""_s, "Void"_s, "void"_s, ValueType_Void );
-		addValueType( ""_s, "Boolean"_s, "bool"_s, ValueType_Boolean );
-		addValueType( ""_s, "Integer"_s, "sint32"_s, ValueType_Integer );
-		addValueType( ""_s, "Unsigned"_s, "uint32"_s, ValueType_Unsigned );
-		addValueType( ""_s, "Decimal"_s, "uint32"_s, ValueType_Decimal );
-		addValueType( ""_s, "String"_s, "const char*"_s, ValueType_String );
-		addValueType( ""_s, "PercentValue"_s, "PercentValue"_s, ValueType_PercentValue );
-		addValueType( ""_s, "DeviceId"_s, "DeviceId"_s, ValueType_DeviceId );
-		addValueType( ""_s, "TypeCrc"_s, "TypeCrc"_s, ValueType_TypeCrc );
-		addValueType( ""_s, "InstanceId"_s, "InstanceId"_s, ValueType_InstanceId );
+		addValueType( ""_s, "Void"_s, "void"_s, ValueType::Void );
+		addValueType( ""_s, "Boolean"_s, "bool"_s, ValueType::Boolean );
+		addValueType( ""_s, "Integer"_s, "sint32"_s, ValueType::Integer );
+		addValueType( ""_s, "Unsigned"_s, "uint32"_s, ValueType::Unsigned );
+		addValueType( ""_s, "Decimal"_s, "uint32"_s, ValueType::Decimal );
+		addValueType( ""_s, "String"_s, "const char*"_s, ValueType::String );
+		addValueType( ""_s, "PercentValue"_s, "PercentValue"_s, ValueType::PercentValue );
+		addValueType( ""_s, "DeviceId"_s, "DeviceId"_s, ValueType::DeviceId );
+		addValueType( ""_s, "TypeCrc"_s, "TypeCrc"_s, ValueType::TypeCrc );
+		addValueType( ""_s, "InstanceId"_s, "InstanceId"_s, ValueType::InstanceId );
 	}
 
 	TypeCollection::~TypeCollection()
@@ -78,7 +77,7 @@ namespace conct
 	const Type* TypeCollection::addValueType( const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, ValueType valueType )
 	{
 		Type* pType = new Type();
-		pType->create( Path(), namespaceVar, name, cppName, TypeKind_Value, valueType, true );
+		pType->create( Path(), namespaceVar, name, cppName, TypeKind::Value, valueType, true );
 
 		m_types.pushBack( pType );
 		return pType;
@@ -123,7 +122,7 @@ namespace conct
 	const InterfaceType* TypeCollection::findInterface( const DynamicString& fullName, const DynamicString& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
-		if( pType != nullptr && pType->getKind() == TypeKind_Interface )
+		if( pType != nullptr && pType->getKind() == TypeKind::Interface )
 		{
 			return static_cast< const InterfaceType* >( pType );
 		}
@@ -134,7 +133,7 @@ namespace conct
 	const InterfaceType* TypeCollection::findInterfaceByCrc( TypeCrc typeCrc )
 	{
 		const Type* pType = findTypeByCrc( typeCrc );
-		if( pType != nullptr && pType->getKind() == TypeKind_Interface )
+		if( pType != nullptr && pType->getKind() == TypeKind::Interface )
 		{
 			return static_cast< const InterfaceType* >( pType );
 		}
@@ -145,7 +144,7 @@ namespace conct
 	const StructType* TypeCollection::findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
-		if( pType != nullptr && pType->getKind() == TypeKind_Struct )
+		if( pType != nullptr && pType->getKind() == TypeKind::Struct )
 		{
 			return static_cast< const StructType* >( pType );
 		}
@@ -156,7 +155,7 @@ namespace conct
 	const StructType* TypeCollection::findStructByCrc( TypeCrc typeCrc )
 	{
 		const Type* pType = findTypeByCrc( typeCrc );
-		if( pType != nullptr && pType->getKind() == TypeKind_Struct )
+		if( pType != nullptr && pType->getKind() == TypeKind::Struct )
 		{
 			return static_cast<const StructType*>(pType);
 		}
@@ -167,7 +166,7 @@ namespace conct
 	const EnumType* TypeCollection::findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
-		if( pType != nullptr && pType->getKind() == TypeKind_Enum )
+		if( pType != nullptr && pType->getKind() == TypeKind::Enum )
 		{
 			return static_cast<const EnumType*>(pType);
 		}
@@ -179,7 +178,7 @@ namespace conct
 	const EnumType* TypeCollection::findEnumByCrc( TypeCrc typeCrc )
 	{
 		const Type* pType = findTypeByCrc( typeCrc );
-		if( pType != nullptr && pType->getKind() == TypeKind_Enum )
+		if( pType != nullptr && pType->getKind() == TypeKind::Enum )
 		{
 			return static_cast<const EnumType*>(pType);
 		}

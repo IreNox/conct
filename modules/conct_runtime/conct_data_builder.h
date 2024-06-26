@@ -1,8 +1,8 @@
 #pragma once
 
-#include "conct_array.h"
-#include "conct_array_view.h"
 #include "conct_core.h"
+
+#include <tiki/tiki_array_view.h>
 
 namespace conct
 {
@@ -36,7 +36,7 @@ namespace conct
 		void				pushStruct( const T& data );
 
 		template< class T >
-		Array< T >			pushArray( uintreg count );
+		ArrayView< T >		pushArray( uintreg count );
 
 		template< class T >
 		void				pushValueData( Value* pTargetValue, const T* pSourceValue );

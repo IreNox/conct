@@ -1,7 +1,5 @@
 #include "conct_value_high.h"
 
-#include "conct_functions.h"
-
 namespace conct
 {
 	ValueHigh::ValueHigh()
@@ -11,17 +9,17 @@ namespace conct
 
 	ValueHigh::ValueHigh( const Value& value )
 	{
-		if( value.type == ValueType_String )
+		if( value.type == ValueType::String )
 		{
 			m_string = DynamicString( value.getString() );
 			m_value.setString( 0u );
 		}
-		else if( value.type == ValueType_Struct )
+		else if( value.type == ValueType::Struct )
 		{
 			m_buffer.pushRange( static_cast< const uint8* >( value.getStructData() ), value.getStructSize() );
 			m_value.setStruct( 0u, value.getStructSize(), value.getStructType() );
 		}
-		else if( value.type == ValueType_Array )
+		else if( value.type == ValueType::Array )
 		{
 			m_buffer.pushRange( static_cast< const uint8* >( value.getArrayData() ), value.getArrayElementSize() * value.getArrayLength() );
 			m_value.setArray( 0u, value.getArrayElementSize(), value.getArrayLength(), value.getArrayType() );
@@ -74,13 +72,13 @@ namespace conct
 
 	const char* ValueHigh::getString() const
 	{
-		CONCT_ASSERT( m_value.type == ValueType_String );
+		TIKI_ASSERT( m_value.type == ValueType::String );
 		return m_string.toConstCharPointer();
 	}
 
 	const void* ValueHigh::getStructData() const
 	{
-		CONCT_ASSERT( m_value.type == ValueType_Struct );
+		TIKI_ASSERT( m_value.type == ValueType::Struct );
 		return m_buffer.getData();
 	}
 
@@ -96,7 +94,7 @@ namespace conct
 
 	const void* ValueHigh::getArrayData() const
 	{
-		CONCT_ASSERT( m_value.type == ValueType_Array );
+		TIKI_ASSERT( m_value.type == ValueType::Array );
 		return m_buffer.getData();
 	}
 

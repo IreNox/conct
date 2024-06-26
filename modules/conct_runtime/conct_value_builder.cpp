@@ -1,6 +1,5 @@
 #include "conct_value_builder.h"
 
-#include "conct_number_limits.h"
 #include "conct_data_builder.h"
 
 namespace conct
@@ -16,9 +15,9 @@ namespace conct
 		return m_pBuilder->getSize();
 	}
 
-	ArrayView< uint8 > ValueBuilder::toArrayView() const
+	ArrayView< const uint8 > ValueBuilder::toArrayView() const
 	{
-		return ArrayView< uint8 >( (const uint8*)m_pValue, m_pBuilder->getSize() );
+		return ArrayView< const uint8 >( (const uint8*)m_pValue, m_pBuilder->getSize() );
 	}
 
 	ResultId ValueBuilder::setVoid()
@@ -53,7 +52,7 @@ namespace conct
 			return ResultId_OutOfMemory;
 		}
 
-		CONCT_ASSERT( ( uintptr )pString - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
+		TIKI_ASSERT( ( uintptr )pString - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
 		m_pValue->setString( uint16( ( uintptr )pString - ( uintptr )m_pValue ) );
 
 		return ResultId_Success;
@@ -91,7 +90,7 @@ namespace conct
 			return ResultId_OutOfMemory;
 		}
 
-		CONCT_ASSERT( ( uintptr )pStruct - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
+		TIKI_ASSERT( ( uintptr )pStruct - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
 		m_pValue->setStruct( uint16( ( uintptr )pStruct - ( uintptr )m_pValue ), uint16( dataSize ), type );
 
 		return ResultId_Success;
@@ -105,7 +104,7 @@ namespace conct
 			return ResultId_OutOfMemory;
 		}
 
-		CONCT_ASSERT( ( uintptr )pArray - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
+		TIKI_ASSERT( ( uintptr )pArray - ( uintptr )m_pValue < NumberLimits< uint16 >::max() );
 		m_pValue->setArray( uint16( ( uintptr )pArray - ( uintptr )m_pValue ), uint8( elementSize ), uint8( length ), type );
 
 		return ResultId_Success;

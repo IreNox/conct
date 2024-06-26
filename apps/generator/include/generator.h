@@ -3,14 +3,11 @@
 #include "hardware_collection.h"
 #include "port_collection.h"
 
-#include "conct_path.h"
 #include "conct_type_collection.h"
-#include "conct_unsorted_set.h"
 
 namespace conct
 {
 	class Device;
-	class Path;
 	struct GeneratorParameters;
 
 	class Generator
@@ -19,12 +16,12 @@ namespace conct
 
 				Generator();
 
-		bool	run( const Vector< DynamicString >& arguments );
+		bool	run( const DynamicArray< DynamicString >& arguments );
 
 	private:
 
-		typedef UnsortedSet< const Type* > TypeSet;
-		typedef UnsortedSet< Path > PathSet;
+		typedef HashSet< const Type* > TypeSet;
+		typedef HashSet< Path > PathSet;
 
 		HardwareCollection	m_hardware;
 		PortCollection		m_ports;
@@ -42,7 +39,7 @@ namespace conct
 
 		bool				writeStringToFile( const Path& filename, const DynamicString& content, bool ifNotExists );
 
-		bool				parseArguments( GeneratorParameters& parameters, const Vector< DynamicString >& arguments );
+		bool				parseArguments( GeneratorParameters& parameters, const DynamicArray< DynamicString >& arguments );
 		void				collectTypesToExport( TypeSet& types, const Device& device );
 		void				collectTypesToExport( TypeSet& types, const Type* pType );
 
@@ -55,7 +52,6 @@ namespace conct
 		bool				exportInterfaceImpl( const Device& device, const GeneratorParameters& parameters );
 		bool				exportDeviceInterface( const Device& device, const GeneratorParameters& parameters );
 		bool				exportDeviceImpl( const Device& device, const GeneratorParameters& parameters );
-		bool				exportIno( const Device& device, const GeneratorParameters& parameters );
 
 		void				writeDependingTypeIncludes( DynamicString& target, const Type* pType );
 	};

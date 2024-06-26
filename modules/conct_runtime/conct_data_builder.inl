@@ -17,15 +17,15 @@ namespace conct
 	}
 
 	template< class T >
-	Array< T > DataBuilder::pushArray( uintreg count )
+	ArrayView< T > DataBuilder::pushArray( uintreg count )
 	{
 		T* pData = static_cast< T* >( pushData( count * sizeof( T ) ) );
 		if( pData == nullptr )
 		{
-			return Array< T >();
+			return ArrayView< T >();
 		}
 
-		return Array< T >(  pData, count );
+		return ArrayView< T >(  pData, count );
 	}
 
 	template< class T >

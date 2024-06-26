@@ -22,9 +22,9 @@ namespace conct
 			"NoDestination",
 			"KeyExchangeFailed",
 		};
-		CONCT_STATIC_ASSERT( CONCT_COUNT( s_aResultIdStrings ) == ResultId_Count );
+		TIKI_STATIC_ASSERT( TIKI_ARRAY_COUNT( s_aResultIdStrings ) == ResultId_Count );
 
-		CONCT_ASSERT( value < ResultId_Count );
+		TIKI_ASSERT( value < ResultId_Count );
 		return s_aResultIdStrings[ value ];
 	}
 }

@@ -2,9 +2,10 @@
 
 #include "conct_controller.h"
 #include "conct_type_collection.h"
-#include "conct_vector.h"
 
 #include "controller_config.h"
+
+#include <tiki/tiki_dynamic_array.h>
 
 namespace conct
 {
@@ -32,7 +33,7 @@ namespace conct
 
 		struct ConnectedDevice
 		{
-			using InstanceVector = Vector< DeviceInstance >;
+			using InstanceArray = DynamicArray< DeviceInstance >;
 
 			DeviceAddress				address;
 			bool						allowRoutering		= false;
@@ -43,17 +44,17 @@ namespace conct
 			ValueCommand*				pInstancesCommand	= nullptr;
 			ValueCommand*				pDevicesCommand		= nullptr;
 
-			InstanceVector				instances;
+			InstanceArray				instances;
 		};
 
 		struct DeviceInstance
 		{
-			using PropertyVector = Vector< InstanceProperty >;
+			using PropertyArray = DynamicArray< InstanceProperty >;
 
 			Instance					instance			= { 0u, 0u };
 			const InterfaceType*		pType				= nullptr;
 
-			PropertyVector				properties;
+			PropertyArray				properties;
 		};
 
 		struct InstanceProperty
@@ -67,23 +68,23 @@ namespace conct
 			bool						hasValueChanged		= false;
 		};
 
-		using ConnectionVector = Vector< Connection* >;
-		using DeviceVector = Vector< ConnectedDevice* >;
+		using ConnectionArray = DynamicArray< Connection* >;
+		using DeviceArray = DynamicArray< ConnectedDevice* >;
 
 	public:
 
-		bool							setup( ControllerConfig& config, RuntimeHigh& runtime );
+		bool							setup( ControllerConfig& config, Runtime& runtime );
 		void							destroy();
 
 		void							loop();
 
-		const DeviceVector&				getDevices() const { return m_devices; }
+		const DeviceArray&				getDevices() const { return m_devices; }
 
 		void							changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const ValueHigh& value );
 
 	private:
 
-		RuntimeHigh*					m_pRuntime			= nullptr;
+		Runtime*						m_pRuntime			= nullptr;
 
 		ControllerConfig*				m_pConfig			= nullptr;
 		uint32							m_configRevision	= (uint32)-1;
@@ -91,8 +92,8 @@ namespace conct
 		Controller						m_controller;
 		TypeCollection					m_types;
 
-		ConnectionVector				m_connections;
-		DeviceVector					m_devices;
+		ConnectionArray					m_connections;
+		DeviceArray						m_devices;
 
 		void							updateConfig();
 		void							updateDevices();

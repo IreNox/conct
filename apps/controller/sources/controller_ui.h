@@ -1,10 +1,24 @@
 #pragma once
 
 struct ImAppContext;
-struct nk_context;
+struct ImUiSurface;
+
+namespace imui
+{
+	class UiSurface;
+	class UiWindow;
+
+	namespace toolbox
+	{
+		class UiToolboxWindow;
+	}
+}
 
 namespace conct
 {
+	using namespace imui;
+	using namespace imui::toolbox;
+
 	class ControllerConfig;
 
 	class ControllerUI
@@ -13,7 +27,7 @@ namespace conct
 
 		void				setup( ControllerConfig& config, ControllerState& state );
 
-		void				doUI( ImAppContext* pContext );
+		void				doUI( ImAppContext* context, ImUiSurface* surface );
 
 	private:
 
@@ -26,10 +40,10 @@ namespace conct
 			Credits
 		};
 
-		ControllerConfig*	m_pConfig				= nullptr;
-		ControllerState*	m_pState				= nullptr;
+		ControllerConfig*	m_config				= nullptr;
+		ControllerState*	m_state					= nullptr;
 
-		State				m_state					= State::Devices;
+		State				m_menuState				= State::Devices;
 		bool				m_isMenuOpen			= false;
 
 		uintreg				m_selectedConnection	= 0u;
@@ -38,21 +52,21 @@ namespace conct
 		DynamicString		m_editHostname;
 		DynamicString		m_editPort;
 
-		void				doMenuUI( ImAppContext* pContext );
+		void				doMenuUI( ImAppContext* context, UiSurface& surface, float menuWidth );
 
-		void				doHomeUI( ImAppContext* pContext );
-		void				doDevicesUI( ImAppContext* pContext );
-		void				doConnectionsUI( ImAppContext* pContext );
-		void				doConnectionEditUI( ImAppContext* pContext );
-		void				doCreditsUI( ImAppContext* pContext );
+		void				doHomeUI( UiToolboxWindow& window );
+		void				doDevicesUI( UiToolboxWindow& window );
+		void				doConnectionsUI( UiToolboxWindow& window );
+		void				doConnectionEditUI( UiToolboxWindow& window );
+		void				doCreditsUI( UiToolboxWindow& window );
 
-		void				doDeviceUI( ImAppContext* pContext, ControllerState::ConnectedDevice& device );
-		void				doInstanceUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance );
-		void				doPropertyUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop );
+		void				doDeviceUI( UiToolboxWindow& window, ControllerState::ConnectedDevice& device );
+		void				doInstanceUI( UiToolboxWindow& window, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance );
+		void				doPropertyUI( UiToolboxWindow& window, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop );
 
-		float				getDeviceHeight( nk_context* pNkContext, const ControllerState::ConnectedDevice& device ) const;
-		float				getInstanceHeight( nk_context* pNkContext, const ControllerState::DeviceInstance& instance ) const;
-		float				getPropertyHeight( nk_context* pNkContext, const ControllerState::InstanceProperty& prop ) const;
+		//float				getDeviceHeight( nk_context* pNkContext, const ControllerState::ConnectedDevice& device ) const;
+		//float				getInstanceHeight( nk_context* pNkContext, const ControllerState::DeviceInstance& instance ) const;
+		//float				getPropertyHeight( nk_context* pNkContext, const ControllerState::InstanceProperty& prop ) const;
 
 		void				changeState( State state );
 

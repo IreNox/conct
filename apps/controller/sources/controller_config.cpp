@@ -1,9 +1,10 @@
 #include "controller_config.h"
 
-#include "conct_string_tools.h"
 #include "conct_trace.h"
 
-#include "tinyxml2/tinyxml2.h"
+#include <tiki/tiki_string_tools.h>
+
+#include <tinyxml2/tinyxml2.h>
 
 namespace conct
 {

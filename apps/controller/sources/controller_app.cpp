@@ -32,11 +32,11 @@ namespace conct
 		return true;
 	}
 
-	void ControllerApp::doUI( ImAppContext* pConext )
+	void ControllerApp::doUI( ImAppContext* conext, ImUiSurface* surface )
 	{
 		m_device.loopDevice();
 
 		m_state.loop();
-		m_ui.doUI( pConext );
+		m_ui.doUI( conext, surface );
 	}
 }

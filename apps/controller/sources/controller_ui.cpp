@@ -1,120 +1,108 @@
 #include "controller_ui.h"
 
-#include "conct_string_tools.h"
-
 #include "controller_ui_widgets.h"
+
+#include <tiki/tiki_functions.h>
+#include <tiki/tiki_string_tools.h>
 
 #include <imapp/imapp.h>
 
 namespace conct
 {
+	using namespace imui;
+	using namespace imui::toolbox;
+
 	void ControllerUI::setup( ControllerConfig& config, ControllerState& state )
 	{
-		m_pConfig	= &config;
-		m_pState	= &state;
+		m_config	= &config;
+		m_state	= &state;
 
 		m_editTitle.reserve( 256u );
 		m_editHostname.reserve( 256u );
 		m_editPort.reserve( 32u );
 	}
 
-	void ControllerUI::doUI( ImAppContext* pContext )
+	void ControllerUI::doUI( ImAppContext* context, ImUiSurface* rawSurface )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiSurface surface( rawSurface );
 
-		const bool showMenuAlways = float( pContext->width ) / pContext->height > 1.5f;
-		if( m_isMenuOpen || showMenuAlways )
+		const bool showMenuAlways	= (float( surface.getSize().width ) / surface.getSize().height) > 1.5f;
+		const bool showMenu			= m_isMenuOpen || showMenuAlways;
+		const float menuWidth		= showMenu ? floorf( max( 200.0f, surface.getSize().width / 5.0f ) ) : 0.0f;
+
+		if( showMenu )
 		{
-			doMenuUI( pContext );
+			doMenuUI( context, surface, menuWidth );
 		}
 
-		const int x = pContext->x + (showMenuAlways ? pContext->width / 5 : 0);
-		const int w = pContext->width - (showMenuAlways ? pContext->width / 5 : 0);
-		if( !nk_begin( pNkContext, "Default", nk_recti( x, pContext->y, w, pContext->height ), NK_WINDOW_NO_SCROLLBAR ) )
-		{
-			return;
-		}
+		UiRect contentRect = surface.getRect();
+		contentRect.shrinkBorder( UiBorder( 0.0f, menuWidth, 0.0f, 0.0f ) );
 
-		const float height = 24.0f + pNkContext->style.window.padding.y;
-		nk_layout_row_begin( pNkContext, NK_STATIC, height, showMenuAlways? 2 : 3 );
+		UiToolboxWindow contentWindow( surface, "Content", contentRect, 1u );
+
+		UiWidgetLayoutVertical mainLayout( contentWindow );
+		mainLayout.setMargin( UiBorder( 15.0f ) );
 
 		if( !showMenuAlways )
 		{
-			nk_layout_row_push( pNkContext, 24.0f + pNkContext->style.button.padding.x * 2.0f );
-
-			const struct nk_image image	= ImAppImageGetBlocking( pContext, "icons/menu.png" );
-			if( nk_button_image( pNkContext, image ) )
+			const struct ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( context, "icons/menu.png" ) );
+			if( contentWindow.buttonIcon( image ) )
 			{
 				m_isMenuOpen = !m_isMenuOpen;
 			}
 		}
 
-		nk_layout_row_push( pNkContext, 28.0f );
 		{
-			const char* pIcon			= getStateIcon( m_state );
-			const struct nk_image image	= ImAppImageGetBlocking( pContext, pIcon );
-			const struct nk_color color	= { 0xff, 0xff, 0xff, 0xff };
-			nk_image_color( pNkContext, image, color );
+			const char* iconName		= getStateIcon( m_menuState );
+			const struct ImUiImage img	= ImAppImageGetImage( ImAppImageLoadResource( context, iconName ) );
+			contentWindow.image( img );
 		}
 
-		nk_layout_row_push( pNkContext, 500.0f );
-		{
-			const char* pTitle = getStateTitle( m_state );
-			nk_label( pNkContext, pTitle, NK_TEXT_LEFT );
-		}
+		contentWindow.label( getStateTitle( m_menuState ) );
 
-		nk_layout_row_end( pNkContext );
-
-		switch( m_state )
+		switch( m_menuState )
 		{
 		case ControllerUI::State::Home:
-			doHomeUI( pContext );
+			doHomeUI( contentWindow );
 			break;
 
 		case ControllerUI::State::Devices:
-			doDevicesUI( pContext );
+			doDevicesUI( contentWindow );
 			break;
 
 		case ControllerUI::State::Connections:
-			doConnectionsUI( pContext );
+			doConnectionsUI( contentWindow );
 			break;
 
 		case ControllerUI::State::ConnectionEdit:
-			doConnectionEditUI( pContext );
+			doConnectionEditUI( contentWindow );
 			break;
 
 		case ControllerUI::State::Credits:
-			doCreditsUI( pContext );
+			doCreditsUI( contentWindow );
 			break;
 		}
-
-		nk_end( pNkContext );
 	}
 
-	void ControllerUI::doMenuUI( ImAppContext* pContext )
+	void ControllerUI::doMenuUI( ImAppContext* context, UiSurface& surface, float menuWidth )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiRect menuRect = surface.getRect();
+		menuRect.size.width = menuWidth;
 
-		const int menuWidth = max( 200, pContext->width / 5 );
-		if( !nk_begin( pNkContext, "Menu", nk_recti( pContext->x, pContext->y, menuWidth, pContext->height ), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
+		UiToolboxWindow menuWindow( surface, "Menu", menuRect, 2 );
+
+		//if( !nk_window_has_focus( pNkContext ) )
+		//{
+		//	m_isMenuOpen = false;
+		//}
+
+		UiWidgetLayoutVertical menuLayout( menuWindow );
+
 		{
-			m_isMenuOpen = false;
-			return;
+			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( context, "bg/menu_header.png" ) );
+			// TODO: size;
+			menuWindow.image( image );
 		}
-
-		if( !nk_window_has_focus( pNkContext ) )
-		{
-			m_isMenuOpen = false;
-		}
-
-		nk_layout_row_dynamic( pNkContext, menuWidth * (723.0f / 1080.0f), 1 );
-		{
-			const struct nk_image image	= ImAppImageGetBlocking( pContext, "bg/menu_header.png" );
-			const struct nk_color color	= { 0xff, 0xff, 0xff, 0xff };
-			nk_image_color( pNkContext, image, color );
-		}
-
-		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
 
 		static const State s_menuStates[] =
 		{
@@ -124,90 +112,77 @@ namespace conct
 			State::Credits,
 		};
 
-		for( size_t i = 0u; i < CONCT_COUNT( s_menuStates ); ++i )
+		for( size_t i = 0u; i < TIKI_ARRAY_COUNT( s_menuStates ); ++i )
 		{
 			const State state = s_menuStates[ i ];
 
-			const char* pTitle	= getStateTitle( state );
-			const char* pIcon	= getStateIcon( state );
+			const char* title		= getStateTitle( state );
+			const char* iconName	= getStateIcon( state );
 
-			const struct nk_image image = ImAppImageGetBlocking( pContext, pIcon );
-			if( nk_button_image_label( pNkContext, image, pTitle, NK_TEXT_RIGHT ) )
+			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( context, iconName ) );
+
+			UiToolboxButton menuButton( menuWindow );
+
+			{
+				UiWidgetLayoutHorizontal buttonLayout( menuWindow, 5.0f );
+
+				menuWindow.image( image );
+				menuWindow.label( title );
+			}
+
+			if( menuButton.end() )
 			{
 				changeState( state );
 				m_isMenuOpen = false;
 			}
 		}
-
-		nk_end( pNkContext );
 	}
 
-	void ControllerUI::doHomeUI( ImAppContext* pContext )
+	void ControllerUI::doHomeUI( UiToolboxWindow& window )
 	{
-		nk_context* pNkContext = pContext->nkContext;
-
-		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
-
-		nk_label( pNkContext, "TODO", NK_TEXT_LEFT );
+		window.label( "TODO" );
 	}
 
-	void ControllerUI::doDevicesUI( ImAppContext* pContext )
+	void ControllerUI::doDevicesUI( UiToolboxWindow& window )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiWidgetLayoutVertical layout( window );
 
-		nk_layout_row_dynamic( pNkContext, pContext->height - 24.0f, 1 );
-
-		nk_style_push_vec2( pNkContext, &pNkContext->style.window.group_padding, nk_vec2i( 0, 0 ) );
-		CONCT_ASSERT( nk_group_begin( pNkContext, "devices", 0 ) );
-
-		const ControllerState::DeviceVector& devices = m_pState->getDevices();
+		const ControllerState::DeviceArray& devices = m_state->getDevices();
 		for( ControllerState::ConnectedDevice* pDevice : devices )
 		{
-			doDeviceUI( pContext, *pDevice );
+			doDeviceUI( window, *pDevice );
 		}
 
 		if( devices.hasElements() )
 		{
-			nk_spacing( pNkContext, 1u );
+			window.spacer( 1.0f, 20.0f );
 		}
-
-		nk_group_end( pNkContext );
-		nk_style_pop_vec2( pNkContext );
 	}
 
-	void ControllerUI::doConnectionsUI( ImAppContext* pContext )
+	void ControllerUI::doConnectionsUI( UiToolboxWindow& window )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiWidgetLayoutVertical layout( window );
+		layout.setVStretch( 1.0f );
 
-		const ControllerConfig::ConnectionVector& connections = m_pConfig->getConnections();
+		const ControllerConfig::ConnectionArray& connections = m_config->getConnections();
 
-		nk_layout_row_dynamic( pNkContext, pContext->height - 100.0f, 1 );
-
-		nk_list_view listView;
-		if( nk_list_view_begin( pNkContext, &listView, "connections", 0, 100, (int)connections.getLength() ) )
 		{
-			nk_layout_row_dynamic( pNkContext, 100.0f, 1 );
+			UiToolboxList list( window, 100.0f, connections.getLength() );
+
 			for( const ControllerConfig::Connection& connection : connections )
 			{
-				nk_group_begin( pNkContext, connection.title.toConstCharPointer(), NK_WINDOW_TITLE | NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR );
+				list.nextItem();
 
-				nk_layout_row_dynamic( pNkContext, 25.0f, 1 );
+				UiWidgetLayoutVertical itemLayout( window );
 
-				nk_label( pNkContext, connection.hostname.toConstCharPointer(), NK_TEXT_LEFT );
+				window.label( connection.hostname );
 
-				nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
-
-				nk_button_label( pNkContext, "Edit" );
-				nk_button_label( pNkContext, "Remove" );
-
-				nk_group_end( pNkContext );
+				window.buttonLabel( "Edit" );
+				window.buttonLabel( "Remove" );
 			}
-			nk_list_view_end( &listView );
 		}
 
-		nk_layout_row_static( pNkContext, 0.0f, 150, 1 );
-
-		if( nk_button_label( pNkContext, "Add Connection" ) )
+		if( window.buttonLabel( "Add Connection" ) )
 		{
 			m_editTitle = "New Connection"_s;
 			m_editHostname.clear();
@@ -217,161 +192,160 @@ namespace conct
 		}
 	}
 
-	void ControllerUI::doConnectionEditUI( ImAppContext* pContext )
+	void ControllerUI::doConnectionEditUI( UiToolboxWindow& window )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiWidgetLayoutVertical mainLayout( window );
+		mainLayout.setHStretch( 1.0f );
 
-		const float rations[] = { 0.1f, 0.9f };
-		nk_layout_row( pNkContext, NK_DYNAMIC, 0.0f, 2, rations );
+		{
+			UiWidgetLayoutGrid layout( window, 2u, 5.0f, 5.0f );
+			layout.setHStretch( 1.0f );
 
-		nk_label( pNkContext, "Title:", NK_TEXT_LEFT );
-		nk_edit_string_zero_terminated( pNkContext, NK_EDIT_FIELD, m_editTitle.beginWrite(), (int)m_editTitle.getCapacity(), nullptr );
-		m_editTitle.endWrite();
+			window.label( "Title:" );
+			window.textEdit( m_editTitle.beginWrite(), m_editTitle.getCapacity() );
+			m_editTitle.endWrite();
 
-		nk_label( pNkContext, "Hostname:", NK_TEXT_LEFT );
-		nk_edit_string_zero_terminated( pNkContext, NK_EDIT_FIELD, m_editHostname.beginWrite(), (int)m_editHostname.getCapacity(), nullptr );
-		m_editHostname.endWrite();
+			window.label( "Hostname:" );
+			window.textEdit( m_editHostname.beginWrite(), m_editHostname.getCapacity() );
+			m_editHostname.endWrite();
 
-		nk_label( pNkContext, "Port:", NK_TEXT_LEFT );
-		nk_edit_string_zero_terminated( pNkContext, NK_EDIT_FIELD, m_editPort.beginWrite(), (int)m_editPort.getCapacity(), nullptr );
-		m_editPort.endWrite();
+			window.label( "Port:" );
+			window.textEdit( m_editPort.beginWrite(), m_editPort.getCapacity() );
+			m_editPort.endWrite();
+		}
 
-		nk_layout_row_static( pNkContext, 0.0f, 150, 2 );
+		UiWidgetLayoutHorizontal buttonLayout( window, 5.0f );
 
-		if( nk_button_label( pNkContext, "Ok" ) )
+		if( window.buttonLabel( "Ok" ) )
 		{
 			ControllerConfig::Connection connection;
 			connection.title	= m_editTitle;
 			connection.hostname	= m_editHostname;
-			connection.port		= string_tools::parseUInt16( m_editPort.toConstCharPointer() );
+			connection.port		= string_tools::parseUInt16( m_editPort );
 
-			m_pConfig->addConnection( connection );
+			m_config->addConnection( connection );
 
 			changeState( State::Connections );
 		}
 
-		if( nk_button_label( pNkContext, "Cancel" ) )
+		if( window.buttonLabel( "Cancel" ) )
 		{
 			changeState( State::Connections );
 		}
 	}
 
-	void ControllerUI::doCreditsUI( ImAppContext* pContext )
+	void ControllerUI::doCreditsUI( UiToolboxWindow& window )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiWidgetLayoutVertical layout( window );
+		layout.setHStretch( 1.0f );
 
-		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
+		window.label( "Programming:" );
+		window.label( "Tim Boden - https://github.com/IreNox" );
 
-		nk_label( pNkContext, "Programming:", NK_TEXT_LEFT );
-		nk_label( pNkContext, "Tim Boden - https://github.com/IreNox", NK_TEXT_LEFT );
+		window.spacer( 1.0f, 20.0f );
 
-		nk_spacing( pNkContext, 1 );
-
-		nk_label( pNkContext, "Special Thanks:", NK_TEXT_LEFT );
-		nk_label( pNkContext, "Remix Icon - https://remixicon.com/", NK_TEXT_LEFT );
-
-		nk_spacing( pNkContext, 1 );
+		window.label( "Special Thanks:" );
+		window.label( "Remix Icon - https://remixicon.com/" );
 	}
 
-	void ControllerUI::doDeviceUI( ImAppContext* pContext, ControllerState::ConnectedDevice& device )
+	void ControllerUI::doDeviceUI( UiToolboxWindow& window, ControllerState::ConnectedDevice& device )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		//const float deviceHeight = getDeviceHeight( pNkContext, device );
+		//nk_layout_row_dynamic( pNkContext, deviceHeight, 1 );
 
-		const float deviceHeight = getDeviceHeight( pNkContext, device );
-		nk_layout_row_dynamic( pNkContext, deviceHeight, 1 );
+		//if( !nk_group_begin( pNkContext, device.name.toConstCharPointer(), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
+		//{
+		//	return;
+		//}
 
-		if( !nk_group_begin( pNkContext, device.name.toConstCharPointer(), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
-		{
-			return;
-		}
+		//// Title
+		//nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
+		//{
+		//	//nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
+		//	//CONCT_ASSERT( nk_panel_begin( pNkContext, "Bla", NK_PANEL_GROUP ) );
 
-		// Title
-		nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
-		{
-			//nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
-			//CONCT_ASSERT( nk_panel_begin( pNkContext, "Bla", NK_PANEL_GROUP ) );
+		//	//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 1 );
+		//	//nk_label( pNkContext, "Bla", NK_TEXT_LEFT );
 
-			//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 1 );
-			//nk_label( pNkContext, "Bla", NK_TEXT_LEFT );
+		//	//nk_panel_end( pNkContext );
+		//	//nk_style_pop_style_item( pNkContext );
 
-			//nk_panel_end( pNkContext );
-			//nk_style_pop_style_item( pNkContext );
+		//	UiHeader deviceHeader( pNkContext, "deviceHeader" );
+		//	if( deviceHeader.isVisible )
+		//	{
+		//		const float width = nk_window_get_width( pNkContext );
+		//		nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 3 );
 
-			UiHeader deviceHeader( pNkContext, "deviceHeader" );
-			if( deviceHeader.isVisible )
-			{
-				const float width = nk_window_get_width( pNkContext );
-				nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 3 );
+		//		nk_layout_row_push( pNkContext, 24.0f );
+		//		nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
+		//		const struct nk_image instancesImage = ImAppImageGetBlocking( pContext, "icons/instances.png" );
+		//		nk_image( pNkContext, instancesImage );
+		//		nk_style_pop_vec2( pNkContext );
 
-				nk_layout_row_push( pNkContext, 24.0f );
-				nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
-				const struct nk_image instancesImage = ImAppImageGetBlocking( pContext, "icons/instances.png" );
-				nk_image( pNkContext, instancesImage );
-				nk_style_pop_vec2( pNkContext );
+		//		const float headerPadding	= pNkContext->style.window.header.padding.x * 2.0f;
+		//		const float imageWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
+		//		const float titleWidth		= pNkContext->style.window.group_padding.x * 2.0f;
+		//		const float favWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
+		//		const float remainingWidth	= width - (headerPadding + imageWidth + titleWidth + favWidth);
+		//		nk_layout_row_push( pNkContext, remainingWidth );
+		//		nk_label( pNkContext, device.name.toConstCharPointer(), NK_TEXT_LEFT );
 
-				const float headerPadding	= pNkContext->style.window.header.padding.x * 2.0f;
-				const float imageWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
-				const float titleWidth		= pNkContext->style.window.group_padding.x * 2.0f;
-				const float favWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
-				const float remainingWidth	= width - (headerPadding + imageWidth + titleWidth + favWidth);
-				nk_layout_row_push( pNkContext, remainingWidth );
-				nk_label( pNkContext, device.name.toConstCharPointer(), NK_TEXT_LEFT );
+		//		// Favorite Button
+		//		nk_layout_row_push( pNkContext, 24.0f + (pNkContext->style.button.padding.x * 2.0f) );
+		//		{
+		//			nk_style_push_float( pNkContext, &pNkContext->style.button.border, 0.0f );
+		//			nk_style_push_float( pNkContext, &pNkContext->style.button.rounding, 0.0f );
+		//			nk_style_push_vec2( pNkContext, &pNkContext->style.button.image_padding, nk_vec2( 0.0f, 0.0f ) );
+		//			nk_style_push_style_item( pNkContext, &pNkContext->style.button.normal, pNkContext->style.window.header.normal );
+		//			//nk_style_push_style_item( pNkContext, &pNkContext->style.button.active, pNkContext->style.window.header.active );
+		//			nk_style_push_style_item( pNkContext, &pNkContext->style.button.hover, pNkContext->style.window.header.hover );
 
-				// Favorite Button
-				nk_layout_row_push( pNkContext, 24.0f + (pNkContext->style.button.padding.x * 2.0f) );
-				{
-					nk_style_push_float( pNkContext, &pNkContext->style.button.border, 0.0f );
-					nk_style_push_float( pNkContext, &pNkContext->style.button.rounding, 0.0f );
-					nk_style_push_vec2( pNkContext, &pNkContext->style.button.image_padding, nk_vec2( 0.0f, 0.0f ) );
-					nk_style_push_style_item( pNkContext, &pNkContext->style.button.normal, pNkContext->style.window.header.normal );
-					//nk_style_push_style_item( pNkContext, &pNkContext->style.button.active, pNkContext->style.window.header.active );
-					nk_style_push_style_item( pNkContext, &pNkContext->style.button.hover, pNkContext->style.window.header.hover );
+		//			const struct nk_image favImage = ImAppImageGetBlocking( pContext, "icons/fav-off.png" );
+		//			if( nk_button_image( pNkContext, favImage ) )
+		//			{
 
-					const struct nk_image favImage = ImAppImageGetBlocking( pContext, "icons/fav-off.png" );
-					if( nk_button_image( pNkContext, favImage ) )
-					{
+		//			}
+		//			nk_style_pop_vec2( pNkContext );
+		//			nk_style_pop_float( pNkContext );
+		//			nk_style_pop_float( pNkContext );
+		//			nk_style_pop_style_item( pNkContext );
+		//			//nk_style_pop_style_item( pNkContext );
+		//			nk_style_pop_style_item( pNkContext );
+		//		}
 
-					}
-					nk_style_pop_vec2( pNkContext );
-					nk_style_pop_float( pNkContext );
-					nk_style_pop_float( pNkContext );
-					nk_style_pop_style_item( pNkContext );
-					//nk_style_pop_style_item( pNkContext );
-					nk_style_pop_style_item( pNkContext );
-				}
+		//		nk_layout_row_end( pNkContext );
+		//	}
+		//}
 
-				nk_layout_row_end( pNkContext );
-			}
-		}
+		//for( ControllerState::DeviceInstance& instance : device.instances )
+		//{
+		//	doInstanceUI( pContext, device, instance );
+		//}
 
-		for( ControllerState::DeviceInstance& instance : device.instances )
-		{
-			doInstanceUI( pContext, device, instance );
-		}
+		//nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
 
-		nk_layout_row_static( pNkContext, 25.0f, 150, 2 );
+		//nk_button_label( pNkContext, "Edit" );
+		//nk_button_label( pNkContext, "Remove" );
 
-		nk_button_label( pNkContext, "Edit" );
-		nk_button_label( pNkContext, "Remove" );
-
-		nk_group_end( pNkContext );
+		//nk_group_end( pNkContext );
 	}
 
-	void ControllerUI::doInstanceUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance )
+	void ControllerUI::doInstanceUI( UiToolboxWindow& window, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiWidgetLayoutVertical layout( window, 5.0f );
+		layout.setHStretch( 1.0f );
 
-		const char* pTypeName = "Unknown Type";
+		const char* typeName = "Unknown Type";
 		if( instance.pType != nullptr )
 		{
-			pTypeName = instance.pType->getName().toConstCharPointer();
+			typeName = instance.pType->getName();
 		}
 
 		{
-			nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
+			//nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
 
-			const struct nk_image instanceImage = ImAppImageGetBlocking( pContext, "icons/instance.png" );
-			UI::doHeaderImageLabel( pNkContext, instanceImage, pTypeName );
+			//const ImUiImage instanceImage = ImAppImageGetBlocking( pContext, "icons/instance.png" );
+			//ui::doHeaderImageLabel( window, instanceImage, typeName );
 
 			//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 2 );
 			//
@@ -385,74 +359,73 @@ namespace conct
 
 		for( ControllerState::InstanceProperty& prop : instance.properties )
 		{
-			doPropertyUI( pContext, device, instance, prop );
+			doPropertyUI( window, device, instance, prop );
 		}
 	}
 
-	void ControllerUI::doPropertyUI( ImAppContext* pContext, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop )
+	void ControllerUI::doPropertyUI( UiToolboxWindow& window, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop )
 	{
-		nk_context* pNkContext = pContext->nkContext;
+		UiWidgetLayoutHorizontal layout( window, 5.0f );
 
-		nk_layout_row_dynamic( pNkContext, 0.0f, 2 );
+		window.label( prop.pProperty->name );
 
-		nk_label( pNkContext, prop.pProperty->name.toConstCharPointer(), NK_TEXT_LEFT );
-
-		if( prop.value.getType() == ValueType_Void &&
+		if( prop.value.getType() == ValueType::Void &&
 			prop.pGetCommand != nullptr )
 		{
-			nk_label( pNkContext, "Loading...", NK_TEXT_LEFT );
+			window.label( "Loading..." );
 			return;
 		}
 
 		const ValueType valueType = prop.value.getType();
 		switch( valueType )
 		{
-		case ValueType_Void:
-			nk_label( pNkContext, "No Value", NK_TEXT_LEFT );
+		case ValueType::Void:
+			window.label( "No Value" );
 			break;
 
-		case ValueType_Boolean:
+		case ValueType::Boolean:
 			{
 				bool active = prop.value.getBoolean();
-				if( nk_checkbox_label( pNkContext, active ? "True" : "False", &active ) )
+				if( window.checkBox( active, active ? "True" : "False" ) )
 				{
 					ValueHigh newValue;
 					newValue.setBoolean( active );
 
-					m_pState->changeProperty( device, instance, prop, newValue );
+					m_state->changeProperty( device, instance, prop, newValue );
 				}
 			}
 			break;
 
-		case ValueType_Integer:
-		case ValueType_Unsigned:
+		case ValueType::Integer:
+		case ValueType::Unsigned:
 			{
-				const sint64 value = valueType == ValueType_Integer ? prop.value.getInteger() : prop.value.getUnsigned();
-				nk_labelf( pNkContext, NK_TEXT_LEFT, "%d", value );
+				const sint64 value = valueType == ValueType::Integer ? prop.value.getInteger() : prop.value.getUnsigned();
+				window.labelFormat( "%d", value );
 			}
 			break;
 
-		case ValueType_PercentValue:
+		case ValueType::PercentValue:
 			{
-				const int oldIntValue = (int)prop.value.getPercentValue();
-				const int newIntValue = nk_slide_int( pNkContext, 0, oldIntValue, 65535, 65535 / 100 );
-				if( newIntValue != oldIntValue )
+				const float oldValue = (float)prop.value.getPercentValue();
+
+				float newValue = oldValue;
+				if( window.slider( newValue, 0.0f, 65535.0f ) )
 				{
-					ValueHigh newValue;
-					newValue.setPercentValue( (PercentValue)newIntValue );
+					ValueHigh newValue2;
+					newValue2.setPercentValue( (PercentValue)newValue );
 
-					m_pState->changeProperty( device, instance, prop, newValue );
+					m_state->changeProperty( device, instance, prop, newValue2 );
 				}
 			}
 			break;
 
-		case ValueType_DeviceId:
-		case ValueType_InstanceId:
-		case ValueType_TypeCrc:
-		case ValueType_String:
-		case ValueType_Struct:
-		case ValueType_Array:
-			nk_label( pNkContext, "Not Implemented", NK_TEXT_LEFT );
+		case ValueType::DeviceId:
+		case ValueType::InstanceId:
+		case ValueType::TypeCrc:
+		case ValueType::String:
+		case ValueType::Struct:
+		case ValueType::Array:
+			window.label( "Not Implemented" );
 			break;
 
 		default:
@@ -460,50 +433,50 @@ namespace conct
 		}
 	}
 
-	float ControllerUI::getDeviceHeight( nk_context* pNkContext, const ControllerState::ConnectedDevice& device ) const
-	{
-		float height = pNkContext->style.window.border;
-		height += pNkContext->style.font->height;
-		height += pNkContext->style.window.header.label_padding.y * 2.0f;
-		height += pNkContext->style.window.header.padding.y * 2.0f;
-		height += pNkContext->style.window.spacing.y * 2.0f;
+	//float ControllerUI::getDeviceHeight( nk_context* pNkContext, const ControllerState::ConnectedDevice& device ) const
+	//{
+	//	float height = pNkContext->style.window.border;
+	//	height += pNkContext->style.font->height;
+	//	height += pNkContext->style.window.header.label_padding.y * 2.0f;
+	//	height += pNkContext->style.window.header.padding.y * 2.0f;
+	//	height += pNkContext->style.window.spacing.y * 2.0f;
 
-		for( const ControllerState::DeviceInstance& instance : device.instances )
-		{
-			height += getInstanceHeight( pNkContext, instance );
-		}
+	//	for( const ControllerState::DeviceInstance& instance : device.instances )
+	//	{
+	//		height += getInstanceHeight( pNkContext, instance );
+	//	}
 
-		return height;
-	}
+	//	return height;
+	//}
 
-	float ControllerUI::getInstanceHeight( nk_context* pNkContext, const ControllerState::DeviceInstance& instance ) const
-	{
-		float height = pNkContext->style.window.group_border * 2.0f;
-		height += pNkContext->style.font->height;
-		height += pNkContext->style.window.header.label_padding.y * 2.0f;
-		height += pNkContext->style.window.header.padding.y * 2.0f;
-		height += pNkContext->style.window.spacing.y * 2.0f;
+	//float ControllerUI::getInstanceHeight( nk_context* pNkContext, const ControllerState::DeviceInstance& instance ) const
+	//{
+	//	float height = pNkContext->style.window.group_border * 2.0f;
+	//	height += pNkContext->style.font->height;
+	//	height += pNkContext->style.window.header.label_padding.y * 2.0f;
+	//	height += pNkContext->style.window.header.padding.y * 2.0f;
+	//	height += pNkContext->style.window.spacing.y * 2.0f;
 
-		for( const ControllerState::InstanceProperty& prop : instance.properties )
-		{
-			height += getPropertyHeight( pNkContext, prop );
-		}
+	//	for( const ControllerState::InstanceProperty& prop : instance.properties )
+	//	{
+	//		height += getPropertyHeight( pNkContext, prop );
+	//	}
 
-		return height;
-	}
+	//	return height;
+	//}
 
-	float ControllerUI::getPropertyHeight( nk_context* pNkContext, const ControllerState::InstanceProperty& prop ) const
-	{
-		float height = pNkContext->style.font->height;
-		height += pNkContext->style.window.padding.y * 2.0f;
-		height += pNkContext->style.window.spacing.y * 2.0f;
+	//float ControllerUI::getPropertyHeight( nk_context* pNkContext, const ControllerState::InstanceProperty& prop ) const
+	//{
+	//	float height = pNkContext->style.font->height;
+	//	height += pNkContext->style.window.padding.y * 2.0f;
+	//	height += pNkContext->style.window.spacing.y * 2.0f;
 
-		return height;
-	}
+	//	return height;
+	//}
 
 	void ControllerUI::changeState( State state )
 	{
-		m_state = state;
+		m_menuState = state;
 
 		switch( state )
 		{

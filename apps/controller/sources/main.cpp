@@ -4,30 +4,29 @@
 
 #include <imapp/imapp.h>
 
-void* __cdecl ImAppProgramInitialize( ImAppParameters* pParameters )
+void* __cdecl ImAppProgramInitialize( ImAppParameters* parameters, int argc, char* argv[] )
 {
-	pParameters->windowTitle		= "Conct";
-	pParameters->defaultFullWindow	= false;
-	pParameters->tickIntervalMs		= 100u;
+	parameters->windowTitle		= "Conct";
+	parameters->tickIntervalMs	= 100u;
 
-	conct::ControllerApp* pApp = new conct::ControllerApp();
-	if( !pApp->setup() )
+	conct::ControllerApp* conctApp = new conct::ControllerApp();
+	if( !conctApp->setup() )
 	{
-		delete pApp;
+		delete conctApp;
 		return nullptr;
 	}
 
-	return pApp;
+	return conctApp;
 }
 
-void __cdecl ImAppProgramDoUi( ImAppContext* pImAppContext, void* pProgramContext )
+void __cdecl ImAppProgramDoDefaultWindowUi( ImAppContext* imapp, void* programContext, ImUiSurface* surface )
 {
-	conct::ControllerApp* pApp = (conct::ControllerApp*)pProgramContext;
-	pApp->doUI( pImAppContext );
+	conct::ControllerApp* conctApp = (conct::ControllerApp*)programContext;
+	conctApp->doUI( imapp, surface );
 }
 
-void __cdecl ImAppProgramShutdown( ImAppContext* pImAppContext, void* pProgramContext )
+void __cdecl ImAppProgramShutdown( ImAppContext* pImAppContext, void* programContext )
 {
-	conct::ControllerApp* pApp = (conct::ControllerApp*)pProgramContext;
-	delete pApp;
+	conct::ControllerApp* conctApp = (conct::ControllerApp*)programContext;
+	delete conctApp;
 }

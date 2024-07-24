@@ -2,7 +2,7 @@
 
 #include "conct_device.h"
 #include "conct_core.h"
-#include "conct_array_view.h"
+#include <tiki/tiki_array_view.h>
 
 namespace conct
 {
@@ -41,19 +41,19 @@ namespace conct
 		return false;
 	}
 
-	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
+	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const
 	{
 		Device* pTypedInstance = static_cast< Device* >( pInstance );
 
-		if( nameCrc == 0xb733 )
+		if( nameCrc == 0xd74c )
 		{
-			targetValueBuilder.setArray( pTypedInstance->findInstances( parameters[ 0u ].getTypeCrc() ) );
+			targetValueBuilder.setArray( pTypedInstance->FindInstances( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 
-		if( nameCrc == 0xe2a7 )
+		if( nameCrc == 0x28be )
 		{
-			targetValueBuilder.setStruct( pTypedInstance->findFirstInstance( parameters[ 0u ].getTypeCrc() ) );
+			targetValueBuilder.setStruct( pTypedInstance->FindFirstInstance( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 

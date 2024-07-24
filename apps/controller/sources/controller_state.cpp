@@ -1,12 +1,13 @@
 #include "controller_state.h"
 
+#include "conct_filesystem.h"
 #include "conct_interface_type.h"
 
 namespace conct
 {
-	bool ControllerState::setup( ControllerConfig& config, RuntimeHigh& runtime )
+	bool ControllerState::setup( ControllerConfig& config, Runtime& runtime )
 	{
-		const Path exePath = Path::getExecutablePath();
+		const Path exePath = filesystem::getExecutablePath();
 		const Path basePath = exePath.getParent().getParent().getParent().getParent().getParent().getParent();
 		const Path typesPath = basePath.push( "config/types"_s );
 
@@ -60,10 +61,10 @@ namespace conct
 			return;
 		}
 
-		ConnectionVector lostConnections = m_connections;
+		ConnectionArray lostConnections = m_connections;
 		m_connections.clear();
 
-		const ControllerConfig::ConnectionVector& connections = m_pConfig->getConnections();
+		const ControllerConfig::ConnectionArray& connections = m_pConfig->getConnections();
 		for( const ControllerConfig::Connection& configConnection : connections )
 		{
 			Connection* pConnection = nullptr;
@@ -102,7 +103,7 @@ namespace conct
 		//DeviceVector lostDevices = m_devices;
 		//m_devices.clear();
 
-		Vector< DeviceConnection > devices;
+		DynamicArray< DeviceConnection > devices;
 		m_pRuntime->getDevices( devices );
 
 		DeviceAddress address;
@@ -147,7 +148,7 @@ namespace conct
 	ControllerState::Connection* ControllerState::createConnection( const DynamicString& hostname, uint16 port )
 	{
 		Connection* pConnection = new Connection();
-		
+
 		pConnection->hostname	= hostname;
 		pConnection->port		= port;
 
@@ -246,7 +247,7 @@ namespace conct
 		{
 			if( pDevice->pInstancesCommand->isOk() )
 			{
-				const ArrayView< Instance > instances = pDevice->pInstancesCommand->getValue().getArray< Instance >();
+				const ConstArrayView< Instance > instances = pDevice->pInstancesCommand->getValue().getArray< Instance >();
 				for( const Instance& instanceData : instances )
 				{
 					if( instanceData.type == 0x6435u )
@@ -279,7 +280,7 @@ namespace conct
 		{
 			if( pDevice->pDevicesCommand->isOk() )
 			{
-				const ArrayView< DeviceConnection > connectedDevices = pDevice->pDevicesCommand->getValue().getArray< DeviceConnection >();
+				const ConstArrayView< DeviceConnection > connectedDevices = pDevice->pDevicesCommand->getValue().getArray< DeviceConnection >();
 				for( const DeviceConnection& connectedDevice : connectedDevices )
 				{
 					DeviceAddress address = pDevice->address;

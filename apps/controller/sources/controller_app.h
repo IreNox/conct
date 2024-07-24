@@ -1,7 +1,6 @@
 #pragma once
 
 #include "conct_device.h"
-#include "conct_runtime_high.h"
 
 #include "device_controller.h"
 
@@ -24,7 +23,7 @@ namespace conct
 
 		bool				setup();
 
-		void				doUI( ImAppContext* pConext );
+		void				doUI( ImAppContext* conext, ImUiSurface* surface );
 
 	private:
 

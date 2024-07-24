@@ -1,29 +1,25 @@
 #pragma once
 
-struct nk_context;
-struct nk_image;
+namespace imui
+{
+	class UiWindow;
+}
 
 namespace conct
 {
-	struct UiWidget
-	{
-					UiWidget( nk_context* pNkContext );
-					~UiWidget();
-
-		nk_context*	pNkContext;
-	};
+	using namespace imui;
 
 	struct UiHeader : UiWidget
 	{
-					UiHeader( nk_context* pNkContext, const char* pId );
+					UiHeader( UiToolboxWindow& window, const char* name );
 					~UiHeader();
 
 		bool		isVisible;
 	};
 
-	struct UI
+	namespace ui
 	{
-		static void doHeaderLabel( nk_context* pNkContext, const char* pText );
-		static void	doHeaderImageLabel( nk_context* pNkContext, const struct nk_image& image, const char* pText );
+		void		doHeaderLabel( UiToolboxWindow& window, const char* text );
+		void		doHeaderImageLabel( UiToolboxWindow& window, const ImUiImage& image, const char* text );
 	};
 }

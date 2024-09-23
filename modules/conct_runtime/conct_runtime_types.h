@@ -17,9 +17,6 @@ namespace conct
 	static const CommandId InvalidCommandId = 0u;
 	static const CommandId FirstCommandId = 1u;
 
-	typedef RelativePointer8< const char > RelativeStringPointer;
-	typedef RelativeArray8< Value > RelativeValueArray;
-
 	struct DeviceAddress
 	{
 		enum
@@ -138,21 +135,19 @@ namespace conct
 
 	struct GetPropertyResponse
 	{
-		Value					value;
 	};
 
 	struct SetPropertyRequest
 	{
 		InstanceId				instanceId;
 		uint16					nameCrc;
-		Value					value;
 	};
 
 	struct CallFunctionRequest
 	{
 		InstanceId				instanceId;
 		uint16					nameCrc;
-		RelativeValueArray		arguments;
+		uint16					argumentCount;
 	};
 
 	struct CallFunctionResponse

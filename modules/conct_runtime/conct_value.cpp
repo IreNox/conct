@@ -1,250 +1,181 @@
 #include "conct_value.h"
 
-#include <tiki/tiki_memory.h>
-
 namespace conct
 {
-	struct StringValueData
+	Value::Value()
+		: m_type( ValueType::Void )
 	{
-		uint16				offset;
-	};
-
-	struct StructValueData
-	{
-		uint16				offset;
-		uint16				size;
-		TypeCrc				type;
-	};
-
-	struct ArrayValueData
-	{
-		uint16				offset;
-		uint8				size;
-		uint8				length;
-		TypeCrc				type;
-	};
-
-	union ValueData
-	{
-		bool				boolean;
-		sint32				integer;
-		uint32				unsignedInteger;
-		PercentValue		percent;
-		DeviceId			device;
-		InstanceId			instanceId;
-		TypeCrc				type;
-		StringValueData		string;
-		StructValueData		structure;
-		ArrayValueData		array;
-	};
-
-	ValueData getData( const uint8 data[ 6u ] )
-	{
-		ValueData result;
-		memory::copy( &result, data, 6u );
-		return result;
 	}
 
-	void setData( uint8 data[ 6u ], const ValueData& sourceData )
+	ValueType Value::getType() const
 	{
-		memory::copy( data, &sourceData, 6u );
+		return m_type;
 	}
 
 	bool Value::getBoolean() const
 	{
-		TIKI_ASSERT( type == ValueType::Boolean );
-		return getData( data ).boolean;
+		TIKI_ASSERT( m_type == ValueType::Boolean );
+		return m_data.boolean;
 	}
 
 	sint32 Value::getInteger() const
 	{
-		TIKI_ASSERT( type == ValueType::Integer );
-		return getData( data ).integer;
+		TIKI_ASSERT( m_type == ValueType::Integer );
+		return m_data.integer;
 	}
 
 	uint32 Value::getUnsigned() const
 	{
-		TIKI_ASSERT( type == ValueType::Unsigned );
-		return getData( data ).unsignedInteger;
+		TIKI_ASSERT( m_type == ValueType::Unsigned );
+		return m_data.unsignedInteger;
 	}
 
-	const char* Value::getString() const
+	StringView Value::getString() const
 	{
-		TIKI_ASSERT( type == ValueType::String );
-		const ValueData valueData = getData( data );
-		if( valueData.string.offset == 0u )
-		{
-			return nullptr;
-		}
-
-		return addPointerCast< char >( this, valueData.string.offset );
+		TIKI_ASSERT( m_type == ValueType::String );
+		return StringView( (const char*)m_buffer.getData(), m_buffer.getLength() - 1u );
 	}
 
 	PercentValue Value::getPercentValue() const
 	{
-		TIKI_ASSERT( type == ValueType::PercentValue );
-		return getData( data ).percent;
+		TIKI_ASSERT( m_type == ValueType::PercentValue );
+		return m_data.percent;
 	}
 
 	DeviceId Value::getDeviceId() const
 	{
-		TIKI_ASSERT( type == ValueType::DeviceId );
-		return getData( data ).device;
+		TIKI_ASSERT( m_type == ValueType::DeviceId );
+		return m_data.device;
 	}
 
 	InstanceId Value::getInstanceId() const
 	{
-		TIKI_ASSERT( type == ValueType::InstanceId );
-		return getData( data ).instanceId;
+		TIKI_ASSERT( m_type == ValueType::InstanceId );
+		return m_data.instanceId;
 	}
 
 	TypeCrc Value::getTypeCrc() const
 	{
-		TIKI_ASSERT( type == ValueType::TypeCrc );
-		return getData( data ).type;
+		TIKI_ASSERT( m_type == ValueType::TypeCrc );
+		return m_data.type;
 	}
 
 	const void* Value::getStructData() const
 	{
-		TIKI_ASSERT( type == ValueType::Struct );
-		const ValueData valueData = getData( data );
-		if( valueData.structure.offset == 0u )
-		{
-			return nullptr;
-		}
-
-		return addPointer( this, valueData.structure.offset );
+		TIKI_ASSERT( m_type == ValueType::Struct );
+		return m_buffer.getData();
 	}
 
-	uint16 Value::getStructSize() const
+	uintsize Value::getStructSize() const
 	{
-		TIKI_ASSERT( type == ValueType::Struct );
-		return getData( data ).structure.size;
+		TIKI_ASSERT( m_type == ValueType::Struct );
+		return m_data.structure.size;
 	}
 
 	TypeCrc Value::getStructType() const
 	{
-		TIKI_ASSERT( type == ValueType::Struct );
-		return getData( data ).structure.type;
+		TIKI_ASSERT( m_type == ValueType::Struct );
+		return m_data.structure.type;
 	}
 
 	const void* Value::getArrayData() const
 	{
-		TIKI_ASSERT( type == ValueType::Array );
-		const ValueData valueData = getData( data );
-		if( valueData.array.offset == 0u )
-		{
-			return nullptr;
-		}
-
-		return addPointer( this, valueData.array.offset );
+		TIKI_ASSERT( m_type == ValueType::Array );
+		return m_buffer.getData();
 	}
 
-	uint8 Value::getArrayElementSize() const
+	uintsize Value::getArrayElementSize() const
 	{
-		TIKI_ASSERT( type == ValueType::Array );
-		return getData( data ).array.size;
+		TIKI_ASSERT( m_type == ValueType::Array );
+		return m_data.array.elementSize;
 	}
 
-	uint8 Value::getArrayLength() const
+	uintsize Value::getArrayLength() const
 	{
-		TIKI_ASSERT( type == ValueType::Array );
-		return getData( data ).array.length;
+		TIKI_ASSERT( m_type == ValueType::Array );
+		return m_data.array.length;
 	}
 
 	TypeCrc Value::getArrayType() const
 	{
-		TIKI_ASSERT( type == ValueType::Array );
-		return getData( data ).array.type;
+		TIKI_ASSERT( m_type == ValueType::Array );
+		return m_data.array.type;
 	}
 
 	void Value::setVoid()
 	{
-		type = ValueType::Void;
+		m_type = ValueType::Void;
 	}
 
 	void Value::setBoolean( bool value )
 	{
-		type = ValueType::Boolean;
-		ValueData valueData;
-		valueData.boolean = value;
-		setData( data, valueData );
+		m_type = ValueType::Boolean;
+		m_data.boolean = value;
 	}
 
 	void Value::setInteger( sint32 value )
 	{
-		type = ValueType::Integer;
-		ValueData valueData;
-		valueData.integer = value;
-		setData( data, valueData );
+		m_type = ValueType::Integer;
+		m_data.integer = value;
 	}
 
 	void Value::setUnsigned( uint32 value )
 	{
-		type = ValueType::Unsigned;
-		ValueData valueData;
-		valueData.unsignedInteger = value;
-		setData( data, valueData );
+		m_type = ValueType::Unsigned;
+		m_data.unsignedInteger = value;
 	}
 
 	void Value::setPercentValue( PercentValue value )
 	{
-		type = ValueType::PercentValue;
-		ValueData valueData;
-		valueData.percent = value;
-		setData( data, valueData );
+		m_type = ValueType::PercentValue;
+		m_data.percent = value;
+	}
+
+	void Value::setString( const char* value )
+	{
+		setString( StringView( value ) );
+	}
+
+	void Value::setString( const StringView& value )
+	{
+		m_type = ValueType::String;
+		m_buffer.assign( value.cast< byte >() );
 	}
 
 	void Value::setDeviceId( DeviceId value )
 	{
-		type = ValueType::DeviceId;
-		ValueData valueData;
-		valueData.device = value;
-		setData( data, valueData );
+		m_type = ValueType::DeviceId;
+		m_data.device = value;
 	}
 
 	void Value::setInstanceId( InstanceId value )
 	{
-		type = ValueType::InstanceId;
-		ValueData valueData;
-		valueData.instanceId = value;
-		setData( data, valueData );
+		m_type = ValueType::InstanceId;
+		m_data.instanceId = value;
 	}
 
 	void Value::setTypeCrc( TypeCrc value )
 	{
-		type = ValueType::TypeCrc;
-		ValueData valueData;
-		valueData.type = value;
-		setData( data, valueData );
+		m_type = ValueType::TypeCrc;
+		m_data.type = value;
 	}
 
-	void Value::setString( uint16 offset )
+	void Value::setStructData( const void* data, uint32 size, TypeCrc typeCrc )
 	{
-		type = ValueType::String;
-		ValueData valueData;
-		valueData.string.offset = offset;
-		setData( data, valueData );
+		m_type = ValueType::Struct;
+		m_data.structure.size = size;
+		m_data.structure.type = typeCrc;
+
+		m_buffer.assign( (const uint8*)data, size );
 	}
 
-	void Value::setStruct( uint16 offset, uint16 size, TypeCrc typeCrc )
+	void Value::setArrayData( const void* data, uint32 elementSize, uint32 length, TypeCrc typeCrc )
 	{
-		type = ValueType::Struct;
-		ValueData valueData;
-		valueData.structure.offset = offset;
-		valueData.structure.size = size;
-		valueData.structure.type = typeCrc;
-		setData( data, valueData );
-	}
+		m_type = ValueType::Array;
+		m_data.array.elementSize	= elementSize;
+		m_data.array.length			= length;
+		m_data.array.type			= typeCrc;
 
-	void Value::setArray( uint16 offset, uint8 size, uint8 length, TypeCrc typeCrc )
-	{
-		type = ValueType::Array;
-		ValueData valueData;
-		valueData.array.offset = offset;
-		valueData.array.size = size;
-		valueData.array.length = length;
-		valueData.array.type = typeCrc;
-		setData( data, valueData );
+		m_buffer.assign( (const uint8*)data, elementSize * length );
 	}
 }

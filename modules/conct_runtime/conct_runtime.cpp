@@ -1,6 +1,5 @@
 #include "conct_runtime.h"
 
-#include "conct_buffered_value_builder.h"
 #include "conct_command.h"
 #include "conct_crc16.h"
 #include "conct_device.h"
@@ -9,7 +8,6 @@
 #include "conct_reader.h"
 #include "conct_runtime.h"
 #include "conct_trace.h"
-#include "conct_value_high.h"
 #include "conct_writer.h"
 
 #include <tiki/tiki_path.h>
@@ -290,7 +288,7 @@ namespace conct
 
 		case MessageType_GetPropertyRequest:
 			{
-				BufferedValueBuilder< 1024u > valueBuilder;
+				DynamicArray< byte > valueData;
 				{
 					const GetPropertyRequest& request = *reinterpret_cast< const GetPropertyRequest* >( package.payload.getData() );
 
@@ -301,23 +299,27 @@ namespace conct
 						return;
 					}
 
-					if( !pInstance->pProxy->getProperty( valueBuilder, pInstance->pInstance, request.nameCrc ) )
+					Value value;
+					if( !pInstance->pProxy->getProperty( value, pInstance->pInstance, request.nameCrc ) )
 					{
 						sendErrorResponse( package, MessageType_GetPropertyResponse, ResultId_NoSuchField );
 						return;
 					}
+
+					value.serialize( valueData );
 				}
 
-				sendResponse( package, valueBuilder.toArrayView(), MessageType_GetPropertyResponse );
+				sendResponse( package, valueData, MessageType_GetPropertyResponse );
 			}
 			break;
 
 		case MessageType_GetPropertyResponse:
 			{
-				const GetPropertyResponse& response = *( const GetPropertyResponse* )package.payload.getData();
+				Value value;
+				value.deserialize( package.payload );
 
 				ValueCommand* pValueCommand = static_cast< ValueCommand* >( pCommand );
-				pValueCommand->setResponse( package.baseHeader.messageResult, response.value );
+				pValueCommand->setResponse( package.baseHeader.messageResult, value );
 			}
 			break;
 
@@ -332,7 +334,10 @@ namespace conct
 					return;
 				}
 
-				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.nameCrc, request.value ) )
+				Value value;
+				value.deserialize( package.payload.getRange( sizeof( request ) ) );
+
+				if( !pInstance->pProxy->setProperty( pInstance->pInstance, request.nameCrc, value ) )
 				{
 					sendErrorResponse( package, MessageType_SetPropertyResponse, ResultId_NoSuchField );
 					return;
@@ -350,7 +355,7 @@ namespace conct
 
 		case MessageType_CallFunctionRequest:
 			{
-				BufferedValueBuilder< 1024u > valueBuilder;
+				DynamicArray< byte > valueData;
 				{
 					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( package.payload.getData() );
 
@@ -361,14 +366,17 @@ namespace conct
 						return;
 					}
 
-					if( !pInstance->pProxy->callFunction( valueBuilder, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
+					Value value;
+					if( !pInstance->pProxy->callFunction( value, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
 					{
 						sendErrorResponse( package, MessageType_CallFunctionRequest, ResultId_NoSuchField );
 						return;
 					}
+
+					value.serialize( valueData );
 				}
 
-				sendResponse( package, valueBuilder.toArrayView(), MessageType_CallFunctionResponse );
+				sendResponse( package, valueData, MessageType_CallFunctionResponse );
 			}
 			break;
 

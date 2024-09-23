@@ -1,7 +1,6 @@
 #include "conct_controller.h"
 
 #include "conct_crc16.h"
-#include "conct_data_builder.h"
 #include "conct_runtime.h"
 
 namespace conct
@@ -51,42 +50,42 @@ namespace conct
 
 	ValueCommand* Controller::getProperty( const RemoteInstance& instance, const char* pName )
 	{
-		BufferedDataBuilder< 1024u > dataBuilder;
-		GetPropertyRequest* pRequest = dataBuilder.pushStruct< GetPropertyRequest >();
-		pRequest->instanceId	= instance.id;
-		pRequest->nameCrc		= calculateStringCrc16( pName );
+		GetPropertyRequest request;
+		request.instanceId	= instance.id;
+		request.nameCrc		= calculateStringCrc16( pName );
 
-		return beginCommand< ValueCommand >( instance.address, dataBuilder, MessageType_GetPropertyRequest );
+		const ConstArrayView< byte > payload( (const byte*)&request, sizeof(request));
+		return beginCommand< ValueCommand >( instance.address, payload, MessageType_GetPropertyRequest );
 	}
 
-	Command* Controller::setProperty( const RemoteInstance& instance, const char* pName, const ValueHigh& value )
+	Command* Controller::setProperty( const RemoteInstance& instance, const char* pName, const Value& value )
 	{
-		BufferedDataBuilder< 1024u > dataBuilder;
-		SetPropertyRequest* pRequest = dataBuilder.pushStruct< SetPropertyRequest >();
+		DynamicArray< byte > payload;
+
+		SetPropertyRequest* pRequest = (SetPropertyRequest*)payload.pushRange( sizeof( SetPropertyRequest ) ).getData();
 		pRequest->instanceId	= instance.id;
 		pRequest->nameCrc		= calculateStringCrc16( pName );
 
-		dataBuilder.pushValueData( &pRequest->value, &value );
+		value.serialize( payload );
 
-		return beginCommand< Command >( instance.address, dataBuilder, MessageType_SetPropertyRequest );
+		return beginCommand< Command >( instance.address, payload, MessageType_SetPropertyRequest );
 	}
 
-	ValueCommand* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ArrayView< ValueHigh >& arguments )
+	ValueCommand* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ConstArrayView< Value >& arguments )
 	{
-		BufferedDataBuilder< 1024u > dataBuilder;
-		CallFunctionRequest* pRequest = dataBuilder.pushStruct< CallFunctionRequest >();
+		DynamicArray< byte > payload;
+
+		CallFunctionRequest* pRequest = (CallFunctionRequest*)payload.pushRange( sizeof( CallFunctionRequest ) ).getData();
 		pRequest->instanceId	= instance.id;
 		pRequest->nameCrc		= calculateStringCrc16( pName );
+		pRequest->argumentCount	= (uint16)arguments.getLength();
 
-		ArrayView< Value > workingArguments = dataBuilder.pushArray< Value >( arguments.getLength() );
-		pRequest->arguments = workingArguments;
-
-		for( uintreg i = 0u; i < workingArguments.getLength(); ++i )
+		for( uintreg i = 0u; i < arguments.getLength(); ++i )
 		{
-			dataBuilder.pushValueData( &workingArguments[ i ], &arguments[ i ] );
+			arguments[ i ].serialize( payload );
 		}
 
-		return beginCommand< ValueCommand >( instance.address, dataBuilder, MessageType_CallFunctionRequest );
+		return beginCommand< ValueCommand >( instance.address, payload, MessageType_CallFunctionRequest );
 	}
 
 	void Controller::releaseCommand( Command* pCommand )
@@ -112,14 +111,9 @@ namespace conct
 	}
 
 	template< class TCommand >
-	TCommand* Controller::beginCommand( const DeviceAddress& deviceAddress, const DataBuilder& payload, MessageType messageType )
+	TCommand* Controller::beginCommand( const DeviceAddress& deviceAddress, const ConstArrayView< byte >& payload, MessageType messageType )
 	{
 		TIKI_ASSERT( m_pRuntime != nullptr );
-
-		if( payload.isExceeded() )
-		{
-			return nullptr;
-		}
 
 		const DeviceId deviceId = deviceAddress.address[ 0u ];
 		const CommandId commandId = m_pRuntime->getNextCommandId( deviceId );
@@ -129,7 +123,7 @@ namespace conct
 		}
 
 		TCommand* pCommand = new TCommand( commandId );
-		if( m_pRuntime->sendCommandPackage( pCommand, deviceAddress, payload.toArrayView(), messageType ) != ResultId_Success )
+		if( m_pRuntime->sendCommandPackage( pCommand, deviceAddress, payload, messageType ) != ResultId_Success )
 		{
 			delete pCommand;
 			pCommand = nullptr;

@@ -52,15 +52,15 @@ namespace conct
 		DynamicString		m_editHostname;
 		DynamicString		m_editPort;
 
-		void				doMenuUI( ImAppContext* context, UiSurface& surface, float menuWidth );
+		void				doMenuUI( ImAppContext* imapp, UiSurface& surface, float menuWidth, float menuOffset );
 
 		void				doHomeUI( UiToolboxWindow& window );
-		void				doDevicesUI( UiToolboxWindow& window );
+		void				doDevicesUI( ImAppContext* imapp, UiToolboxWindow& window );
 		void				doConnectionsUI( UiToolboxWindow& window );
 		void				doConnectionEditUI( UiToolboxWindow& window );
 		void				doCreditsUI( UiToolboxWindow& window );
 
-		void				doDeviceUI( UiToolboxWindow& window, ControllerState::ConnectedDevice& device );
+		void				doDeviceUI( ImAppContext* imapp, UiToolboxWindow& window, ControllerState::ConnectedDevice& device );
 		void				doInstanceUI( UiToolboxWindow& window, const ControllerState::ConnectedDevice& device, ControllerState::DeviceInstance& instance );
 		void				doPropertyUI( UiToolboxWindow& window, const ControllerState::ConnectedDevice& device, const ControllerState::DeviceInstance& instance, ControllerState::InstanceProperty& prop );
 

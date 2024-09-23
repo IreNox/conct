@@ -6,8 +6,11 @@
 
 void* __cdecl ImAppProgramInitialize( ImAppParameters* parameters, int argc, char* argv[] )
 {
-	parameters->windowTitle		= "Conct";
-	parameters->tickIntervalMs	= 100u;
+	parameters->tickIntervalMs		= 100u;
+	parameters->resPath				= "./../../../assets";
+	parameters->defaultResPak		= "controller";
+	parameters->windowTitle			= "Conct";
+	parameters->windowClearColor	= ImUiColorCreate( 0xf7, 0xf7, 0xf7, 0xff );
 
 	conct::ControllerApp* conctApp = new conct::ControllerApp();
 	if( !conctApp->setup() )
@@ -21,6 +24,8 @@ void* __cdecl ImAppProgramInitialize( ImAppParameters* parameters, int argc, cha
 
 void __cdecl ImAppProgramDoDefaultWindowUi( ImAppContext* imapp, void* programContext, ImUiSurface* surface )
 {
+	ImAppResPakActivateTheme( ImAppResourceGetDefaultPak( imapp ), "theme" );
+
 	conct::ControllerApp* conctApp = (conct::ControllerApp*)programContext;
 	conctApp->doUI( imapp, surface );
 }

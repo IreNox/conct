@@ -64,7 +64,7 @@ namespace conct
 			ValueCommand*				pGetCommand			= nullptr;
 			Command*					pSetCommand			= nullptr;
 
-			ValueHigh					value;
+			Value						value;
 			bool						hasValueChanged		= false;
 		};
 
@@ -80,7 +80,7 @@ namespace conct
 
 		const DeviceArray&				getDevices() const { return m_devices; }
 
-		void							changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const ValueHigh& value );
+		void							changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const Value& value );
 
 	private:
 

@@ -22,30 +22,30 @@ namespace conct
 		m_editPort.reserve( 32u );
 	}
 
-	void ControllerUI::doUI( ImAppContext* context, ImUiSurface* rawSurface )
+	void ControllerUI::doUI( ImAppContext* imapp, ImUiSurface* rawSurface )
 	{
 		UiSurface surface( rawSurface );
 
 		const bool showMenuAlways	= (float( surface.getSize().width ) / surface.getSize().height) > 1.5f;
 		const bool showMenu			= m_isMenuOpen || showMenuAlways;
-		const float menuWidth		= showMenu ? floorf( max( 200.0f, surface.getSize().width / 5.0f ) ) : 0.0f;
+		const float menuWidth		= floorf( max( 200.0f, surface.getSize().width / 5.0f ) );
 
-		if( showMenu )
-		{
-			doMenuUI( context, surface, menuWidth );
-		}
-
-		UiRect contentRect = surface.getRect();
-		contentRect.shrinkBorder( UiBorder( 0.0f, menuWidth, 0.0f, 0.0f ) );
-
+		const UiRect contentRect = surface.getRect().shrinkBorder( UiBorder( 0.0f, showMenu ? menuWidth : 0.0f, 0.0f, 0.0f ) );
 		UiToolboxWindow contentWindow( surface, "Content", contentRect, 1u );
 
-		UiWidgetLayoutVertical mainLayout( contentWindow );
-		mainLayout.setMargin( UiBorder( 15.0f ) );
+		UiWidgetLayoutVertical mainLayout( contentWindow, 5.0f );
+		mainLayout.setHStretch( 1.0f );
+		mainLayout.setMargin( UiBorder( 10.0f ) );
+
+		//UiAnimation< float > menuAnimation( mainLayout, -menuWidth, 0.0f, 5.0f, !showMenu );
+		if( showMenu )
+		{
+			doMenuUI( imapp, surface, menuWidth, 0.0f ); // menuAnimation.getValue() );
+		}
 
 		if( !showMenuAlways )
 		{
-			const struct ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( context, "icons/menu.png" ) );
+			const struct ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( imapp, "icons/menu.png" ) );
 			if( contentWindow.buttonIcon( image ) )
 			{
 				m_isMenuOpen = !m_isMenuOpen;
@@ -53,12 +53,20 @@ namespace conct
 		}
 
 		{
-			const char* iconName		= getStateIcon( m_menuState );
-			const struct ImUiImage img	= ImAppImageGetImage( ImAppImageLoadResource( context, iconName ) );
-			contentWindow.image( img );
-		}
+			UiWidgetLayoutHorizontal titleLayout( contentWindow, 10.0f );
+			titleLayout.setHStretch( 1.0f );
+			titleLayout.setPadding( UiBorder( 5.0f ) );
 
-		contentWindow.label( getStateTitle( m_menuState ) );
+			titleLayout.drawSkin( UiToolboxConfig::getSkin( ImUiToolboxSkin_Button ), UiToolboxConfig::getColor( ImUiToolboxColor_Button ) );
+
+			{
+				const char* iconName		= getStateIcon( m_menuState );
+				const struct ImUiImage img	= ImAppImageGetImage( ImAppImageLoadResource( imapp, iconName ) );
+				contentWindow.image( img );
+			}
+
+			contentWindow.label( getStateTitle( m_menuState ) );
+		}
 
 		switch( m_menuState )
 		{
@@ -67,7 +75,7 @@ namespace conct
 			break;
 
 		case ControllerUI::State::Devices:
-			doDevicesUI( contentWindow );
+			doDevicesUI( imapp, contentWindow );
 			break;
 
 		case ControllerUI::State::Connections:
@@ -84,9 +92,10 @@ namespace conct
 		}
 	}
 
-	void ControllerUI::doMenuUI( ImAppContext* context, UiSurface& surface, float menuWidth )
+	void ControllerUI::doMenuUI( ImAppContext* imapp, UiSurface& surface, float menuWidth, float menuOffset )
 	{
 		UiRect menuRect = surface.getRect();
+		menuRect.pos.x += menuOffset;
 		menuRect.size.width = menuWidth;
 
 		UiToolboxWindow menuWindow( surface, "Menu", menuRect, 2 );
@@ -96,12 +105,22 @@ namespace conct
 		//	m_isMenuOpen = false;
 		//}
 
-		UiWidgetLayoutVertical menuLayout( menuWindow );
+		UiWidgetLayoutVertical menuLayout( menuWindow, 5.0f );
+		menuLayout.setVStretch( 1.0f );
+
+		menuLayout.drawColor( UiColor::CreateGray( 96u ) );
 
 		{
-			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( context, "bg/menu_header.png" ) );
-			// TODO: size;
-			menuWindow.image( image );
+			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( imapp, "bg/menu_header.png" ) );
+			//const ImUiImage image = ImAppResPakGetImage( ImAppResourceGetDefaultPak( imapp ), "bg/menu_header.png" );
+			if( image.textureData )
+			{
+				UiSize imageSize;
+				imageSize.width		= menuRect.size.width;
+				imageSize.height	= (float( image.height ) / image.width) * imageSize.width;
+
+				menuWindow.image( image, imageSize );
+			}
 		}
 
 		static const State s_menuStates[] =
@@ -119,12 +138,14 @@ namespace conct
 			const char* title		= getStateTitle( state );
 			const char* iconName	= getStateIcon( state );
 
-			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( context, iconName ) );
+			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( imapp, iconName ) );
 
 			UiToolboxButton menuButton( menuWindow );
+			menuButton.setHStretch( 1.0f );
 
 			{
 				UiWidgetLayoutHorizontal buttonLayout( menuWindow, 5.0f );
+				buttonLayout.setVAlign( 0.5f );
 
 				menuWindow.image( image );
 				menuWindow.label( title );
@@ -143,14 +164,14 @@ namespace conct
 		window.label( "TODO" );
 	}
 
-	void ControllerUI::doDevicesUI( UiToolboxWindow& window )
+	void ControllerUI::doDevicesUI( ImAppContext* imapp, UiToolboxWindow& window )
 	{
 		UiWidgetLayoutVertical layout( window );
 
 		const ControllerState::DeviceArray& devices = m_state->getDevices();
 		for( ControllerState::ConnectedDevice* pDevice : devices )
 		{
-			doDeviceUI( window, *pDevice );
+			doDeviceUI( imapp, window, *pDevice );
 		}
 
 		if( devices.hasElements() )
@@ -248,74 +269,38 @@ namespace conct
 		window.label( "Remix Icon - https://remixicon.com/" );
 	}
 
-	void ControllerUI::doDeviceUI( UiToolboxWindow& window, ControllerState::ConnectedDevice& device )
+	void ControllerUI::doDeviceUI( ImAppContext* imapp, UiToolboxWindow& window, ControllerState::ConnectedDevice& device )
 	{
-		//const float deviceHeight = getDeviceHeight( pNkContext, device );
-		//nk_layout_row_dynamic( pNkContext, deviceHeight, 1 );
+		// Title
+		{
+			//nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
+			//CONCT_ASSERT( nk_panel_begin( pNkContext, "Bla", NK_PANEL_GROUP ) );
 
-		//if( !nk_group_begin( pNkContext, device.name.toConstCharPointer(), NK_WINDOW_BORDER | NK_WINDOW_NO_SCROLLBAR ) )
-		//{
-		//	return;
-		//}
+			//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 1 );
+			//nk_label( pNkContext, "Bla", NK_TEXT_LEFT );
 
-		//// Title
-		//nk_layout_row_dynamic( pNkContext, 0.0f, 1 );
-		//{
-		//	//nk_style_push_style_item( pNkContext, &pNkContext->style.window.fixed_background, pNkContext->style.window.header.normal );
-		//	//CONCT_ASSERT( nk_panel_begin( pNkContext, "Bla", NK_PANEL_GROUP ) );
+			//nk_panel_end( pNkContext );
+			//nk_style_pop_style_item( pNkContext );
 
-		//	//nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 1 );
-		//	//nk_label( pNkContext, "Bla", NK_TEXT_LEFT );
+			UiHeader deviceHeader( window, "deviceHeader" );
+			if( deviceHeader.isVisible )
+			{
+				const ImUiImage instancesImage = ImAppImageGetImage( ImAppImageLoadResource( imapp, "icons/instances.png" ) );
+				window.image( instancesImage );
 
-		//	//nk_panel_end( pNkContext );
-		//	//nk_style_pop_style_item( pNkContext );
+				window.label( device.name );
+				window.strecher( 1.0f, 0.0f );
 
-		//	UiHeader deviceHeader( pNkContext, "deviceHeader" );
-		//	if( deviceHeader.isVisible )
-		//	{
-		//		const float width = nk_window_get_width( pNkContext );
-		//		nk_layout_row_begin( pNkContext, NK_STATIC, 0.0f, 3 );
+				// Favorite Button
+				{
+					const ImUiImage favImage = ImAppImageGetImage( ImAppImageLoadResource( imapp, "icons/fav-off.png" ) );
+					if( window.buttonIcon( favImage ) )
+					{
 
-		//		nk_layout_row_push( pNkContext, 24.0f );
-		//		nk_style_push_vec2( pNkContext, &pNkContext->style.window.spacing, nk_vec2( 0.0f, 9.0f ) );
-		//		const struct nk_image instancesImage = ImAppImageGetBlocking( pContext, "icons/instances.png" );
-		//		nk_image( pNkContext, instancesImage );
-		//		nk_style_pop_vec2( pNkContext );
-
-		//		const float headerPadding	= pNkContext->style.window.header.padding.x * 2.0f;
-		//		const float imageWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
-		//		const float titleWidth		= pNkContext->style.window.group_padding.x * 2.0f;
-		//		const float favWidth		= 24.0f + pNkContext->style.window.spacing.x + (pNkContext->style.window.group_padding.x * 2.0f);
-		//		const float remainingWidth	= width - (headerPadding + imageWidth + titleWidth + favWidth);
-		//		nk_layout_row_push( pNkContext, remainingWidth );
-		//		nk_label( pNkContext, device.name.toConstCharPointer(), NK_TEXT_LEFT );
-
-		//		// Favorite Button
-		//		nk_layout_row_push( pNkContext, 24.0f + (pNkContext->style.button.padding.x * 2.0f) );
-		//		{
-		//			nk_style_push_float( pNkContext, &pNkContext->style.button.border, 0.0f );
-		//			nk_style_push_float( pNkContext, &pNkContext->style.button.rounding, 0.0f );
-		//			nk_style_push_vec2( pNkContext, &pNkContext->style.button.image_padding, nk_vec2( 0.0f, 0.0f ) );
-		//			nk_style_push_style_item( pNkContext, &pNkContext->style.button.normal, pNkContext->style.window.header.normal );
-		//			//nk_style_push_style_item( pNkContext, &pNkContext->style.button.active, pNkContext->style.window.header.active );
-		//			nk_style_push_style_item( pNkContext, &pNkContext->style.button.hover, pNkContext->style.window.header.hover );
-
-		//			const struct nk_image favImage = ImAppImageGetBlocking( pContext, "icons/fav-off.png" );
-		//			if( nk_button_image( pNkContext, favImage ) )
-		//			{
-
-		//			}
-		//			nk_style_pop_vec2( pNkContext );
-		//			nk_style_pop_float( pNkContext );
-		//			nk_style_pop_float( pNkContext );
-		//			nk_style_pop_style_item( pNkContext );
-		//			//nk_style_pop_style_item( pNkContext );
-		//			nk_style_pop_style_item( pNkContext );
-		//		}
-
-		//		nk_layout_row_end( pNkContext );
-		//	}
-		//}
+					}
+				}
+			}
+		}
 
 		//for( ControllerState::DeviceInstance& instance : device.instances )
 		//{
@@ -388,7 +373,7 @@ namespace conct
 				bool active = prop.value.getBoolean();
 				if( window.checkBox( active, active ? "True" : "False" ) )
 				{
-					ValueHigh newValue;
+					Value newValue;
 					newValue.setBoolean( active );
 
 					m_state->changeProperty( device, instance, prop, newValue );
@@ -411,7 +396,7 @@ namespace conct
 				float newValue = oldValue;
 				if( window.slider( newValue, 0.0f, 65535.0f ) )
 				{
-					ValueHigh newValue2;
+					Value newValue2;
 					newValue2.setPercentValue( (PercentValue)newValue );
 
 					m_state->changeProperty( device, instance, prop, newValue2 );

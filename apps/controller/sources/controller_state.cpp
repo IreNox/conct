@@ -413,7 +413,7 @@ namespace conct
 		}
 	}
 
-	void ControllerState::changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const ValueHigh& value )
+	void ControllerState::changeProperty( const ConnectedDevice& device, const DeviceInstance& instance, InstanceProperty& prop, const Value& value )
 	{
 		if( prop.pSetCommand != nullptr )
 		{

@@ -1,0 +1,112 @@
+<res_pak name="Controller" outputPath="../assets/controller.iarespak">
+    <resources>
+        <resource name="icons/refresh" type="Image" path="icons/refresh.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/menu" type="Image" path="icons/menu.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/instances" type="Image" path="icons/instances.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/instains" type="Image" path="icons/instance.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/home" type="Image" path="icons/home.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/fav-on" type="Image" path="icons/fav-on.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/fav-off" type="Image" path="icons/fav-off.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/edit-connection" type="Image" path="icons/edit-connection.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/devices" type="Image" path="icons/devices.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/credits" type="Image" path="icons/credits.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/connections" type="Image" path="icons/connections.png" allow_atlas="true" repeat="false"/>
+        <resource name="bg/menu_header" type="Image" path="bg/menu_header.png" allow_atlas="false" repeat="false"/>
+        <resource name="skins/solid_small" type="Image" path="skins/solid_small.png" allow_atlas="true" repeat="false"/>
+        <resource name="skins/solid_border_small" type="Image" path="skins/solid_border_small.png" allow_atlas="true" repeat="false"/>
+        <resource name="skins/border_small" type="Image" path="skins/border_small.png" allow_atlas="true" repeat="false"/>
+        <resource name="theme" type="Theme">
+            <value name="Font" fontName=""/>
+            <value name="Text" color="fff"/>
+            <value name="Button Skin" skinName="skin_solid_small"/>
+            <value name="Button Default" color="128222"/>
+            <value name="Button Hover" color="e5e5e5"/>
+            <value name="Button Clocked" color="666"/>
+            <value name="Button Text" color="fff"/>
+            <value name="Button Height" value="32"/>
+            <value name="Button Padding" top="0" left="8" right="8" bottom="0"/>
+            <value name="Check Box Unchecked Skin" skinName="skin_solid_border_small"/>
+            <value name="Check Box Checked Skin" skinName="skin_solid_border_small"/>
+            <value name="Check Box Default" color="b2b2b2"/>
+            <value name="Check Box Hover" color="e5e5e5"/>
+            <value name="Check Box Clicked" color="666"/>
+            <value name="Check Box Checked" color="fff"/>
+            <value name="Check Box Check Icon" imageName="icons/cross"/>
+            <value name="Check Box Size" width="25" height="25"/>
+            <value name="Check Box Text Spacing" value="8"/>
+            <value name="Slider Skin" skinName="skin_border_small"/>
+            <value name="Slider Pivot Skin" skinName="skin_solid_small"/>
+            <value name="Slider Background" color="4c4c4c"/>
+            <value name="Slider Pivot" color="b2b2b2"/>
+            <value name="Slider Pivot Hover" color="e5e5e5"/>
+            <value name="Slider Pivot Clicked" color="666"/>
+            <value name="Slider Height" value="25"/>
+            <value name="Slider Padding" top="0" left="5" right="5" bottom="0"/>
+            <value name="Slider Pivot Size" width="10" height="25"/>
+            <value name="Text Edit Skin" skinName="skin_solid_border_small"/>
+            <value name="Text Edit Background" color="666"/>
+            <value name="Text Edit Text" color="fff"/>
+            <value name="Text Edit Cursor" color="000"/>
+            <value name="Text Edit Selection" color="b2b2b2"/>
+            <value name="Text Edit Height" value="25"/>
+            <value name="Text Edit Padding" top="2" left="2" right="2" bottom="2"/>
+            <value name="Text Edit Cursor Size" width="1" height="21"/>
+            <value name="Text Edit Blink time"/>
+            <value name="Progress Bar Skin" skinName="skin_border_small"/>
+            <value name="Progress Bar Progress Skin" skinName="skin_solid_small"/>
+            <value name="Progress Bar Background" color="4c4c4c"/>
+            <value name="Progress Bar Progress" color="b2b2b2"/>
+            <value name="Progress Bar Height" value="25"/>
+            <value name="Progress Bar Padding" top="2" left="2" right="2" bottom="2"/>
+            <value name="Scroll Area Bar Skin" skinName="skin_solid_border_small"/>
+            <value name="Scroll Area Bar Pivot Skin" skinName="skin_solid_small"/>
+            <value name="Scroll Area Bar Background" color="4c4c4c"/>
+            <value name="Scroll Area Bar Pivot" color="b2b2b2"/>
+            <value name="Scroll Area Bar Size" value="8"/>
+            <value name="Scroll Area Bar Spacing" top="8" left="25" right="25" bottom="8"/>
+            <value name="Scroll Area Bar Min Size" width="25" height="8"/>
+            <value name="List Item" skinName="skin_border_small"/>
+            <value name="List Item Selected Skin" skinName="skin_solid_small"/>
+            <value name="List Item Hover" color="e5e5e5"/>
+            <value name="List Item Clicked" color="666"/>
+            <value name="List Item Selected" color="b2b2b2"/>
+            <value name="List Item Spacing" value="8"/>
+            <value name="Drop Down Skin" skinName="skin_solid_border_small"/>
+            <value name="Drop Down List Skin" skinName="skin_solid_small"/>
+            <value name="Drop Down List Item Skin" skinName="skin_border_small"/>
+            <value name="Drop Down Background" color="666"/>
+            <value name="Drop Down Text" color="fff"/>
+            <value name="Drop Down Icon" color="fff"/>
+            <value name="Drop Down Hover" color="e5e5e5"/>
+            <value name="Drop Down Clicked" color="666"/>
+            <value name="Drop Down Open" color="b2b2b2"/>
+            <value name="Drop Down List" color="4c4c4c"/>
+            <value name="Drop Down List Item Text" color="fff"/>
+            <value name="Drop Down List Item Hover" color="e5e5e5"/>
+            <value name="Drop Down List Item Clicked" color="666"/>
+            <value name="Drop Down List Item Selected" color="b2b2b2"/>
+            <value name="Drop Down Open Icon" imageName="icons/arrow_down"/>
+            <value name="Drop Down Close Icon" imageName="icons/arrow_up"/>
+            <value name="Drop Down Height" value="25"/>
+            <value name="Drop Down Padding" top="0" left="4" right="0" bottom="0"/>
+            <value name="Drop Down List Z Order" value="20"/>
+            <value name="Drop Down List Max Length" value="12"/>
+            <value name="Drop Down Item Padding" top="0" left="4" right="0" bottom="0"/>
+            <value name="Drop Down Item Size" value="25"/>
+            <value name="Drop Down Item Spacing" value="8"/>
+            <value name="Popup Skin" skinName="skin_solid_border_small"/>
+            <value name="Popup Background" color="0003"/>
+            <value name="Popup Window" color="4c4c4c"/>
+            <value name="Pop-Up Z Order" value="10"/>
+            <value name="Pop-Up Padding" top="8" left="8" right="8" bottom="8"/>
+            <value name="Pop-Up Button Spacing" value="4"/>
+        </resource>
+        <resource name="skin_solid_small" type="Skin" image_name="skins/solid_small" top="3" left="3" bottom="3" right="3"/>
+        <resource name="skin_solid_border_small" type="Skin" image_name="skins/solid_border_small" top="3" left="3" bottom="3" right="3"/>
+        <resource name="skin_border_small" type="Skin" image_name="skins/border_small" top="3" left="3" bottom="3" right="3"/>
+        <resource name="icons/cross" type="Image" path="icons/cross.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/check" type="Image" path="icons/check.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/arrow_up" type="Image" path="icons/arrow_up.png" allow_atlas="true" repeat="false"/>
+        <resource name="icons/arrow_down" type="Image" path="icons/arrow_down.png" allow_atlas="true" repeat="false"/>
+    </resources>
+</res_pak>

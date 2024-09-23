@@ -18,7 +18,7 @@ namespace conct
 		void setupDevice();
 		void loopDevice();
 
-		virtual const char* getName() const TIKI_OVERRIDE_FINAL;
+		virtual const char* getName() const override final;
 
 	protected:
 
@@ -31,8 +31,8 @@ namespace conct
 		virtual void setup() = 0;
 		virtual void loop() = 0;
 
-		virtual void getEmptyInstances( ArrayView< Instance >& instances ) TIKI_OVERRIDE_FINAL;
-		virtual void getPublicInstances( ConstInstanceView& instances ) const TIKI_OVERRIDE_FINAL;
-		virtual void getLocalInstances( ArrayView< const LocalInstance >& instances ) TIKI_OVERRIDE_FINAL;
+		virtual void getEmptyInstances( ArrayView< Instance >& instances ) override final;
+		virtual void getPublicInstances( ConstInstanceView& instances ) const override final;
+		virtual void getLocalInstances( ArrayView< const LocalInstance >& instances ) override final;
 	};
 }

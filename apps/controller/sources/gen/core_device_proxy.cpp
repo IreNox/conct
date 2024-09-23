@@ -11,25 +11,25 @@ namespace conct
 	{
 	}
 
-	bool DeviceProxy::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const
+	bool DeviceProxy::getProperty( Value& targetValue, const void* pInstance, uint16 nameCrc ) const
 	{
 		const Device* pTypedInstance = static_cast< const Device* >( pInstance );
 
 		if( nameCrc == 0x4daa )
 		{
-			targetValueBuilder.setString( pTypedInstance->getName() );
+			targetValue.setString( pTypedInstance->getName() );
 			return true;
 		}
 
 		if( nameCrc == 0x7ab5 )
 		{
-			targetValueBuilder.setUnsigned( pTypedInstance->getSerialNumber() );
+			targetValue.setUnsigned( pTypedInstance->getSerialNumber() );
 			return true;
 		}
 
 		if( nameCrc == 0xcfaf )
 		{
-			targetValueBuilder.setArray( pTypedInstance->getInstances() );
+			targetValue.setArray( pTypedInstance->getInstances() );
 			return true;
 		}
 
@@ -41,19 +41,19 @@ namespace conct
 		return false;
 	}
 
-	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const
+	bool DeviceProxy::callFunction( Value& targetValue, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const
 	{
 		Device* pTypedInstance = static_cast< Device* >( pInstance );
 
 		if( nameCrc == 0xd74c )
 		{
-			targetValueBuilder.setArray( pTypedInstance->FindInstances( parameters[ 0u ].getTypeCrc() ) );
+			targetValue.setArray( pTypedInstance->FindInstances( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 
 		if( nameCrc == 0x28be )
 		{
-			targetValueBuilder.setStruct( pTypedInstance->FindFirstInstance( parameters[ 0u ].getTypeCrc() ) );
+			targetValue.setStruct( pTypedInstance->FindFirstInstance( parameters[ 0u ].getTypeCrc() ) );
 			return true;
 		}
 

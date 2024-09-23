@@ -25,7 +25,7 @@ namespace conct
 	{
 	}
 
-	void ValueCommand::setResponse( ResultId result, const ValueHigh& value )
+	void ValueCommand::setResponse( ResultId result, const Value& value )
 	{
 		m_value = value;
 		Command::setResponse( result );

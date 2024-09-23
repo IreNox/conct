@@ -1,7 +1,6 @@
 #pragma once
 
 #include "conct_runtime.h"
-#include "conct_value_high.h"
 
 namespace conct
 {
@@ -53,14 +52,14 @@ namespace conct
 							ValueCommand( CommandId id );
 		virtual				~ValueCommand() { }
 
-		const ValueHigh&	getValue() const { return m_value; }
+		const Value&		getValue() const { return m_value; }
 
 	protected:
 
-		void				setResponse( ResultId result, const ValueHigh& data );
+		void				setResponse( ResultId result, const Value& data );
 
 	private:
 
-		ValueHigh			m_value;
+		Value				m_value;
 	};
 }

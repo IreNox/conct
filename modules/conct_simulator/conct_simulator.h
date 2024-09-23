@@ -2,7 +2,7 @@
 
 #include "conct_core.h"
 
-#if CONCT_ENABLED( CONCT_TARGET_DLL )
+#if TIKI_ENABLED( TIKI_TARGET_DLL )
 #	define CONCT_SIMULATOR_DLL __declspec( dllimport )
 #else
 #	define CONCT_SIMULATOR_DLL __declspec( dllexport )

@@ -2,7 +2,8 @@
 
 #include "conct_atomic.h"
 #include "conct_mutex.h"
-#include "conct_queue.h"
+
+#include <tiki/tiki_queue.h>
 
 namespace conct
 {

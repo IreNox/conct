@@ -2,19 +2,18 @@
 
 #include "conct_port.h"
 
-#include "conct_dynamic_string.h"
-#include "conct_vector.h"
+#include <tiki/tiki_dynamic_string.h>
 
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 #	include <WinSock2.h>
 #	include <ws2ipdef.h>
-#elif CONCT_ENABLED( CONCT_PLATFORM_LINUX )
+#elif TIKI_ENABLED( TIKI_PLATFORM_LINUX )
 #	include <arpa/inet.h>
 #endif
 
 namespace conct
 {
-#if CONCT_ENABLED( CONCT_PLATFORM_WINDOWS )
+#if TIKI_ENABLED( TIKI_PLATFORM_WINDOWS )
 	typedef uintreg SocketType;
 #else
 	typedef int SocketType;
@@ -32,18 +31,18 @@ namespace conct
 
 		bool						setup( const PortTcpServerParameters& parameters );
 
-		virtual void				getEndpoints( ArrayView< uintreg >& endpoints ) CONCT_OVERRIDE_FINAL;
-		virtual bool				popConnectionReset( uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
+		virtual void				getEndpoints( ConstArrayView< uintreg >& endpoints ) override final;
+		virtual bool				popConnectionReset( uintreg& endpointId ) override final;
 
-		virtual void				loop() CONCT_OVERRIDE_FINAL;
+		virtual void				loop() override final;
 
-		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) CONCT_OVERRIDE_FINAL;
-		virtual void				closeSend( Writer& writer, uintreg endpointId ) CONCT_OVERRIDE_FINAL;
+		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) override final;
+		virtual void				closeSend( Writer& writer, uintreg endpointId ) override final;
 
-		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) CONCT_OVERRIDE_FINAL;
-		virtual void				closeReceived( Reader& reader, uintreg endpointId ) CONCT_OVERRIDE_FINAL;
+		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) override final;
+		virtual void				closeReceived( Reader& reader, uintreg endpointId ) override final;
 
-		virtual Flags8< PortFlag >	getFlags() const CONCT_OVERRIDE_FINAL;
+		virtual Flags8< PortFlag >	getFlags() const override final;
 
 	private:
 
@@ -52,15 +51,15 @@ namespace conct
 			SocketType				socket;
 			sockaddr_in6			address;
 
-			Vector< uint8 >			sendData;
-			Vector< uint8 >			receiveData;
+			DynamicArray< uint8 >	sendData;
+			DynamicArray< uint8 >	receiveData;
 		};
 
 		SocketType					m_socket;
 
-		Vector< Connection >		m_connections;
-		Vector< uintreg >			m_brokenConnections;
-		Vector< uintreg >			m_connectedConnections;
+		DynamicArray< Connection >	m_connections;
+		DynamicArray< uintreg >		m_brokenConnections;
+		DynamicArray< uintreg >		m_connectedConnections;
 
 		void						addConnection( uintreg socket, const sockaddr_in6& address );
 		bool						updateConnection( Connection& connection );

@@ -21,7 +21,7 @@ namespace conct
 	{
 	public:
 
-		virtual void				getEndpoints( ArrayView< const uintreg >& endpoints ) = 0;
+		virtual void				getEndpoints( ConstArrayView< uintreg >& endpoints ) = 0;
 		virtual bool				popConnectionReset( uintreg& endpointId ) = 0;
 
 		virtual void				loop() = 0;

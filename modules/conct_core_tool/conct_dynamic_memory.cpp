@@ -48,27 +48,27 @@ namespace conct
 
 		struct Pool
 		{
-			Pool*						pPrevious;
+			Pool*					pPrevious;
 
-			uintptr						size;
-			pool_t						pool;
+			uintsize				size;
+			pool_t					pool;
 		};
 
 		struct Allocator
 		{
-			Allocator*					pNext;
+			Allocator*				pNext;
 
-			tlsf_t						tlsf;
-			Pool*						pCurrentPool;
+			tlsf_t					tlsf;
+			Pool*					pCurrentPool;
 
-			uintptr						poolCount;
-			uintptr						allocatedSize;
-			uintptr						allocationCount;
-			uintptr						totalAllocations;
-			uintptr						maxAllocated;
+			uintsize				poolCount;
+			uintsize				allocatedSize;
+			uintsize				allocationCount;
+			uintsize				totalAllocations;
+			uintsize				maxAllocated;
 		};
 
-		uintptr						m_pageSize;
+		uintsize					m_pageSize;
 		uintreg						m_protectionCounter;
 
 		Mutex						m_mutex;
@@ -297,7 +297,7 @@ namespace conct
 		void* pAddress = tlsf_memalign( pAllocator->tlsf, alignment, size );
 		if( pAddress == nullptr )
 		{
-			const uintptr minPoolSize	= alignValue( sizeof( Pool ) + tlsf_pool_overhead() + tlsf_alloc_overhead() + alignment + size, m_pageSize );
+			const uintptr minPoolSize	= alignValue( sizeof( Pool ) + tlsf_pool_overhead() + tlsf_alloc_overhead() + tlsf_block_size_min() + alignment + size, m_pageSize);
 			const uintptr poolSize		= max( s_defaultPoolSize, minPoolSize );
 
 #if TIKI_ENABLED( TIKI_POINTER_64 )
@@ -315,7 +315,7 @@ namespace conct
 			void* pPoolData	= alignPointer( &pPool[ 1u ], tlsf_align_size() );
 
 			pPool->size		= poolSize;
-			pPool->pool		= tlsf_add_pool( pAllocator->tlsf, pPoolData, poolSize - sizeof( Pool ) );
+			pPool->pool		= tlsf_add_pool( pAllocator->tlsf, pPoolData, poolSize - ((uintptr)pPoolData - (uintptr)pPoolMemory) );
 
 			pPool->pPrevious = pAllocator->pCurrentPool;
 			pAllocator->pCurrentPool = pPool;
@@ -323,7 +323,7 @@ namespace conct
 			pAddress = tlsf_memalign( pAllocator->tlsf, alignment, size );
 			if( pAddress == nullptr )
 			{
-				trace::write( "Could not allocate memory.\n" );
+				trace::write( "Could not allocate memory." );
 				return nullptr;
 			}
 

@@ -74,7 +74,7 @@ namespace conct
 		return true;
 	}
 
-	const Type* TypeCollection::addValueType( const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, ValueType valueType )
+	const Type* TypeCollection::addValueType( const StringView& namespaceVar, const StringView& name, const StringView& cppName, ValueType valueType )
 	{
 		Type* pType = new Type();
 		pType->create( Path(), namespaceVar, name, cppName, TypeKind::Value, valueType, true );
@@ -83,10 +83,10 @@ namespace conct
 		return pType;
 	}
 
-	const Type* TypeCollection::findType( const DynamicString& fullName, const DynamicString& referenceNamespace )
+	const Type* TypeCollection::findType( const StringView& fullName, const StringView& referenceNamespace )
 	{
-		DynamicString namespaceVar;
-		DynamicString name = fullName;
+		StringView namespaceVar;
+		StringView name = fullName;
 
 		const size_t lastDot = fullName.lastIndexOf( '.' );
 		if( lastDot != InvalidStringIndex )
@@ -97,7 +97,7 @@ namespace conct
 
 		for( const Type* pType : m_types )
 		{
-			if( pType->getName() == name && ( pType->getNamespace() == namespaceVar || pType->getNamespace() == referenceNamespace ) )
+			if( pType->getName() == name && (pType->getNamespace() == namespaceVar || pType->getNamespace() == referenceNamespace) )
 			{
 				return pType;
 			}
@@ -119,7 +119,7 @@ namespace conct
 		return nullptr;
 	}
 
-	const InterfaceType* TypeCollection::findInterface( const DynamicString& fullName, const DynamicString& referenceNamespace )
+	const InterfaceType* TypeCollection::findInterface( const StringView& fullName, const StringView& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
 		if( pType != nullptr && pType->getKind() == TypeKind::Interface )
@@ -141,7 +141,7 @@ namespace conct
 		return nullptr;
 	}
 
-	const StructType* TypeCollection::findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace )
+	const StructType* TypeCollection::findStruct( const StringView& fullName, const StringView& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
 		if( pType != nullptr && pType->getKind() == TypeKind::Struct )
@@ -163,7 +163,7 @@ namespace conct
 		return nullptr;
 	}
 
-	const EnumType* TypeCollection::findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace )
+	const EnumType* TypeCollection::findEnum( const StringView& fullName, const StringView& referenceNamespace )
 	{
 		const Type* pType = findType( fullName, referenceNamespace );
 		if( pType != nullptr && pType->getKind() == TypeKind::Enum )

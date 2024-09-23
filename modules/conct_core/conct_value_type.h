@@ -21,5 +21,6 @@ namespace conct
 
 		Count
 	};
+
 	const char*	getValueTypeName( ValueType value );
 }

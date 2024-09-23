@@ -27,15 +27,15 @@ namespace conct
 
 		bool							load( const Path& path );
 
-		const Type*						addValueType( const DynamicString& namespaceVar, const DynamicString& name, const DynamicString& cppName, ValueType valueType );
+		const Type*						addValueType( const StringView& namespaceVar, const StringView& name, const StringView& cppName, ValueType valueType );
 
-		const Type*						findType( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const Type*						findType( const StringView& fullName, const StringView& referenceNamespace );
 		const Type*						findTypeByCrc( TypeCrc typeCrc );
-		const InterfaceType*			findInterface( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const InterfaceType*			findInterface( const StringView& fullName, const StringView& referenceNamespace );
 		const InterfaceType*			findInterfaceByCrc( TypeCrc typeCrc );
-		const StructType*				findStruct( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const StructType*				findStruct( const StringView& fullName, const StringView& referenceNamespace );
 		const StructType*				findStructByCrc( TypeCrc typeCrc );
-		const EnumType*					findEnum( const DynamicString& fullName, const DynamicString& referenceNamespace );
+		const EnumType*					findEnum( const StringView& fullName, const StringView& referenceNamespace );
 		const EnumType*					findEnumByCrc( TypeCrc typeCrc );
 
 		const ArrayType*				makeArray( const Type* pBaseType );

@@ -60,9 +60,10 @@ namespace conct
 
 		DynamicString			m_name;
 
-		const Hardware*			m_pHardware;
+		const Hardware*			m_pHardware		= nullptr;
+		bool					m_router		= false;
 
-		bool					m_dynamicPorts;
+		bool					m_dynamicPorts	= false;
 		PortVector				m_ports;
 
 		InterfaceSet			m_interfaces;

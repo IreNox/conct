@@ -382,7 +382,7 @@ namespace conct
 		headerContent += "\t{\n";
 		headerContent += "\tpublic:\n";
 		headerContent += "\n";
-		headerContent += "\t\tstatic const TypeCrc s_typeCrc = "_s + string_tools::toString( pInterface->getCrc() ) + ";\n";
+		headerContent += "\t\tstatic const TypeCrc s_typeCrc = 0x"_s + string_tools::toHexString( pInterface->getCrc() ) + ";\n";
 		headerContent += "\n";
 
 		for( const InterfaceProperty& property : pInterface->getProperties() )
@@ -449,7 +449,7 @@ namespace conct
 		headerContent += "{\n";
 		headerContent += "\tstruct "_s + pStruct->getName() + "\n";
 		headerContent += "\t{\n";
-		headerContent += "\t\tstatic const TypeCrc s_typeCrc = "_s + string_tools::toString( pStruct->getCrc() ) + ";\n";
+		headerContent += "\t\tstatic const TypeCrc s_typeCrc = 0x"_s + string_tools::toHexString( pStruct->getCrc() ) + ";\n";
 		headerContent += "\n";
 
 		for( const StructField& field : pStruct->getFields() )
@@ -481,7 +481,7 @@ namespace conct
 		headerContent += "\n";
 		headerContent += "namespace conct\n";
 		headerContent += "{\n";
-		headerContent += "\tstatic constexpr TypeCrc "_s + pEnum->getName() + "TypeCrc = " + string_tools::toString( pEnum->getCrc() ) + ";\n";
+		headerContent += "\tstatic constexpr TypeCrc "_s + pEnum->getName() + "TypeCrc = 0x" + string_tools::toHexString( pEnum->getCrc() ) + ";\n";
 		headerContent += "\n";
 		headerContent += "\tenum "_s + pEnum->getName() + "\n";
 		headerContent += "\t{\n";
@@ -525,10 +525,10 @@ namespace conct
 			headerContent += "\n";
 			headerContent += "\t\t"_s + proxyName + "();\n";
 			headerContent += "\n";
-			headerContent += "\t\tvirtual bool getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const TIKI_OVERRIDE_FINAL;\n";
-			headerContent += "\t\tvirtual bool setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const TIKI_OVERRIDE_FINAL;\n";
+			headerContent += "\t\tvirtual bool getProperty( Value& targetValue, const void* pInstance, uint16 nameCrc ) const override final;\n";
+			headerContent += "\t\tvirtual bool setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const override final;\n";
 			headerContent += "\n";
-			headerContent += "\t\tvirtual bool callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const TIKI_OVERRIDE_FINAL;\n";
+			headerContent += "\t\tvirtual bool callFunction( Value& targetValue, void* pInstance, uint16 nameCrc, const ConstArrayView< Value >& parameters ) const override final;\n";
 			headerContent += "\t};\n";
 			headerContent += "}\n";
 
@@ -558,7 +558,7 @@ namespace conct
 			sourceContent += "\t}\n";
 			sourceContent += "\n";
 
-			sourceContent += "\tbool "_s + proxyName + "::getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const\n";
+			sourceContent += "\tbool "_s + proxyName + "::getProperty( Value& targetValue, const void* pInstance, uint16 nameCrc ) const\n";
 			sourceContent += "\t{\n";
 
 			bool isFirst = true;
@@ -579,7 +579,7 @@ namespace conct
 
 				sourceContent += "\t\tif( nameCrc == "_s + getStringHexCrc16( property.name ) + " )\n";
 				sourceContent += "\t\t{\n";
-				sourceContent += "\t\t\t"_s + getTypeCppValueSetFunction( property.pType, "targetValueBuilder"_s, "pTypedInstance->get"_s + property.name + "()" ) + ";\n";
+				sourceContent += "\t\t\t"_s + getTypeCppValueSetFunction( property.pType, "targetValue"_s, "pTypedInstance->get"_s + property.name + "()" ) + ";\n";
 				sourceContent += "\t\t\treturn true;\n";
 				sourceContent += "\t\t}\n";
 				sourceContent += "\n";
@@ -620,7 +620,7 @@ namespace conct
 			sourceContent += "\t}\n";
 			sourceContent += "\n";
 
-			sourceContent += "\tbool "_s + pInterface->getName() + "Proxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const\n";
+			sourceContent += "\tbool "_s + pInterface->getName() + "Proxy::callFunction( Value& targetValue, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const\n";
 			sourceContent += "\t{\n";
 
 			if( !pInterface->getFunctions().isEmpty() )
@@ -657,7 +657,7 @@ namespace conct
 					parameters += " ";
 				}
 
-				sourceContent += "\t\t\t"_s + getTypeCppValueSetFunction( function.pReturnType, "targetValueBuilder"_s, "pTypedInstance->"_s + function.name + "(" + parameters + ")" ) + ";\n";
+				sourceContent += "\t\t\t"_s + getTypeCppValueSetFunction( function.pReturnType, "targetValue"_s, "pTypedInstance->"_s + function.name + "(" + parameters + ")" ) + ";\n";
 				sourceContent += "\t\t\treturn true;\n";
 				sourceContent += "\t\t}\n";
 				sourceContent += "\n";
@@ -711,12 +711,12 @@ namespace conct
 			{
 				if( property.hasGetter )
 				{
-					headerContent += "\t\tvirtual "_s + getTypeCppReturnName( property.pType ) + " get" + property.name + "() const TIKI_OVERRIDE_FINAL;\n";
+					headerContent += "\t\tvirtual "_s + getTypeCppReturnName( property.pType ) + " get" + property.name + "() const override final;\n";
 				}
 
 				if( property.hasSetter )
 				{
-					headerContent += "\t\tvirtual void set"_s + property.name + "( " + getTypeCppArgumentName( property.pType ) + " value ) TIKI_OVERRIDE_FINAL;\n";
+					headerContent += "\t\tvirtual void set"_s + property.name + "( " + getTypeCppArgumentName( property.pType ) + " value ) override final;\n";
 				}
 			}
 
@@ -738,7 +738,7 @@ namespace conct
 					parameters += getTypeCppArgumentName( parameter.pType ) + " " + parameter.name;
 				}
 
-				headerContent += "\t\tvirtual "_s + getTypeCppReturnName( function.pReturnType ) + " " + function.name + "( " + parameters + " ) TIKI_OVERRIDE_FINAL;\n";
+				headerContent += "\t\tvirtual "_s + getTypeCppReturnName( function.pReturnType ) + " " + function.name + "( " + parameters + " ) override final;\n";
 			}
 
 			headerContent += "\t};\n";
@@ -863,7 +863,7 @@ namespace conct
 		headerContent += "\t\tvoid setupDevice();\n";
 		headerContent += "\t\tvoid loopDevice();\n";
 		headerContent += "\n";
-		headerContent += "\t\tvirtual const char* getName() const TIKI_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual const char* getName() const override final;\n";
 		headerContent += "\n";
 		headerContent += "\tprotected:\n";
 		headerContent += "\n";
@@ -904,9 +904,9 @@ namespace conct
 		headerContent += "\t\tvirtual void setup() = 0;\n";
 		headerContent += "\t\tvirtual void loop() = 0;\n";
 		headerContent += "\n";
-		headerContent += "\t\tvirtual void getEmptyInstances( ArrayView< Instance >& instances ) TIKI_OVERRIDE_FINAL;\n";
-		headerContent += "\t\tvirtual void getPublicInstances( ConstInstanceView& instances ) const TIKI_OVERRIDE_FINAL;\n";
-		headerContent += "\t\tvirtual void getLocalInstances( ArrayView< const LocalInstance >& instances ) TIKI_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void getEmptyInstances( ArrayView< Instance >& instances ) override final;\n";
+		headerContent += "\t\tvirtual void getPublicInstances( ConstInstanceView& instances ) const override final;\n";
+		headerContent += "\t\tvirtual void getLocalInstances( ArrayView< const LocalInstance >& instances ) override final;\n";
 		headerContent += "\t};\n";
 		headerContent += "}\n";
 
@@ -1114,8 +1114,8 @@ namespace conct
 		headerContent += "\t{\n";
 		headerContent += "\tprotected:\n";
 		headerContent += "\n";
-		headerContent += "\t\tvirtual void setup() TIKI_OVERRIDE_FINAL;\n";
-		headerContent += "\t\tvirtual void loop() TIKI_OVERRIDE_FINAL;\n";
+		headerContent += "\t\tvirtual void setup() override final;\n";
+		headerContent += "\t\tvirtual void loop() override final;\n";
 		headerContent += "\t};\n";
 		headerContent += "}\n";
 

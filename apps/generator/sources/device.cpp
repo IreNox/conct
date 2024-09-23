@@ -18,8 +18,6 @@ namespace conct
 {
 	Device::Device()
 	{
-		m_pHardware = nullptr;
-
 	}
 
 	bool Device::load( const Path& fileName, HardwareCollection& hardwareCollection, PortCollection& portCollection, TypeCollection& typeCollection )
@@ -37,13 +35,10 @@ namespace conct
 			return false;
 		}
 
-		if( !loadStringValue( m_name, pRootNode, "name" ) )
-		{
-			return false;
-		}
-
 		DynamicString hardwareName;
-		if( !loadStringValue( hardwareName, pRootNode, "hardware" ) )
+		if( !loadStringValue( m_name, pRootNode, "name" ) ||
+			!loadStringValue( hardwareName, pRootNode, "hardware" ) ||
+			!loadBooleanValue( m_router, pRootNode, "router" ) )
 		{
 			return false;
 		}
@@ -178,7 +173,12 @@ namespace conct
 
 		DeviceInstance deviceInstance;
 		deviceInstance.id = m_instances.getLength();
-		deviceInstance.pInterface = typeCollection.findInterface( "Core.Device"_s, ""_s );
+		deviceInstance.pInterface = typeCollection.findInterface( "Core.Device", "" );
+		if( !deviceInstance.pInterface )
+		{
+			return false;
+		}
+
 		m_instances.pushBack( deviceInstance );
 		m_interfaces.insert( deviceInstance.pInterface );
 		m_proxies.insert( deviceInstance.pInterface );
@@ -187,7 +187,12 @@ namespace conct
 		{
 			DeviceInstance routerInstance;
 			routerInstance.id = m_instances.getLength();
-			routerInstance.pInterface = typeCollection.findInterface( "Core.Router"_s, ""_s );
+			routerInstance.pInterface = typeCollection.findInterface( "Core.Router", "" );
+			if( !routerInstance.pInterface )
+			{
+				return false;
+			}
+
 			m_instances.pushBack( routerInstance );
 			m_interfaces.insert( routerInstance.pInterface );
 			m_proxies.insert( routerInstance.pInterface );
@@ -229,7 +234,8 @@ namespace conct
 
 	bool Device::needsRouter() const
 	{
-		if( m_ports.getLength() > 1u )
+		if( m_router ||
+			m_ports.getLength() > 1u )
 		{
 			return true;
 		}

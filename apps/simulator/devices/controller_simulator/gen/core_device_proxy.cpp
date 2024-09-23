@@ -2,7 +2,7 @@
 
 #include "conct_device.h"
 #include "conct_core.h"
-#include "conct_array_view.h"
+#include <tiki/tiki_array_view.h>
 
 namespace conct
 {
@@ -41,7 +41,7 @@ namespace conct
 		return false;
 	}
 
-	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
+	bool DeviceProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const
 	{
 		Device* pTypedInstance = static_cast< Device* >( pInstance );
 

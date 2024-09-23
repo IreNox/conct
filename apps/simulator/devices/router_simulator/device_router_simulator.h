@@ -8,12 +8,12 @@ namespace conct
 	{
 	public:
 
-		RuntimeHigh&	getRuntime() { return m_runtime; }
-		Router&			getRouter() { return m_instanceRouter; }
+		Runtime&	getRuntime() { return m_runtime; }
+		Router&		getRouter() { return m_instanceRouter; }
 
 	protected:
 
-		virtual void setup() CONCT_OVERRIDE_FINAL;
-		virtual void loop() CONCT_OVERRIDE_FINAL;
+		virtual void setup() override final;
+		virtual void loop() override final;
 	};
 }

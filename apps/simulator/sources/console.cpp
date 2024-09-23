@@ -1,13 +1,15 @@
 ﻿#include "console.h"
 
-#include "conct_path.h"
 #include "conct_trace.h"
+#include "conct_filesystem.h"
 
 #include "console_controller.h"
 #include "console_input.h"
 #include "console_instances.h"
 #include "console_plugin.h"
 #include "console_render.h"
+
+#include <tiki/tiki_path.h>
 
 namespace conct
 {
@@ -20,7 +22,7 @@ namespace conct
 		ConsoleInput::setup();
 		ConsoleRenderer::setup();
 
-		const Path exePath = Path::getExecutablePath();
+		const Path exePath = filesystem::getExecutablePath();
 		const Path basePath = exePath.getParent().getParent().getParent().getParent().getParent().getParent();
 		const Path configPath = basePath.push( "config"_s );
 		const Path typesPath = configPath.push( "types"_s );

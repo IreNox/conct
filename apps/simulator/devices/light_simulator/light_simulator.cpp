@@ -1,6 +1,6 @@
 #include "light_simulator.h"
 
-#include "conct_string_tools.h"
+#include <tiki/tiki_string_tools.h>
 
 namespace conct
 {
@@ -28,7 +28,7 @@ namespace conct
 		targetData.pRouter		= nullptr;
 		targetData.pController	= nullptr;
 
-		ArrayView< Instance > instances = m_device.getInstances();
+		const ConstArrayView< Instance > instances = m_device.getInstances();
 
 		targetData.instances.clear();
 		for( uintreg i = 0u; i < instances.getLength(); ++i )
@@ -56,31 +56,31 @@ namespace conct
 					}
 					break;
 
-				case Dimmer::s_typeCrc:
-					{
-						Dimmer* pDimmer = static_cast< Dimmer* >( pLocalInstance->pInstance );
+				//case Dimmer::s_typeCrc:
+				//	{
+				//		Dimmer* pDimmer = static_cast< Dimmer* >( pLocalInstance->pInstance );
 
-						DynamicString data;
-						data += "Dimmer\n";
-						data += "Brightness: "_s + string_tools::toString( ( pDimmer->getBrightness() / 65535.0f ) * 100.0f ) + "%\n";
+				//		DynamicString data;
+				//		data += "Dimmer\n";
+				//		data += "Brightness: "_s + string_tools::toString( ( pDimmer->getBrightness() / 65535.0f ) * 100.0f ) + "%\n";
 
-						targetInstance.data = data;
-					}
-					break;
+				//		targetInstance.data = data;
+				//	}
+				//	break;
 
-				case RGB::s_typeCrc:
-					{
-						RGB* pRGB = static_cast< RGB* >( pLocalInstance->pInstance );
+				//case RGB::s_typeCrc:
+				//	{
+				//		RGB* pRGB = static_cast< RGB* >( pLocalInstance->pInstance );
 
-						DynamicString data;
-						data += "RGB\n";
-						data += "Red:   "_s + string_tools::toString( ( pRGB->getRed() / 65535.0f ) * 100.0f ) + "%\n";
-						data += "Green: "_s + string_tools::toString( ( pRGB->getGreen() / 65535.0f ) * 100.0f ) + "%\n";
-						data += "Blue:  "_s + string_tools::toString( ( pRGB->getBlue() / 65535.0f ) * 100.0f ) + "%\n";
+				//		DynamicString data;
+				//		data += "RGB\n";
+				//		data += "Red:   "_s + string_tools::toString( ( pRGB->getRed() / 65535.0f ) * 100.0f ) + "%\n";
+				//		data += "Green: "_s + string_tools::toString( ( pRGB->getGreen() / 65535.0f ) * 100.0f ) + "%\n";
+				//		data += "Blue:  "_s + string_tools::toString( ( pRGB->getBlue() / 65535.0f ) * 100.0f ) + "%\n";
 
-						targetInstance.data = data;
-					}
-					break;
+				//		targetInstance.data = data;
+				//	}
+				//	break;
 
 				default:
 					continue;

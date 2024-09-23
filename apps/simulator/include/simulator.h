@@ -1,9 +1,10 @@
 #pragma  once
 
-#include "conct_array.h"
 #include "conct_atomic.h"
 
 #include "console.h"
+
+#include <tiki/tiki_array_view.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -33,7 +34,7 @@ namespace conct
 			std::thread			thread;
 		};
 
-		Array< Device >			m_devices;
+		ArrayView< Device >		m_devices;
 		Console					m_console;
 
 		bool					loadDevices();

@@ -8,10 +8,13 @@ namespace conct
 
 	void DeviceInterface::setupDevice()
 	{
-		PortNRF24L01ClientParameters port0Parameters;
+		PortTcpClientParameters port0Parameters;
+		port0Parameters.serverHost = "::1"_s;
+		port0Parameters.serverPort = 5489;
 		m_port0.setup( port0Parameters );
 
 		m_runtime.setup( this );
+		m_runtime.registerPort( &m_port0 );
 
 		setup();
 	}
@@ -30,35 +33,31 @@ namespace conct
 		 return "LightSimulator";
 	}
 
-	void DeviceInterface::getEmptyInstances( Array< Instance >& instances )
+	void DeviceInterface::getEmptyInstances( ArrayView< Instance >& instances )
 	{
-		static Instance s_instances[ 4u ];
-		instances = Array< Instance >( s_instances, CONCT_COUNT( s_instances ) );
+		static Instance s_instances[ 2u ];
+		instances = ArrayView< Instance >( s_instances, TIKI_ARRAY_COUNT( s_instances ) );
 	}
 
-	void DeviceInterface::getPublicInstances( ArrayView< Instance >& instances ) const
+	void DeviceInterface::getPublicInstances( ConstInstanceView& instances ) const
 	{
 		static const Instance s_instances[] =
 		{
 			{ 0, 32636 },
 			{ 1, 24332 },
-			{ 2, 57793 },
-			{ 3, 7621 },
 		};
 
-		instances.set( s_instances, CONCT_COUNT( s_instances ) );
+		instances.set( s_instances, TIKI_ARRAY_COUNT( s_instances ) );
 	}
 
-	void DeviceInterface::getLocalInstances( ArrayView< LocalInstance >& instances )
+	void DeviceInterface::getLocalInstances( ArrayView< const LocalInstance >& instances )
 	{
 		static const LocalInstance s_instances[] =
 		{
 			{ 0, this, &m_proxyDevice },
 			{ 1, &m_instanceLight, &m_proxyLight },
-			{ 2, &m_instanceDimmer, &m_proxyDimmer },
-			{ 3, &m_instanceRGB, &m_proxyRGB },
 		};
 
-		instances.set( s_instances, CONCT_COUNT( s_instances ) );
+		instances.set( s_instances, TIKI_ARRAY_COUNT( s_instances ) );
 	}
 }

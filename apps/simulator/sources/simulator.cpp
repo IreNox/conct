@@ -1,12 +1,13 @@
 #include "simulator.h"
 
 #include "conct_directory_iterator.h"
-#include "conct_path.h"
 #include "conct_timer.h"
 #include "conct_trace.h"
 
 #include "conct_simulator.h"
 #include "conct_simulator_context.h"
+
+#include <tiki/tiki_dynamic_array.h>
 
 #include <windows.h>
 
@@ -56,7 +57,7 @@ namespace conct
 		const Path exePath( szExeFileName );
 		const Path programPath = exePath.getParent();
 
-		Vector< DevicePrototype > devicePrototypes;
+		DynamicArray< DevicePrototype > devicePrototypes;
 		DirectoryIterator directorIterator( programPath );
 		while( directorIterator.next() )
 		{
@@ -100,7 +101,7 @@ namespace conct
 		}
 
 		Device* pDevices = new Device[ devicePrototypes.getLength() ];
-		m_devices = Array< Device >( pDevices, devicePrototypes.getLength() );
+		m_devices = ArrayView< Device >( pDevices, devicePrototypes.getLength() );
 
 		for( uintreg i = 0u; i < devicePrototypes.getLength(); ++i )
 		{
@@ -150,7 +151,7 @@ namespace conct
 		}
 
 		delete[] m_devices.getData();
-		m_devices = Array< Device >();
+		m_devices = ArrayView< Device >();
 	}
 
 	void Simulator::runDevice( Device* pDevice )

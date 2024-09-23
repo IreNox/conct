@@ -1,6 +1,6 @@
 #pragma once
 
-#include "conct_vector.h"
+#include <tiki/tiki_dynamic_array.h>
 
 #include "i_simulator_device.h"
 
@@ -10,7 +10,7 @@ namespace conct
 
 	struct ConsoleDevice
 	{
-		typedef Vector< ConsolePlugin* > PluginVector;
+		typedef DynamicArray< ConsolePlugin* > PluginVector;
 
 		ISimulatorDevice*	pDevice;
 		SimulatorDeviceData	data;

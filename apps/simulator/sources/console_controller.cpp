@@ -3,8 +3,9 @@
 #include "conct_controller.h"
 #include "conct_interface_type.h"
 #include "conct_router.h"
-#include "conct_string_tools.h"
 #include "conct_type_collection.h"
+
+#include <tiki/tiki_string_tools.h>
 
 #include "console_input.h"
 #include "console_render.h"
@@ -19,7 +20,7 @@ namespace conct
 		m_action		= Action_Invalid;
 		m_index			= 0u;
 
-		for( uintreg i = 0u; i < CONCT_COUNT( m_lastIndices ); ++i )
+		for( uintreg i = 0u; i < TIKI_ARRAY_COUNT( m_lastIndices ); ++i )
 		{
 			m_lastIndices[ i ] = 0u;
 		}
@@ -29,7 +30,7 @@ namespace conct
 	{
 		if( localDevice.data.pRouter != nullptr )
 		{
-			const ArrayView< DeviceConnection > devices = localDevice.data.pRouter->getConnectedDevices();
+			const ConstArrayView< DeviceConnection > devices = localDevice.data.pRouter->getConnectedDevices();
 			for( DeviceConnection deviceConnection : devices )
 			{
 				addDevice( deviceConnection.id, nullptr );
@@ -304,7 +305,7 @@ namespace conct
 
 				if( m_action == Action_SetProperty )
 				{
-					if( m_pProperty->pType->getKind() == TypeKind_Value )
+					if( m_pProperty->pType->getKind() == TypeKind::Value )
 					{
 						setValueState( m_pProperty->pType->getValueType() );
 					}
@@ -483,10 +484,10 @@ namespace conct
 	{
 		switch( m_valueType )
 		{
-		case ValueType_Void:
+		case ValueType::Void:
 			return false;
 
-		case ValueType_Boolean:
+		case ValueType::Boolean:
 			{
 				const DynamicString valueText = text.trim().toLower();
 				if( valueText == "false" || valueText == "0" )
@@ -502,12 +503,12 @@ namespace conct
 			}
 			break;
 
-		case ValueType_Integer:
+		case ValueType::Integer:
 			{
 				const DynamicString valueText = text.trim();
 
 				sint32 intValue;
-				if( string_tools::tryParseSInt32( intValue, valueText.toConstCharPointer() ) )
+				if( string_tools::tryParseSInt32( intValue, valueText ) )
 				{
 					value.setInteger( intValue );
 					return true;
@@ -515,12 +516,12 @@ namespace conct
 			}
 			break;
 
-		case ValueType_Unsigned:
+		case ValueType::Unsigned:
 			{
 				const DynamicString valueText = text.trim();
 
 				uint32 intValue;
-				if( string_tools::tryParseUInt32( intValue, valueText.toConstCharPointer() ) )
+				if( string_tools::tryParseUInt32( intValue, valueText ) )
 				{
 					value.setInteger( intValue );
 					return true;
@@ -528,11 +529,11 @@ namespace conct
 			}
 			break;
 
-		case ValueType_String:
+		case ValueType::String:
 			//value.setString();
 			break;
 
-		case ValueType_PercentValue:
+		case ValueType::PercentValue:
 			{
 				const DynamicString valueText = text.trim();
 
@@ -543,7 +544,7 @@ namespace conct
 				}
 
 				float floatValue;
-				if( string_tools::tryParseFloat( floatValue, valueText.toConstCharPointer() ) && floatValue >= 0.0f )
+				if( string_tools::tryParseFloat( floatValue, valueText ) && floatValue >= 0.0f )
 				{
 					if( floatValue <= 1.0f )
 					{
@@ -559,7 +560,7 @@ namespace conct
 			}
 			break;
 
-		//case ValueType_Instance:
+		//case ValueType::Instance:
 		//	{
 		//		InstanceId intValue;
 		//		if( string_tools::tryParseUInt16( intValue, text.toConstCharPointer() ) )
@@ -570,10 +571,10 @@ namespace conct
 		//	}
 		//	break;
 
-		case ValueType_TypeCrc:
+		case ValueType::TypeCrc:
 			{
 				TypeCrc intValue;
-				if( string_tools::tryParseUInt16( intValue, text.toConstCharPointer() ) )
+				if( string_tools::tryParseUInt16( intValue, text ) )
 				{
 					value.setTypeCrc( intValue );
 					return true;
@@ -589,34 +590,34 @@ namespace conct
 	{
 		switch( value.getType() )
 		{
-		case ValueType_Void:
+		case ValueType::Void:
 			return "void"_s;
 
-		case ValueType_Boolean:
+		case ValueType::Boolean:
 			return DynamicString( value.getBoolean() ? "true" : "false" );
 			break;
 
-		case ValueType_Integer:
+		case ValueType::Integer:
 			return string_tools::toString( value.getInteger() );
 			break;
 
-		case ValueType_Unsigned:
+		case ValueType::Unsigned:
 			return string_tools::toString( value.getUnsigned() );
 			break;
 
-		case ValueType_String:
+		case ValueType::String:
 			return DynamicString( value.getString() );
 			break;
 
-		case ValueType_PercentValue:
+		case ValueType::PercentValue:
 			return string_tools::toString( float( value.getPercentValue() ) * ( 100.0f / 65535.0f ) ) + " %";
 			break;
 
-		case ValueType_InstanceId:
+		case ValueType::InstanceId:
 			return string_tools::toString( value.getInstanceId() );
 			break;
 
-		case ValueType_TypeCrc:
+		case ValueType::TypeCrc:
 			return string_tools::toString( value.getTypeCrc() );
 			break;
 		}
@@ -743,7 +744,7 @@ namespace conct
 			"Waiting",
 			"Popup"
 		};
-		static_assert( CONCT_COUNT( s_aStateNames ) == State_Count, "" );
+		static_assert( TIKI_ARRAY_COUNT( s_aStateNames ) == State_Count, "" );
 
 		drawClear();
 		ConsoleRenderer::drawText( 0u, 6u, s_aStateNames[ m_state ] );
@@ -808,7 +809,7 @@ namespace conct
 
 		const uint16x2 size = ConsoleRenderer::getSize();
 
-		const uintreg index = uintreg( m_timer.getElapsedSeconds() * ( 1000.0 / 80.0 ) ) % CONCT_COUNT( s_aFrames );
+		const uintreg index = uintreg( m_timer.getElapsedSeconds() * ( 1000.0 / 80.0 ) ) % TIKI_ARRAY_COUNT( s_aFrames );
 		ConsoleRenderer::drawText( ( size.x / 2u ) - 3u, 7u, s_aFrames[ index ] );
 	}
 
@@ -819,7 +820,7 @@ namespace conct
 
 		const uint16x2 size = ConsoleRenderer::getSize();
 
-		const uint16 width = CONCT_MAX( textSize.x + 4u, 6u );
+		const uint16 width = TIKI_STATIC_MAX( textSize.x + 4u, 6u );
 		const uint16 height = textSize.y + 7u;
 		const uint16 x = ( size.x / 2u ) - ( width / 2u );
 
@@ -994,20 +995,20 @@ namespace conct
 				}
 				text += getStringFromValue( value );
 
-				if( m_action == Action_GetProperty && value.getType() == ValueType_String && m_pInstance->pType == m_pDeviceType && m_pProperty->name == "Name" )
+				if( m_action == Action_GetProperty && value.getType() == ValueType::String && m_pInstance->pType == m_pDeviceType && m_pProperty->name == "Name" )
 				{
 					m_pInstance->pDevice->name = DynamicString( value.getString() );
 				}
-				else if( value.getType() == ValueType_Struct && value.getStructType() == ValueTypeTraits< Instance >::getTypeCrc() )
+				else if( value.getType() == ValueType::Struct && value.getStructType() == ValueTypeTraits< Instance >::getTypeCrc() )
 				{
 					const Instance sourceInstance = value.getStruct< Instance >();
 					text += addInstance( sourceInstance );
 				}
-				else if( value.getType() == ValueType_Array )
+				else if( value.getType() == ValueType::Array )
 				{
 					if( value.getArrayType() == ValueTypeTraits< Instance >::getTypeCrc() )
 					{
-						const ArrayView< Instance > instances = value.getArray< Instance >();
+						const ConstArrayView< Instance > instances = value.getArray< Instance >();
 						for( uintreg i = 0u; i < instances.getLength(); ++i )
 						{
 							text += addInstance( instances[ i ] );
@@ -1015,7 +1016,7 @@ namespace conct
 					}
 					else if( value.getArrayType() == ValueTypeTraits< DeviceConnection >::getTypeCrc() )
 					{
-						const ArrayView< DeviceConnection > devices = value.getArray< DeviceConnection >();
+						const ConstArrayView< DeviceConnection > devices = value.getArray< DeviceConnection >();
 						for( uintreg i = 0u; i < devices.getLength(); ++i )
 						{
 							text += addDevice( devices[ i ].id, &m_pInstance->pDevice->address );

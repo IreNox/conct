@@ -1,14 +1,12 @@
 #pragma once
 
 #include "conct_device.h"
-#include "conct_runtime_high.h"
+#include "conct_runtime.h"
 
 #include "conct_port_tcp_client.h"
 
 #include "core_device_proxy.h"
-#include "core_router_proxy.h"
 
-#include "conct_router.h"
 
 namespace conct
 {
@@ -21,24 +19,22 @@ namespace conct
 		void setupDevice();
 		void loopDevice();
 
-		virtual const char* getName() const CONCT_OVERRIDE_FINAL;
+		virtual const char* getName() const override final;
 
 	protected:
 
-		RuntimeHigh m_runtime;
+		Runtime m_runtime;
 
 		PortTcpClient m_port0;
 
 		DeviceProxy m_proxyDevice;
-		RouterProxy m_proxyRouter;
 
-		Router m_instanceRouter;
 
 		virtual void setup() = 0;
 		virtual void loop() = 0;
 
-		virtual void getEmptyInstances( Array< Instance >& instances ) CONCT_OVERRIDE_FINAL;
-		virtual void getPublicInstances( ArrayView< Instance >& instances ) const CONCT_OVERRIDE_FINAL;
-		virtual void getLocalInstances( ArrayView< LocalInstance >& instances ) CONCT_OVERRIDE_FINAL;
+		virtual void getEmptyInstances( ArrayView< Instance >& instances ) override final;
+		virtual void getPublicInstances( ConstInstanceView& instances ) const override final;
+		virtual void getLocalInstances( ArrayView< const LocalInstance >& instances ) override final;
 	};
 }

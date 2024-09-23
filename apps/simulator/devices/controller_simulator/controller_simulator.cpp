@@ -3,6 +3,7 @@
 namespace conct
 {
 	ControllerSimulator::ControllerSimulator()
+		: m_router( m_device.getRuntime() )
 	{
 	}
 
@@ -24,7 +25,7 @@ namespace conct
 	void ControllerSimulator::fillData( SimulatorDeviceData& targetData )
 	{
 		targetData.name			= "Controller"_s;
-		targetData.pRouter		= &m_device.getRouter();
+		targetData.pRouter		= &m_router;
 		targetData.pController	= &m_controller;
 	}
 }

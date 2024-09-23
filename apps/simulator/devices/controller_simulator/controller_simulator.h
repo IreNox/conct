@@ -3,6 +3,7 @@
 #include "i_simulator_device.h"
 
 #include "conct_controller.h"
+#include "conct_router.h"
 
 #include "device_controller_simulator.h"
 
@@ -15,14 +16,15 @@ namespace conct
 									ControllerSimulator();
 		virtual						~ControllerSimulator();
 
-		virtual void				setup() CONCT_OVERRIDE_FINAL;
-		virtual void				loop() CONCT_OVERRIDE_FINAL;
+		virtual void				setup() override final;
+		virtual void				loop() override final;
 
-		virtual void 				fillData( SimulatorDeviceData& targetData ) CONCT_OVERRIDE_FINAL;
+		virtual void 				fillData( SimulatorDeviceData& targetData ) override final;
 
 	private:
 
 		DeviceControllerSimulator	m_device;
+		Router						m_router;
 		Controller					m_controller;
 	};
 }

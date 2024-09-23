@@ -10,8 +10,8 @@ namespace conct
 	{
 	protected:
 
-		virtual void	setup() CONCT_OVERRIDE_FINAL;
-		virtual void	loop() CONCT_OVERRIDE_FINAL;
+		virtual void	setup() override final;
+		virtual void	loop() override final;
 
 	private:
 

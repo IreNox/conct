@@ -1,9 +1,9 @@
 #include "core_router_proxy.h"
 
 #include "conct_router.h"
-#include "conct_array_view.h"
-#include "conct_runtime.h"
 #include "conct_core.h"
+#include <tiki/tiki_array_view.h>
+#include "conct_runtime.h"
 
 namespace conct
 {
@@ -30,7 +30,7 @@ namespace conct
 		return false;
 	}
 
-	bool RouterProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< Value >& parameters ) const
+	bool RouterProxy::callFunction( ValueBuilder& targetValueBuilder, void* pInstance, uint16 nameCrc, const ArrayView< const Value >& parameters ) const
 	{
 		Router* pTypedInstance = static_cast< Router* >( pInstance );
 

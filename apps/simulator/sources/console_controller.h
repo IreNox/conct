@@ -3,12 +3,12 @@
 #include "console_plugin.h"
 
 #include "conct_core.h"
-#include "conct_dynamic_string.h"
 #include "conct_runtime.h"
 #include "conct_structs.h"
 #include "conct_timer.h"
 #include "conct_value_high.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_dynamic_string.h>
 
 #include <forward_list>
 
@@ -26,13 +26,13 @@ namespace conct
 
 									ConsoleController( TypeCollection* pTypes );
 
-		virtual void				activate( ConsoleDevice& localDevice ) CONCT_OVERRIDE_FINAL;
-		virtual void				deactivate( ConsoleDevice& localDevice ) CONCT_OVERRIDE_FINAL;
+		virtual void				activate( ConsoleDevice& localDevice ) override final;
+		virtual void				deactivate( ConsoleDevice& localDevice ) override final;
 
-		virtual void				update( ConsoleDevice& localDevice ) CONCT_OVERRIDE_FINAL;
-		virtual void				draw( const ConsoleDevice& localDevice ) const CONCT_OVERRIDE_FINAL;
+		virtual void				update( ConsoleDevice& localDevice ) override final;
+		virtual void				draw( const ConsoleDevice& localDevice ) const override final;
 
-		virtual const char*			getName() const CONCT_OVERRIDE_FINAL;
+		virtual const char*			getName() const TIKI_OVERRIDE_FINAL;
 
 	private:
 
@@ -94,8 +94,8 @@ namespace conct
 			const InterfaceType*	pType;
 		};
 
-		typedef Vector< DynamicString > StringVector;
-		typedef Vector< State > StateVector;
+		typedef DynamicArray< DynamicString > StringVector;
+		typedef DynamicArray< State > StateVector;
 		typedef std::forward_list< ControllerDevice > DeviceList;
 		typedef std::forward_list< ControllerInstance > InstanceList;
 		//typedef Vector< ControllerDeviceCommand > DeviceCommandVector;
@@ -118,7 +118,7 @@ namespace conct
 		const InterfaceType*		m_pInterface;
 		const InterfaceProperty*	m_pProperty;
 		const InterfaceFunction*	m_pFunction;
-		Vector< ValueHigh >			m_values;
+		DynamicArray< ValueHigh >	m_values;
 
 		DeviceList					m_devices;
 		InstanceList				m_instances;

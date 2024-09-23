@@ -28,7 +28,7 @@ namespace conct
 			}
 			else if( c == '\n' )
 			{
-				size.x = CONCT_MAX( size.x, x );
+				size.x = TIKI_STATIC_MAX( size.x, x );
 				size.y++;
 
 				x = 0u;
@@ -39,7 +39,7 @@ namespace conct
 			x++;
 		}
 
-		size.x = CONCT_MAX( size.x, x );
+		size.x = TIKI_STATIC_MAX( size.x, x );
 		return size;
 	}
 
@@ -122,7 +122,7 @@ namespace conct
 			}
 			else if( c == '\n' )
 			{
-				size.x = CONCT_MAX( size.x, x - baseX );
+				size.x = TIKI_STATIC_MAX( size.x, x - baseX );
 				size.y++;
 
 				x = baseX;
@@ -133,7 +133,7 @@ namespace conct
 			x++;
 		}
 
-		size.x = CONCT_MAX( size.x, x - baseX );
+		size.x = TIKI_STATIC_MAX( size.x, x - baseX );
 		return size;
 	}
 

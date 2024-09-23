@@ -1,11 +1,12 @@
 #pragma once
 
-#include "conct_flags.h"
 #include "conct_runtime.h"
 #include "conct_structs.h"
 #include "conct_type_collection.h"
 
 #include "console_plugin.h"
+
+#include <tiki/tiki_flags.h>
 
 namespace conct
 {
@@ -35,7 +36,7 @@ namespace conct
 			ChangeFlag_CommandLine	= 1u << 3u,
 		};
 
-		typedef Vector< ConsoleDevice > DeviceVector;
+		typedef DynamicArray< ConsoleDevice > DeviceVector;
 
 		Flags8< ChangeFlag >		m_changeFlags;
 

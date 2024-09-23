@@ -10,12 +10,12 @@ namespace conct
 	{
 	public:
 
-		virtual void				activate( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
-		virtual void				deactivate( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
+		virtual void				activate( ConsoleDevice& device ) override final;
+		virtual void				deactivate( ConsoleDevice& device ) override final;
 
-		virtual void				update( ConsoleDevice& device ) CONCT_OVERRIDE_FINAL;
-		virtual void				draw( const ConsoleDevice& device ) const CONCT_OVERRIDE_FINAL;
+		virtual void				update( ConsoleDevice& device ) override final;
+		virtual void				draw( const ConsoleDevice& device ) const override final;
 
-		virtual const char*			getName() const CONCT_OVERRIDE_FINAL;
+		virtual const char*			getName() const override final;
 	};
 }

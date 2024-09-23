@@ -30,7 +30,7 @@ namespace conct
 		VK_LEFT,	// ConsoleKey_Left
 		VK_RIGHT,	// ConsoleKey_Right
 	};
-	static_assert( CONCT_COUNT( s_aKeyMapping ) == ConsoleKey_Count, "" );
+	static_assert( TIKI_ARRAY_COUNT( s_aKeyMapping ) == ConsoleKey_Count, "" );
 
 	void ConsoleInput::setup()
 	{
@@ -56,7 +56,7 @@ namespace conct
 				{
 					ReadConsoleInputA( consoleHandle, &input, 1u, &read );
 
-					for( size_t i = 0u; i < CONCT_COUNT( s_aKeyMapping ); ++i )
+					for( size_t i = 0u; i < TIKI_ARRAY_COUNT( s_aKeyMapping ); ++i )
 					{
 						if( s_aKeyMapping[ i ] == input.Event.KeyEvent.wVirtualKeyCode )
 						{
@@ -99,7 +99,7 @@ namespace conct
 		}
 
 		ConsoleKey key = ConsoleKey_Count;
-		for( size_t i = 0u; i < CONCT_COUNT( s_aKeyMapping ); ++i )
+		for( size_t i = 0u; i < TIKI_ARRAY_COUNT( s_aKeyMapping ); ++i )
 		{
 			if( s_aKeyMapping[ i ] == input.Event.KeyEvent.wVirtualKeyCode )
 			{

@@ -13,10 +13,10 @@ namespace conct
 								LightSimulator();
 		virtual					~LightSimulator();
 
-		virtual void			setup() CONCT_OVERRIDE_FINAL;
-		virtual void			loop() CONCT_OVERRIDE_FINAL;
+		virtual void			setup() override final;
+		virtual void			loop() override final;
 
-		virtual void 			fillData( SimulatorDeviceData& targetData ) CONCT_OVERRIDE_FINAL;
+		virtual void 			fillData( SimulatorDeviceData& targetData ) override final;
 
 	private:
 

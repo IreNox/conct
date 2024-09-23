@@ -1,8 +1,8 @@
 #pragma once
 
 #include "conct_core.h"
-#include "conct_dynamic_string.h"
-#include "conct_vector.h"
+
+#include <tiki/tiki_dynamic_string.h>
 
 namespace conct
 {
@@ -18,11 +18,13 @@ namespace conct
 
 	struct SimulatorDeviceData
 	{
-		DynamicString				name;
+		using InstanceArray = DynamicArray< SimulatorInstance >;
 
-		Router*						pRouter;
-		Controller*					pController;
-		Vector< SimulatorInstance >	instances;
+		DynamicString	name;
+
+		Router*			pRouter;
+		Controller*		pController;
+		InstanceArray	instances;
 	};
 
 	class ISimulatorDevice

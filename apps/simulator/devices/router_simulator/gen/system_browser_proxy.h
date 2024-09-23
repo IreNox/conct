@@ -4,11 +4,11 @@
 
 namespace conct
 {
-	class LightProxy : public Proxy
+	class BrowserProxy : public Proxy
 	{
 	public:
 
-		LightProxy();
+		BrowserProxy();
 
 		virtual bool getProperty( ValueBuilder& targetValueBuilder, const void* pInstance, uint16 nameCrc ) const override final;
 		virtual bool setProperty( void* pInstance, uint16 nameCrc, const Value& value ) const override final;

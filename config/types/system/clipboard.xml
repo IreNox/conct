@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="System" name="Clipboard">
+	<properties>
+		<property name="Text" type="String">
+			<get />
+			<set />
+		</property>
+	</properties>
+	<functions>
+		<function name="Clear" return="Void" />
+	</functions>
+</interface>

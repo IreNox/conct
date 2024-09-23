@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<enum namespace="Home" name="LightSource" base="uint8">
+	<values>
+		<value name="W" />
+		<value name="WC" />
+		<value name="RGB" />
+		<value name="RGBW" />
+		<value name="RGBWC" />
+	</values>
+</enum>

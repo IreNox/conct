@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <interface namespace="Home.Sensors" name="Humidity">
+	<config>
+		<field name="Platform" type="String" />
+		<field name="Pin1" type="uint8" />
+		<field name="Pin2" type="uint8" optional="true" />
+	</config>
 	<properties>
 		<property name="Humidity" type="PercentValue">
 			<get />

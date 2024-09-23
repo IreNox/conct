@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface namespace="System" name="Browser">
+	<properties>
+		<property name="IsOpen" type="Boolean">
+			<get />
+			<set />
+		</property>
+	</properties>
+	<functions>
+		<function name="Open" return="Void">
+			<parameters>
+				<parameter name="url" type="String" />
+			</parameters>
+		</function>
+	</functions>
+</interface>

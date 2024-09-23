@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <interface namespace="Home" name="Light">
+	<config>
+		<field name="Source" type="LightSource" />
+		<field name="Platform" type="String" />
+		<field name="Pin1" type="uint8" />
+		<field name="Pin2" type="uint8" optional="true" />
+		<field name="Pin3" type="uint8" optional="true" />
+	</config>
 	<properties>
+		<property name="Source" type="LightSource">
+			<get />
+		</property>
 		<property name="On" type="Boolean">
+			<get />
+			<set />
+		</property>
+		<property name="Brightness" type="PercentValue">
+			<get />
+			<set />
+		</property>
+		<property name="Red" type="PercentValue">
+			<get />
+			<set />
+		</property>
+		<property name="Green" type="PercentValue">
+			<get />
+			<set />
+		</property>
+		<property name="Blue" type="PercentValue">
+			<get />
+			<set />
+		</property>
+		<property name="White" type="PercentValue">
+			<get />
+			<set />
+		</property>
+		<property name="WhiteColdWarm" type="PercentValue">
 			<get />
 			<set />
 		</property>

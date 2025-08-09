@@ -178,4 +178,38 @@ namespace conct
 
 		m_buffer.assign( (const uint8*)data, elementSize * length );
 	}
+
+	void Value::serialize( BinaryWriter& target ) const
+	{
+		target.writeByte( (byte)m_type );
+		target.writeStruct( m_data );
+		target.writeData( m_buffer.getLength() );
+		target.writeData( m_buffer.getData(), m_buffer.getLength() );
+	}
+
+	bool Value::deserialize( BinaryReader& source )
+	{
+		byte type;
+		if( !source.readByte( type ) )
+		{
+			return false;
+		}
+
+		if( type > (byte)ValueType::Count )
+		{
+			return false;
+		}
+
+		m_type = (ValueType)type;
+
+		if( !source.readStruct( m_data ) )
+		{
+			return false;
+		}
+
+		uint32
+
+
+		return true;
+	}
 }

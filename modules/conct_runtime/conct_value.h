@@ -6,6 +6,9 @@
 
 namespace conct
 {
+	class BinaryReader;
+	class BinaryWriter;
+
 	struct ValueStructData
 	{
 		uint32				size;
@@ -86,16 +89,21 @@ namespace conct
 		void				setArray( const ConstArrayView< T >& value );
 		void				setArrayData( const void* data, uint32 elementSize, uint32 length, TypeCrc type );
 
-		void				serialize( DynamicArray< byte >& target ) const;
-		void				deserialize( const ConstArrayView< byte >& source );
+		void				serialize( BinaryWriter& target ) const;
+		bool				deserialize( BinaryReader& source );
 
 	private:
 
-		using ByteArray = DynamicArray< byte >;
+		//using ByteArray = DynamicArray< byte >;
 
 		ValueType		m_type;
+		bool			m_ownsBuffer;
 		ValueData		m_data;
-		ByteArray		m_buffer;
+		byte*			m_buffer;
+		uintsize		m_bufferLength;
+		uintsize		m_bufferCapacity;
+
+		//ByteArray		m_buffer;
 	};
 }
 

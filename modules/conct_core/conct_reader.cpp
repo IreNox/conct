@@ -2,23 +2,28 @@
 
 namespace conct
 {
-	Reader::Reader()
+	BinaryReader::BinaryReader()
 	{
 		set( nullptr, 0u );
 	}
 
-	Reader::Reader( const void* pData, uintreg size )
+	BinaryReader::BinaryReader( const ConstArrayView< byte >& data )
+	{
+		set( data.getData(), data.getLength() );
+	}
+
+	BinaryReader::BinaryReader( const void* pData, uintreg size )
 	{
 		set( pData, size );
 	}
 
-	void Reader::set( const void* pData, uintreg size )
+	void BinaryReader::set( const void* pData, uintreg size )
 	{
 		m_pData			= static_cast< const uint8* >( pData );
 		m_remainingSize	= size;
 	}
 
-	uintreg Reader::readData( void* pTarget, uintreg length )
+	uintreg BinaryReader::readData( void* pTarget, uintreg length )
 	{
 		uint8* pTargetBytes = static_cast< uint8* >( pTarget );
 
@@ -32,7 +37,7 @@ namespace conct
 		return i;
 	}
 
-	uintreg Reader::readData( void* pTarget, uintreg length, uintreg alreadyRead )
+	uintreg BinaryReader::readData( void* pTarget, uintreg length, uintreg alreadyRead )
 	{
 		uint8* pTargetBytes = static_cast< uint8* >( pTarget );
 
@@ -48,17 +53,17 @@ namespace conct
 		return i - alreadyRead;
 	}
 
-	bool Reader::readByte( uint8& target )
+	bool BinaryReader::readByte( byte& target )
 	{
 		return readData( &target, sizeof( target ) ) == sizeof( target );
 	}
 
-	uintreg Reader::readShort( uint16& target )
+	bool BinaryReader::readShort( uint16& target )
 	{
-		return readData( &target, sizeof( target ) );
+		return readData( &target, sizeof( target ) ) == sizeof( target );
 	}
 
-	uintreg Reader::readShort( uint16& target, uintreg alreadyRead )
+	uintreg BinaryReader::readShort( uint16& target, uintreg alreadyRead )
 	{
 		return readData( &target, sizeof( target ), alreadyRead );
 	}

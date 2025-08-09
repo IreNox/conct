@@ -357,7 +357,10 @@ namespace conct
 			{
 				DynamicArray< byte > valueData;
 				{
-					const CallFunctionRequest& request = *reinterpret_cast< const CallFunctionRequest* >( package.payload.getData() );
+					BinaryReader packageReader( package.payload );
+
+					CallFunctionRequest request;
+					packageReader.readStruct( request );
 
 					const LocalInstance* pInstance = m_pDevice->getInstance( request.instanceId );
 					if( pInstance == nullptr )
@@ -366,8 +369,15 @@ namespace conct
 						return;
 					}
 
+					DynamicArray< Value > arguments;
+					for( uintsize i = 0u; i < request.argumentCount; ++i )
+					{
+						Value& value = arguments.pushBack();
+						value.deserialize( packageReader );
+					}
+
 					Value value;
-					if( !pInstance->pProxy->callFunction( value, pInstance->pInstance, request.nameCrc, request.arguments.toView() ) )
+					if( !pInstance->pProxy->callFunction( value, pInstance->pInstance, request.nameCrc, arguments ) )
 					{
 						sendErrorResponse( package, MessageType_CallFunctionRequest, ResultId_NoSuchField );
 						return;
@@ -474,7 +484,7 @@ namespace conct
 
 	void Runtime::readPort( Port* pPort, PortData& portData )
 	{
-		Reader reader;
+		BinaryReader reader;
 		uintreg endpointId;
 		while( pPort->openReceived( reader, endpointId ) )
 		{
@@ -483,7 +493,7 @@ namespace conct
 		}
 	}
 
-	void Runtime::readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId )
+	void Runtime::readPackage( Port* pPort, PortData& portData, BinaryReader& reader, uintreg endpointId )
 	{
 #if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
 		const DeviceData* pDevice = findDevice( portData, endpointId );
@@ -530,7 +540,7 @@ namespace conct
 	}
 
 #if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-	void Runtime::readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice )
+	void Runtime::readCryptoHeader( PendingReceivedPackage& package, BinaryReader& reader, const DeviceData* pDevice )
 	{
 		if( pDevice != nullptr && pDevice->status != DeviceStatus_AwaitCryptoKey )
 		{
@@ -549,7 +559,7 @@ namespace conct
 	}
 #endif
 
-	void Runtime::readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted )
+	void Runtime::readBaseHeader( PendingReceivedPackage& package, BinaryReader& reader, bool encrypted )
 	{
 		package.data.readBytes.alreadyRead += reader.readStruct( package.target.baseHeader, package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead < sizeof( package.target.baseHeader ) )
@@ -577,7 +587,7 @@ namespace conct
 		setState( package, PackageState_ReadSourceAddress );
 	}
 
-	void Runtime::readBytes( DynamicArray< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted )
+	void Runtime::readBytes( DynamicArray< uint8 >& target, PendingReceivedPackage& package, BinaryReader& reader, PackageState nextState, bool encrypted )
 	{
 		package.data.readBytes.alreadyRead += reader.readData( target.getData(), target.getLength(), package.data.readBytes.alreadyRead );
 		if( package.data.readBytes.alreadyRead == target.getLength() )
@@ -627,7 +637,7 @@ namespace conct
 
 		SendPackage& currentPackage = portData.sendPackages.getFront();
 
-		Writer writer;
+		BinaryWriter writer;
 		const uintreg remainingSize = currentPackage.data.getLength() - currentPackage.currentOffset;
 		if( !pPort->openSend( writer, remainingSize, currentPackage.targetEndpointId ) )
 		{
@@ -680,7 +690,7 @@ namespace conct
 		targetAddress.address[ sourceAddress.getLength() ] = InvalidDeviceId;
 	}
 
-	ResultId Runtime::sendPackage( const DeviceAddress& deviceAddress, const ArrayView< const byte >& payload, CommandId commandId, MessageType messageType, ResultId result )
+	ResultId Runtime::sendPackage( const DeviceAddress& deviceAddress, const ConstArrayView< byte >& payload, CommandId commandId, MessageType messageType, ResultId result )
 	{
 		MessageBaseHeader baseHeader;
 
@@ -771,7 +781,7 @@ namespace conct
 		return ResultId_Success;
 	}
 
-	ResultId Runtime::sendResponse( const ReceivedPackage& package, const ArrayView< const byte >& payload, MessageType messageType )
+	ResultId Runtime::sendResponse( const ReceivedPackage& package, const ConstArrayView< byte >& payload, MessageType messageType )
 	{
 		DeviceAddress address;
 		getDeviceAddress( address, package.deviceId, package.sourceAddress );

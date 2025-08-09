@@ -57,7 +57,7 @@ namespace conct
 			titleLayout.setHStretch( 1.0f );
 			titleLayout.setPadding( UiBorder( 5.0f ) );
 
-			titleLayout.drawSkin( UiToolboxConfig::getSkin( ImUiToolboxSkin_Button ), UiToolboxConfig::getColor( ImUiToolboxColor_Button ) );
+			titleLayout.drawSkin( UiToolboxTheme::getSkin( ImUiToolboxSkin_Button ), UiToolboxTheme::getColor( ImUiToolboxColor_Button ) );
 
 			{
 				const char* iconName		= getStateIcon( m_menuState );
@@ -113,7 +113,7 @@ namespace conct
 		{
 			const ImUiImage image = ImAppImageGetImage( ImAppImageLoadResource( imapp, "bg/menu_header.png" ) );
 			//const ImUiImage image = ImAppResPakGetImage( ImAppResourceGetDefaultPak( imapp ), "bg/menu_header.png" );
-			if( image.textureData )
+			if( image.textureHandle )
 			{
 				UiSize imageSize;
 				imageSize.width		= menuRect.size.width;
@@ -188,7 +188,7 @@ namespace conct
 		const ControllerConfig::ConnectionArray& connections = m_config->getConnections();
 
 		{
-			UiToolboxList list( window, 100.0f, connections.getLength() );
+			UiToolboxList list( window, 100.0f, connections.getLength(), false );
 
 			for( const ControllerConfig::Connection& connection : connections )
 			{

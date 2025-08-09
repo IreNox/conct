@@ -33,11 +33,11 @@ namespace conct
 
 		virtual void				loop() TIKI_OVERRIDE_FINAL;
 
-		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) TIKI_OVERRIDE_FINAL;
-		virtual void				closeSend( Writer& writer, uintreg endpointId ) TIKI_OVERRIDE_FINAL;
+		virtual bool				openSend( BinaryWriter& writer, uintreg size, uintreg endpointId ) TIKI_OVERRIDE_FINAL;
+		virtual void				closeSend( BinaryWriter& writer, uintreg endpointId ) TIKI_OVERRIDE_FINAL;
 
-		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) TIKI_OVERRIDE_FINAL;
-		virtual void				closeReceived( Reader& reader, uintreg endpointId ) TIKI_OVERRIDE_FINAL;
+		virtual bool				openReceived( BinaryReader& reader, uintreg& endpointId ) TIKI_OVERRIDE_FINAL;
+		virtual void				closeReceived( BinaryReader& reader, uintreg endpointId ) TIKI_OVERRIDE_FINAL;
 
 		virtual Flags8< PortFlag >	getFlags() const TIKI_OVERRIDE_FINAL;
 

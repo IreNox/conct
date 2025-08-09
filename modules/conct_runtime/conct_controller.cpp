@@ -2,6 +2,7 @@
 
 #include "conct_crc16.h"
 #include "conct_runtime.h"
+#include "conct_writer.h"
 
 namespace conct
 {
@@ -60,20 +61,28 @@ namespace conct
 
 	Command* Controller::setProperty( const RemoteInstance& instance, const char* pName, const Value& value )
 	{
-		DynamicArray< byte > payload;
+		BinaryWriter payloadWriter;
 
-		SetPropertyRequest* pRequest = (SetPropertyRequest*)payload.pushRange( sizeof( SetPropertyRequest ) ).getData();
-		pRequest->instanceId	= instance.id;
-		pRequest->nameCrc		= calculateStringCrc16( pName );
+		SetPropertyRequest request;
+		request.instanceId	= instance.id;
+		request.nameCrc		= calculateStringCrc16( pName );
 
-		value.serialize( payload );
+		payloadWriter.writeStruct( request );
 
-		return beginCommand< Command >( instance.address, payload, MessageType_SetPropertyRequest );
+		//DynamicArray< byte > payload;
+
+		//SetPropertyRequest* pRequest = (SetPropertyRequest*)payload.pushRange( sizeof( SetPropertyRequest ) ).getData();
+		//pRequest->instanceId	= instance.id;
+		//pRequest->nameCrc		= calculateStringCrc16( pName );
+
+		value.serialize( payloadWriter );
+
+		return beginCommand< Command >( instance.address, payloadWriter.getData(), MessageType_SetPropertyRequest );
 	}
 
 	ValueCommand* Controller::callFunction( const RemoteInstance& instance, const char* pName, const ConstArrayView< Value >& arguments )
 	{
-		DynamicArray< byte > payload;
+		BinaryWriter payloadWriter;
 
 		CallFunctionRequest* pRequest = (CallFunctionRequest*)payload.pushRange( sizeof( CallFunctionRequest ) ).getData();
 		pRequest->instanceId	= instance.id;

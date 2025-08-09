@@ -7,8 +7,8 @@
 
 namespace conct
 {
-	class Reader;
-	class Writer;
+	class BinaryReader;
+	class BinaryWriter;
 
 	enum PortFlag
 	{
@@ -26,11 +26,11 @@ namespace conct
 
 		virtual void				loop() = 0;
 
-		virtual bool				openSend( Writer& writer, uintreg size, uintreg endpointId ) = 0;
-		virtual void				closeSend( Writer& writer, uintreg endpointId ) = 0;
+		virtual bool				openSend( BinaryWriter& writer, uintreg size, uintreg endpointId ) = 0;
+		virtual void				closeSend( BinaryWriter& writer, uintreg endpointId ) = 0;
 
-		virtual bool				openReceived( Reader& reader, uintreg& endpointId ) = 0;
-		virtual void				closeReceived( Reader& reader, uintreg endpointId ) = 0;
+		virtual bool				openReceived( BinaryReader& reader, uintreg& endpointId ) = 0;
+		virtual void				closeReceived( BinaryReader& reader, uintreg endpointId ) = 0;
 
 		virtual Flags8< PortFlag >	getFlags() const = 0;
 	};

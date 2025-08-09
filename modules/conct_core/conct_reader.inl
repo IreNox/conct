@@ -3,13 +3,13 @@
 namespace conct
 {
 	template< class T >
-	uintreg Reader::readStruct( T& target )
+	bool BinaryReader::readStruct( T& target )
 	{
-		return readData( &target, sizeof( T ) );
+		return readData( &target, sizeof( T ) ) == sizeof( T );
 	}
 
 	template< class T >
-	uintreg Reader::readStruct( T& target, uintreg alreadyRead )
+	uintreg BinaryReader::readStruct( T& target, uintreg alreadyRead )
 	{
 		return readData( &target, sizeof( T ), alreadyRead );
 	}

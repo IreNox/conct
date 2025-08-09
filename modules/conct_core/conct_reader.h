@@ -2,14 +2,17 @@
 
 #include "conct_core.h"
 
+#include <tiki/tiki_array_view.h>
+
 namespace conct
 {
-	class Reader
+	class BinaryReader
 	{
 	public:
 
-						Reader();
-						Reader( const void* pData, uintreg size );
+						BinaryReader();
+						BinaryReader( const ConstArrayView< byte >& data );
+						BinaryReader( const void* pData, uintreg size );
 
 		void			set( const void* pData, uintreg size );
 
@@ -17,19 +20,19 @@ namespace conct
 		bool			isEnd() const { return m_remainingSize == 0u; }
 
 		template< class T >
-		uintreg			readStruct( T& target );
+		bool			readStruct( T& target );
 		template< class T >
 		uintreg			readStruct( T& Target, uintreg alreadyRead );
 		uintreg			readData( void* pTarget, uintreg length );
 		uintreg			readData( void* pTarget, uintreg length, uintreg alreadyRead );
 
-		bool			readByte( uint8& target );
-		uintreg			readShort( uint16& target );
+		bool			readByte( byte& target );
+		bool			readShort( uint16& target );
 		uintreg			readShort( uint16& target, uintreg alreadyRead );
 
 	private:
 
-		const uint8*	m_pData;
+		const byte*		m_pData;
 		uintreg			m_remainingSize;
 	};
 }

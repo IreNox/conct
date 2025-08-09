@@ -272,19 +272,19 @@ namespace conct
 		while( receivedBytes == 2048 );
 	}
 
-	bool PortTcpClient::openSend( Writer& writer, uintreg size, uintreg endpointId )
+	bool PortTcpClient::openSend( BinaryWriter& writer, uintreg size, uintreg endpointId )
 	{
 		m_sendData.setLengthUninitialized( m_sendData.getLength() + size );
 		writer.set( m_sendData.getEnd() - size, size );
 		return true;
 	}
 
-	void PortTcpClient::closeSend( Writer& writer, uintreg endpointId )
+	void PortTcpClient::closeSend( BinaryWriter& writer, uintreg endpointId )
 	{
 		TIKI_ASSERT( writer.isEnd() );
 	}
 
-	bool PortTcpClient::openReceived( Reader& reader, uintreg& endpointId )
+	bool PortTcpClient::openReceived( BinaryReader& reader, uintreg& endpointId )
 	{
 		if( m_receiveData.isEmpty() )
 		{
@@ -296,7 +296,7 @@ namespace conct
 		return true;
 	}
 
-	void PortTcpClient::closeReceived( Reader& reader, uintreg endpointId )
+	void PortTcpClient::closeReceived( BinaryReader& reader, uintreg endpointId )
 	{
 		TIKI_ASSERT( reader.isEnd() );
 

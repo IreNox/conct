@@ -11,7 +11,7 @@ namespace conct
 {
 	class Device;
 	class Port;
-	class Reader;
+	class BinaryReader;
 	class Command;
 
 	class Runtime
@@ -32,7 +32,7 @@ namespace conct
 
 		CommandId				getNextCommandId( DeviceId deviceId );
 
-		ResultId				sendCommandPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< uint8 >& payload, MessageType messageType );
+		ResultId				sendCommandPackage( Command* pCommand, const DeviceAddress& deviceAddress, const ArrayView< byte >& payload, MessageType messageType );
 		bool					popFinishCommand( Command*& pCommand );
 
 	private:
@@ -75,7 +75,7 @@ namespace conct
 			MessageBaseHeader				baseHeader;
 			DynamicArray< DeviceId >		sourceAddress;
 			DynamicArray< DeviceId >		destinationAddress;
-			DynamicArray< uint8 >			payload;
+			DynamicArray< byte >			payload;
 		};
 
 		struct PendingReceivedPackage
@@ -88,7 +88,7 @@ namespace conct
 		struct SendPackage
 		{
 			uintreg							targetEndpointId;
-			DynamicArray< uint8 >			data;
+			DynamicArray< byte >			data;
 			uintreg							currentOffset;
 		};
 
@@ -142,12 +142,12 @@ namespace conct
 		DeviceData*			findDevice( PortData& portData, uintreg endpointId );
 
 		void				readPort( Port* pPort, PortData& portData );
-		void				readPackage( Port* pPort, PortData& portData, Reader& reader, uintreg endpointId );
+		void				readPackage( Port* pPort, PortData& portData, BinaryReader& reader, uintreg endpointId );
 #if TIKI_ENABLED( CONCT_RUNTIME_USE_CRYPTO )
-		void				readCryptoHeader( PendingReceivedPackage& package, Reader& reader, const DeviceData* pDevice );
+		void				readCryptoHeader( PendingReceivedPackage& package, BinaryReader& reader, const DeviceData* pDevice );
 #endif
-		void				readBaseHeader( PendingReceivedPackage& package, Reader& reader, bool encrypted );
-		void				readBytes( DynamicArray< uint8 >& target, PendingReceivedPackage& package, Reader& reader, PackageState nextState, bool encrypted );
+		void				readBaseHeader( PendingReceivedPackage& package, BinaryReader& reader, bool encrypted );
+		void				readBytes( DynamicArray< uint8 >& target, PendingReceivedPackage& package, BinaryReader& reader, PackageState nextState, bool encrypted );
 		void				readStore( Port* pPort, PortData& portData, PendingReceivedPackage& package, uintreg endpointId );
 
 		void				writePort( Port* pPort, PortData& portData );
@@ -160,8 +160,8 @@ namespace conct
 
 		void				getDeviceAddress( DeviceAddress& targetAddress, DeviceId targetDeviceId, const DynamicArray< DeviceId >& sourceAddress ) const;
 
-		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ArrayView< const byte >& payload, CommandId commandId, MessageType messageType, ResultId result );
-		ResultId			sendResponse( const ReceivedPackage& package, const ArrayView< const byte >& payload, MessageType messageType );
+		ResultId			sendPackage( const DeviceAddress& deviceAddress, const ConstArrayView< byte >& payload, CommandId commandId, MessageType messageType, ResultId result );
+		ResultId			sendResponse( const ReceivedPackage& package, const ConstArrayView< byte >& payload, MessageType messageType );
 		ResultId			sendErrorResponse( const ReceivedPackage& package, MessageType messageType, ResultId result );
 	};
 }
